@@ -26,3 +26,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  fonts:
+    - family: PixelIcons
+      fonts:
+        - asset: assets/icons/PixelIcons.ttf
