@@ -5,16 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Macos Dev",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main_development.dart",
-      "args": [
-        "--target",
-        "lib/main_development.dart"
-      ]
-    },
-    {
       "name": "Launch development",
       "request": "launch",
       "type": "dart",
@@ -49,6 +39,36 @@
         "--target",
         "lib/main_production.dart"
       ]
-    }
+    },
+    {
+      "name": "Launch Dev [No flavor]",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": [
+        "--target",
+        "lib/main_development.dart"
+      ]
+    },
+    {
+      "name": "Launch Stg [No flavor]",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": [
+        "--target",
+        "lib/main_staging.dart"
+      ]
+    },
+    {
+      "name": "Launch Prod [No flavor]",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": [
+        "--target",
+        "lib/main_production.dart"
+      ]
+    },
   ]
 }
