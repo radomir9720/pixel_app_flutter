@@ -26,7 +26,8 @@ class PixelIcons {
   static const IconData licenses = IconData(0xe90b, fontFamily: _fontFamily);
   static const IconData fastActions = IconData(0xe90c, fontFamily: _fontFamily);
   static const IconData power = IconData(0xe90d, fontFamily: _fontFamily);
-  static const IconData windshieldBlower = IconData(0xe90e, fontFamily: _fontFamily);
+  static const IconData windshieldBlower =
+      IconData(0xe90e, fontFamily: _fontFamily);
   static const IconData airflow = IconData(0xe90f, fontFamily: _fontFamily);
   static const IconData fan = IconData(0xe910, fontFamily: _fontFamily);
   static const IconData belt = IconData(0xe911, fontFamily: _fontFamily);
