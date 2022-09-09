@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pixel_app_flutter/presentation/app/brightness.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/screen_size_helper.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
 
 class MaterialTheme {
   static const _fontFamily = 'Inter';
@@ -14,6 +15,12 @@ class MaterialTheme {
     );
 
     return ThemeData(
+      extensions: const [
+        GradientScaffoldColors(
+          start: Color(0xFF435159),
+          end: Color(0xFF1F292E),
+        ),
+      ],
       brightness: brightness,
       fontFamily: _fontFamily,
       visualDensity: VisualDensity.adaptivePlatformDensity,

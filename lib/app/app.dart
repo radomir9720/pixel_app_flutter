@@ -4,6 +4,8 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/theme.dart';
 import 'package:pixel_app_flutter/presentation/app/typography.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/organisms/adaptive_widget.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -21,7 +23,7 @@ class App extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
+            home: GradientScaffold(
               body: Center(
                 child: SingleChildScrollView(
                   child: Column(
@@ -40,7 +42,9 @@ class App extends StatelessWidget {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                 child: AppTypography(
-                  child: child ?? const SizedBox.shrink(),
+                  child: AdaptiveWidget(
+                    child: child ?? const SizedBox.shrink(),
+                  ),
                 ),
               );
             },
