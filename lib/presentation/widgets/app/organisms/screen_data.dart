@@ -4,11 +4,15 @@ import 'package:meta/meta.dart';
 enum ScreenType {
   desktop,
   tablet,
-  handset,
+  handset;
+
+  bool get isDesktop => this == ScreenType.desktop;
+  bool get isTablet => this == ScreenType.tablet;
+  bool get isHandset => this == ScreenType.handset;
 }
 
-class AdaptiveWidget extends StatelessWidget {
-  const AdaptiveWidget({
+class Screen extends StatelessWidget {
+  const Screen({
     super.key,
     required this.child,
     this.desktopSize = 900,
@@ -34,7 +38,7 @@ class AdaptiveWidget extends StatelessWidget {
 
     if (inheritedAdapriveWidget == null) {
       throw FlutterError(
-        'AdaptiveWidget.of(context) called with a context that does not '
+        'Screen.of(context) called with a context that does not '
         'contain a ScreenData',
       );
     }

@@ -1,0 +1,9 @@
+{
+    "@@locale": "ru",
+    
+    "generalTabTitle": "Основное",
+    "carInfoTabTitle": "О машине",
+    "navigatorTabTitle": "Навигатор",
+    "appsTabTitle": "Приложения",
+    "chargingTabTitle": "Зарядка"
+}

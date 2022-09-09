@@ -1,7 +1,9 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
+    
+    "generalTabTitle": "General",
+    "carInfoTabTitle": "Car Info",
+    "navigatorTabTitle": "Navigator",
+    "appsTabTitle": "Apps",
+    "chargingTabTitle": "Charging"
 }

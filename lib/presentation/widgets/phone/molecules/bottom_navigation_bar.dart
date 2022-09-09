@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixel_app_flutter/presentation/app/colors.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/nav_bar_colors.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
@@ -20,11 +20,16 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ArgumentError.checkNotNull(
+      Theme.of(context).extension<NavBarColors>(),
+      'NavBarColors',
+    );
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: AppColors.of(context).buttonText.withOpacity(.1),
+            color: colors.divider,
           ),
         ),
       ),
@@ -61,11 +66,16 @@ class BottomNavBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ArgumentError.checkNotNull(
+      Theme.of(context).extension<NavBarColors>(),
+      'NavBarColors',
+    );
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const SizedBox(height: 5),
-        Icon(icon),
+        Icon(icon, color: colors.icon),
         if (selected)
           Container(
             height: 5,
@@ -74,7 +84,7 @@ class BottomNavBarItem extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(24),
               ),
-              color: Theme.of(context).primaryColor,
+              color: colors.selectedBackground,
             ),
           )
         else

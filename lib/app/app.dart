@@ -5,7 +5,7 @@ import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/theme.dart';
 import 'package:pixel_app_flutter/presentation/app/typography.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/organisms/adaptive_widget.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -36,7 +36,7 @@ class _AppState extends State<App> {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                 child: AppTypography(
-                  child: AdaptiveWidget(
+                  child: Screen(
                     child: child ?? const SizedBox.shrink(),
                   ),
                 ),
