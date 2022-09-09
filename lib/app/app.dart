@@ -4,11 +4,18 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/theme.dart';
 import 'package:pixel_app_flutter/presentation/app/typography.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
+import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/adaptive_widget.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final _appRouter = MainRouter();
 
   @override
   Widget build(BuildContext context) {
@@ -16,28 +23,15 @@ class App extends StatelessWidget {
       data: const AppColorsData.dark(),
       child: Builder(
         builder: (context) {
-          return MaterialApp(
+          return MaterialApp.router(
             theme: MaterialTheme.from(AppColors.of(context)),
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: GradientScaffold(
-              body: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Action #1'),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            routeInformationParser: _appRouter.defaultRouteParser(),
+            routerDelegate: _appRouter.delegate(),
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),

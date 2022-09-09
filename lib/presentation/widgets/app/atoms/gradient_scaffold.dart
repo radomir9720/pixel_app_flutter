@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class GradientScaffold extends Scaffold {
-  GradientScaffold({required Widget body, super.key})
-      : super(
+  GradientScaffold({
+    required Widget body,
+    super.bottomNavigationBar,
+    super.key,
+  }) : super(
           body: Builder(
             builder: (context) {
               final colors = ArgumentError.checkNotNull(

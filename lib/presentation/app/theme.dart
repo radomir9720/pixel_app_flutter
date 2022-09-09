@@ -82,6 +82,7 @@ class MaterialTheme {
 
       iconTheme: IconThemeData(
         size: 24.si,
+        color: colors.text,
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(

@@ -17,6 +17,7 @@ dependencies:
   bloc: ^8.1.0
   intl: ^0.17.0
   equatable: ^2.0.5
+  auto_route: ^5.0.0
   flutter_bloc: ^8.1.1
 
 dev_dependencies:
@@ -28,6 +29,10 @@ dev_dependencies:
 
   # linter
   very_good_analysis: ^3.0.1
+
+  # codegen
+  build_runner: ^2.2.0
+  auto_route_generator: ^5.0.0
 
 flutter:
   uses-material-design: true
