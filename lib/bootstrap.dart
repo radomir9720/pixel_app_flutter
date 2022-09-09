@@ -26,6 +26,9 @@ class AppBlocObserver extends BlocObserver {
 }
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+  // SizeProvider.initialize(sizeConverter:
+  // const SizeConverter(fo: fo, si: si));
+
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
