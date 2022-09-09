@@ -1,3 +1,9 @@
+# Generated code
+**/*.g.dart
+**/*.gr.dart
+**/*.config.dart
+**/*.freezed.dart
+
 # Miscellaneous
 *.class
 *.lock
