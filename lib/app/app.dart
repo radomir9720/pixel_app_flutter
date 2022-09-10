@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
@@ -38,7 +39,12 @@ class _AppState extends State<App> {
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                 child: AppTypography(
                   child: Screen(
-                    child: child ?? const SizedBox.shrink(),
+                    child: AnnotatedRegion<SystemUiOverlayStyle>(
+                      value: SystemUiOverlayStyle(
+                        statusBarBrightness: Theme.of(context).brightness,
+                      ),
+                      child: child ?? const SizedBox.shrink(),
+                    ),
                   ),
                 ),
               );
