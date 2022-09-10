@@ -25,27 +25,29 @@ class BottomNavBar extends StatelessWidget {
       'NavBarColors',
     );
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: colors.divider,
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: colors.divider,
+            ),
           ),
         ),
-      ),
-      height: 64,
-      child: Row(
-        children: List.generate(tabIcons.length, (index) {
-          return Expanded(
-            child: InkWell(
-              onTap: () => onTap(index),
-              child: BottomNavBarItem(
-                icon: tabIcons[index],
-                selected: index == activeIndex,
+        height: 64,
+        child: Row(
+          children: List.generate(tabIcons.length, (index) {
+            return Expanded(
+              child: InkWell(
+                onTap: () => onTap(index),
+                child: BottomNavBarItem(
+                  icon: tabIcons[index],
+                  selected: index == activeIndex,
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }
