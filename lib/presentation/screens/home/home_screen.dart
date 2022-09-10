@@ -5,8 +5,8 @@ import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/molecules/side_nav_bar.dart';
 import 'package:pixel_app_flutter/presentation/widgets/phone/molecules/bottom_navigation_bar.dart';
-import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/side_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,6 +25,8 @@ class HomeScreen extends StatelessWidget {
         final tabsRouter = AutoTabsRouter.of(context);
         final screenData = Screen.of(context);
         final screenType = screenData.type;
+        final landscape = !screenType.isHandset ||
+            screenData.size.width > screenData.size.height;
 
         return GradientScaffold(
           body: Stack(
@@ -35,10 +37,10 @@ class HomeScreen extends StatelessWidget {
                   child: child,
                 ),
               ),
-              if (!screenType.isHandset) _SideNavBar(tabsRouter: tabsRouter)
+              if (landscape) _SideNavBar(tabsRouter: tabsRouter)
             ],
           ),
-          bottomNavigationBar: screenData.type.isHandset
+          bottomNavigationBar: !landscape
               ? BottomNavBar(
                   activeIndex: tabsRouter.activeIndex,
                   onTap: tabsRouter.setActiveIndex,
