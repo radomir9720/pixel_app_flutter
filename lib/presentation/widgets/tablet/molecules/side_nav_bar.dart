@@ -66,7 +66,7 @@ class SideNavBar extends StatelessWidget {
                   ),
                   child: Icon(
                     item.icon,
-                    size: 17,
+                    size: 15,
                     color: colors.icon,
                   ),
                 ),
