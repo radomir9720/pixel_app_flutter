@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                   if (landscape)
                     _SideNavBar(
                       tabsRouter: tabsRouter,
-                      showTitle: !screenType.isHandset,
+                      isHandset: screenType.isHandset,
                     )
                 ],
               ),
@@ -125,14 +125,14 @@ class _BottomNavBar extends StatelessWidget {
 class _SideNavBar extends StatelessWidget {
   const _SideNavBar({
     required this.tabsRouter,
-    required this.showTitle,
+    required this.isHandset,
   });
 
   @protected
   final TabsRouter tabsRouter;
 
   @protected
-  final bool showTitle;
+  final bool isHandset;
 
   @override
   Widget build(BuildContext context) {
@@ -142,16 +142,17 @@ class _SideNavBar extends StatelessWidget {
       left: 32,
       child: Center(
         child: SideNavBar(
-          showTitle: showTitle,
+          showTitle: !isHandset,
           items: [
             SideNavBarItem(
               icon: PixelIcons.car,
               title: context.l10n.generalTabTitle,
             ),
-            SideNavBarItem(
-              icon: PixelIcons.info,
-              title: context.l10n.carInfoTabTitle,
-            ),
+            if (isHandset)
+              SideNavBarItem(
+                icon: PixelIcons.info,
+                title: context.l10n.carInfoTabTitle,
+              ),
             SideNavBarItem(
               icon: PixelIcons.navigator,
               title: context.l10n.navigatorTabTitle,
