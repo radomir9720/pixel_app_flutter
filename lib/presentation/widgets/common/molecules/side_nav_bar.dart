@@ -7,6 +7,7 @@ class SideNavBar extends StatelessWidget {
     required this.items,
     required this.activeIndex,
     required this.onTap,
+    this.showTitle = true,
   });
 
   @protected
@@ -17,6 +18,9 @@ class SideNavBar extends StatelessWidget {
 
   @protected
   final ValueSetter<int> onTap;
+
+  @protected
+  final bool showTitle;
 
   @protected
   static const circularRadius = Radius.circular(100);
@@ -73,12 +77,13 @@ class SideNavBar extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 17),
-            Text(
-              item.title,
-              style: textStyle.copyWith(
-                color: selected ? colors.selectedText : colors.unselectedText,
+            if (showTitle)
+              Text(
+                item.title,
+                style: textStyle.copyWith(
+                  color: selected ? colors.selectedText : colors.unselectedText,
+                ),
               ),
-            ),
           ],
         );
       }),
