@@ -5,5 +5,12 @@
     "carInfoTabTitle": "Car Info",
     "navigatorTabTitle": "Navigator",
     "appsTabTitle": "Apps",
-    "chargingTabTitle": "Charging"
+    "chargingTabTitle": "Charging",
+
+    "frontButtonCaption": "Front",
+    "airflowButtonCaption": "Airflow",
+    "settingsButtonCaption": "Settings",
+    "powerOffButtonCaption": "Power Off",
+    "leftBeltButtonCaption": "Left belt",
+    "rightBeltButtonCaption": "Right belt"
 }

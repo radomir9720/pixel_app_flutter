@@ -53,6 +53,7 @@ class BottomNavBar extends StatelessWidget {
   }
 }
 
+@protected
 class BottomNavBarItem extends StatelessWidget {
   const BottomNavBarItem({
     super.key,

@@ -22,6 +22,8 @@ class PixelIcons {
   static const IconData apps = IconData(0xe907, fontFamily: _fontFamily);
   static const IconData navigator = IconData(0xe908, fontFamily: _fontFamily);
   static const IconData car = IconData(0xe909, fontFamily: _fontFamily);
+  static const IconData hideDown = IconData(0xe919, fontFamily: _fontFamily);
+  static const IconData showUp = IconData(0xe91a, fontFamily: _fontFamily);
   static const IconData about = IconData(0xe90a, fontFamily: _fontFamily);
   static const IconData licenses = IconData(0xe90b, fontFamily: _fontFamily);
   static const IconData fastActions = IconData(0xe90c, fontFamily: _fontFamily);

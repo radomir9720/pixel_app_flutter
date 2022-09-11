@@ -19,6 +19,10 @@ dependencies:
   equatable: ^2.0.5
   auto_route: ^5.0.0
   flutter_bloc: ^8.1.1
+  re_seedwork:
+    git:
+      url: https://github.com/radomir9720/re_seedwork.git
+      ref: "0.1.2"
 
 dev_dependencies:
   #  test

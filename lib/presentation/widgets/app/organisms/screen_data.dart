@@ -109,6 +109,14 @@ class ScreenData {
     }
   }
 
+  bool get isPortrait {
+    return size.width < size.height;
+  }
+
+  bool get isLandscape {
+    return !isPortrait;
+  }
+
   @override
   bool operator ==(dynamic other) {
     return other is ScreenData &&

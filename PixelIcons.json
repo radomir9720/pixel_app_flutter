@@ -274,12 +274,28 @@
     {
       "selection": [
         {
+          "order": 30,
+          "id": 23,
+          "name": "hideDown",
+          "prevSize": 32,
+          "code": 59673,
+          "tempChar": ""
+        },
+        {
+          "order": 31,
+          "id": 22,
+          "name": "showUp",
+          "prevSize": 32,
+          "code": 59674,
+          "tempChar": ""
+        },
+        {
           "order": 28,
           "id": 21,
           "name": "about",
           "prevSize": 32,
           "code": 59658,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 29,
@@ -287,7 +303,7 @@
           "name": "licenses",
           "prevSize": 32,
           "code": 59659,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 8,
@@ -295,7 +311,7 @@
           "name": "fastActions",
           "prevSize": 32,
           "code": 59660,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 9,
@@ -303,7 +319,7 @@
           "name": "power",
           "prevSize": 32,
           "code": 59661,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 10,
@@ -311,7 +327,7 @@
           "name": "windshieldBlower",
           "prevSize": 32,
           "code": 59662,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 11,
@@ -319,7 +335,7 @@
           "name": "airflow",
           "prevSize": 32,
           "code": 59663,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 12,
@@ -327,7 +343,7 @@
           "name": "fan",
           "prevSize": 32,
           "code": 59664,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 13,
@@ -335,7 +351,7 @@
           "name": "belt",
           "prevSize": 32,
           "code": 59665,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 14,
@@ -343,7 +359,7 @@
           "name": "settings",
           "prevSize": 32,
           "code": 59666,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 15,
@@ -351,7 +367,7 @@
           "name": "unlocked",
           "prevSize": 32,
           "code": 59667,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 16,
@@ -359,7 +375,7 @@
           "name": "locked",
           "prevSize": 32,
           "code": 59668,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 17,
@@ -367,7 +383,7 @@
           "name": "light",
           "prevSize": 32,
           "code": 59669,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 18,
@@ -375,7 +391,7 @@
           "name": "speedometer",
           "prevSize": 32,
           "code": 59670,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 19,
@@ -383,7 +399,7 @@
           "name": "sunCharging",
           "prevSize": 32,
           "code": 59671,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 20,
@@ -391,20 +407,48 @@
           "name": "battery",
           "prevSize": 32,
           "code": 59672,
-          "tempChar": ""
+          "tempChar": ""
         }
       ],
       "id": 0,
       "metadata": {
         "name": "Common",
         "importSize": {
-          "width": 15,
-          "height": 15
+          "width": 16,
+          "height": 10
         }
       },
       "height": 1024,
       "prevSize": 32,
       "icons": [
+        {
+          "id": 23,
+          "paths": [
+            "M903.68 192l-391.68 395.574-391.68-395.574-120.32 121.781 512 518.219 512-518.219-120.32-121.781z"
+          ],
+          "attrs": [],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "hideDown"
+          ],
+          "colorPermutations": {}
+        },
+        {
+          "id": 22,
+          "paths": [
+            "M120.32 832l391.68-395.574 391.68 395.574 120.32-121.781-512-518.219-512 518.219 120.32 121.781z"
+          ],
+          "attrs": [],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "showUp"
+          ],
+          "colorPermutations": {}
+        },
         {
           "id": 21,
           "paths": [

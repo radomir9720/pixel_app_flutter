@@ -4,6 +4,8 @@ class GradientScaffold extends Scaffold {
   GradientScaffold({
     required Widget body,
     super.bottomNavigationBar,
+    super.backgroundColor,
+    super.extendBody,
     super.key,
   }) : super(
           body: Builder(

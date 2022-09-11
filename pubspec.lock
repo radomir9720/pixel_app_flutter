@@ -415,6 +415,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  re_seedwork:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "0.1.2"
+      resolved-ref: "10b8390a3841d8cc6dfc351ab2a50d44ecfe2afa"
+      url: "https://github.com/radomir9720/re_seedwork.git"
+    source: git
+    version: "0.1.2"
   shelf:
     dependency: transitive
     description:

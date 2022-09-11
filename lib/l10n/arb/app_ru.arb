@@ -5,5 +5,12 @@
     "carInfoTabTitle": "О машине",
     "navigatorTabTitle": "Навигатор",
     "appsTabTitle": "Приложения",
-    "chargingTabTitle": "Зарядка"
+    "chargingTabTitle": "Зарядка",
+
+    "frontButtonCaption": "Обдув лоб. стекла",
+    "airflowButtonCaption": "Поток воздуха",
+    "settingsButtonCaption": "Настройки",
+    "powerOffButtonCaption": "Откл. питание",
+    "leftBeltButtonCaption": "Левый ремень",
+    "rightBeltButtonCaption": "Правый ремень"
 }
