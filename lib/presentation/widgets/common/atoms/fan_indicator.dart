@@ -18,28 +18,30 @@ class FanIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List<Widget>.generate(
-        sections,
-        (index) {
-          final disabled = power < index + 1;
+    return FittedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List<Widget>.generate(
+          sections,
+          (index) {
+            final disabled = power < index + 1;
 
-          return SizedBox.square(
-            dimension: 6,
-            child: DecoratedBox(
-              decoration: ShapeDecoration(
-                shape: const CircleBorder().copyWith(
-                  side: disabled
-                      ? BorderSide(color: AppColors.of(context).disabled)
-                      : null,
+            return SizedBox.square(
+              dimension: 6,
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  shape: const CircleBorder().copyWith(
+                    side: disabled
+                        ? BorderSide(color: AppColors.of(context).disabled)
+                        : null,
+                  ),
+                  color: disabled ? null : AppColors.of(context).primary,
                 ),
-                color: disabled ? null : AppColors.of(context).primary,
               ),
-            ),
-          );
-        },
-      ).divideBy(const SizedBox(width: 3)).toList(),
+            );
+          },
+        ).divideBy(const SizedBox(width: 3)).toList(),
+      ),
     );
   }
 }
