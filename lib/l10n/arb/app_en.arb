@@ -15,7 +15,10 @@
     "rightBeltButtonCaption": "Right belt",
 
     "frontTrunkInterfaceTitle": "Front Trunk",
+    "rearTrunkInterfaceTitle": "Rear Trunk",
     "doorInterfaceTitle": "Door",
+    "leftDoorInterfaceTitle": "Left Door",
+    "rightDoorInterfaceTitle": "Right Door",
     "trunkInterfaceTitle": "Trunk",
     "lightsInterfaceTitle": "Lights",
 

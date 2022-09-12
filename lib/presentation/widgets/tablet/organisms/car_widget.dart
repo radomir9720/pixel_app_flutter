@@ -136,7 +136,7 @@ class _CarWidgetState extends State<CarWidget> {
                   onPressed: () => setState(() {
                     frontTrunkOpened = !frontTrunkOpened;
                   }),
-                  title: context.l10n.frontTrunkInterfaceTitle,
+                  title: context.l10n.trunkInterfaceTitle,
                   status: getStatus(frontTrunkOpened),
                 ),
               ),

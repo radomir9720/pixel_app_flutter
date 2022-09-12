@@ -14,8 +14,11 @@
     "leftBeltButtonCaption": "Левый ремень",
     "rightBeltButtonCaption": "Правый ремень",
 
-    "frontTrunkInterfaceTitle": "Пер. Багажник",
+    "frontTrunkInterfaceTitle": "Передний Багажник",
+    "rearTrunkInterfaceTitle": "Задний Багажник",
     "doorInterfaceTitle": "Дверь",
+    "leftDoorInterfaceTitle": "Левая дверь",
+    "rightDoorInterfaceTitle": "Правая дверь",
     "trunkInterfaceTitle": "Багажник",
     "lightsInterfaceTitle": "Фары",
 
