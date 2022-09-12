@@ -33,16 +33,17 @@ class BottomInterfacesMenu extends StatelessWidget {
             Expanded(
               child: GlueTitle(
                 alignment: Alignment.centerLeft,
-                widget: PIconButton(
-                  onPressed: () {},
-                  icon: PixelIcons.settings,
-                  size:
-                      isHandset ? PIconButtonSize.normal : PIconButtonSize.big,
-                ),
                 title: context.l10n.settingsButtonCaption,
                 side: displayTitleAtTheBottom
                     ? GlueTitleSide.bottom
                     : GlueTitleSide.right,
+                child: PIconButton(
+                  onPressed: () {},
+                  icon: PixelIcons.settings,
+                  size: isHandset
+                      ? PIconButtonSize.small
+                      : PIconButtonSize.normal,
+                ),
               ),
             ),
             //
@@ -55,16 +56,17 @@ class BottomInterfacesMenu extends StatelessWidget {
             Expanded(
               child: GlueTitle(
                 alignment: Alignment.centerRight,
-                widget: PIconButton.error(
-                  onPressed: () {},
-                  icon: PixelIcons.power,
-                  size:
-                      isHandset ? PIconButtonSize.normal : PIconButtonSize.big,
-                ),
                 title: context.l10n.powerOffButtonCaption,
                 side: displayTitleAtTheBottom
                     ? GlueTitleSide.bottom
                     : GlueTitleSide.left,
+                child: PIconButton.error(
+                  onPressed: () {},
+                  icon: PixelIcons.power,
+                  size: isHandset
+                      ? PIconButtonSize.small
+                      : PIconButtonSize.normal,
+                ),
               ),
             ),
           ],

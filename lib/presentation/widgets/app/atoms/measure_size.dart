@@ -6,7 +6,10 @@ typedef OnWidgetSizeChange = void Function(Size size);
 class MeasureSizeRenderObject extends RenderProxyBox {
   MeasureSizeRenderObject(this.onChange);
 
+  @protected
   Size? oldSize;
+
+  @protected
   final OnWidgetSizeChange onChange;
 
   @override
@@ -27,9 +30,10 @@ class MeasureSize extends SingleChildRenderObjectWidget {
   const MeasureSize({
     super.key,
     required this.onChange,
-    required Widget super.child,
+    required super.child,
   });
 
+  @protected
   final OnWidgetSizeChange onChange;
 
   @override

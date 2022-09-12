@@ -12,5 +12,32 @@
     "settingsButtonCaption": "Настройки",
     "powerOffButtonCaption": "Откл. питание",
     "leftBeltButtonCaption": "Левый ремень",
-    "rightBeltButtonCaption": "Правый ремень"
+    "rightBeltButtonCaption": "Правый ремень",
+
+    "frontTrunkInterfaceTitle": "Пер. Багажник",
+    "doorInterfaceTitle": "Дверь",
+    "trunkInterfaceTitle": "Багажник",
+    "lightsInterfaceTitle": "Фары",
+
+    "autoModeLightsStatus": "Авто Режим",
+
+    "lockedInterfaceStatus": "Закрыто",
+    "unlockedInterfaceStatus": "Открыто",
+
+    "speedInfoPanelTitle": "Скорость",
+    "statisticInfoPanelTitle": "Статистика",
+    "fastActionsInfoPanelTitle": "Быстрые действия",
+
+    "kmMeasurementUnit": "км",
+    "kmPerHourMeasurenentUnit": "км/ч",
+    "kwPerHourMeasurementUnit": "кВт/ч",
+
+    "actionSwitchTitle": "Действие #{num}",
+    "@actionSwitchTitle": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    }
 }

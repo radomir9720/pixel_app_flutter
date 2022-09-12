@@ -12,5 +12,33 @@
     "settingsButtonCaption": "Settings",
     "powerOffButtonCaption": "Power Off",
     "leftBeltButtonCaption": "Left belt",
-    "rightBeltButtonCaption": "Right belt"
+    "rightBeltButtonCaption": "Right belt",
+
+    "frontTrunkInterfaceTitle": "Front Trunk",
+    "doorInterfaceTitle": "Door",
+    "trunkInterfaceTitle": "Trunk",
+    "lightsInterfaceTitle": "Lights",
+
+    "autoModeLightsStatus": "Auto Mode",
+
+    "lockedInterfaceStatus": "Locked",
+    "unlockedInterfaceStatus": "Unlocked",
+
+    "speedInfoPanelTitle": "Speed",
+    "statisticInfoPanelTitle": "Statistic",
+    "fastActionsInfoPanelTitle": "Fast actions",
+
+    "kmMeasurementUnit": "km",
+    "kmPerHourMeasurenentUnit": "km/h",
+    "kwPerHourMeasurementUnit": "kW/h",
+
+    "actionSwitchTitle": "Action #{num}",
+    "@actionSwitchTitle": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    }
+
 }

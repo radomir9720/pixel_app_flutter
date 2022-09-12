@@ -30,6 +30,8 @@ class HomeScreen extends StatelessWidget {
         final screenType = screenData.type;
         final landscape = !screenType.isHandset ||
             screenData.size.width > screenData.size.height;
+        final showSideNavBarTitle =
+            !screenType.isHandset && screenData.size.width > 700;
 
         return BottomSheetInterfacesBuilder(
           enable: screenType.isHandset,
@@ -49,6 +51,7 @@ class HomeScreen extends StatelessWidget {
                     _SideNavBar(
                       tabsRouter: tabsRouter,
                       isHandset: screenType.isHandset,
+                      showTitle: showSideNavBarTitle,
                     )
                 ],
               ),
@@ -126,6 +129,7 @@ class _SideNavBar extends StatelessWidget {
   const _SideNavBar({
     required this.tabsRouter,
     required this.isHandset,
+    this.showTitle = true,
   });
 
   @protected
@@ -134,34 +138,42 @@ class _SideNavBar extends StatelessWidget {
   @protected
   final bool isHandset;
 
+  @protected
+  final bool showTitle;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
       top: 0,
       bottom: 0,
-      left: 32,
+      left: isHandset ? 16 : 32,
       child: Center(
         child: SideNavBar(
-          showTitle: !isHandset,
+          showTitle: showTitle,
           items: [
             SideNavBarItem(
+              pageIndex: 0,
               icon: PixelIcons.car,
               title: context.l10n.generalTabTitle,
             ),
             if (isHandset)
               SideNavBarItem(
+                pageIndex: 1,
                 icon: PixelIcons.info,
                 title: context.l10n.carInfoTabTitle,
               ),
             SideNavBarItem(
+              pageIndex: 2,
               icon: PixelIcons.navigator,
               title: context.l10n.navigatorTabTitle,
             ),
             SideNavBarItem(
+              pageIndex: 3,
               icon: PixelIcons.apps,
               title: context.l10n.appsTabTitle,
             ),
             SideNavBarItem(
+              pageIndex: 4,
               icon: PixelIcons.charging,
               title: context.l10n.chargingTabTitle,
             ),

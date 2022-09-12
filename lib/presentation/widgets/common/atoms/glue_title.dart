@@ -14,7 +14,7 @@ enum GlueTitleSide {
 class GlueTitle extends StatelessWidget {
   const GlueTitle({
     super.key,
-    required this.widget,
+    required this.child,
     required this.title,
     required this.side,
     this.alignment = Alignment.center,
@@ -22,7 +22,7 @@ class GlueTitle extends StatelessWidget {
   });
 
   @protected
-  final Widget widget;
+  final Widget child;
 
   @protected
   final String title;
@@ -56,6 +56,7 @@ class GlueTitle extends StatelessWidget {
     return Align(
       alignment: alignment,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -67,7 +68,7 @@ class GlueTitle extends StatelessWidget {
                   right: side.isRight ? gap : 0,
                   bottom: side.isBottom ? gap : 0,
                 ),
-                child: widget,
+                child: child,
               ),
               if (side.isRight) textWidget,
             ],

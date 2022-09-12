@@ -46,8 +46,8 @@ class SideNavBar extends StatelessWidget {
       children: List.generate(items.length, (index) {
         final isFirst = index == 0;
         final isLast = index == items.length - 1;
-        final selected = index == activeIndex;
         final item = items[index];
+        final selected = item.pageIndex == activeIndex;
         final borderRadius = BorderRadius.vertical(
           top: isFirst ? circularRadius : Radius.zero,
           bottom: isLast ? circularRadius : Radius.zero,
@@ -59,7 +59,7 @@ class SideNavBar extends StatelessWidget {
               width: 38,
               height: 42,
               child: InkWell(
-                onTap: () => onTap(index),
+                onTap: () => onTap(item.pageIndex),
                 borderRadius: borderRadius,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -95,9 +95,12 @@ class SideNavBarItem {
   const SideNavBarItem({
     required this.icon,
     required this.title,
+    required this.pageIndex,
   });
 
   final IconData icon;
 
   final String title;
+
+  final int pageIndex;
 }

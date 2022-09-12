@@ -94,6 +94,24 @@ class MaterialTheme {
         color: colors.text,
       ),
 
+      chipTheme: ChipThemeData(
+        labelStyle: TextStyle(
+          height: 1.21,
+          fontSize: 11.fo,
+          fontFamily: _fontFamily,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w500,
+          color: colors.buttonText,
+        ),
+        padding:
+            EdgeInsets.symmetric(horizontal: 5.si, vertical: 12.5.si).copyWith(
+          bottom: 14.5,
+        ),
+        elevation: 0,
+        shape: ElevatedButtonBorder(colors: colors),
+        selectedColor: colors.primaryAccent.withOpacity(.15),
+      ),
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
@@ -102,7 +120,7 @@ class MaterialTheme {
             height: 1.21,
             fontSize: 11.fo,
             fontFamily: _fontFamily,
-            fontStyle: FontStyle.italic,
+            // fontStyle: FontStyle.italic,
             fontWeight: FontWeight.w500,
             color: colors.buttonText,
           ),
