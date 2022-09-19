@@ -115,7 +115,7 @@ class MaterialTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          onPrimary: colors.onPrimary,
+          foregroundColor: colors.onPrimary,
           textStyle: TextStyle(
             height: 1.21,
             fontSize: 11.fo,

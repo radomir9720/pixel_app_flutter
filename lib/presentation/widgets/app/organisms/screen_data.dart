@@ -126,7 +126,7 @@ class ScreenData {
   }
 
   @override
-  int get hashCode => hashValues(
+  int get hashCode => Object.hash(
         type.hashCode,
         size.hashCode,
         orientation.hashCode,
