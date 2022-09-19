@@ -7,6 +7,18 @@
 		<string>en</string>
 		<string>ru</string>
 	</array>
+
+	<!-- <key>NSBluetoothAlwaysUsageDescription</key>  
+	<string>To keep bluetooth connection with the main car controller</string>  
+	<key>To keep connection with the main car controller</key>  
+	<string>To keep bluetooth connection with the main car controller</string>  
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>  
+	<string>To keep bluetooth connection with the main car controller</string>  
+	<key>NSLocationAlwaysUsageDescription</key>  
+	<string>To keep bluetooth connection with the main car controller</string>  
+	<key>NSLocationWhenInUseUsageDescription</key>  
+	<string>To keep bluetooth connection with the main car controller</string> -->
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

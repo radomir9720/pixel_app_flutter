@@ -1,0 +1,17 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Radomir Epur on 19.09.2022.
+  
+*/
+
+//NSBluetoothAlwaysUsageDescription = "Чтобы сохранять блютуз соединение с главным контроллером автомобиля";
+//
+//NSBluetoothPeripheralUsageDescription = "Чтобы сохранять блютуз соединение с главным контроллером автомобиля";
+//
+//NSLocationAlwaysAndWhenInUseUsageDescription = "Чтобы сохранять блютуз соединение с главным контроллером автомобиля";
+//
+//NSLocationAlwaysUsageDescription = "Чтобы сохранять блютуз соединение с главным контроллером автомобиля";
+//
+//NSLocationWhenInUseUsageDescription = "Чтобы сохранять блютуз соединение с главным контроллером автомобиля";

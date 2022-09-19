@@ -1,0 +1,17 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Radomir Epur on 19.09.2022.
+  
+*/
+
+//NSBluetoothAlwaysUsageDescription = "To keep bluetooth connection with the main car controller";
+//
+//NSBluetoothPeripheralUsageDescription = "To keep bluetooth connection with the main car controller";
+//
+//NSLocationAlwaysAndWhenInUseUsageDescription = "To keep bluetooth connection with the main car controller";
+//
+//NSLocationAlwaysUsageDescription = "To keep bluetooth connection with the main car controller";
+//
+//NSLocationWhenInUseUsageDescription = "To keep bluetooth connection with the main car controller";
