@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
+import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/glue_title.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.dart';
@@ -38,7 +40,9 @@ class BottomInterfacesMenu extends StatelessWidget {
                     ? GlueTitleSide.bottom
                     : GlueTitleSide.right,
                 child: PIconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.router.push(const SettingsRoute());
+                  },
                   icon: PixelIcons.settings,
                   size: isHandset
                       ? PIconButtonSize.small
