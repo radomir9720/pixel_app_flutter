@@ -26,7 +26,11 @@ class GradientScaffold extends Scaffold {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: body,
+                // TODO(radomir9720): delete material from widgets
+                child: Material(
+                  color: Colors.transparent,
+                  child: body,
+                ),
               );
             },
           ),

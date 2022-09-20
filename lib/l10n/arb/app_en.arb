@@ -42,6 +42,12 @@
                 "type": "int"
             }
         }
-    }
+    },
 
+    "closeButtonCaption": "Close",
+    "dataSourceButtonCaption": "Data Source",
+    "fastActionsButtonCaption": "Fast Actions",
+    "licencesButtonCaption": "Licences",
+    "aboutButtonCaption": "About",
+    "settingScreenTitle": "Settings"
 }

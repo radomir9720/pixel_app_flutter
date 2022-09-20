@@ -42,5 +42,12 @@
                 "type": "int"
             }
         }
-    }
+    },
+
+    "closeButtonCaption": "Закрыть",
+    "dataSourceButtonCaption": "Источник Данных",
+    "fastActionsButtonCaption": "Быстрые Действия",
+    "licencesButtonCaption": "Лицензии",
+    "aboutButtonCaption": "О приложении",
+    "settingScreenTitle": "Настройки"
 }

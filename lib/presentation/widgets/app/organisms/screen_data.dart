@@ -94,18 +94,18 @@ class ScreenData {
   final Orientation orientation;
 
   R whenType<R>({
-    required R Function(Size size, Orientation orientation) orElse,
-    R Function(Size size, Orientation orientation)? desktop,
-    R Function(Size size, Orientation orientation)? tablet,
-    R Function(Size size, Orientation orientation)? handset,
+    required R Function() orElse,
+    R Function()? desktop,
+    R Function()? tablet,
+    R Function()? handset,
   }) {
     switch (type) {
       case ScreenType.desktop:
-        return desktop?.call(size, orientation) ?? orElse(size, orientation);
+        return desktop?.call() ?? orElse();
       case ScreenType.tablet:
-        return tablet?.call(size, orientation) ?? orElse(size, orientation);
+        return tablet?.call() ?? orElse();
       case ScreenType.handset:
-        return handset?.call(size, orientation) ?? orElse(size, orientation);
+        return handset?.call() ?? orElse();
     }
   }
 

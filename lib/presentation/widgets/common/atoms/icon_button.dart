@@ -100,7 +100,7 @@ class PIconButton extends StatelessWidget {
     );
     final iconSize = size.when(
       small: () => 14,
-      normal: () => 18,
+      normal: () => 16,
       big: () => 23,
     );
 

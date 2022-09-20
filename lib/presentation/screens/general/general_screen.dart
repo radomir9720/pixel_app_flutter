@@ -16,8 +16,8 @@ class GeneralScreen extends StatelessWidget {
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: screenData.whenType(
-        orElse: (_, __) => const TabletGeneralScreenBody(),
-        handset: (_, __) => const HandsetGeneralScreenBody(),
+        orElse: () => const TabletGeneralScreenBody(),
+        handset: () => const HandsetGeneralScreenBody(),
       ),
     );
   }

@@ -93,7 +93,7 @@ class _BottomNavBar extends StatelessWidget {
     final landscape = !screenData.type.isHandset || !screenData.isPortrait;
 
     return screenData.whenType(
-      orElse: (_, __) {
+      orElse: () {
         return IntrinsicHeight(
           child: Padding(
             padding:
@@ -102,7 +102,7 @@ class _BottomNavBar extends StatelessWidget {
           ),
         );
       },
-      handset: (_, __) {
+      handset: () {
         if (!landscape) {
           return MeasureSize(
             onChange: onBottomNavBarSizeChange,
