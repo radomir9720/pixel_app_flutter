@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
@@ -12,6 +16,7 @@ class SpeedWidget extends StatelessWidget {
     fontSize: 104,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
+    fontFeatures: [FontFeature.tabularFigures()],
   );
 
   @protected
@@ -44,7 +49,11 @@ class SpeedWidget extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '160',
+                    text: context
+                        .watch<DataSourceLiveCubit>()
+                        .state
+                        .speed
+                        .toString(),
                     style: speedTextStyle.copyWith(
                       color: AppColors.of(context).textAccent,
                     ),

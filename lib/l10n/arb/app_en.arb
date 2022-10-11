@@ -49,5 +49,25 @@
     "fastActionsButtonCaption": "Fast Actions",
     "licencesButtonCaption": "Licences",
     "aboutButtonCaption": "About",
-    "settingScreenTitle": "Settings"
+    "settingScreenTitle": "Settings",
+
+    "selectDeviceDialogTitle": "Select Device",
+    "deviceNameDialogLabel": "Device name",
+    "bondedDialogLabel": "Bonded",
+    "noDeviceNameDialogStub": "No name",
+    "errorDiscoveringDevicesMessage": "Error while discovering devices",
+    "errorConnectingToDataSourceMessage": "Error connecting to the data source",
+    "successfullyConnectedToDataSourceMessage": "Successfully connected to the data source",
+    "cancelButtonCaption": "Cancel",
+
+    "unknownErrorSelectingDataSourceMessage": "Unknown error while selecting data source",
+    "unavailableDataSourceErrorMessage": "Data source is unavailable",
+    "errorEnablingDataSourceMessage": "Error while enabling data source",
+    "demoDataSourceTitle": "Demo",
+    "bluetoothDataSourceTitle": "Bluetooth"
+
+
+
+
+
 }

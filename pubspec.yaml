@@ -16,6 +16,7 @@ dependencies:
   # dart
   bloc: ^8.1.0
   intl: ^0.17.0
+  crclib: ^3.0.0
   equatable: ^2.0.5
   auto_route: ^5.0.0
   flutter_svg: ^1.1.5
@@ -24,6 +25,17 @@ dependencies:
     git:
       url: https://github.com/radomir9720/re_seedwork.git
       ref: "0.1.2"
+
+  # codegen
+  freezed_annotation: ^2.1.0
+
+  # di
+  get_it: ^7.2.0
+  injectable: ^1.5.3
+
+  # platform
+  shared_preferences: ^2.0.15
+  flutter_bluetooth_serial: ^0.4.0
 
 dev_dependencies:
   #  test
@@ -36,8 +48,10 @@ dev_dependencies:
   very_good_analysis: ^3.0.1
 
   # codegen
+  freezed: ^2.1.0
   build_runner: ^2.2.0
   auto_route_generator: ^5.0.0
+  injectable_generator: ^1.5.4
 
 flutter:
   uses-material-design: true

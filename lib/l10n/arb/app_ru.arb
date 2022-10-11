@@ -49,5 +49,20 @@
     "fastActionsButtonCaption": "Быстрые Действия",
     "licencesButtonCaption": "Лицензии",
     "aboutButtonCaption": "О приложении",
-    "settingScreenTitle": "Настройки"
+    "settingScreenTitle": "Настройки",
+
+    "selectDeviceDialogTitle": "Выберите устройство",
+    "deviceNameDialogLabel": "Имя устройства",
+    "bondedDialogLabel": "Сопряжено",
+    "noDeviceNameDialogStub": "Нет имени",
+    "errorDiscoveringDevicesMessage": "Ошибка при обнаружении устройств",
+    "errorConnectingToDataSourceMessage": "Ошибка при подключении к источнику данных",
+    "successfullyConnectedToDataSourceMessage": "Успешное подключение к источнику данных",
+    "cancelButtonCaption": "Отменить",
+
+    "unknownErrorSelectingDataSourceMessage": "Неизвестная ошибка при выборе источника данных",
+    "unavailableDataSourceErrorMessage": "Источник данных недоступен",
+    "errorEnablingDataSourceMessage": "Ошибка при включении источника данных",
+    "demoDataSourceTitle": "Demo",
+    "bluetoothDataSourceTitle": "Bluetooth"
 }

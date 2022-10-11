@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/theme.dart';
@@ -22,8 +25,8 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return AppColors(
       data: const AppColorsData.dark(),
-      child: Builder(
-        builder: (context) {
+      child: BlocBuilder<DataSourceConnectBloc, DataSourceConnectState>(
+        builder: (context, state) {
           return MaterialApp.router(
             theme: MaterialTheme.from(AppColors.of(context)),
             localizationsDelegates: const [
@@ -33,7 +36,18 @@ class _AppState extends State<App> {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             routeInformationParser: _appRouter.defaultRouteParser(),
-            routerDelegate: _appRouter.delegate(),
+            routerDelegate: AutoRouterDelegate.declarative(
+              _appRouter,
+              routes: (_) {
+                if (state.isLoading) {
+                  return const [LoadingRoute()];
+                }
+                if (state.isSuccess) {
+                  return const [HomeFlow()];
+                }
+                return const [SelectDataSourceFlow()];
+              },
+            ),
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),

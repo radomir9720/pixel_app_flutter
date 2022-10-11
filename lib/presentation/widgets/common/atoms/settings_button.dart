@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 
+enum SettingsButtonState {
+  error,
+  enabled,
+  selected;
+
+  R when<R>({
+    required R Function() error,
+    required R Function() enabled,
+    required R Function() selected,
+  }) {
+    switch (this) {
+      case SettingsButtonState.error:
+        return error();
+      case SettingsButtonState.enabled:
+        return enabled();
+      case SettingsButtonState.selected:
+        return selected();
+    }
+  }
+}
+
 class SettingsButton extends StatelessWidget {
   const SettingsButton({
     super.key,
     this.onPressed,
+    this.titleFontSize = 14,
     required this.icon,
     required this.title,
+    this.state = SettingsButtonState.enabled,
   });
 
   @protected
@@ -19,6 +42,12 @@ class SettingsButton extends StatelessWidget {
   final String title;
 
   @protected
+  final double titleFontSize;
+
+  @protected
+  final SettingsButtonState state;
+
+  @protected
   static const borderRadius = BorderRadius.all(Radius.circular(8));
 
   @protected
@@ -27,7 +56,7 @@ class SettingsButton extends StatelessWidget {
   @protected
   static const titleStyle = TextStyle(
     fontSize: 16,
-    height: 1.18,
+    height: 1.42,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
@@ -38,9 +67,17 @@ class SettingsButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: borderRadius,
         border: Border.all(
-          color: AppColors.of(context).border,
+          color: state.when(
+            error: () => AppColors.of(context).errorAccent,
+            enabled: () => AppColors.of(context).border,
+            selected: () => AppColors.of(context).primary,
+          ),
         ),
-        color: buttonColor,
+        color: state.when(
+          error: () => AppColors.of(context).errorAccent.withOpacity(.15),
+          enabled: () => buttonColor,
+          selected: () => AppColors.of(context).primary.withOpacity(.15),
+        ),
       ),
       child: InkWell(
         borderRadius: borderRadius,
@@ -56,8 +93,10 @@ class SettingsButton extends StatelessWidget {
                 Flexible(
                   child: Text(
                     title,
-                    style:
-                        titleStyle.copyWith(color: AppColors.of(context).text),
+                    style: titleStyle.copyWith(
+                      color: AppColors.of(context).text,
+                      fontSize: titleFontSize,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

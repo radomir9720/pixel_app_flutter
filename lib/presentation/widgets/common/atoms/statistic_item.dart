@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 
@@ -24,6 +26,7 @@ class StatisticItem extends StatelessWidget {
     fontSize: 14,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w600,
+    fontFeatures: [FontFeature.tabularFigures()],
   );
 
   @protected

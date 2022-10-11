@@ -5,9 +5,12 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:flutter/widgets.dart';
 import 'package:pixel_app_flutter/app/app.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   bootstrap(() => const App());
 }

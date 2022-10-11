@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:pixel_app_flutter/app/scopes/selected_data_source_scope.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/apps_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/car_info/car_info_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/charging/charging_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/data_source/data_source_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/general_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/home/home_screen.dart';
@@ -18,7 +20,7 @@ part 'main_router.gr.dart';
     CustomRoute<void>(
       path: '',
       initial: true,
-      page: EmptyRouterPage,
+      page: SelectedDataSourceScope,
       name: 'HomeFlow',
       transitionsBuilder: TransitionsBuilders.fadeIn,
       children: [
@@ -57,6 +59,23 @@ part 'main_router.gr.dart';
           page: DataSourceScreen,
         ),
       ],
+    ),
+    AutoRoute<void>(
+      path: 'select-data-source',
+      page: EmptyRouterPage,
+      name: 'SelectDataSourceFlow',
+      children: [
+        AutoRoute<void>(
+          initial: true,
+          name: 'SelectDataSourceRoute',
+          page: DataSourceScreen,
+        ),
+      ],
+    ),
+    CustomRoute<void>(
+      path: 'loading',
+      page: LoadingScreen,
+      transitionsBuilder: TransitionsBuilders.noTransition,
     ),
   ],
 )
