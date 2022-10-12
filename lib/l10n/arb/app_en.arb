@@ -51,6 +51,9 @@
     "aboutButtonCaption": "About",
     "settingScreenTitle": "Settings",
 
+    "dataSourceScreenTitle": "Data source",
+    "selectDataSourceScreenTitle": "Select data source",
+
     "selectDeviceDialogTitle": "Select Device",
     "deviceNameDialogLabel": "Device name",
     "bondedDialogLabel": "Bonded",

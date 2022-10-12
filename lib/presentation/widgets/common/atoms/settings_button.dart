@@ -26,7 +26,7 @@ class SettingsButton extends StatelessWidget {
   const SettingsButton({
     super.key,
     this.onPressed,
-    this.titleFontSize = 14,
+    this.titleFontSize,
     required this.icon,
     required this.title,
     this.state = SettingsButtonState.enabled,
@@ -42,7 +42,7 @@ class SettingsButton extends StatelessWidget {
   final String title;
 
   @protected
-  final double titleFontSize;
+  final double? titleFontSize;
 
   @protected
   final SettingsButtonState state;
@@ -84,25 +84,28 @@ class SettingsButton extends StatelessWidget {
         onTap: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon),
-                const SizedBox(width: 10),
-                Flexible(
-                  child: Text(
-                    title,
-                    style: titleStyle.copyWith(
-                      color: AppColors.of(context).text,
-                      fontSize: titleFontSize,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Icon(icon),
+              ),
+              Flexible(
+                child: Text(
+                  title,
+                  style: titleStyle.copyWith(
+                    color: AppColors.of(context).text,
+                    fontSize: titleFontSize ??
+                        DefaultTextStyle.of(context).style.fontSize,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox.shrink()
+            ],
           ),
         ),
       ),

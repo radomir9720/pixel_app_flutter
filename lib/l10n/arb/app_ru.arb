@@ -51,6 +51,9 @@
     "aboutButtonCaption": "О приложении",
     "settingScreenTitle": "Настройки",
 
+    "dataSourceScreenTitle": "Источник данных",
+    "selectDataSourceScreenTitle": "Выберите источник данных",
+
     "selectDeviceDialogTitle": "Выберите устройство",
     "deviceNameDialogLabel": "Имя устройства",
     "bondedDialogLabel": "Сопряжено",
