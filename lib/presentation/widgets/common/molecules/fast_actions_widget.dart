@@ -89,7 +89,8 @@ class _FastActionsWidgetState extends State<FastActionsWidget> {
             //
             if (widget.mode.isManyRows &&
                 manyRowsWidgetWidth <= constraints.maxWidth)
-              UnconstrainedBox(
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: MeasureSize(
                   onChange: (size) {
                     if (size.width != manyRowsWidgetWidth) {
