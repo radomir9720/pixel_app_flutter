@@ -62,6 +62,8 @@ class DataSourceConnectBloc
   ) async {
     emit(state.inLoading());
 
+    await Future<void>.delayed(Duration.zero);
+
     try {
       final values = dataSourceStorage.read();
       emit(
@@ -108,7 +110,9 @@ class DataSourceConnectBloc
     Emitter<DataSourceConnectState> emit,
   ) async {
     final address = event.dataSourceWithAddress.address;
-    emit(AsyncData.loading(Optional.presented(event.dataSourceWithAddress)));
+    emit(state.inLoading());
+
+    await Future<void>.delayed(Duration.zero);
 
     try {
       final dataSource = event.dataSourceWithAddress.dataSource;
@@ -122,7 +126,9 @@ class DataSourceConnectBloc
               dataSourceKey: dataSource.key,
               address: address,
             );
-            return state.inSuccess();
+            return AsyncData.success(
+              Optional.presented(event.dataSourceWithAddress),
+            );
           },
         ),
       );
