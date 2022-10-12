@@ -3,12 +3,12 @@ import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-typedef DataSourceDeviceListState = AsyncData<List<DataSourceDevice>, Object>;
+typedef DataSourceDeviceListState = AsyncData<Set<DataSourceDevice>, Object>;
 
 class DataSourceDeviceListCubit extends Cubit<DataSourceDeviceListState>
     with ConsumerBlocMixin {
   DataSourceDeviceListCubit({required this.dataSource})
-      : super(const AsyncData.initial([])) {
+      : super(const AsyncData.initial({})) {
     try {
       dataSource.getDeviceStream().then((result) {
         result.when(
@@ -17,10 +17,10 @@ class DataSourceDeviceListCubit extends Cubit<DataSourceDeviceListState>
             subscribe<DataSourceDevice>(
               stream,
               (value) => emit(
-                AsyncData.success([
+                AsyncData.success({
                   ...state.payload,
                   value,
-                ]),
+                }),
               ),
             );
           },
