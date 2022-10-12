@@ -39,21 +39,23 @@ class HomeScreen extends StatelessWidget {
             if (landscape) sheetController.changeBottomPadding(0);
 
             return GradientScaffold(
-              body: Stack(
-                children: [
-                  Positioned.fill(
-                    child: FadeTransition(
-                      opacity: animation,
-                      child: child,
+              body: SafeArea(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      ),
                     ),
-                  ),
-                  if (landscape)
-                    _SideNavBar(
-                      tabsRouter: tabsRouter,
-                      isHandset: screenType.isHandset,
-                      showTitle: showSideNavBarTitle,
-                    )
-                ],
+                    if (landscape)
+                      _SideNavBar(
+                        tabsRouter: tabsRouter,
+                        isHandset: screenType.isHandset,
+                        showTitle: showSideNavBarTitle,
+                      )
+                  ],
+                ),
               ),
               bottomNavigationBar: _BottomNavBar(
                 tabsRouter: tabsRouter,
