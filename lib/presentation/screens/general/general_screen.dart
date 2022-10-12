@@ -36,7 +36,12 @@ class TabletGeneralScreenBody extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
           ),
-          const TabletUpperInfoPanel(),
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: TabletUpperInfoPanel(),
+          ),
           Positioned(
             right: MediaQuery.of(context).size.width * .25,
             bottom: MediaQuery.of(context).size.height * .25,

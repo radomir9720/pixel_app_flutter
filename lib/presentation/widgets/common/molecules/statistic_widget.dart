@@ -4,6 +4,7 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/statistic_item.dart';
+import 'package:re_seedwork/re_seedwork.dart';
 
 class StatisticWidget extends StatelessWidget {
   const StatisticWidget({super.key, this.useWrap = false});
@@ -48,20 +49,29 @@ class StatisticWidget extends StatelessWidget {
           Text(
             context.l10n.statisticInfoPanelTitle,
             style: Theme.of(context).textTheme.headline4,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 16),
           if (useWrap)
             Wrap(
               runSpacing: 16,
               spacing: 85,
-              children: items,
+              children: items
+                  .map(
+                    (child) => SizedBox(
+                      width: 150,
+                      child: child,
+                    ),
+                  )
+                  .toList(),
             )
           else
-            Expanded(
+            FittedBox(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: items,
+                children: items.divideBy(const SizedBox(height: 10)).toList(),
               ),
             ),
         ],
