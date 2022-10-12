@@ -53,29 +53,32 @@ class InterfaceButton extends StatelessWidget {
     final color =
         disabled ? AppColors.of(context).disabled : AppColors.of(context).text;
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.all(6),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(
-              icon,
-              size: 26,
-              color: color,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            DefaultTextStyle(
-              style: textStyle.copyWith(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                icon,
+                size: 26,
                 color: color,
               ),
-              child: bottom,
-            ),
-          ],
+              const SizedBox(
+                height: 8,
+              ),
+              DefaultTextStyle(
+                style: textStyle.copyWith(
+                  color: color,
+                ),
+                child: bottom,
+              ),
+            ],
+          ),
         ),
       ),
     );
