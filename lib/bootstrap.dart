@@ -21,6 +21,16 @@ import 'package:pixel_app_flutter/data/services/demo_data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum Environment {
+  prod,
+  stg,
+  dev;
+
+  bool get isDev => this == Environment.dev;
+  bool get isStg => this == Environment.stg;
+  bool get isProd => this == Environment.prod;
+}
+
 class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
@@ -35,7 +45,10 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+Future<void> bootstrap(
+  FutureOr<Widget> Function() builder,
+  Environment env,
+) async {
   // SizeProvider.initialize(sizeConverter:
   // const SizeConverter(fo: fo, si: si));
 
@@ -45,7 +58,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   Bloc.observer = AppBlocObserver();
 
-  await configureDependencies();
+  await configureDependencies(env);
 
   await runZonedGuarded(
     () async => runApp(MainScope(child: await builder())),
@@ -54,22 +67,23 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 }
 
 @InjectableInit()
-Future<void> configureDependencies() async {
+Future<void> configureDependencies(Environment env) async {
   final getIt = GetIt.instance;
 
-  await _configureManualDeps(getIt);
+  await _configureManualDeps(getIt, env);
   $initGetIt(getIt);
 }
 
-Future<void> _configureManualDeps(GetIt getIt) async {
+Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
   final gh = GetItHelper(getIt)
     ..factory<List<DataSource>>(
       () => [
         if (Platform.isAndroid)
           BluetoothDataSource(bluetoothSerial: FlutterBluetoothSerial.instance),
-        DemoDataSource(),
+        DemoDataSource(generateRandomErrors: env.isDev),
       ],
-    );
+    )
+    ..factory<Environment>(() => env);
 
   await gh.factoryAsync<SharedPreferences>(
     SharedPreferences.getInstance,

@@ -7,13 +7,18 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 class DemoDataSource implements DataSource {
-  DemoDataSource({this.updatePeriodMillis = 800})
-      : controller = StreamController.broadcast(),
+  DemoDataSource({
+    this.generateRandomErrors = false,
+    this.updatePeriodMillis = 800,
+  })  : controller = StreamController.broadcast(),
         subscriptionCallbacks = {},
         valueCache = {};
 
   @protected
   final int updatePeriodMillis;
+
+  @protected
+  final bool generateRandomErrors;
 
   @visibleForTesting
   final Map<ParameterId, int> valueCache;
@@ -23,7 +28,7 @@ class DemoDataSource implements DataSource {
     List<E> en,
     V value,
   ) {
-    if (math.Random().nextBool()) {
+    if (generateRandomErrors && math.Random().nextBool()) {
       final errorIndex = math.Random().nextInt(en.length);
       final error = en[errorIndex];
       return Result.error(error);
@@ -59,7 +64,9 @@ class DemoDataSource implements DataSource {
   }
 
   @override
-  Future<void> dispose() async {}
+  Future<void> dispose() async {
+    await controller.close();
+  }
 
   @override
   Future<Result<EnableError, void>> enable() async {
