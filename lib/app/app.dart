@@ -12,7 +12,10 @@ import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 
 class App extends StatefulWidget {
-  const App({super.key});
+  const App({super.key, this.observersBuilder});
+
+  @protected
+  final List<NavigatorObserver> Function()? observersBuilder;
 
   @override
   State<App> createState() => _AppState();
@@ -50,6 +53,8 @@ class _AppState extends State<App> {
                 }
                 return const [SelectDataSourceFlow()];
               },
+              navigatorObservers: widget.observersBuilder ??
+                  AutoRouterDelegate.defaultNavigatorObserversBuilder,
             ),
             builder: (context, child) {
               return MediaQuery(

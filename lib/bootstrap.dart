@@ -10,10 +10,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
+import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/scopes/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
 import 'package:pixel_app_flutter/data/services/bluetooth_data_source.dart';
@@ -29,39 +34,58 @@ enum Environment {
   bool get isDev => this == Environment.dev;
   bool get isStg => this == Environment.stg;
   bool get isProd => this == Environment.prod;
-}
 
-class AppBlocObserver extends BlocObserver {
-  @override
-  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    super.onChange(bloc, change);
-    // log('onChange(${bloc.runtimeType}, $change)');
-  }
-
-  @override
-  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-    // log('onError(${bloc.runtimeType}, $error, $stackTrace)');
-    super.onError(bloc, error, stackTrace);
+  R when<R>({
+    required R Function() prod,
+    required R Function() stg,
+    required R Function() dev,
+  }) {
+    switch (this) {
+      case Environment.prod:
+        return prod();
+      case Environment.stg:
+        return stg();
+      case Environment.dev:
+        return dev();
+    }
   }
 }
 
 Future<void> bootstrap(
-  FutureOr<Widget> Function() builder,
+  FutureOr<Widget> Function(List<NavigatorObserver> Function() observersBuilder)
+      builder,
   Environment env,
 ) async {
   // SizeProvider.initialize(sizeConverter:
   // const SizeConverter(fo: fo, si: si));
 
-  FlutterError.onError = (details) {
-    log(details.exceptionAsString(), stackTrace: details.stack);
-  };
+  await Firebase.initializeApp();
 
-  Bloc.observer = AppBlocObserver();
+  await CrashlyticsHelper.initialize();
+
+  await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(kReleaseMode);
+
+  FlutterError.onError = CrashlyticsHelper.recordFlutterError;
+
+  Bloc.observer = FirebaseBlocObserver();
 
   await configureDependencies(env);
 
   await runZonedGuarded(
-    () async => runApp(MainScope(child: await builder())),
+    () async => runApp(
+      MainScope(
+        child: await builder(
+          () => [
+            FirebaseAnalyticsObserver(
+              analytics: FirebaseAnalytics.instance,
+              routeFilter: (route) {
+                return route is PageRoute || route is DialogRoute;
+              },
+            ),
+          ],
+        ),
+      ),
+    ),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

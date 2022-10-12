@@ -12,5 +12,5 @@ import 'package:pixel_app_flutter/bootstrap.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  bootstrap(() => const App(), Environment.prod);
+  bootstrap((ob) => App(observersBuilder: ob), Environment.prod);
 }

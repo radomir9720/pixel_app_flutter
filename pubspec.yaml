@@ -37,6 +37,11 @@ dependencies:
   shared_preferences: ^2.0.15
   flutter_bluetooth_serial: ^0.4.0
 
+  # firebase
+  firebase_core: ^1.24.0
+  firebase_analytics: ^9.3.8
+  firebase_crashlytics: ^2.9.0
+
 dev_dependencies:
   #  test
   flutter_test:
