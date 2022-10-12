@@ -100,9 +100,9 @@ class SelectDataSourceBloc
               unsuccessfulEnableAttempt: () =>
                   SelectDataSourceError.unsuccessfulEnableAttempt,
             );
-            if (error == null) return false;
+            if (error == null) return true;
             emit(state.inFailure(error));
-            return true;
+            return false;
           },
           value: (_) => true,
         );
