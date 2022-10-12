@@ -121,10 +121,22 @@ class DemoDataSource implements DataSource {
   }
 
   @override
-  Future<bool> get isAvailable async => math.Random().nextBool();
+  Future<bool> get isAvailable async {
+    if (generateRandomErrors) {
+      return math.Random().nextBool();
+    }
+
+    return true;
+  }
 
   @override
-  Future<bool> get isEnabled async => math.Random().nextBool();
+  Future<bool> get isEnabled async {
+    if (generateRandomErrors) {
+      return math.Random().nextBool();
+    }
+
+    return true;
+  }
 
   @override
   Future<Result<SendEventError, void>> sendEvent(
