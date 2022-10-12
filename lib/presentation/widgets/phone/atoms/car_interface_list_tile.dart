@@ -64,32 +64,35 @@ class CarInterfaceListTile extends StatelessWidget {
       success: () => colors.successPastel,
     );
 
-    return ListTile(
-      title: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(text: title),
-            const TextSpan(text: ' ['),
-            TextSpan(
-              text: status,
-              style: textStyle.copyWith(color: statusColor),
-            ),
-            const TextSpan(text: ']'),
-          ],
-          style: textStyle.copyWith(color: AppColors.of(context).text),
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(text: title),
+              const TextSpan(text: ' ['),
+              TextSpan(
+                text: status,
+                style: textStyle.copyWith(color: statusColor),
+              ),
+              const TextSpan(text: ']'),
+            ],
+            style: textStyle.copyWith(color: AppColors.of(context).text),
+          ),
         ),
-      ),
-      onTap: onPressed,
-      shape: Border(
-        bottom: BorderSide(
-          color: AppColors.of(context).border,
+        onTap: onPressed,
+        shape: Border(
+          bottom: BorderSide(
+            color: AppColors.of(context).border,
+          ),
         ),
-      ),
-      contentPadding: const EdgeInsets.only(left: 4),
-      trailing: Icon(
-        icon,
-        size: 23,
-        color: colors.text,
+        contentPadding: const EdgeInsets.only(left: 4),
+        trailing: Icon(
+          icon,
+          size: 23,
+          color: colors.text,
+        ),
       ),
     );
   }
