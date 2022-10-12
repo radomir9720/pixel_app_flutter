@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 class SelectDeviceDialog extends StatefulWidget {
@@ -33,11 +35,11 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
     super.dispose();
   }
 
-  void showLoadingDialog() {
+  void showLoadingDialog(VoidCallback onInit) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const ConnectToDataSourceLoadingDialog(),
+      builder: (context) => ConnectToDataSourceLoadingDialog(onInit: onInit),
     );
   }
 
@@ -86,18 +88,20 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
                                         subtitle: Text(e.address),
                                         onTap: () {
                                           Navigator.of(context).pop();
-                                          showLoadingDialog();
-                                          context
-                                              .read<DataSourceConnectBloc>()
-                                              .add(
-                                                DataSourceConnectEvent.connect(
-                                                  DataSourceWithAddress(
-                                                    dataSource:
-                                                        widget.dataSource,
-                                                    address: e.address,
+                                          showLoadingDialog(
+                                            () => context
+                                                .read<DataSourceConnectBloc>()
+                                                .add(
+                                                  DataSourceConnectEvent
+                                                      .connect(
+                                                    DataSourceWithAddress(
+                                                      dataSource:
+                                                          widget.dataSource,
+                                                      address: e.address,
+                                                    ),
                                                   ),
                                                 ),
-                                              );
+                                          );
                                         },
                                         trailing: e.isBonded
                                             ? Icon(
@@ -134,7 +138,9 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
 }
 
 class ConnectToDataSourceLoadingDialog extends StatefulWidget {
-  const ConnectToDataSourceLoadingDialog({super.key});
+  const ConnectToDataSourceLoadingDialog({super.key, required this.onInit});
+
+  final VoidCallback onInit;
 
   @override
   State<ConnectToDataSourceLoadingDialog> createState() =>
@@ -144,17 +150,25 @@ class ConnectToDataSourceLoadingDialog extends StatefulWidget {
 class _ConnectToDataSourceLoadingDialogState
     extends State<ConnectToDataSourceLoadingDialog> {
   late final StreamSubscription<void> connectSub;
+  late final String? currentRouteName;
 
   @override
   void initState() {
     super.initState();
+    currentRouteName = context.router.stack.first.name;
+
     connectSub =
         context.read<DataSourceConnectBloc>().stream.listen(onNewState);
+    widget.onInit();
   }
 
   void onNewState(AsyncData<Optional<DataSourceWithAddress>, Object> state) {
     if (state.isExecuted) {
-      Navigator.of(context).pop();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (currentRouteName == RouteNames.homeFlow || state.isFailure) {
+          Navigator.of(context).pop();
+        }
+      });
     }
     if (state.isFailure) {
       ScaffoldMessenger.of(context).showSnackBar(

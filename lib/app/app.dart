@@ -26,6 +26,9 @@ class _AppState extends State<App> {
     return AppColors(
       data: const AppColorsData.dark(),
       child: BlocBuilder<DataSourceConnectBloc, DataSourceConnectState>(
+        buildWhen: (previous, current) {
+          return !current.payload.isPresent || !previous.payload.isPresent;
+        },
         builder: (context, state) {
           return MaterialApp.router(
             theme: MaterialTheme.from(AppColors.of(context)),

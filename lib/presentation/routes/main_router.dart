@@ -14,6 +14,11 @@ import 'package:pixel_app_flutter/presentation/screens/settings/settings_screen.
 
 part 'main_router.gr.dart';
 
+mixin RouteNames {
+  static const homeFlow = 'HomeFlow';
+  static const selectDataSourceFlow = 'SelectDataSourceFlow';
+}
+
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen|Scope,Route',
   routes: <AutoRoute>[
@@ -21,7 +26,7 @@ part 'main_router.gr.dart';
       path: '',
       initial: true,
       page: SelectedDataSourceScope,
-      name: 'HomeFlow',
+      name: RouteNames.homeFlow,
       transitionsBuilder: TransitionsBuilders.fadeIn,
       children: [
         AutoRoute<void>(
@@ -63,7 +68,7 @@ part 'main_router.gr.dart';
     AutoRoute<void>(
       path: 'select-data-source',
       page: EmptyRouterPage,
-      name: 'SelectDataSourceFlow',
+      name: RouteNames.selectDataSourceFlow,
       children: [
         AutoRoute<void>(
           initial: true,
