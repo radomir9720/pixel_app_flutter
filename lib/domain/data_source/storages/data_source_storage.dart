@@ -1,18 +1,20 @@
 import 'package:re_seedwork/re_seedwork.dart';
 
 abstract class DataSourceStorage {
-  Future<Result<WriteError, void>> write({
+  const DataSourceStorage();
+
+  Future<Result<DataSourceStorageWriteError, void>> write({
     required String dataSourceKey,
     required String address,
   });
 
-  Future<Result<RemoveError, void>> remove();
+  Future<Result<DataSourceStorageRemoveError, void>> remove();
 
-  Result<ReadError, List<String>> read();
+  Result<DataSourceStorageReadError, List<String>> read();
 }
 
-enum WriteError { unknown }
+enum DataSourceStorageWriteError { unknown }
 
-enum RemoveError { unknown }
+enum DataSourceStorageRemoveError { unknown }
 
-enum ReadError { unknown, noValue }
+enum DataSourceStorageReadError { unknown, noValue }

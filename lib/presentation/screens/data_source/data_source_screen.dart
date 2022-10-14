@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/data/services/bluetooth_data_source.dart';
@@ -5,7 +6,7 @@ import 'package:pixel_app_flutter/data/services/demo_data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
-import 'package:pixel_app_flutter/presentation/screens/data_source/select_device_dialog.dart';
+import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/settings_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/settings_base_layout.dart';
@@ -36,15 +37,8 @@ class DataSourceScreen extends StatelessWidget {
             success: (payload) {
               payload.selected.when(
                 presented: (source) {
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false,
-                    routeSettings: const RouteSettings(
-                      name: 'SelectDeviceDialog',
-                    ),
-                    builder: (context) => SelectDeviceDialog(
-                      dataSource: source,
-                    ),
+                  context.router.push(
+                    SelectDeviceDialogRoute(dataSource: source),
                   );
                 },
                 undefined: () {},
@@ -64,6 +58,8 @@ class DataSourceScreen extends StatelessWidget {
             screenTitle: currentDataSource != null
                 ? context.l10n.dataSourceScreenTitle
                 : context.l10n.selectDataSourceScreenTitle,
+            // TODO(radomir9720): ew
+            showBottom: context.router.current.parent?.parent?.name != 'Root',
             buttons: state.payload.all.map(
               (e) {
                 void onPressed() {

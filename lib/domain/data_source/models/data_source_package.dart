@@ -2,6 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:crclib/catalog.dart';
 import 'package:flutter/foundation.dart';
 
+extension UintListToInt on List<int> {
+  int get toInt {
+    return int.parse(
+      map((e) => e.toRadixString(16).padLeft(2, '0')).join(),
+      radix: 16,
+    );
+  }
+}
+
 class DataSourcePackage extends UnmodifiableListView<int> {
   DataSourcePackage(super.source) {
     validatePackage();
@@ -40,6 +49,8 @@ class DataSourcePackage extends UnmodifiableListView<int> {
       throw WrongCheckSumDataSourcePackageException(
         packageCheckSum: checkSum,
         calculatedCheckSum: calculatedCheckSum,
+        body: body,
+        package: this,
       );
     }
   }
@@ -131,8 +142,12 @@ class WrongCheckSumDataSourcePackageException
   const WrongCheckSumDataSourcePackageException({
     required List<int> packageCheckSum,
     required List<int> calculatedCheckSum,
+    required List<int> body,
+    required List<int> package,
   }) : super(
-          'Wrong checkSum. Package checkSum: $packageCheckSum '
-          'Calculated checkSum: $calculatedCheckSum',
+          'Wrong checkSum. Package checkSum: $packageCheckSum. '
+          'Calculated checkSum: $calculatedCheckSum. '
+          'Body: $body. '
+          'Package: $package',
         );
 }

@@ -17,19 +17,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
 import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/scopes/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
 import 'package:pixel_app_flutter/data/services/bluetooth_data_source.dart';
 import 'package:pixel_app_flutter/data/services/demo_data_source.dart';
+import 'package:pixel_app_flutter/data/storages/developer_tools_parameters_storage.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum Environment {
-  prod,
-  stg,
-  dev;
+  prod(prodKey),
+  stg(stgKey),
+  dev(devKey);
+
+  const Environment(this.value);
+
+  static const prodKey = 'prod';
+  static const stgKey = 'stg';
+  static const devKey = 'dev';
+
+  final String value;
 
   bool get isDev => this == Environment.dev;
   bool get isStg => this == Environment.stg;
@@ -95,22 +105,46 @@ Future<void> configureDependencies(Environment env) async {
   final getIt = GetIt.instance;
 
   await _configureManualDeps(getIt, env);
-  $initGetIt(getIt);
+  $initGetIt(getIt, environment: env.value);
 }
 
 Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
-  final gh = GetItHelper(getIt)
-    ..factory<List<DataSource>>(
-      () => [
-        if (Platform.isAndroid)
-          BluetoothDataSource(bluetoothSerial: FlutterBluetoothSerial.instance),
-        DemoDataSource(generateRandomErrors: env.isDev),
-      ],
-    )
-    ..factory<Environment>(() => env);
+  final gh = GetItHelper(getIt)..factory<Environment>(() => env);
 
   await gh.factoryAsync<SharedPreferences>(
     SharedPreferences.getInstance,
     preResolve: true,
   );
+
+  await gh.factoryAsync(
+    PackageInfo.fromPlatform,
+    preResolve: true,
+  );
+
+  gh
+    ..singleton<DeveloperToolsParametersStorage>(
+      DeveloperToolsParametersStorageImpl(preferences: getIt.get()),
+    )
+    ..factory<List<DataSource>>(
+      () {
+        final devToolsParamsStorage =
+            getIt.get<DeveloperToolsParametersStorage>();
+        return [
+          if (Platform.isAndroid)
+            BluetoothDataSource(
+              bluetoothSerial: FlutterBluetoothSerial.instance,
+            ),
+          DemoDataSource(
+            generateRandomErrors: () {
+              return env.isDev &&
+                  devToolsParamsStorage
+                      .data.enableRandomErrorGenerationForDemoDataSource;
+            },
+            updatePeriodMillis: () {
+              return devToolsParamsStorage.data.requestsPeriodInMillis;
+            },
+          ),
+        ];
+      },
+    );
 }

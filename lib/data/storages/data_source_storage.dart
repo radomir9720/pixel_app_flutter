@@ -6,24 +6,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 @Injectable(as: DataSourceStorage)
 class DataSourceStorageImpl implements DataSourceStorage {
-  DataSourceStorageImpl({required this.preferences});
+  const DataSourceStorageImpl({required this.preferences});
 
+  @protected
   final SharedPreferences preferences;
 
   @protected
   static const kDataSourceKey = 'dataSource';
 
   @override
-  Future<Result<RemoveError, void>> remove() async {
+  Future<Result<DataSourceStorageRemoveError, void>> remove() async {
     if (await preferences.remove(kDataSourceKey)) {
       return const Result.value(null);
     }
 
-    return const Result.error(RemoveError.unknown);
+    return const Result.error(DataSourceStorageRemoveError.unknown);
   }
 
   @override
-  Future<Result<WriteError, void>> write({
+  Future<Result<DataSourceStorageWriteError, void>> write({
     required String dataSourceKey,
     required String address,
   }) async {
@@ -34,13 +35,15 @@ class DataSourceStorageImpl implements DataSourceStorage {
       return const Result.value(null);
     }
 
-    return const Result.error(WriteError.unknown);
+    return const Result.error(DataSourceStorageWriteError.unknown);
   }
 
   @override
-  Result<ReadError, List<String>> read() {
+  Result<DataSourceStorageReadError, List<String>> read() {
     final value = preferences.getStringList(kDataSourceKey);
-    if (value == null) return const Result.error(ReadError.noValue);
+    if (value == null) {
+      return const Result.error(DataSourceStorageReadError.noValue);
+    }
 
     return Result.value(value);
   }

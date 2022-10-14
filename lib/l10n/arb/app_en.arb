@@ -6,6 +6,14 @@
     "navigatorTabTitle": "Navigator",
     "appsTabTitle": "Apps",
     "chargingTabTitle": "Charging",
+    "appVersion": "Pixel App. v{version}",
+    "@appVersion": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
 
     "frontButtonCaption": "Front",
     "airflowButtonCaption": "Airflow",
@@ -61,16 +69,39 @@
     "errorDiscoveringDevicesMessage": "Error while discovering devices",
     "errorConnectingToDataSourceMessage": "Error connecting to the data source",
     "successfullyConnectedToDataSourceMessage": "Successfully connected to the data source",
+
     "cancelButtonCaption": "Cancel",
+    "saveButtonCaption": "Save",
 
     "unknownErrorSelectingDataSourceMessage": "Unknown error while selecting data source",
     "unavailableDataSourceErrorMessage": "Data source is unavailable",
     "errorEnablingDataSourceMessage": "Error while enabling data source",
     "demoDataSourceTitle": "Demo",
-    "bluetoothDataSourceTitle": "Bluetooth"
+    "bluetoothDataSourceTitle": "Bluetooth",
 
-
-
-
-
+    "requestsExchangeLogsListTileLabel": "Requests exchange logs with data source",
+    "requestsExchangeLogsScreenTitle": "Requests exchange logs",
+    "enableDemoDataSourceRandomErrorGenerationListTileLabel": "Enable DemoDataSource random error generation",
+    "whichParametersToSubscribeToListTileLabel": "Which parameters to subscribe to(or send periodic requests)",
+    "requestPeriodInMillisListTileLabel": "Request period in milliseconds",
+    "requestPeriodInMillisListTileSubtitle": "Also, the frequency of sending events by subscription also depends on this parameter in DemoDataSource",
+    "directionListTileLabel": "Direction",
+    "incomingListTileLabel": "Incoming",
+    "outgoingListTileLabel": "Outgoing",
+    "timeListTileLabel": "Time",
+    "packageListTileLabel": "Package",
+    "indexListTileLabel": "Index",
+    "integerListTileLabel": "int",
+    "hexListTileLabel": "hex",
+    "periodicRequestsProtocolVersionLabel": "Periodic requests",
+    "subscriptionProtocolVersionLabel": "Subscription",
+    "protocolVersionLabel": "Protocol version",
+    "developerToolsButtonCaption": "Developer tools",
+    "developerToolsScreenTitle": "Developer tools",
+    "enterParameterIdTextFieldLabel": "Enter parameter ID",
+    "errorParsingIntegerValueMessage": "Error while parsing an integer",
+    "parameterIdLimitsMessage": "Parameter ID should should be an integer greater or equal than 0 and less or equal than 65535(0xFFFF)",
+    "addCustomIdButtonCaption": "Add custom ID",
+    "enableHandshakeResponseListTileLabel": "Send response to handshake request",
+    "sendHandshakeResponseTimeoutListTileLabel": "How many milliseconds after receiving a handshake request to send the response"
 }

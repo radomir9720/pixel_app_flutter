@@ -6,6 +6,14 @@
     "navigatorTabTitle": "Навигатор",
     "appsTabTitle": "Приложения",
     "chargingTabTitle": "Зарядка",
+    "appVersion": "Pixel App. v{version}",
+    "@appVersion": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
 
     "frontButtonCaption": "Обдув лоб. стекла",
     "airflowButtonCaption": "Поток воздуха",
@@ -61,11 +69,40 @@
     "errorDiscoveringDevicesMessage": "Ошибка при обнаружении устройств",
     "errorConnectingToDataSourceMessage": "Ошибка при подключении к источнику данных",
     "successfullyConnectedToDataSourceMessage": "Успешное подключение к источнику данных",
+
     "cancelButtonCaption": "Отменить",
+    "saveButtonCaption": "Сохранить",
 
     "unknownErrorSelectingDataSourceMessage": "Неизвестная ошибка при выборе источника данных",
     "unavailableDataSourceErrorMessage": "Источник данных недоступен",
     "errorEnablingDataSourceMessage": "Ошибка при включении источника данных",
     "demoDataSourceTitle": "Demo",
-    "bluetoothDataSourceTitle": "Bluetooth"
+    "bluetoothDataSourceTitle": "Bluetooth",
+
+    "requestsExchangeLogsListTileLabel": "Логи обмена запросов с источником данных",
+    "requestsExchangeLogsScreenTitle": "Логи обмена запросов",
+    "enableDemoDataSourceRandomErrorGenerationListTileLabel": "Включить рандомную генерацию ошибок DemoDataSource",
+    "whichParametersToSubscribeToListTileLabel": "На какие параметры подписаться(или отправлять периодические запросы)",
+    "requestPeriodInMillisListTileLabel": "Период запросов в миллисекундах",
+    "requestPeriodInMillisListTileSubtitle": "Также от этого параметра зависит частота отправки эвентов по подписке в DemoDataSource",
+    "directionListTileLabel": "Направление",
+    "incomingListTileLabel": "Входящий",
+    "outgoingListTileLabel": "Исходящий",
+    "timeListTileLabel": "Время",
+    "packageListTileLabel": "Пакет",
+    "indexListTileLabel": "Индекс",
+    "integerListTileLabel": "int",
+    "hexListTileLabel": "hex",
+    "periodicRequestsProtocolVersionLabel": "Периодические заросы",
+    "subscriptionProtocolVersionLabel": "Подписка",
+    "protocolVersionLabel": "Версия протокола",
+    "developerToolsButtonCaption": "Инструменты разработчика",
+    "developerToolsScreenTitle": "Инструменты разработчика",
+    "enterParameterIdTextFieldLabel": "Введите ID параметра",
+    "errorParsingIntegerValueMessage": "Ошибка при парсинге целого числа",
+    "parameterIdLimitsMessage": "Идентификатор параметра должен быть целым числом больше или равным нулю и меньше или равным 65535(0xFFFF)",
+    "addCustomIdButtonCaption": "Добавить кастомный идентификатор",
+    "enableHandshakeResponseListTileLabel": "Включить ответ на хэндшэйк",
+    "sendHandshakeResponseTimeoutListTileLabel": "Через сколько миллисекунд после получения запроса на хэндшэйк отправить ответ"
+
 }

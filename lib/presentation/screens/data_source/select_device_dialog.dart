@@ -35,14 +35,6 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
     super.dispose();
   }
 
-  void showLoadingDialog(VoidCallback onInit) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ConnectToDataSourceLoadingDialog(onInit: onInit),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -77,43 +69,46 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
                           Flexible(
                             child: SingleChildScrollView(
                               child: Column(
-                                children: state.payload
-                                    .map(
-                                      (e) => ListTile(
-                                        title: Text(
-                                          e.name ??
-                                              context
-                                                  .l10n.noDeviceNameDialogStub,
-                                        ),
-                                        subtitle: Text(e.address),
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                          showLoadingDialog(
-                                            () => context
-                                                .read<DataSourceConnectBloc>()
-                                                .add(
-                                                  DataSourceConnectEvent
-                                                      .connect(
-                                                    DataSourceWithAddress(
-                                                      dataSource:
-                                                          widget.dataSource,
-                                                      address: e.address,
-                                                    ),
-                                                  ),
-                                                ),
-                                          );
-                                        },
-                                        trailing: e.isBonded
-                                            ? Icon(
-                                                Icons.check,
-                                                size: 20,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              )
-                                            : null,
+                                children: state.payload.map(
+                                  (e) {
+                                    return ListTile(
+                                      title: Text(
+                                        e.name ??
+                                            context.l10n.noDeviceNameDialogStub,
                                       ),
-                                    )
-                                    .toList(),
+                                      subtitle: Text(e.address),
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                        context.router.push(
+                                          ConnectToDataSourceLoadingDialogRoute(
+                                            onInit: () {
+                                              context
+                                                  .read<DataSourceConnectBloc>()
+                                                  .add(
+                                                    DataSourceConnectEvent
+                                                        .connect(
+                                                      DataSourceWithAddress(
+                                                        dataSource:
+                                                            widget.dataSource,
+                                                        address: e.address,
+                                                      ),
+                                                    ),
+                                                  );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      trailing: e.isBonded
+                                          ? Icon(
+                                              Icons.check,
+                                              size: 20,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            )
+                                          : null,
+                                    );
+                                  },
+                                ).toList(),
                               ),
                             ),
                           ),
@@ -165,9 +160,7 @@ class _ConnectToDataSourceLoadingDialogState
   void onNewState(AsyncData<Optional<DataSourceWithAddress>, Object> state) {
     if (state.isExecuted) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        if (currentRouteName == RouteNames.homeFlow || state.isFailure) {
-          Navigator.of(context).pop();
-        }
+        Navigator.of(context).pop();
       });
     }
     if (state.isFailure) {

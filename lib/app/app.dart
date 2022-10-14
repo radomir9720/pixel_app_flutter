@@ -30,7 +30,7 @@ class _AppState extends State<App> {
       data: const AppColorsData.dark(),
       child: BlocBuilder<DataSourceConnectBloc, DataSourceConnectState>(
         buildWhen: (previous, current) {
-          return !current.payload.isPresent || !previous.payload.isPresent;
+          return !current.isLoading || previous.isInitial;
         },
         builder: (context, state) {
           return MaterialApp.router(
@@ -45,12 +45,22 @@ class _AppState extends State<App> {
             routerDelegate: AutoRouterDelegate.declarative(
               _appRouter,
               routes: (_) {
-                if (state.isLoading) {
-                  return const [LoadingRoute()];
+                if (state.payload.isPresent) {
+                  return [
+                    HomeFlow(
+                      children: [
+                        const HomeRoute(),
+                        if (state.isFailure) ...[
+                          const SettingsRoute(),
+                          const SelectDataSourceFlow(),
+                        ]
+                      ],
+                    ),
+                  ];
                 }
-                if (state.isSuccess) {
-                  return const [HomeFlow()];
-                }
+
+                if (state.isLoading) return [const LoadingRoute()];
+
                 return const [SelectDataSourceFlow()];
               },
               navigatorObservers: widget.observersBuilder ??

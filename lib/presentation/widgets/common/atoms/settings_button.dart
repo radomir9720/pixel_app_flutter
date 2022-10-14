@@ -95,6 +95,7 @@ class SettingsButton extends StatelessWidget {
               Flexible(
                 child: Text(
                   title,
+                  textAlign: TextAlign.center,
                   style: titleStyle.copyWith(
                     color: AppColors.of(context).text,
                     fontSize: titleFontSize ??

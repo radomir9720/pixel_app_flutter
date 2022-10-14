@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/close_button.dart';
@@ -10,6 +9,8 @@ class SettingsBaseLayout extends StatelessWidget {
     super.key,
     required this.screenTitle,
     required this.buttons,
+    this.bottom = const SizedBox.shrink(),
+    this.showBottom = true,
   });
 
   @protected
@@ -17,6 +18,12 @@ class SettingsBaseLayout extends StatelessWidget {
 
   @protected
   final List<Widget> buttons;
+
+  @protected
+  final Widget bottom;
+
+  @protected
+  final bool showBottom;
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +47,14 @@ class SettingsBaseLayout extends StatelessWidget {
     );
 
     final height = MediaQuery.of(context).size.height;
-    const standardScreenHeight = 550;
+    const standardScreenHeight = 700;
 
     final factor = (1 - (height / standardScreenHeight).clamp(1, 1.5)).abs();
     return SafeArea(
       child: Column(
         children: [
           SizedBox(
-            height: (factor * standardScreenHeight + 16)
+            height: (factor * standardScreenHeight + 32)
                 .clamp(0, height / 4)
                 .toDouble(),
           ),
@@ -101,10 +108,21 @@ class SettingsBaseLayout extends StatelessWidget {
               ),
             ),
           ),
-          if (context.router.stack.length > 1)
-            Padding(
-              padding: closeButtonPadding,
-              child: const PCloseButton(),
+          if (showBottom)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: closeButtonPadding,
+                    child: const PCloseButton(),
+                  ),
+                ),
+                Expanded(
+                  child: Center(child: bottom),
+                ),
+                const Spacer(),
+              ],
             ),
         ],
       ),

@@ -8,27 +8,27 @@ import 'package:re_seedwork/re_seedwork.dart';
 
 class DemoDataSource implements DataSource {
   DemoDataSource({
-    this.generateRandomErrors = false,
-    this.updatePeriodMillis = 800,
+    required this.generateRandomErrors,
+    required this.updatePeriodMillis,
   })  : controller = StreamController.broadcast(),
         subscriptionCallbacks = {},
         valueCache = {};
 
   @protected
-  final int updatePeriodMillis;
+  final int Function() updatePeriodMillis;
 
   @protected
-  final bool generateRandomErrors;
+  final bool Function() generateRandomErrors;
 
   @visibleForTesting
-  final Map<ParameterId, int> valueCache;
+  final Map<int, int> valueCache;
 
   @protected
   Result<E, V> returnValueOrErrorFromList<E extends Enum, V>(
     List<E> en,
     V value,
   ) {
-    if (generateRandomErrors && math.Random().nextBool()) {
+    if (generateRandomErrors() && math.Random().nextBool()) {
       final errorIndex = math.Random().nextInt(en.length);
       final error = en[errorIndex];
       return Result.error(error);
@@ -122,7 +122,7 @@ class DemoDataSource implements DataSource {
 
   @override
   Future<bool> get isAvailable async {
-    if (generateRandomErrors) {
+    if (generateRandomErrors()) {
       return math.Random().nextBool();
     }
 
@@ -131,7 +131,7 @@ class DemoDataSource implements DataSource {
 
   @override
   Future<bool> get isEnabled async {
-    if (generateRandomErrors) {
+    if (generateRandomErrors()) {
       return math.Random().nextBool();
     }
 
@@ -143,17 +143,16 @@ class DemoDataSource implements DataSource {
     DataSourceOutgoingEvent event,
   ) async {
     return event.maybeWhen(
-      getParameterValue: (parameterId) {
-        controller.sink.add(
-          DataSourceGetParameterValueIncomingEvent(
-            DataSourcePackage.fromBody([
-              0x00,
-              int.parse('10000001', radix: 2),
-              ...parameterId.value.toTwoBytes,
-              0x00,
-            ]),
-          ),
-        );
+      getParameterValue: (id) {
+        const version = DataSourceProtocolVersion.periodicRequests;
+        if (id == ParameterId.speed()) {
+          _sendNewSpeedCallback(version: version);
+        } else if (id == ParameterId.current()) {
+          _sendNewCurrentCallback(version: version);
+        } else if (id == ParameterId.voltage()) {
+          _sendNewVoltageCallback(version: version);
+        }
+
         return const Result.value(null);
       },
       handshake: () {
@@ -176,16 +175,16 @@ class DemoDataSource implements DataSource {
         return const Result.value(null);
       },
       subscribe: (id) {
-        if (id == ParameterId.speed) {
+        if (id == ParameterId.speed()) {
           subscriptionCallbacks.add(_sendNewSpeedCallback);
-        } else if (id == ParameterId.current) {
+        } else if (id == ParameterId.current()) {
           subscriptionCallbacks.add(_sendNewCurrentCallback);
-        } else if (id == ParameterId.voltage) {
+        } else if (id == ParameterId.voltage()) {
           subscriptionCallbacks.add(_sendNewVoltageCallback);
         }
 
         timer ??= Timer.periodic(
-          Duration(milliseconds: updatePeriodMillis),
+          Duration(milliseconds: updatePeriodMillis()),
           (timer) {
             for (final element in subscriptionCallbacks) {
               element();
@@ -196,11 +195,11 @@ class DemoDataSource implements DataSource {
         return const Result.value(null);
       },
       unsubscribe: (id) {
-        if (id == ParameterId.speed) {
+        if (id == ParameterId.speed()) {
           subscriptionCallbacks.remove(_sendNewSpeedCallback);
-        } else if (id == ParameterId.current) {
+        } else if (id == ParameterId.current()) {
           subscriptionCallbacks.remove(_sendNewCurrentCallback);
-        } else if (id == ParameterId.voltage) {
+        } else if (id == ParameterId.voltage()) {
           subscriptionCallbacks.remove(_sendNewVoltageCallback);
         }
 
@@ -210,49 +209,80 @@ class DemoDataSource implements DataSource {
     );
   }
 
-  void _sendNewSpeedCallback() {
-    final lastValue = valueCache[ParameterId.speed] ?? 0;
+  @override
+  Future<Result<DisconnectError, void>> disconnect() async {
+    return const Result.value(null);
+  }
+
+  void _sendNewSpeedCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    final lastValue = valueCache[ParameterId.speed().value] ?? 0;
     final newValue =
         (lastValue + Random().nextInt(10) * (Random().nextBool() ? 1 : -1))
             .clamp(0, 100);
-    valueCache[ParameterId.speed] = newValue;
+    valueCache[ParameterId.speed().value] = newValue;
     _updateValueCallback(
-      ParameterId.speed,
+      ParameterId.speed(),
       newValue,
+      version,
     );
   }
 
-  void _sendNewVoltageCallback() {
-    final lastValue = valueCache[ParameterId.voltage] ?? 80;
+  void _sendNewVoltageCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    final lastValue = valueCache[ParameterId.voltage().value] ?? 80000;
     final newValue =
-        (lastValue + Random().nextInt(2) * (Random().nextBool() ? 1 : -1))
-            .clamp(0, 100);
-    valueCache[ParameterId.voltage] = newValue;
-    _updateValueCallback(ParameterId.voltage, newValue);
+        (lastValue + Random().nextInt(2000) * (Random().nextBool() ? 1 : -1))
+            .clamp(0, 100000);
+    valueCache[ParameterId.voltage().value] = newValue;
+    _updateValueCallback(
+      ParameterId.voltage(),
+      newValue,
+      version,
+    );
   }
 
-  void _sendNewCurrentCallback() {
-    final lastValue = valueCache[ParameterId.current] ?? 200;
+  void _sendNewCurrentCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    final lastValue = valueCache[ParameterId.current().value] ?? 200;
     final newValue =
         (lastValue + Random().nextInt(20) * (Random().nextBool() ? 1 : -1))
             .clamp(0, 255);
-    valueCache[ParameterId.current] = newValue;
-    _updateValueCallback(ParameterId.current, newValue);
+    valueCache[ParameterId.current().value] = newValue;
+
+    _updateValueCallback(
+      ParameterId.current(),
+      newValue,
+      version,
+    );
   }
 
   void _updateValueCallback(
     ParameterId parameterId,
     int value,
+    DataSourceProtocolVersion version,
   ) {
+    final requestType = version.when(
+      subscription: () => '10010101',
+      periodicRequests: () => '10000001',
+    );
+
+    final package = DataSourcePackage.fromBody([
+      0x00,
+      int.parse(requestType, radix: 2),
+      ...parameterId.value.toTwoBytes,
+      (value.bitLength / 8).ceil(),
+      value,
+    ]);
+
     controller.sink.add(
-      DataSourceUpdateValueIncomingEvent(
-        DataSourcePackage.fromBody([
-          0x00,
-          int.parse('10010101', radix: 2),
-          ...parameterId.value.toTwoBytes,
-          0x01,
-          value,
-        ]),
+      version.when(
+        subscription: () => DataSourceUpdateValueIncomingEvent(package),
+        periodicRequests: () =>
+            DataSourceGetParameterValueIncomingEvent(package),
       ),
     );
   }

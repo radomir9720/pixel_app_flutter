@@ -116,10 +116,10 @@ class BluetoothDataSource extends DataSource {
     void parsePackage() {
       final _package = [...package];
       package.clear();
+
       final dataSourceEvent =
           DataSourceEvent.fromPackage(DataSourcePackage(_package));
       controller.sink.add(dataSourceEvent);
-      //
     }
 
     while (incomingPackage.isNotEmpty) {
@@ -140,7 +140,6 @@ class BluetoothDataSource extends DataSource {
         package.clear();
       }
 
-      // if (package.isEmpty) {
       if (incomingPackage.contains(startingByte) || package.isNotEmpty) {
         package.addAll(
           incomingPackage.sublist(sublistFrom, sublistTo),
@@ -184,5 +183,11 @@ class BluetoothDataSource extends DataSource {
     //
     await connection?.close();
     connection?.dispose();
+  }
+
+  @override
+  Future<Result<DisconnectError, void>> disconnect() async {
+    await connection?.close();
+    return const Result.value(null);
   }
 }

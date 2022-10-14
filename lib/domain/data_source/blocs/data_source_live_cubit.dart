@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
@@ -16,6 +19,7 @@ class DataSourceLiveState {
     required this.frontTrunkOpened,
     required this.trunkOpened,
     required this.lightOn,
+    required this.parameters,
   });
 
   final int speed;
@@ -38,6 +42,8 @@ class DataSourceLiveState {
 
   final bool lightOn;
 
+  final DeveloperToolsParameters parameters;
+
   @override
   int get hashCode => Object.hash(
         speed,
@@ -50,6 +56,7 @@ class DataSourceLiveState {
         frontTrunkOpened,
         trunkOpened,
         lightOn,
+        parameters,
       );
 
   @override
@@ -64,7 +71,8 @@ class DataSourceLiveState {
         other.rightDoorOpened == rightDoorOpened &&
         other.frontTrunkOpened == frontTrunkOpened &&
         other.trunkOpened == trunkOpened &&
-        other.lightOn == lightOn;
+        other.lightOn == lightOn &&
+        other.parameters == parameters;
   }
 
   DataSourceLiveState copyWith({
@@ -78,6 +86,7 @@ class DataSourceLiveState {
     bool? frontTrunkOpened,
     bool? trunkOpened,
     bool? lightOn,
+    DeveloperToolsParameters? parameters,
   }) {
     return DataSourceLiveState(
       speed: speed ?? this.speed,
@@ -90,15 +99,19 @@ class DataSourceLiveState {
       frontTrunkOpened: frontTrunkOpened ?? this.frontTrunkOpened,
       trunkOpened: trunkOpened ?? this.trunkOpened,
       lightOn: lightOn ?? this.lightOn,
+      parameters: parameters ?? this.parameters,
     );
   }
 }
 
 class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
     with ConsumerBlocMixin {
-  DataSourceLiveCubit({required this.dataSource})
-      : super(
-          const DataSourceLiveState(
+  DataSourceLiveCubit({
+    required this.dataSource,
+    required this.developerToolsParametersStorage,
+  })  : observers = {},
+        super(
+          DataSourceLiveState(
             speed: 0,
             battery: 0,
             odometer: 0,
@@ -109,46 +122,189 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
             leftDoorOpened: false,
             rightDoorOpened: false,
             frontTrunkOpened: false,
+            parameters: developerToolsParametersStorage.read().when(
+                  error: (e) => developerToolsParametersStorage.defaultValue,
+                  value: (v) => v,
+                ),
           ),
         ) {
+    subscribeToParameterIdList = state.parameters.subscriptionParameterIds
+        .map(ParameterId.fromInt)
+        .toList();
+
+    state.parameters.protocolVersion.when(
+      subscription: () {
+        subscribeTo(subscribeToParameterIdList);
+      },
+      periodicRequests: () {
+        _setNewTimer(
+          state.parameters.requestsPeriodInMillis,
+          subscribeToParameterIdList,
+        );
+      },
+    );
+
+    subscribe<DeveloperToolsParameters>(
+      developerToolsParametersStorage,
+      _onDeveloperToolsParametersUpdated,
+    );
+
     subscribe<DataSourceIncomingEvent>(dataSource.eventStream, (event) {
+      _observe(event);
       event.maybeWhen(
-        updateValue: (id) => _onValueUpdated(id, event.package.data.first),
+        updateValue: (id) =>
+            _onParameterValueUpdated(id, event.package.data.toInt),
         getParameterValue: (id) =>
-            _onValueUpdated(id, event.package.data.first),
+            _onParameterValueUpdated(id, event.package.data.toInt),
         handshake: () {
-          dataSource.sendEvent(const DataSourceHandshakeOutgoingEvent());
+          final enableResponse =
+              developerToolsParametersStorage.data.enableHandshakeResponse;
+          if (!enableResponse) return;
+          final timeout = developerToolsParametersStorage
+              .data.handshakeResponseTimeoutInMillis;
+          Future<void>.delayed(Duration(milliseconds: timeout)).then((value) {
+            const event = DataSourceHandshakeOutgoingEvent();
+            _observe(event);
+            dataSource.sendEvent(event);
+          });
         },
         orElse: () {},
       );
     });
   }
 
-  void _onValueUpdated(ParameterId id, int value) {
+  Timer? timer;
+
+  late final List<ParameterId> subscribeToParameterIdList;
+
+  final Set<void Function(DataSourceEvent event)> observers;
+
+  @protected
+  final DataSource dataSource;
+
+  @protected
+  final DeveloperToolsParametersStorage developerToolsParametersStorage;
+
+  void _onDeveloperToolsParametersUpdated(DeveloperToolsParameters newParams) {
+    if (newParams == state.parameters) return;
+    final newRequestPeriod = newParams.requestsPeriodInMillis;
+    final newSubscribeToParams =
+        newParams.subscriptionParameterIds.map(ParameterId.fromInt).toList();
+    if (newParams.protocolVersion != state.parameters.protocolVersion) {
+      newParams.protocolVersion.when(
+        subscription: () {
+          _cancelTimer();
+          subscribeTo(newSubscribeToParams);
+        },
+        periodicRequests: () {
+          unsubscribeFrom(subscribeToParameterIdList);
+          _setNewTimer(newRequestPeriod, newSubscribeToParams);
+        },
+      );
+    } else if (newParams.requestsPeriodInMillis !=
+        state.parameters.requestsPeriodInMillis) {
+      _setNewTimer(newRequestPeriod, subscribeToParameterIdList);
+    } else if (!const DeepCollectionEquality.unordered().equals(
+      newParams.subscriptionParameterIds,
+      subscribeToParameterIdList,
+    )) {
+      state.parameters.protocolVersion.when(
+        subscription: () {
+          unsubscribeFrom(subscribeToParameterIdList);
+          subscribeTo(newSubscribeToParams);
+        },
+        periodicRequests: () {
+          _setNewTimer(newRequestPeriod, newSubscribeToParams);
+        },
+      );
+    }
+
+    emit(state.copyWith(parameters: newParams));
+  }
+
+  void _cancelTimer() {
+    timer?.cancel();
+    timer = null;
+  }
+
+  void _setNewTimer(int requestPeriod, List<ParameterId> ids) {
+    _cancelTimer();
+    timer = Timer.periodic(
+      Duration(milliseconds: requestPeriod),
+      (timer) {
+        for (final id in ids) {
+          getValue(id);
+        }
+      },
+    );
+    final newIdList = [...ids];
+    subscribeToParameterIdList
+      ..clear()
+      ..addAll(newIdList);
+  }
+
+  void _onParameterValueUpdated(ParameterId id, int value) {
     emit(
       id.when(
         speed: () => state.copyWith(speed: value),
         light: () => state.copyWith(lightOn: value == 1),
         voltage: () => state.copyWith(battery: value),
         current: () => state.copyWith(sunCharging: value),
+        custom: (id) => state,
       ),
     );
   }
 
-  @visibleForTesting
-  final DataSource dataSource;
-
   void handshake() {
-    dataSource.sendEvent(const DataSourceHandshakeOutgoingEvent());
+    const event = DataSourceHandshakeOutgoingEvent();
+    _observe(event);
+    dataSource.sendEvent(event);
   }
 
   void subscribeTo(List<ParameterId> ids) {
     for (final id in ids) {
-      dataSource.sendEvent(DataSourceSubscribeOutgoingEvent(id));
+      final event = DataSourceSubscribeOutgoingEvent(id);
+      _observe(event);
+      dataSource.sendEvent(event);
+    }
+    final newIdList = [...ids];
+    subscribeToParameterIdList
+      ..clear()
+      ..addAll(newIdList);
+  }
+
+  void unsubscribeFrom(List<ParameterId> ids) {
+    for (final id in ids) {
+      final event = DataSourceUnsubscribeOutgoingEvent(id);
+      _observe(event);
+      dataSource.sendEvent(event);
     }
   }
 
   void getValue(ParameterId id) {
-    dataSource.sendEvent(DataSourceGetParameterValueOutgoingEvent(id));
+    final event = DataSourceGetParameterValueOutgoingEvent(id);
+    _observe(event);
+    dataSource.sendEvent(event);
+  }
+
+  void _observe(DataSourceEvent event) {
+    for (final observer in observers) {
+      observer(event);
+    }
+  }
+
+  void addObserver(void Function(DataSourceEvent event) observer) {
+    observers.add(observer);
+  }
+
+  void removeObserver(void Function(DataSourceEvent event) observer) {
+    observers.remove(observer);
+  }
+
+  @override
+  Future<void> close() {
+    _cancelTimer();
+    dataSource.disconnect();
+    return super.close();
   }
 }

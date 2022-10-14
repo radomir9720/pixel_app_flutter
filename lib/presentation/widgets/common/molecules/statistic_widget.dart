@@ -20,7 +20,7 @@ class StatisticWidget extends StatelessWidget {
         builder: (context, state) {
           return StatisticItem(
             icon: PixelIcons.battery,
-            value: '$state%',
+            value: '${state ~/ 1000}%',
           );
         },
       ),
@@ -34,7 +34,9 @@ class StatisticWidget extends StatelessWidget {
         builder: (context, state) {
           return StatisticItem(
             icon: PixelIcons.sunCharging,
-            value: '$state',
+            value: int.parse(
+              '$state'.padRight(3, '0').substring(0, 3),
+            ).toString(),
             measurementUnit: context.l10n.kwPerHourMeasurementUnit,
           );
         },

@@ -18,6 +18,8 @@ abstract class DataSource {
 
   Future<Result<ConnectError, void>> connect(String address);
 
+  Future<Result<DisconnectError, void>> disconnect();
+
   Future<Result<GetDeviceListError, Stream<DataSourceDevice>>>
       getDeviceStream();
 
@@ -29,6 +31,8 @@ abstract class DataSource {
 enum SendEventError { unknown, noConnection }
 
 enum ConnectError { unknown, bondingError, unableToSubscribe }
+
+enum DisconnectError { unknown }
 
 enum GetDeviceListError { unknown }
 

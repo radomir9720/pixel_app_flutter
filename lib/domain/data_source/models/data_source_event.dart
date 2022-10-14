@@ -1,38 +1,6 @@
 import 'package:flutter/foundation.dart';
+
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
-
-enum ParameterId {
-  speed(125),
-  light(513),
-  voltage(174),
-  current(239);
-
-  const ParameterId(this.value);
-
-  final int value;
-
-  static ParameterId fromInt(int integer) {
-    return ParameterId.values.firstWhere((element) => element.value == integer);
-  }
-
-  R when<R>({
-    required R Function() speed,
-    required R Function() light,
-    required R Function() voltage,
-    required R Function() current,
-  }) {
-    switch (this) {
-      case ParameterId.speed:
-        return speed();
-      case ParameterId.light:
-        return light();
-      case ParameterId.voltage:
-        return voltage();
-      case ParameterId.current:
-        return current();
-    }
-  }
-}
 
 extension ToTwoBytesExtension on int {
   List<int> get toTwoBytes {
@@ -78,6 +46,19 @@ abstract class DataSourceEvent {
   int get requestType;
 
   int get requestDirection; // 0 - outgoing, 1 - incoming
+
+  R whenDirection<R>({
+    required R Function() incoming,
+    required R Function() outgoing,
+  }) {
+    switch (requestDirection) {
+      case 0:
+        return outgoing();
+      case 1:
+        return incoming();
+    }
+    throw UnimplementedError('Unknown request direction id: $requestDirection');
+  }
 }
 
 abstract class DataSourceOutgoingEvent extends DataSourceEvent {
@@ -264,20 +245,6 @@ class DataSourceUpdateValueIncomingEvent extends DataSourceIncomingEvent {
   const DataSourceUpdateValueIncomingEvent(
     super.packageBody,
   );
-
-  R when<R>({required R Function(int speed) speed}) {
-    final id = package.parameterId;
-    final data = package.data;
-
-    if (id == ParameterId.speed.value) {
-      return speed(data.first);
-    }
-
-    throw UnimplementedError('No case for parameterId: $id');
-  }
-
-  @override
-  List<int> get body => package;
 
   @override
   int get requestType => 0x15;
