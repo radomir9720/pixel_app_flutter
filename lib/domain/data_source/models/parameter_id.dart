@@ -133,7 +133,7 @@ class _CustomParameterId extends ParameterId {
 //   final int value;
 
 //   static ParameterId fromInt(int integer) {
-//     return ParameterId.values.firstWhere((element) => 
+//     return ParameterId.values.firstWhere((element) =>
 //            element.value == integer);
 //   }
 
