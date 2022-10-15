@@ -1,13 +1,14 @@
 name: pixel_app_flutter
 
-on: [pull_request, push]
+# on: [pull_request, push]
+
+on: [push]
 
 jobs:
-  semantic-pull-request:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
-
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    uses: radomir9720/workflows/.github/workflows/flutter_package.yml@main
     with:
+      min_coverage: 0
       flutter_channel: stable
       flutter_version: 3.0.5
+      coverage_excludes: "**/*.g.dart **/*.freezed.dart **/*.config.dart"
