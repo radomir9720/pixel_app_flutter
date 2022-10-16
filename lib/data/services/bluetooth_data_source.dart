@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
@@ -123,6 +124,8 @@ class BluetoothDataSource extends DataSource {
     }
 
     while (incomingPackage.isNotEmpty) {
+      final initial = [...incomingPackage];
+
       final indexOfStartingByte = incomingPackage.indexOf(startingByte);
       final indexOfEndingByte = incomingPackage.indexOf(endingByte);
       final sublistFrom = indexOfStartingByte == -1 ? 0 : indexOfStartingByte;
@@ -148,6 +151,10 @@ class BluetoothDataSource extends DataSource {
         if (package.isNotEmpty && package.last == endingByte) {
           parsePackage();
         }
+      }
+
+      if (const DeepCollectionEquality().equals(initial, incomingPackage)) {
+        break;
       }
     }
   }
