@@ -113,8 +113,11 @@ abstract class DataSourceIncomingEvent extends DataSourceEvent {
 // Outgoing events
 
 class DataSourceHandshakeOutgoingEvent extends DataSourceOutgoingEvent {
-  const DataSourceHandshakeOutgoingEvent()
+  const DataSourceHandshakeOutgoingEvent.initial()
       : super(const DataSourceParameterId.custom(0));
+
+  const DataSourceHandshakeOutgoingEvent.ping()
+      : super(const DataSourceParameterId.custom(0xFFFF));
 
   @override
   int get requestType => DataSourceRequestType.handshake.value;

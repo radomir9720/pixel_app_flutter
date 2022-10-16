@@ -159,13 +159,16 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
         getParameterValue: (id) =>
             _onParameterValueUpdated(id, event.package.data.toInt),
         handshake: () {
+          final id = event.package.parameterId;
+          // Do not respond to handshake response from MainECU
+          if (id == 0) return;
           final enableResponse =
               developerToolsParametersStorage.data.enableHandshakeResponse;
           if (!enableResponse) return;
           final timeout = developerToolsParametersStorage
               .data.handshakeResponseTimeoutInMillis;
           Future<void>.delayed(Duration(milliseconds: timeout)).then((value) {
-            const event = DataSourceHandshakeOutgoingEvent();
+            const event = DataSourceHandshakeOutgoingEvent.ping();
             _observe(event);
             dataSource.sendEvent(event);
           });
@@ -258,8 +261,8 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
     );
   }
 
-  void handshake() {
-    const event = DataSourceHandshakeOutgoingEvent();
+  void initialHandshake() {
+    const event = DataSourceHandshakeOutgoingEvent.initial();
     _observe(event);
     dataSource.sendEvent(event);
   }
