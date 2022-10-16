@@ -103,5 +103,17 @@
     "parameterIdLimitsMessage": "Parameter ID should should be an integer greater or equal than 0 and less or equal than 65535(0xFFFF)",
     "addCustomIdButtonCaption": "Add custom ID",
     "enableHandshakeResponseListTileLabel": "Send response to handshake request",
-    "sendHandshakeResponseTimeoutListTileLabel": "How many milliseconds after receiving a handshake request to send the response"
+    "sendHandshakeResponseTimeoutListTileLabel": "How many milliseconds after receiving a handshake request to send the response",
+
+    "processedRequestsTabTitle": "Processed",
+    "rawRequestsTabTitle": "Raw",
+    "addCustomValueIntegerDialogButtonCaption": "Add custom value",
+    "enterValueIntegerDialogTextFieldLabel": "Enter value",
+    "requestsFilterScreenTitle": "Requests filter",
+    "parameterIdListTileLabel": "Parameter ID",
+    "parameterIdFilterDialogTitle": "Parameter ID filter",
+    "requestTypeListTileLabel": "Request type",
+    "requestTypeFilterDialogTitle": "Request type",
+    "requestDirectionListTileLabel": "Request direction",
+    "requestDirectionFilterDialogTitle": "Request direction filter"
 }

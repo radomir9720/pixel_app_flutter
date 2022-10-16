@@ -1,8 +1,23 @@
+import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
+typedef Observer = void Function(List<int> package);
+
 abstract class DataSource {
-  const DataSource();
+  DataSource() : observers = {};
+
+  final Set<Observer> observers;
+
+  void addObserver(Observer observer) => observers.add(observer);
+
+  void removeObserver(Observer observer) => observers.remove(observer);
+
+  void observe(List<int> package) {
+    for (final observer in observers) {
+      observer(package);
+    }
+  }
 
   String get key;
 
@@ -25,7 +40,10 @@ abstract class DataSource {
 
   Future<Result<CancelDeviceDiscoveringError, void>> cancelDeviceDiscovering();
 
-  Future<void> dispose();
+  @mustCallSuper
+  Future<void> dispose() async {
+    observers.clear();
+  }
 }
 
 enum SendEventError { unknown, noConnection }

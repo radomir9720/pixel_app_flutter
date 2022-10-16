@@ -25,6 +25,14 @@ class DataSourcePackage extends UnmodifiableListView<int> {
     ]);
   }
 
+  static DataSourcePackage? instanceOrNUll(List<int> package) {
+    try {
+      return DataSourcePackage(package);
+    } catch (e) {
+      return null;
+    }
+  }
+
   Uint8List get toUint8List => Uint8List.fromList(this);
 
   static const startingByte = 0x3c;

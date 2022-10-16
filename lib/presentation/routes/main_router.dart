@@ -11,8 +11,11 @@ import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dar
 import 'package:pixel_app_flutter/presentation/screens/data_source/data_source_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/data_source/select_device_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/developer_tools_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/developer_tools/processed_exhange_logs_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/developer_tools/raw_exchange_logs_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/developer_tools/requests_exchange_logs_filter_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/requests_exchange_logs_screen.dart';
-import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/change_parameters_subscription_dialog.dart';
+import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/integer_list_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/slider_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/general_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/home/home_screen.dart';
@@ -25,8 +28,11 @@ mixin RouteNames {
   static const homeFlow = 'HomeFlow';
   static const selectDataSourceFlow = 'SelectDataSourceFlow';
   static const developerToolsFlow = 'DeveloperToolsFlow';
-  // static const dataSourceFlow = 'DataSourceFlow';
+  static const requestsExchangeLogsFlow = 'RequestsExchangeLogsFlow';
+  static const requestsExchangeLogsFilterFlow =
+      'RequestsExchangeLogsFilterFlow';
   //
+  static const requestsExchangeLogsRoute = 'RequestsExchangeLogsRoute';
   static const selectDeviceDialogRoute = 'SelectDeviceDialogRoute';
   static const connectToDataSourceLoadingDialogRoute =
       'ConnectToDataSourceLoadingDialogRoute';
@@ -36,6 +42,10 @@ mixin RouteNames {
       'ChangeRequestPeriodDialogRoute';
   static const changeHandshakeResponseTimeoutDialogRoute =
       'ChangeHandshakeResponseTimeoutDialogRoute';
+
+  static const filterParameterIdDialogRoute = 'FilterParameterIdDialogRoute';
+  static const filterRequestTypeDialogRoute = 'FilterRequestTypeDialogRoute';
+  static const filterDirectionDialogRoute = 'FilterDirectionDialogRoute';
 }
 
 const _selectDataSourceRouter = AutoRoute<void>(
@@ -108,16 +118,62 @@ const _selectDataSourceRouter = AutoRoute<void>(
           page: DeveloperToolsScope,
           children: [
             AutoRoute<void>(
-              // initial: true,
               path: '',
               page: DeveloperToolsScreen,
             ),
             AutoRoute<void>(
               path: 'exchange-logs',
-              page: RequestsExchangeLogsScreen,
+              page: EmptyRouterScreen,
+              name: RouteNames.requestsExchangeLogsFlow,
+              children: [
+                AutoRoute(
+                  page: RequestsExchangeLogsScreen,
+                  initial: true,
+                  name: RouteNames.requestsExchangeLogsRoute,
+                  children: [
+                    AutoRoute<void>(
+                      path: 'processed',
+                      page: ProcessedExchangeLogsScreen,
+                    ),
+                    AutoRoute<void>(
+                      path: 'raw',
+                      page: RawExchangeLogsScreen,
+                    ),
+                  ],
+                ),
+                AutoRoute<void>(
+                  path: 'filter',
+                  page: EmptyRouterScreen,
+                  name: RouteNames.requestsExchangeLogsFilterFlow,
+                  children: [
+                    AutoRoute(
+                      initial: true,
+                      page: RequestsExchangeLogsFilterScreen,
+                    ),
+                    CustomRoute<List<int>>(
+                      page: IntegerListDialog,
+                      path: 'parameter-id',
+                      name: RouteNames.filterParameterIdDialogRoute,
+                      customRouteBuilder: dialogRouteBuilder,
+                    ),
+                    CustomRoute<List<int>>(
+                      page: IntegerListDialog,
+                      path: 'request-type',
+                      name: RouteNames.filterRequestTypeDialogRoute,
+                      customRouteBuilder: dialogRouteBuilder,
+                    ),
+                    CustomRoute<List<int>>(
+                      page: IntegerListDialog,
+                      path: 'direction',
+                      name: RouteNames.filterDirectionDialogRoute,
+                      customRouteBuilder: dialogRouteBuilder,
+                    ),
+                  ],
+                ),
+              ],
             ),
             CustomRoute<List<int>>(
-              page: ChangeParametersSubscriptionDialog,
+              page: IntegerListDialog,
               path: 'change-parameters-subscription',
               name: RouteNames.changeParametersSubscriptionDialogRoute,
               customRouteBuilder: dialogRouteBuilder,

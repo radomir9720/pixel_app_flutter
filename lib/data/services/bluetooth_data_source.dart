@@ -47,7 +47,11 @@ class BluetoothDataSource extends DataSource {
       return const Result.error(SendEventError.noConnection);
     }
 
-    _sink.add(event.toPackage());
+    final package = event.toPackage();
+
+    observe(package);
+
+    _sink.add(package);
 
     return const Result.value(null);
   }
@@ -112,6 +116,8 @@ class BluetoothDataSource extends DataSource {
   }
 
   void _onNewPackage(Uint8List event) {
+    observe(event);
+
     final incomingPackage = [...event];
 
     void parsePackage() {
@@ -180,6 +186,7 @@ class BluetoothDataSource extends DataSource {
 
   @override
   Future<void> dispose() async {
+    await super.dispose();
     await subscription?.cancel();
     subscription = null;
     //

@@ -1,24 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 
-class ChangeParametersSubscriptionDialog extends StatefulWidget {
-  const ChangeParametersSubscriptionDialog({
+class OnlyNumbersInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.length < oldValue.text.length) {
+      return newValue;
+    } else if (RegExp(r'^([0-9]*)+$').hasMatch(newValue.text)) {
+      return newValue;
+    }
+    return oldValue;
+  }
+}
+
+class IntegerListDialog extends StatefulWidget {
+  const IntegerListDialog({
     super.key,
-    required this.initialValue,
+    required this.title,
+    required this.alwasysVisibleOptions,
+    required this.initialChoosedOptions,
+    this.validator,
   });
 
   @protected
-  final List<int> initialValue;
+  final String title;
+
+  @protected
+  final List<int> alwasysVisibleOptions;
+
+  @protected
+  final List<int> initialChoosedOptions;
+
+  @protected
+  final String? Function(int)? validator;
 
   @override
-  State<ChangeParametersSubscriptionDialog> createState() =>
-      _ChangeParametersSubscriptionDialogState();
+  State<IntegerListDialog> createState() => _IntegerListDialogState();
 }
 
-class _ChangeParametersSubscriptionDialogState
-    extends State<ChangeParametersSubscriptionDialog> {
+class _IntegerListDialogState extends State<IntegerListDialog> {
   late Set<int> newValue;
   bool showCustomIdTextField = false;
   String textFieldValue = '';
@@ -26,26 +50,26 @@ class _ChangeParametersSubscriptionDialogState
   @override
   void initState() {
     super.initState();
-    newValue = {...widget.initialValue};
+    newValue = {...widget.initialChoosedOptions};
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        context.l10n.whichParametersToSubscribeToListTileLabel,
+        widget.title,
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Wrap(
             spacing: 16,
+            runSpacing: 16,
             children: [
               ...{
-                ...ParameterId.all.map((e) => e.value),
+                ...widget.alwasysVisibleOptions,
                 ...newValue,
               }.map((current) {
-                // final current = e.value;
                 return FilterChip(
                   label: Text('$current'),
                   showCheckmark: false,
@@ -70,7 +94,7 @@ class _ChangeParametersSubscriptionDialogState
                 textFieldValue = value;
               },
               decoration: InputDecoration(
-                label: Text(context.l10n.enterParameterIdTextFieldLabel),
+                label: Text(context.l10n.enterValueIntegerDialogTextFieldLabel),
                 suffixIcon: IconButton(
                   onPressed: () {
                     final integer = int.tryParse(textFieldValue);
@@ -86,13 +110,10 @@ class _ChangeParametersSubscriptionDialogState
                       return;
                     }
 
-                    if (integer < 0 || integer > 0xFFFF) {
+                    final error = widget.validator?.call(integer);
+                    if (error != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            context.l10n.parameterIdLimitsMessage,
-                          ),
-                        ),
+                        SnackBar(content: Text(error)),
                       );
                       return;
                     }
@@ -110,7 +131,8 @@ class _ChangeParametersSubscriptionDialogState
               onPressed: () {
                 setState(() => showCustomIdTextField = true);
               },
-              child: Text(context.l10n.addCustomIdButtonCaption),
+              child:
+                  Text(context.l10n.addCustomValueIntegerDialogButtonCaption),
             ),
         ],
       ),
@@ -129,20 +151,5 @@ class _ChangeParametersSubscriptionDialogState
         )
       ],
     );
-  }
-}
-
-class OnlyNumbersInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    if (newValue.text.length < oldValue.text.length) {
-      return newValue;
-    } else if (RegExp(r'^([0-9]*)+$').hasMatch(newValue.text)) {
-      return newValue;
-    }
-    return oldValue;
   }
 }

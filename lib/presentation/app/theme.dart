@@ -89,6 +89,10 @@ class MaterialTheme {
         ),
       ),
 
+      tabBarTheme: TabBarTheme(
+        labelColor: colors.text,
+      ),
+
       iconTheme: IconThemeData(
         size: 24.si,
         color: colors.text,
