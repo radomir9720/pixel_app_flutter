@@ -6,14 +6,68 @@ import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 class ExchangeLogCard extends StatelessWidget {
-  const ExchangeLogCard({super.key, required this.item});
+  const ExchangeLogCard._({
+    this.event,
+    this.package,
+    required this.dateTime,
+  }) : assert(
+          (event == null) != (package == null),
+          'Either "package" must be not null, or "event"',
+        );
+
+  factory ExchangeLogCard.fromDataSourceEvent({
+    required DataSourceEvent event,
+    required DateTime dateTime,
+  }) =>
+      ExchangeLogCard._(
+        event: event,
+        dateTime: dateTime,
+      );
+
+  factory ExchangeLogCard.fromPackage({
+    required List<int> package,
+    required DateTime dateTime,
+  }) =>
+      ExchangeLogCard._(
+        package: package,
+        dateTime: dateTime,
+      );
 
   @protected
-  final RequestsExchangeLogsEvent item;
+  final DataSourceEvent? event;
+
+  @protected
+  final List<int>? package;
+
+  @protected
+  final DateTime dateTime;
+
+  R whenDirection<R>(
+    int? direction, {
+    required R Function() incoming,
+    required R Function() outgoing,
+    required R Function(int? directionId) unknown,
+  }) {
+    switch (direction) {
+      case 0:
+        return outgoing();
+      case 1:
+        return incoming();
+      default:
+        return unknown(direction);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final package = item.event.toPackage();
+    final _package = ArgumentError.checkNotNull(
+      event?.toPackage() ?? package,
+      '_package',
+    );
+
+    final instanceOrNull = DataSourcePackage.instanceOrNUll(package ?? []);
+
+    final direction = event?.requestDirection ?? instanceOrNull?.directionFlag;
 
     return Container(
       color: Theme.of(context).cardColor,
@@ -25,22 +79,28 @@ class ExchangeLogCard extends StatelessWidget {
             trailing: Row(
               children: [
                 Text(
-                  item.event.whenDirection(
+                  whenDirection(
+                    direction,
                     incoming: () => context.l10n.incomingListTileLabel,
                     outgoing: () => context.l10n.outgoingListTileLabel,
+                    unknown: (id) => 'Unknown${id == null ? '' : ': "$id"'}',
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Icon(
-                  item.event.whenDirection(
+                  whenDirection(
+                    direction,
                     incoming: () => Icons.arrow_circle_left,
                     outgoing: () => Icons.arrow_circle_right,
+                    unknown: (id) => Icons.question_mark,
                   ),
-                  color: item.event.whenDirection(
+                  color: whenDirection(
+                    direction,
                     incoming: () => AppColors.of(context).successPastel,
-                    outgoing: () => AppColors.of(context).errorAccent,
+                    outgoing: () => AppColors.of(context).primaryAccent,
+                    unknown: (id) => AppColors.of(context).errorAccent,
                   ),
                 ),
               ],
@@ -48,7 +108,7 @@ class ExchangeLogCard extends StatelessWidget {
           ),
           _ExchangeLogCardListTile(
             title: context.l10n.timeListTileLabel,
-            trailing: Text(DateFormat('HH:mm:ss.SSS').format(item.dateTime)),
+            trailing: Text(DateFormat('HH:mm:ss.SSS').format(dateTime)),
           ),
           FittedBox(
             alignment: Alignment.centerLeft,
@@ -68,7 +128,7 @@ class ExchangeLogCard extends StatelessWidget {
                       child: Text(context.l10n.indexListTileLabel),
                     ),
                     ...List.generate(
-                      package.length,
+                      _package.length,
                       (index) => Container(
                         color: Theme.of(context).colorScheme.primary,
                         padding: const EdgeInsets.all(4),
@@ -87,7 +147,7 @@ class ExchangeLogCard extends StatelessWidget {
                       padding: const EdgeInsets.all(4),
                       child: Text(context.l10n.integerListTileLabel),
                     ),
-                    ...package.map(
+                    ..._package.map(
                       (e) => Padding(
                         padding: const EdgeInsets.all(4),
                         child: Text(
@@ -105,7 +165,7 @@ class ExchangeLogCard extends StatelessWidget {
                       padding: const EdgeInsets.all(4),
                       child: Text(context.l10n.hexListTileLabel),
                     ),
-                    ...package.map(
+                    ..._package.map(
                       (e) => Padding(
                         padding: const EdgeInsets.all(4),
                         child: Text(

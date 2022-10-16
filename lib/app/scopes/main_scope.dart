@@ -14,19 +14,23 @@ class MainScope extends SingleChildStatelessWidget {
   Widget buildWithChild(BuildContext context, Widget? child) {
     return MultiProvider(
       providers: [
+        Provider<Environment>(create: (context) => GetIt.I()),
+        Provider<PackageInfo>(create: (context) => GetIt.I()),
+        Provider<List<DataSource>>(create: (context) => GetIt.I()),
+        // storages
+        Provider<DataSourceStorage>(create: (context) => GetIt.I()),
         // blocs
         BlocProvider(
-          create: (context) => SelectDataSourceBloc(dataSources: GetIt.I()),
+          create: (context) => SelectDataSourceBloc(
+            dataSources: context.read(),
+          ),
         ),
         BlocProvider(
           create: (context) => DataSourceConnectBloc(
-            dataSourceStorage: GetIt.I(),
-            availableDataSources: GetIt.I(),
+            dataSourceStorage: context.read(),
+            availableDataSources: context.read(),
           )..add(const DataSourceConnectEvent.tryConnectWithStorageData()),
         ),
-        //
-        Provider<Environment>(create: (context) => GetIt.I()),
-        Provider<PackageInfo>(create: (context) => GetIt.I()),
       ],
       child: child,
     );

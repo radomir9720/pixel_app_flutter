@@ -1,28 +1,28 @@
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class ParameterId {
-  const ParameterId(this.value);
+abstract class DataSourceParameterId {
+  const DataSourceParameterId(this.value);
 
-  factory ParameterId.speed() => const _SpeedParameterId();
-  factory ParameterId.light() => const _LightParameterId();
-  factory ParameterId.voltage() => const _VoltageParameterId();
-  factory ParameterId.current() => const _CurrentParameterId();
-  factory ParameterId.custom(int id) => _CustomParameterId(id);
+  const factory DataSourceParameterId.speed() = _SpeedParameterId;
+  const factory DataSourceParameterId.light() = _LightParameterId;
+  const factory DataSourceParameterId.voltage() = _VoltageParameterId;
+  const factory DataSourceParameterId.current() = _CurrentParameterId;
+  const factory DataSourceParameterId.custom(int id) = _CustomParameterId;
 
-  factory ParameterId.fromInt(int id) {
+  factory DataSourceParameterId.fromInt(int id) {
     return all.firstWhere(
       (element) => element.value == id,
-      orElse: () => ParameterId.custom(id),
+      orElse: () => DataSourceParameterId.custom(id),
     );
   }
 
-  static List<ParameterId> get all {
-    return [
-      ParameterId.speed(),
-      ParameterId.light(),
-      ParameterId.voltage(),
-      ParameterId.current(),
+  static List<DataSourceParameterId> get all {
+    return const [
+      DataSourceParameterId.speed(),
+      DataSourceParameterId.light(),
+      DataSourceParameterId.voltage(),
+      DataSourceParameterId.current(),
     ];
   }
 
@@ -40,14 +40,14 @@ abstract class ParameterId {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ParameterId && other.value == value;
+    return other is DataSourceParameterId && other.value == value;
   }
 
   @override
   int get hashCode => value.hashCode;
 }
 
-class _SpeedParameterId extends ParameterId {
+class _SpeedParameterId extends DataSourceParameterId {
   const _SpeedParameterId() : super(125);
 
   @override
@@ -62,7 +62,7 @@ class _SpeedParameterId extends ParameterId {
   }
 }
 
-class _LightParameterId extends ParameterId {
+class _LightParameterId extends DataSourceParameterId {
   const _LightParameterId() : super(513);
 
   @override
@@ -77,7 +77,7 @@ class _LightParameterId extends ParameterId {
   }
 }
 
-class _VoltageParameterId extends ParameterId {
+class _VoltageParameterId extends DataSourceParameterId {
   const _VoltageParameterId() : super(174);
 
   @override
@@ -92,7 +92,7 @@ class _VoltageParameterId extends ParameterId {
   }
 }
 
-class _CurrentParameterId extends ParameterId {
+class _CurrentParameterId extends DataSourceParameterId {
   const _CurrentParameterId() : super(239);
 
   @override
@@ -107,7 +107,7 @@ class _CurrentParameterId extends ParameterId {
   }
 }
 
-class _CustomParameterId extends ParameterId {
+class _CustomParameterId extends DataSourceParameterId {
   const _CustomParameterId(super.id);
 
   @override
@@ -121,37 +121,3 @@ class _CustomParameterId extends ParameterId {
     return custom(value);
   }
 }
-
-// enum ParameterId {
-//   speed(125),
-//   light(513),
-//   voltage(174),
-//   current(239);
-
-//   const ParameterId(this.value);
-
-//   final int value;
-
-//   static ParameterId fromInt(int integer) {
-//     return ParameterId.values.firstWhere((element) =>
-//            element.value == integer);
-//   }
-
-//   R when<R>({
-//     required R Function() speed,
-//     required R Function() light,
-//     required R Function() voltage,
-//     required R Function() current,
-//   }) {
-//     switch (this) {
-//       case ParameterId.speed:
-//         return speed();
-//       case ParameterId.light:
-//         return light();
-//       case ParameterId.voltage:
-//         return voltage();
-//       case ParameterId.current:
-//         return current();
-//     }
-//   }
-// }

@@ -84,7 +84,18 @@ class DeveloperToolsScreen extends StatelessWidget {
                     context.router
                         .push<List<int>>(
                       ChangeParametersSubscriptionDialogRoute(
-                        initialValue: state.subscriptionParameterIds,
+                        initialChoosedOptions: state.subscriptionParameterIds,
+                        title: context
+                            .l10n.whichParametersToSubscribeToListTileLabel,
+                        alwasysVisibleOptions: DataSourceParameterId.all
+                            .map((e) => e.value)
+                            .toList(),
+                        validator: (integer) {
+                          if (integer < 0 || integer > 0xFFFF) {
+                            return context.l10n.parameterIdLimitsMessage;
+                          }
+                          return null;
+                        },
                       ),
                     )
                         .then((value) {
@@ -146,7 +157,7 @@ class DeveloperToolsScreen extends StatelessWidget {
                 ListTile(
                   title: Text(context.l10n.requestsExchangeLogsListTileLabel),
                   onTap: () {
-                    context.router.push(const RequestsExchangeLogsRoute());
+                    context.router.push(const RequestsExchangeLogsFlow());
                   },
                 ),
               ],

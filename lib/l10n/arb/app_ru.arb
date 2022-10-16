@@ -103,6 +103,19 @@
     "parameterIdLimitsMessage": "Идентификатор параметра должен быть целым числом больше или равным нулю и меньше или равным 65535(0xFFFF)",
     "addCustomIdButtonCaption": "Добавить кастомный идентификатор",
     "enableHandshakeResponseListTileLabel": "Включить ответ на хэндшэйк",
-    "sendHandshakeResponseTimeoutListTileLabel": "Через сколько миллисекунд после получения запроса на хэндшэйк отправить ответ"
+    "sendHandshakeResponseTimeoutListTileLabel": "Через сколько миллисекунд после получения запроса на хэндшэйк отправить ответ",
+
+    "processedRequestsTabTitle": "Обработанные",
+    "rawRequestsTabTitle": "Сырые",
+    "addCustomValueIntegerDialogButtonCaption": "Добавить кастомное значение",
+    "enterValueIntegerDialogTextFieldLabel": "Введите значение",
+    "requestsFilterScreenTitle": "Фильтры запросов",
+    "parameterIdListTileLabel": "ID параметра",
+    "parameterIdFilterDialogTitle": "Фильтр по ID параметра",
+    "requestTypeListTileLabel": "Тип запроса",
+    "requestTypeFilterDialogTitle": "Фильтр по типу запроса",
+    "requestDirectionListTileLabel": "Направление запроса",
+    "requestDirectionFilterDialogTitle": "Фильтр по направлению запросов"
+
 
 }
