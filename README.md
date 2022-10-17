@@ -11,7 +11,7 @@
   * [What is currently implemented](#what-is-currently-implemented)
   * [What should be implemented](#what-should-be-implemented)
   * [How can i contribute?](#how-can-i-contribute)
-  * [How to lauch the project]()
+  * [How to lauch the project](#how-to-launch-the-project)
 
 ## <a name="about">About</a>
 ---

@@ -101,7 +101,7 @@ class SettingsButton extends StatelessWidget {
                     fontSize: titleFontSize ??
                         DefaultTextStyle.of(context).style.fontSize,
                   ),
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
