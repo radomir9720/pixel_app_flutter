@@ -115,5 +115,8 @@
     "requestTypeListTileLabel": "Request type",
     "requestTypeFilterDialogTitle": "Request type",
     "requestDirectionListTileLabel": "Request direction",
-    "requestDirectionFilterDialogTitle": "Request direction filter"
+    "requestDirectionFilterDialogTitle": "Request direction filter",
+
+    "dontTurnOffTheScreenButtonCaption": "Don't turn off the screen",
+    "errorTogglingDTOMessage": "Error toggling \"Don't turn off the screen\" mode"
 }

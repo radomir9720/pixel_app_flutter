@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
+import 'package:pixel_app_flutter/domain/settings/settings.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
@@ -39,6 +40,28 @@ class SettingsScreen extends StatelessWidget {
             icon: PixelIcons.about,
             title: context.l10n.aboutButtonCaption,
             onPressed: () {},
+          ),
+          BlocConsumer<AlwaysOnDisplayToggleBloc, AlwaysOnDisplayToggleState>(
+            listenWhen: (previous, current) => current.isFailure,
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(context.l10n.errorTogglingDTOMessage)),
+              );
+            },
+            builder: (context, state) {
+              return SettingsButton(
+                icon: Icons.aod,
+                state: state.payload
+                    ? SettingsButtonState.selected
+                    : SettingsButtonState.enabled,
+                title: context.l10n.dontTurnOffTheScreenButtonCaption,
+                onPressed: () {
+                  context
+                      .read<AlwaysOnDisplayToggleBloc>()
+                      .add(const AlwaysOnDisplayToggleEvent.toggle());
+                },
+              );
+            },
           ),
           if (context.watch<Environment>().isDev)
             SettingsButton(

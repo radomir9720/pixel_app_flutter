@@ -115,7 +115,10 @@
     "requestTypeListTileLabel": "Тип запроса",
     "requestTypeFilterDialogTitle": "Фильтр по типу запроса",
     "requestDirectionListTileLabel": "Направление запроса",
-    "requestDirectionFilterDialogTitle": "Фильтр по направлению запросов"
+    "requestDirectionFilterDialogTitle": "Фильтр по направлению запросов",
+
+    "dontTurnOffTheScreenButtonCaption": "Не выключать экран",
+    "errorTogglingDTOMessage": "Ошибка при переключении режима \"Не выключать экран\""
 
 
 }
