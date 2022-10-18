@@ -83,17 +83,17 @@ android {
         production {
             dimension "default"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "Pixel App Flutter"]
+            manifestPlaceholders = [appName: "Pixel"]
         }
         staging {
             dimension "default"
             applicationIdSuffix ".stg"
-            manifestPlaceholders = [appName: "[STG] Pixel App Flutter"]
+            manifestPlaceholders = [appName: "[STG] Pixel"]
         }
         development {
             dimension "default"
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appName: "[DEV] Pixel App Flutter"]
+            manifestPlaceholders = [appName: "[DEV] Pixel"]
         }
     }
 
