@@ -6,7 +6,6 @@
 // https://opensource.org/licenses/MIT.
 
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -96,7 +95,7 @@ Future<void> bootstrap(
         ),
       ),
     ),
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
+    CrashlyticsHelper.recordError,
   );
 }
 
