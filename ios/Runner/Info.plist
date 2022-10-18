@@ -2,23 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>en</string>
-		<string>ru</string>
-	</array>
-
-	<!-- <key>NSBluetoothAlwaysUsageDescription</key>  
-	<string>To keep bluetooth connection with the main car controller</string>  
-	<key>To keep connection with the main car controller</key>  
-	<string>To keep bluetooth connection with the main car controller</string>  
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>  
-	<string>To keep bluetooth connection with the main car controller</string>  
-	<key>NSLocationAlwaysUsageDescription</key>  
-	<string>To keep bluetooth connection with the main car controller</string>  
-	<key>NSLocationWhenInUseUsageDescription</key>  
-	<string>To keep bluetooth connection with the main car controller</string> -->
-
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -29,6 +14,11 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ru</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>Pixel App Flutter</string>
 	<key>CFBundlePackageType</key>
@@ -45,6 +35,8 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -60,7 +52,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
 </dict>
 </plist>
