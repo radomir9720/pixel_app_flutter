@@ -96,7 +96,7 @@ Future<void> bootstrap(
         ),
       ),
     ),
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
+    CrashlyticsHelper.recordError,
   );
 }
 
