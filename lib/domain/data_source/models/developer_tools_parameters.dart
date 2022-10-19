@@ -56,7 +56,7 @@ class DeveloperToolsParameters {
 
   const DeveloperToolsParameters.defaultValues()
       : enableRandomErrorGenerationForDemoDataSource = false,
-        protocolVersion = DataSourceProtocolVersion.periodicRequests,
+        protocolVersion = DataSourceProtocolVersion.subscription,
         requestsPeriodInMillis = 800,
         enableHandshakeResponse = true,
         handshakeResponseTimeoutInMillis = 1000,
