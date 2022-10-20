@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -165,13 +164,10 @@ class DemoDataSource extends DataSource {
       handshake: () {
         Future<void>.delayed(const Duration(seconds: 1)).then(
           (value) {
-            final package = DataSourcePackage.fromBody([
-              0x00,
-              int.parse('10010000', radix: 2),
-              0xFF,
-              0xFF,
-              0x00,
-            ]);
+            final package = DataSourcePackage.builder(
+              secondConfigByte: int.parse('10010000', radix: 2),
+              parameterId: 0xFFFF,
+            );
 
             observe(package);
 
@@ -296,20 +292,11 @@ class DemoDataSource extends DataSource {
       periodicRequests: () => '10000001',
     );
 
-    final bits = (value.bitLength / 8).ceil();
-
-    final package = DataSourcePackage.fromBody([
-      0x00,
-      int.parse(requestType, radix: 2),
-      ...parameterId.value.toTwoBytes,
-      bits.clamp(1, 100),
-      ...value
-          .toRadixString(16)
-          .padLeft(bits * 2, '0')
-          .split('')
-          .splitAfterIndexed((index, element) => index.isOdd)
-          .map((e) => int.parse(e.join(), radix: 16)),
-    ]);
+    final package = DataSourcePackage.builder(
+      secondConfigByte: int.parse(requestType, radix: 2),
+      parameterId: parameterId.value,
+      data: value,
+    );
 
     observe(package);
 

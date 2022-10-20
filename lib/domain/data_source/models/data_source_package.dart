@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:crclib/catalog.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 
 extension UintListToInt on List<int> {
   int get toInt {
@@ -25,12 +26,51 @@ class DataSourcePackage extends UnmodifiableListView<int> {
     ]);
   }
 
+  factory DataSourcePackage.builder({
+    int firstConfigByte = 0x00,
+    required int secondConfigByte,
+    required int parameterId,
+    int? data,
+  }) {
+    final body = <int>[
+      firstConfigByte,
+      secondConfigByte,
+      ...parameterId.toTwoBytes,
+      dataBitsLength(data),
+      ...dataToBytes(data),
+    ];
+
+    return DataSourcePackage([
+      startingByte,
+      ...body,
+      ...calculateCheckSum(body),
+      endingByte,
+    ]);
+  }
+
   static DataSourcePackage? instanceOrNUll(List<int> package) {
     try {
       return DataSourcePackage(package);
     } catch (e) {
       return null;
     }
+  }
+
+  static int dataBitsLength(int? data) {
+    if (data == null) return 0;
+    final bits = (data.bitLength / 8).ceil();
+    return bits.clamp(1, 100);
+  }
+
+  static List<int> dataToBytes(int? data) {
+    if (data == null) return const [];
+    return data
+        .toRadixString(16)
+        .padLeft(dataBitsLength(data) * 2, '0')
+        .split('')
+        .splitAfterIndexed((index, element) => index.isOdd)
+        .map((e) => int.parse(e.join(), radix: 16))
+        .toList();
   }
 
   Uint8List get toUint8List => Uint8List.fromList(this);
