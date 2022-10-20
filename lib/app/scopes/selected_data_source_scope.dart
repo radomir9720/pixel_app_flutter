@@ -41,7 +41,9 @@ class SelectedDataSourceScope extends AutoRouter {
                 create: (context) => DataSourceLiveCubit(
                   dataSource: device.dataSource,
                   developerToolsParametersStorage: context.read(),
-                )..initialHandshake(),
+                )
+                  ..initHandshake()
+                  ..initParametersSubscription(),
               ),
               if (context.watch<Environment>().isDev) ...[
                 BlocProvider(

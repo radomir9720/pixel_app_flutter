@@ -131,22 +131,6 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
                 ),
           ),
         ) {
-    subscribeToParameterIdList = state.parameters.subscriptionParameterIds
-        .map(DataSourceParameterId.fromInt)
-        .toList();
-
-    state.parameters.protocolVersion.when(
-      subscription: () {
-        subscribeTo(subscribeToParameterIdList);
-      },
-      periodicRequests: () {
-        _setNewTimer(
-          state.parameters.requestsPeriodInMillis,
-          subscribeToParameterIdList,
-        );
-      },
-    );
-
     subscribe<DeveloperToolsParameters>(
       developerToolsParametersStorage,
       _onDeveloperToolsParametersUpdated,
@@ -273,10 +257,28 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
     );
   }
 
-  void initialHandshake() {
+  void initHandshake() {
     final event = DataSourceHandshakeOutgoingEvent.initial(handhsakeId);
     _observe(event);
     dataSource.sendEvent(event);
+  }
+
+  void initParametersSubscription() {
+    subscribeToParameterIdList = state.parameters.subscriptionParameterIds
+        .map(DataSourceParameterId.fromInt)
+        .toList();
+
+    state.parameters.protocolVersion.when(
+      subscription: () {
+        subscribeTo(subscribeToParameterIdList);
+      },
+      periodicRequests: () {
+        _setNewTimer(
+          state.parameters.requestsPeriodInMillis,
+          subscribeToParameterIdList,
+        );
+      },
+    );
   }
 
   void subscribeTo(List<DataSourceParameterId> ids) {
