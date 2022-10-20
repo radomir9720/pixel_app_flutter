@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/app/scopes/developer_tools_scope.dart';
+import 'package:pixel_app_flutter/app/scopes/select_data_source_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/selected_data_source_scope.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/apps_screen.dart';
@@ -49,7 +50,7 @@ mixin RouteNames {
 }
 
 const _selectDataSourceRouter = AutoRoute<void>(
-  page: EmptyRouterPage,
+  page: SelectDataSourceScope,
   path: 'select-data-source',
   name: RouteNames.selectDataSourceFlow,
   children: [

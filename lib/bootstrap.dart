@@ -6,7 +6,6 @@
 // https://opensource.org/licenses/MIT.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -21,10 +20,6 @@ import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
 import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/scopes/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
-import 'package:pixel_app_flutter/data/services/bluetooth_data_source.dart';
-import 'package:pixel_app_flutter/data/services/demo_data_source.dart';
-import 'package:pixel_app_flutter/data/storages/developer_tools_parameters_storage.dart';
-import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum Environment {
@@ -108,7 +103,9 @@ Future<void> configureDependencies(Environment env) async {
 }
 
 Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
-  final gh = GetItHelper(getIt)..factory<Environment>(() => env);
+  final gh = GetItHelper(getIt)
+    ..factory<Environment>(() => env)
+    ..factory<FlutterBluetoothSerial>(() => FlutterBluetoothSerial.instance);
 
   await gh.factoryAsync<SharedPreferences>(
     SharedPreferences.getInstance,
@@ -119,31 +116,4 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
     PackageInfo.fromPlatform,
     preResolve: true,
   );
-
-  gh
-    ..singleton<DeveloperToolsParametersStorage>(
-      DeveloperToolsParametersStorageImpl(preferences: getIt.get()),
-    )
-    ..factory<List<DataSource>>(
-      () {
-        final devToolsParamsStorage =
-            getIt.get<DeveloperToolsParametersStorage>();
-        return [
-          if (Platform.isAndroid)
-            BluetoothDataSource(
-              bluetoothSerial: FlutterBluetoothSerial.instance,
-            ),
-          DemoDataSource(
-            generateRandomErrors: () {
-              return env.isDev &&
-                  devToolsParamsStorage
-                      .data.enableRandomErrorGenerationForDemoDataSource;
-            },
-            updatePeriodMillis: () {
-              return devToolsParamsStorage.data.requestsPeriodInMillis;
-            },
-          ),
-        ];
-      },
-    );
 }

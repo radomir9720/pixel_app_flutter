@@ -11,6 +11,7 @@ class DemoDataSource extends DataSource {
   DemoDataSource({
     required this.generateRandomErrors,
     required this.updatePeriodMillis,
+    required super.id,
   })  : controller = StreamController.broadcast(),
         subscriptionCallbacks = {},
         valueCache = {};
@@ -67,6 +68,8 @@ class DemoDataSource extends DataSource {
   @override
   Future<void> dispose() async {
     await super.dispose();
+    timer?.cancel();
+    timer = null;
     await controller.close();
   }
 
@@ -172,9 +175,11 @@ class DemoDataSource extends DataSource {
 
             observe(package);
 
-            controller.sink.add(
-              DataSourceHandshakeIncomingEvent(package),
-            );
+            if (!controller.isClosed) {
+              controller.sink.add(
+                DataSourceHandshakeIncomingEvent(package),
+              );
+            }
           },
         );
 

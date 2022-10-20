@@ -5,8 +5,11 @@ import 'package:re_seedwork/re_seedwork.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @Injectable(as: DataSourceStorage)
-class DataSourceStorageImpl implements DataSourceStorage {
-  const DataSourceStorageImpl({required this.preferences});
+class DataSourceStorageImpl
+    extends InMemoryValueStore<Optional<DataSourceWithAddress>>
+    implements DataSourceStorage {
+  DataSourceStorageImpl({required this.preferences})
+      : super(const Optional.undefined());
 
   @protected
   final SharedPreferences preferences;
@@ -20,18 +23,20 @@ class DataSourceStorageImpl implements DataSourceStorage {
       return const Result.value(null);
     }
 
+    await put(const Optional.undefined());
+
     return const Result.error(DataSourceStorageRemoveError.unknown);
   }
 
   @override
-  Future<Result<DataSourceStorageWriteError, void>> write({
-    required String dataSourceKey,
-    required String address,
-  }) async {
+  Future<Result<DataSourceStorageWriteError, void>> write(
+    DataSourceWithAddress dataSourceWithAddress,
+  ) async {
     if (await preferences.setStringList(kDataSourceKey, [
-      dataSourceKey,
-      address,
+      dataSourceWithAddress.dataSource.key,
+      dataSourceWithAddress.address,
     ])) {
+      await put(Optional.presented(dataSourceWithAddress));
       return const Result.value(null);
     }
 
@@ -42,6 +47,7 @@ class DataSourceStorageImpl implements DataSourceStorage {
   Result<DataSourceStorageReadError, List<String>> read() {
     final value = preferences.getStringList(kDataSourceKey);
     if (value == null) {
+      put(const Optional.undefined());
       return const Result.error(DataSourceStorageReadError.noValue);
     }
 

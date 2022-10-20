@@ -17,21 +17,18 @@ class MainScope extends SingleChildStatelessWidget {
       providers: [
         Provider<Environment>(create: (context) => GetIt.I()),
         Provider<PackageInfo>(create: (context) => GetIt.I()),
-        Provider<List<DataSource>>(create: (context) => GetIt.I()),
         // storages
-        Provider<DataSourceStorage>(create: (context) => GetIt.I()),
+        InheritedProvider<DataSourceStorage>(create: (context) => GetIt.I()),
+        InheritedProvider<DeveloperToolsParametersStorage>(
+          create: (context) => GetIt.I(),
+        ),
         // blocs
         BlocProvider(
-          create: (context) => SelectDataSourceBloc(
-            dataSources: context.read(),
+          create: (context) => DataSourceCubit(
+            dataSourceStorage: context.read(),
           ),
         ),
-        BlocProvider(
-          create: (context) => DataSourceConnectBloc(
-            dataSourceStorage: context.read(),
-            availableDataSources: context.read(),
-          )..add(const DataSourceConnectEvent.tryConnectWithStorageData()),
-        ),
+
         BlocProvider(
           create: (context) => AlwaysOnDisplayToggleBloc(
             service: GetIt.I(),

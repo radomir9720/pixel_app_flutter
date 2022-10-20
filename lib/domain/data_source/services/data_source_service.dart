@@ -5,7 +5,9 @@ import 'package:re_seedwork/re_seedwork.dart';
 typedef Observer = void Function(List<int> package);
 
 abstract class DataSource {
-  DataSource() : observers = {};
+  DataSource({required this.id}) : observers = {};
+
+  final int id;
 
   final Set<Observer> observers;
 

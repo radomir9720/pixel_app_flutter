@@ -1,5 +1,6 @@
 // blocs
 export './blocs/data_source_connect_bloc.dart';
+export './blocs/data_source_cubit.dart';
 export './blocs/data_source_device_list_cubit.dart';
 export './blocs/data_source_live_cubit.dart' hide Observer;
 export './blocs/developer_tools_parameters_cubit.dart';
@@ -15,6 +16,7 @@ export './models/data_source_package.dart';
 export './models/data_source_parameter_id.dart';
 export './models/data_source_request_direction.dart';
 export './models/data_source_request_type.dart';
+export './models/data_source_with_address.dart';
 export './models/developer_tools_parameters.dart';
 
 // services

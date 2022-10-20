@@ -309,6 +309,7 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
 
   @override
   Future<void> close() {
+    observers.clear();
     _cancelTimer();
     dataSource.disconnect();
     return super.close();

@@ -10,6 +10,7 @@ import 'package:re_seedwork/re_seedwork.dart';
 class BluetoothDataSource extends DataSource {
   BluetoothDataSource({
     required this.bluetoothSerial,
+    required super.id,
   })  : controller = StreamController.broadcast(),
         package = [];
 
