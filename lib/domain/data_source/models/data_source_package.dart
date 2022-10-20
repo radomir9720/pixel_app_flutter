@@ -36,7 +36,7 @@ class DataSourcePackage extends UnmodifiableListView<int> {
       firstConfigByte,
       secondConfigByte,
       ...parameterId.toTwoBytes,
-      dataBitsLength(data),
+      dataBytesLength(data),
       ...dataToBytes(data),
     ];
 
@@ -56,17 +56,30 @@ class DataSourcePackage extends UnmodifiableListView<int> {
     }
   }
 
-  static int dataBitsLength(int? data) {
+  static int dataBytesLength(int? data) {
     if (data == null) return 0;
     final bits = (data.bitLength / 8).ceil();
     return bits.clamp(1, 100);
   }
 
-  static List<int> dataToBytes(int? data) {
-    if (data == null) return const [];
+  /// If [fixedBytesLenght] is not null, then bytes length will be set to this
+  /// value, and element count in returned list will be equal to
+  /// [fixedBytesLenght]
+  static List<int> dataToBytes(
+    int? data, {
+    int? fixedBytesLenght,
+  }) {
+    if (data == null) {
+      if (fixedBytesLenght != null) {
+        return List.filled(fixedBytesLenght, 0);
+      }
+      return const [];
+    }
+    final bytesLength = fixedBytesLenght ?? dataBytesLength(data);
+
     return data
         .toRadixString(16)
-        .padLeft(dataBitsLength(data) * 2, '0')
+        .padLeft(bytesLength * 2, '0')
         .split('')
         .splitAfterIndexed((index, element) => index.isOdd)
         .map((e) => int.parse(e.join(), radix: 16))
