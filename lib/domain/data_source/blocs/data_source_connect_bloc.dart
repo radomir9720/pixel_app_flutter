@@ -82,6 +82,10 @@ class DataSourceConnectBloc
     } catch (e) {
       emit(state.inFailure());
       rethrow;
+    } finally {
+      if (state.isFailure) {
+        await dataSourceStorage.put(const Optional.undefined());
+      }
     }
   }
 
