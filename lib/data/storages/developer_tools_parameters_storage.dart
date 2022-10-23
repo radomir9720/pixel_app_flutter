@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@Injectable(as: DeveloperToolsParametersStorage)
 class DeveloperToolsParametersStorageImpl
     extends InMemoryValueStore<DeveloperToolsParameters>
     implements DeveloperToolsParametersStorage {

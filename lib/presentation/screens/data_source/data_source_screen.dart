@@ -49,9 +49,9 @@ class DataSourceScreen extends StatelessWidget {
         },
         builder: (context, state) {
           final currentDataSource = context
-              .watch<DataSourceConnectBloc>()
+              .watch<DataSourceCubit>()
               .state
-              .payload
+              .ds
               .when(undefined: () => null, presented: (v) => v);
 
           return SettingsBaseLayout(

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:crclib/catalog.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 
 extension UintListToInt on List<int> {
   int get toInt {
@@ -25,12 +26,64 @@ class DataSourcePackage extends UnmodifiableListView<int> {
     ]);
   }
 
+  factory DataSourcePackage.builder({
+    int firstConfigByte = 0x00,
+    required int secondConfigByte,
+    required int parameterId,
+    int? data,
+  }) {
+    final body = <int>[
+      firstConfigByte,
+      secondConfigByte,
+      ...parameterId.toTwoBytes,
+      dataBytesLength(data),
+      ...dataToBytes(data),
+    ];
+
+    return DataSourcePackage([
+      startingByte,
+      ...body,
+      ...calculateCheckSum(body),
+      endingByte,
+    ]);
+  }
+
   static DataSourcePackage? instanceOrNUll(List<int> package) {
     try {
       return DataSourcePackage(package);
     } catch (e) {
       return null;
     }
+  }
+
+  static int dataBytesLength(int? data) {
+    if (data == null) return 0;
+    final bits = (data.bitLength / 8).ceil();
+    return bits.clamp(1, 100);
+  }
+
+  /// If [fixedBytesLenght] is not null, then bytes length will be set to this
+  /// value, and element count in returned list will be equal to
+  /// [fixedBytesLenght]
+  static List<int> dataToBytes(
+    int? data, {
+    int? fixedBytesLenght,
+  }) {
+    if (data == null) {
+      if (fixedBytesLenght != null) {
+        return List.filled(fixedBytesLenght, 0);
+      }
+      return const [];
+    }
+    final bytesLength = fixedBytesLenght ?? dataBytesLength(data);
+
+    return data
+        .toRadixString(16)
+        .padLeft(bytesLength * 2, '0')
+        .split('')
+        .splitAfterIndexed((index, element) => index.isOdd)
+        .map((e) => int.parse(e.join(), radix: 16))
+        .toList();
   }
 
   Uint8List get toUint8List => Uint8List.fromList(this);
@@ -48,7 +101,7 @@ class DataSourcePackage extends UnmodifiableListView<int> {
     }
     // Check ending byte
     if (this[length - 1] != endingByte) {
-      throw const InvalidEndingByteDataSourcePackageException();
+      throw InvalidEndingByteDataSourcePackageException(this);
     }
 
     final checkSum = sublist(length - 3, length - 1);
@@ -141,8 +194,8 @@ class InvalidStartingByteDataSourcePackageException
 
 class InvalidEndingByteDataSourcePackageException
     extends DataSourcePackageException {
-  const InvalidEndingByteDataSourcePackageException()
-      : super('Invalid ending byte');
+  const InvalidEndingByteDataSourcePackageException(List<int> package)
+      : super('Invalid ending byte. Package: $package');
 }
 
 class WrongCheckSumDataSourcePackageException

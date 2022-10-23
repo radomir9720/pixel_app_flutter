@@ -1,20 +1,45 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
+extension PopFirstExtension on List<int> {
+  List<int> popFirst(int count) {
+    if (length == 0 || count == 0) return const [];
+    if (count >= length) {
+      final buffer = [...this];
+      clear();
+      return buffer;
+    }
+
+    final buffer = sublist(0, count);
+    removeRange(0, count);
+    return buffer;
+  }
+}
+
 class BluetoothDataSource extends DataSource {
   BluetoothDataSource({
     required this.bluetoothSerial,
+    required super.id,
+    required this.connectToAddress,
+    int parseDebouncerDelayInMillis = kParseDebouncerDelayInMillis,
   })  : controller = StreamController.broadcast(),
-        package = [];
+        buffer = [],
+        debouncer = Debouncer(milliseconds: parseDebouncerDelayInMillis);
+
+  @visibleForTesting
+  static const kParseDebouncerDelayInMillis = 150;
 
   @visibleForTesting
   final StreamController<DataSourceIncomingEvent> controller;
+
+  @visibleForTesting
+  final Future<BluetoothConnection> Function(String address) connectToAddress;
 
   @visibleForTesting
   StreamSubscription<Uint8List>? subscription;
@@ -22,21 +47,31 @@ class BluetoothDataSource extends DataSource {
   @visibleForTesting
   StreamSink<Uint8List>? sink;
 
-  List<int> package;
-
-  @protected
+  @visibleForTesting
   final FlutterBluetoothSerial bluetoothSerial;
 
+  @visibleForTesting
   BluetoothConnection? connection;
 
-  static const startingByte = 0x3c;
-  static const endingByte = 0x3e;
+  @visibleForTesting
+  List<int> buffer;
+
+  @visibleForTesting
+  final Debouncer debouncer;
+
+  @visibleForTesting
+  Completer<void>? noBytesInBufferCompleter;
 
   @override
   String get key => 'bluetooth';
 
   @override
   Stream<DataSourceIncomingEvent> get eventStream => controller.stream;
+
+  Future<void> get noBytesInBufferFuture =>
+      noBytesInBufferCompleter?.future ?? Future.value();
+
+  bool get noBytesInBuffer => noBytesInBufferCompleter?.isCompleted ?? true;
 
   @override
   Future<Result<SendEventError, void>> sendEvent(
@@ -58,11 +93,11 @@ class BluetoothDataSource extends DataSource {
 
   @override
   Future<Result<EnableError, void>> enable() async {
-    if (!(await bluetoothSerial.isAvailable ?? false)) {
+    if (!await isAvailable) {
       return const Result.error(EnableError.isUnavailable);
     }
 
-    if (await bluetoothSerial.isEnabled ?? false) {
+    if (await isEnabled) {
       return const Result.error(EnableError.isAlreadyEnabled);
     }
 
@@ -92,7 +127,7 @@ class BluetoothDataSource extends DataSource {
       }
     }
 
-    final connection = await BluetoothConnection.toAddress(address);
+    final connection = await connectToAddress(address);
     this.connection = connection;
 
     final input = connection.input;
@@ -118,50 +153,109 @@ class BluetoothDataSource extends DataSource {
   void _onNewPackage(Uint8List event) {
     observe(event);
 
-    final incomingPackage = [...event];
+    buffer.addAll(event);
 
-    void parsePackage() {
-      final _package = [...package];
-      package.clear();
+    tryParse();
+  }
 
-      final dataSourceEvent =
-          DataSourceEvent.fromPackage(DataSourcePackage(_package));
-      controller.sink.add(dataSourceEvent);
+  @visibleForTesting
+  void tryParse() {
+    if (buffer.isEmpty) return;
+    if (noBytesInBuffer) noBytesInBufferCompleter = Completer();
+
+    const minimumPackageLength = 9;
+
+    const startingByte = DataSourcePackage.startingByte;
+    const endingByte = DataSourcePackage.endingByte;
+
+    // Step 1
+    // Check buffer lenght. Minimum length of a valid package is 9.
+    // If the length is less than this value, do nothing(wait for more bytes).
+    if (buffer.length < minimumPackageLength) return;
+
+    // Step 2
+    // If first byte is not starting,
+    // then removing every byte until the starting one
+    if (buffer.first != startingByte) {
+      final indexOfStartingByte = buffer.indexOf(startingByte);
+
+      // There is no starting byte in buffer yet
+      // Clearing buffer
+      if (indexOfStartingByte == -1) {
+        buffer.removeRange(0, buffer.length);
+        return;
+      }
+
+      // Starting byte was found
+      // Removing every byte until starting byte(exclusive)
+      // buffer.popFirst(indexOfStartingByte);
+      buffer.popFirst(indexOfStartingByte);
+
+      // Check the buffer lenght after popFirst() method.
+      // If the length is less than minimum length, do nothing
+      // (wait for more bytes).
+      // ignore: invariant_booleans
+      if (buffer.length < minimumPackageLength) return;
     }
 
-    while (incomingPackage.isNotEmpty) {
-      final initial = [...incomingPackage];
+    // Step 3
+    // Check that buffer contains ending byte.
+    // Otherwise do nothing(wait for more bytes)
+    if (!buffer.contains(endingByte)) return;
 
-      final indexOfStartingByte = incomingPackage.indexOf(startingByte);
-      final indexOfEndingByte = incomingPackage.indexOf(endingByte);
-      final sublistFrom = indexOfStartingByte == -1 ? 0 : indexOfStartingByte;
-      final sublistTo = indexOfEndingByte == -1
-          ? incomingPackage.length
-          : indexOfEndingByte + 1;
+    // Step 4
+    // Checking buffer length
+    // Correct bytes order:
+    // 0 - starting byte
+    // 1 - config byte 1
+    // 2 - config byte 2
+    // 3 - parameter id(first byte)
+    // 4 - parameter id(second byte)
+    // 5 - data length
+    // 6+n - data
+    // 6+n+1 - CRC sum(first byte)
+    // 6+n+2 - CRC sum(second byte)
+    // 6+n+3 - ending byte
+    // So the ending byte should be at position bytes[5 + bytes[5] + 3]
+    final indexOfPotentialEndingByte = 5 + buffer[5] + 3;
+    // If length of the buffer is less than should be,
+    // do nothing((wait for more bytes))
+    if (indexOfPotentialEndingByte > buffer.length - 1) return;
 
-      if (package.isNotEmpty &&
-          incomingPackage.contains(startingByte) &&
-          incomingPackage.contains(endingByte) &&
-          indexOfStartingByte < indexOfEndingByte) {
-        // If current package has no ending byte, and inside
-        // the incoming package the ending byte is after the starting byte -
-        // resetting current package(clearing)
-        package.clear();
+    // Step 5
+    // Check that ending byte is in the right position
+
+    final potentialEndingByte = buffer[indexOfPotentialEndingByte];
+    // If the ending byte is in the right position, then extracting the chunk
+    // from buffer, parsing it, and adding to events stream
+    if (potentialEndingByte == endingByte) {
+      final package = buffer.popFirst(indexOfPotentialEndingByte + 1);
+      final dataSourceEvent =
+          DataSourceEvent.fromPackage(DataSourcePackage(package));
+      controller.sink.add(dataSourceEvent);
+    } else {
+      // If the ending byte was not found at the index where it should be,
+      // then trying to find the next starting byte, and remove everything until
+      // the new starting byte(exclusive)
+      final indexOfStartingByte = buffer.sublist(1).indexOf(startingByte);
+
+      // There is no starting byte in buffer yet
+      // Clearing buffer
+      if (indexOfStartingByte == -1) {
+        buffer.removeRange(0, buffer.length);
+        return;
       }
 
-      if (incomingPackage.contains(startingByte) || package.isNotEmpty) {
-        package.addAll(
-          incomingPackage.sublist(sublistFrom, sublistTo),
-        );
-        incomingPackage.removeRange(0, sublistTo);
-        if (package.isNotEmpty && package.last == endingByte) {
-          parsePackage();
-        }
-      }
+      // Starting byte was found
+      // Removing every byte until starting byte(exclusive)
+      // + 1 because above we took a sublist of buffer, which begins from 2 item
+      buffer.popFirst(indexOfStartingByte + 1);
+    }
 
-      if (const DeepCollectionEquality().equals(initial, incomingPackage)) {
-        break;
-      }
+    if (buffer.isNotEmpty) {
+      debouncer.run(tryParse);
+    } else {
+      noBytesInBufferCompleter?.complete();
     }
   }
 
@@ -187,6 +281,12 @@ class BluetoothDataSource extends DataSource {
   @override
   Future<void> dispose() async {
     await super.dispose();
+    debouncer.dispose();
+    //
+    if (!noBytesInBuffer) {
+      noBytesInBufferCompleter?.complete();
+    }
+    //
     await subscription?.cancel();
     subscription = null;
     //

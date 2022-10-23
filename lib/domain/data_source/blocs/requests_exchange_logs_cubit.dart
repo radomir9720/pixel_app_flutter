@@ -96,6 +96,9 @@ class ProcessedRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
 
   @override
   void add(DataSourceEvent data) {
+    // Just in case
+    if (isClosed) return;
+
     emit([
       ...state.reversed.take(maxItems - 1).toList().reversed,
       ProcessedRequestsExchangeLogsState(data, DateTime.now())
@@ -109,6 +112,9 @@ class RawRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
 
   @override
   void add(List<int> data) {
+    // Just in case
+    if (isClosed) return;
+
     emit([
       ...state.reversed.take(maxItems - 1).toList().reversed,
       RawRequestsExchangeLogsState(data, DateTime.now())

@@ -112,6 +112,7 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
     required this.dataSource,
     required this.developerToolsParametersStorage,
   })  : observers = {},
+        initDateTime = DateTime.now(),
         super(
           DataSourceLiveState(
             speed: 0,
@@ -130,22 +131,6 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
                 ),
           ),
         ) {
-    subscribeToParameterIdList = state.parameters.subscriptionParameterIds
-        .map(DataSourceParameterId.fromInt)
-        .toList();
-
-    state.parameters.protocolVersion.when(
-      subscription: () {
-        subscribeTo(subscribeToParameterIdList);
-      },
-      periodicRequests: () {
-        _setNewTimer(
-          state.parameters.requestsPeriodInMillis,
-          subscribeToParameterIdList,
-        );
-      },
-    );
-
     subscribe<DeveloperToolsParameters>(
       developerToolsParametersStorage,
       _onDeveloperToolsParametersUpdated,
@@ -158,6 +143,8 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
             _onParameterValueUpdated(id, event.package.data.toInt),
         getParameterValue: (id) =>
             _onParameterValueUpdated(id, event.package.data.toInt),
+        subscriptionResponse: (id) =>
+            _onParameterValueUpdated(id, event.package.data.toInt),
         handshake: () {
           final id = event.package.parameterId;
           // Do not respond to handshake response from MainECU
@@ -168,7 +155,7 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
           final timeout = developerToolsParametersStorage
               .data.handshakeResponseTimeoutInMillis;
           Future<void>.delayed(Duration(milliseconds: timeout)).then((value) {
-            const event = DataSourceHandshakeOutgoingEvent.ping();
+            final event = DataSourceHandshakeOutgoingEvent.ping(handhsakeId);
             _observe(event);
             dataSource.sendEvent(event);
           });
@@ -180,6 +167,8 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
 
   Timer? timer;
 
+  final DateTime initDateTime;
+
   late final List<DataSourceParameterId> subscribeToParameterIdList;
 
   final Set<Observer> observers;
@@ -189,6 +178,15 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
 
   @protected
   final DeveloperToolsParametersStorage developerToolsParametersStorage;
+
+  int get handhsakeId {
+    final diff = DateTime.now().difference(initDateTime).inMilliseconds;
+    if (diff > 0xFFFFFFFF) {
+      final str = diff.toRadixString(16);
+      return int.parse(str.substring(str.length - 8), radix: 16);
+    }
+    return diff;
+  }
 
   void _onDeveloperToolsParametersUpdated(DeveloperToolsParameters newParams) {
     if (newParams == state.parameters) return;
@@ -261,15 +259,33 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
     );
   }
 
-  void initialHandshake() {
-    const event = DataSourceHandshakeOutgoingEvent.initial();
+  void initHandshake() {
+    final event = DataSourceHandshakeOutgoingEvent.initial(handhsakeId);
     _observe(event);
     dataSource.sendEvent(event);
   }
 
+  void initParametersSubscription() {
+    subscribeToParameterIdList = state.parameters.subscriptionParameterIds
+        .map(DataSourceParameterId.fromInt)
+        .toList();
+
+    state.parameters.protocolVersion.when(
+      subscription: () {
+        subscribeTo(subscribeToParameterIdList);
+      },
+      periodicRequests: () {
+        _setNewTimer(
+          state.parameters.requestsPeriodInMillis,
+          subscribeToParameterIdList,
+        );
+      },
+    );
+  }
+
   void subscribeTo(List<DataSourceParameterId> ids) {
     for (final id in ids) {
-      final event = DataSourceSubscribeOutgoingEvent(id);
+      final event = DataSourceSubscribeOutgoingEvent(id: id);
       _observe(event);
       dataSource.sendEvent(event);
     }
@@ -281,14 +297,14 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
 
   void unsubscribeFrom(List<DataSourceParameterId> ids) {
     for (final id in ids) {
-      final event = DataSourceUnsubscribeOutgoingEvent(id);
+      final event = DataSourceUnsubscribeOutgoingEvent(id: id);
       _observe(event);
       dataSource.sendEvent(event);
     }
   }
 
   void getValue(DataSourceParameterId id) {
-    final event = DataSourceGetParameterValueOutgoingEvent(id);
+    final event = DataSourceGetParameterValueOutgoingEvent(id: id);
     _observe(event);
     dataSource.sendEvent(event);
   }
@@ -309,6 +325,7 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
 
   @override
   Future<void> close() {
+    observers.clear();
     _cancelTimer();
     dataSource.disconnect();
     return super.close();

@@ -12,6 +12,7 @@ extension ToTwoBytesExtension on int {
   }
 }
 
+@immutable
 abstract class DataSourceEvent {
   const DataSourceEvent();
 
@@ -20,6 +21,7 @@ abstract class DataSourceEvent {
     DataSourceUpdateValueIncomingEvent.new,
     DataSourceHandshakeIncomingEvent.new,
     DataSourceGetParameterValueIncomingEvent.new,
+    DataSourceSubscriptionResponseIncomingEvent.new,
   ];
 
   static DataSourceIncomingEvent fromPackage(DataSourcePackage package) {
@@ -61,9 +63,11 @@ abstract class DataSourceEvent {
 }
 
 abstract class DataSourceOutgoingEvent extends DataSourceEvent {
-  const DataSourceOutgoingEvent(this.id);
+  const DataSourceOutgoingEvent({required this.id, this.data});
 
   final DataSourceParameterId id;
+
+  final int? data;
 
   R maybeWhen<R>({
     required R Function() orElse,
@@ -79,12 +83,20 @@ abstract class DataSourceOutgoingEvent extends DataSourceEvent {
   @override
   int get parameterId => id.value;
 
+  int get firstConfigByte => 0x00;
+
+  int? get fixedBytesDataLength => null;
+
   @override
   List<int> get body => [
-        0x00, // Config byte 1
+        firstConfigByte,
         requestType, // Config byte 2,
         ...id.value.toTwoBytes, // parameter id. Two bytes
-        0x00, // data length,
+        fixedBytesDataLength ?? DataSourcePackage.dataBytesLength(data),
+        ...DataSourcePackage.dataToBytes(
+          data,
+          fixedBytesLenght: fixedBytesDataLength,
+        ),
       ];
 }
 
@@ -98,6 +110,7 @@ abstract class DataSourceIncomingEvent extends DataSourceEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   });
 
   @override
@@ -113,14 +126,17 @@ abstract class DataSourceIncomingEvent extends DataSourceEvent {
 // Outgoing events
 
 class DataSourceHandshakeOutgoingEvent extends DataSourceOutgoingEvent {
-  const DataSourceHandshakeOutgoingEvent.initial()
-      : super(const DataSourceParameterId.custom(0));
+  const DataSourceHandshakeOutgoingEvent.initial(int data)
+      : super(id: const DataSourceParameterId.custom(0), data: data);
 
-  const DataSourceHandshakeOutgoingEvent.ping()
-      : super(const DataSourceParameterId.custom(0xFFFF));
+  const DataSourceHandshakeOutgoingEvent.ping(int data)
+      : super(id: const DataSourceParameterId.custom(0xFFFF), data: data);
 
   @override
   int get requestType => DataSourceRequestType.handshake.value;
+
+  @override
+  int? get fixedBytesDataLength => 4;
 
   @override
   R maybeWhen<R>({
@@ -135,7 +151,7 @@ class DataSourceHandshakeOutgoingEvent extends DataSourceOutgoingEvent {
 }
 
 class DataSourceGetParameterValueOutgoingEvent extends DataSourceOutgoingEvent {
-  const DataSourceGetParameterValueOutgoingEvent(super.id);
+  const DataSourceGetParameterValueOutgoingEvent({required super.id});
 
   @override
   int get requestType => DataSourceRequestType.bufferRequest.value;
@@ -153,7 +169,7 @@ class DataSourceGetParameterValueOutgoingEvent extends DataSourceOutgoingEvent {
 }
 
 class DataSourceSubscribeOutgoingEvent extends DataSourceOutgoingEvent {
-  const DataSourceSubscribeOutgoingEvent(super.id);
+  const DataSourceSubscribeOutgoingEvent({required super.id});
 
   @override
   int get requestType => DataSourceRequestType.subscription.value;
@@ -171,7 +187,7 @@ class DataSourceSubscribeOutgoingEvent extends DataSourceOutgoingEvent {
 }
 
 class DataSourceUnsubscribeOutgoingEvent extends DataSourceOutgoingEvent {
-  const DataSourceUnsubscribeOutgoingEvent(super.id);
+  const DataSourceUnsubscribeOutgoingEvent({required super.id});
 
   @override
   List<int> get body => [
@@ -209,13 +225,14 @@ class DataSourceHandshakeIncomingEvent extends DataSourceIncomingEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   }) {
     return handshake?.call() ?? orElse();
   }
 }
 
 class DataSourceGetParameterValueIncomingEvent extends DataSourceIncomingEvent {
-  DataSourceGetParameterValueIncomingEvent(super.package);
+  const DataSourceGetParameterValueIncomingEvent(super.package);
 
   @override
   int get requestType => DataSourceRequestType.bufferRequest.value;
@@ -226,6 +243,7 @@ class DataSourceGetParameterValueIncomingEvent extends DataSourceIncomingEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   }) {
     return getParameterValue
             ?.call(DataSourceParameterId.fromInt(package.parameterId)) ??
@@ -247,11 +265,33 @@ class DataSourceUpdateValueIncomingEvent extends DataSourceIncomingEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   }) {
     return updateValue
             ?.call(DataSourceParameterId.fromInt(package.parameterId)) ??
         orElse();
   }
+}
+
+class DataSourceSubscriptionResponseIncomingEvent
+    extends DataSourceIncomingEvent {
+  const DataSourceSubscriptionResponseIncomingEvent(super.package);
+
+  @override
+  R maybeWhen<R>({
+    required R Function() orElse,
+    R Function()? handshake,
+    R Function(DataSourceParameterId id)? getParameterValue,
+    R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
+  }) {
+    return subscriptionResponse
+            ?.call(DataSourceParameterId.fromInt(package.parameterId)) ??
+        orElse();
+  }
+
+  @override
+  int get requestType => DataSourceRequestType.subscription.value;
 }
 
 // Exceptions

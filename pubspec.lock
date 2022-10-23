@@ -324,9 +324,11 @@ packages:
   flutter_bluetooth_serial:
     dependency: "direct main"
     description:
-      name: flutter_bluetooth_serial
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "chore/make_BluetoothStreamSink_public"
+      resolved-ref: a2fb2a9011848e2dbee41df967f4e290e00386d5
+      url: "https://github.com/radomir9720/flutter_bluetooth_serial.git"
+    source: git
     version: "0.4.0"
   flutter_localizations:
     dependency: "direct main"
@@ -669,11 +671,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.1.2"
-      resolved-ref: "10b8390a3841d8cc6dfc351ab2a50d44ecfe2afa"
+      ref: "0.1.3"
+      resolved-ref: "103a43d340fbec52e896e851a9301ffe5b3989d1"
       url: "https://github.com/radomir9720/re_seedwork.git"
     source: git
-    version: "0.1.2"
+    version: "0.1.3"
   shared_preferences:
     dependency: "direct main"
     description:

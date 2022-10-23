@@ -5,28 +5,6 @@ import 'package:re_seedwork/re_seedwork.dart';
 
 part 'data_source_connect_bloc.freezed.dart';
 
-@immutable
-class DataSourceWithAddress {
-  const DataSourceWithAddress({
-    required this.dataSource,
-    required this.address,
-  });
-
-  final DataSource dataSource;
-
-  final String address;
-
-  @override
-  int get hashCode => Object.hash(dataSource.hashCode, address.hashCode);
-
-  @override
-  bool operator ==(dynamic other) {
-    return other is DataSourceWithAddress &&
-        other.address == address &&
-        other.dataSource == dataSource;
-  }
-}
-
 @freezed
 class DataSourceConnectEvent with _$DataSourceConnectEvent {
   const factory DataSourceConnectEvent.connect(
@@ -83,14 +61,16 @@ class DataSourceConnectBloc
 
                 return result.when(
                   error: state.inFailure,
-                  value: (_) => AsyncData.success(
-                    Optional.presented(
+                  value: (_) {
+                    final dataSourceWithAddress = Optional.presented(
                       DataSourceWithAddress(
                         dataSource: dataSource,
                         address: address,
                       ),
-                    ),
-                  ),
+                    );
+                    dataSourceStorage.put(dataSourceWithAddress);
+                    return AsyncData.success(dataSourceWithAddress);
+                  },
                 );
               }
             }
@@ -102,6 +82,10 @@ class DataSourceConnectBloc
     } catch (e) {
       emit(state.inFailure());
       rethrow;
+    } finally {
+      if (state.isFailure) {
+        await dataSourceStorage.put(const Optional.undefined());
+      }
     }
   }
 
@@ -122,10 +106,7 @@ class DataSourceConnectBloc
         await result.when(
           error: (e) async => state.inFailure(),
           value: (_) async {
-            await dataSourceStorage.write(
-              dataSourceKey: dataSource.key,
-              address: address,
-            );
+            await dataSourceStorage.write(event.dataSourceWithAddress);
             return AsyncData.success(
               Optional.presented(event.dataSourceWithAddress),
             );
