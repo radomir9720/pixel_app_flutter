@@ -27,13 +27,13 @@ class BluetoothDataSource extends DataSource {
     required this.bluetoothSerial,
     required super.id,
     required this.connectToAddress,
-    int throttlerDelayInMillis = kThrottlerDelayInMillis,
+    int parseDebouncerDelayInMillis = kParseDebouncerDelayInMillis,
   })  : controller = StreamController.broadcast(),
         buffer = [],
-        debouncer = Debouncer(milliseconds: throttlerDelayInMillis);
+        debouncer = Debouncer(milliseconds: parseDebouncerDelayInMillis);
 
   @visibleForTesting
-  static const kThrottlerDelayInMillis = 150;
+  static const kParseDebouncerDelayInMillis = 150;
 
   @visibleForTesting
   final StreamController<DataSourceIncomingEvent> controller;
@@ -59,11 +59,19 @@ class BluetoothDataSource extends DataSource {
   @visibleForTesting
   final Debouncer debouncer;
 
+  @visibleForTesting
+  Completer<void>? noBytesInBufferCompleter;
+
   @override
   String get key => 'bluetooth';
 
   @override
   Stream<DataSourceIncomingEvent> get eventStream => controller.stream;
+
+  Future<void> get noBytesInBufferFuture =>
+      noBytesInBufferCompleter?.future ?? Future.value();
+
+  bool get noBytesInBuffer => noBytesInBufferCompleter?.isCompleted ?? true;
 
   @override
   Future<Result<SendEventError, void>> sendEvent(
@@ -153,6 +161,8 @@ class BluetoothDataSource extends DataSource {
   @visibleForTesting
   void tryParse() {
     if (buffer.isEmpty) return;
+    if (noBytesInBuffer) noBytesInBufferCompleter = Completer();
+
     const minimumPackageLength = 9;
 
     const startingByte = DataSourcePackage.startingByte;
@@ -244,6 +254,8 @@ class BluetoothDataSource extends DataSource {
 
     if (buffer.isNotEmpty) {
       debouncer.run(tryParse);
+    } else {
+      noBytesInBufferCompleter?.complete();
     }
   }
 
@@ -270,6 +282,10 @@ class BluetoothDataSource extends DataSource {
   Future<void> dispose() async {
     await super.dispose();
     debouncer.dispose();
+    //
+    if (!noBytesInBuffer) {
+      noBytesInBufferCompleter?.complete();
+    }
     //
     await subscription?.cancel();
     subscription = null;

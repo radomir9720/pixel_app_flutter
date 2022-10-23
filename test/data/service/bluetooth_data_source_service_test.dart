@@ -125,14 +125,15 @@ void main() {
 
     Future<void> assertStreamEventsCount(
       int expectableEventsCount, {
-      bool awaitDebouncerToComplete = true,
+      bool awaitNoBytesInBufferToComplete = true,
     }) async {
       var incomingEvents = 0;
 
       final sub = ds.eventStream.listen((event) => incomingEvents++);
 
       await inputStreamController.done;
-      if (awaitDebouncerToComplete) await ds.debouncer.completerFuture;
+
+      if (awaitNoBytesInBufferToComplete) await ds.noBytesInBufferFuture;
 
       expect(incomingEvents, equals(expectableEventsCount));
 
@@ -405,7 +406,10 @@ void main() {
           addBytesToStream(_noEndingByte);
 
           // assert
-          await assertStreamEventsCount(3, awaitDebouncerToComplete: false);
+          await assertStreamEventsCount(
+            3,
+            awaitNoBytesInBufferToComplete: false,
+          );
           expect(ds.buffer.length, equals(9));
         });
       });
@@ -818,6 +822,62 @@ void main() {
         verify(connection.dispose).called(1);
       },
     );
+
+    group('awaitNoBytesInBufferCompleter', () {
+      group('noBytesInBuffer getter', () {
+        test('initially is true', () {
+          // assert
+          expect(ds.noBytesInBuffer, isTrue);
+        });
+
+        test('becomes true when were received new bytes', () {
+          ds.buffer.addAll([1, 2, 3]);
+          ds.tryParse();
+          expect(ds.noBytesInBuffer, isFalse);
+        });
+
+        test('becomes false when no bytes remained in buffer', () {
+          ds.buffer.addAll([60, 0, 145, 0, 125, 1, 11, 229, 141, 62]);
+          ds.tryParse();
+          expect(ds.noBytesInBuffer, isTrue);
+        });
+      });
+
+      group('noBytesInBufferFuture getter', () {
+        test(' initially is completed', () async {
+          final stopwatch = Stopwatch()..start();
+          await ds.noBytesInBufferFuture;
+          stopwatch.stop();
+          final elapsed = stopwatch.elapsedMilliseconds;
+          // Tolerance 5 milliseconds
+          expect(elapsed, lessThanOrEqualTo(5));
+        });
+
+        test(
+            'sets new completer when were received new bytes '
+            'and does not complete until there are bytes in buffer', () async {
+          ds.buffer.addAll([1, 2, 3]);
+          ds.tryParse();
+
+          await expectLater(
+            ds.noBytesInBufferFuture
+                .timeout(Duration(milliseconds: ds.debouncer.milliseconds * 2)),
+            throwsA(isA<TimeoutException>()),
+          );
+        });
+
+        test('completer when no bytes remained in buffer', () async {
+          ds.buffer.addAll([60, 0, 145, 0, 125, 1, 11, 229, 141, 62]);
+          ds.tryParse();
+          final stopwatch = Stopwatch()..start();
+          await ds.noBytesInBufferFuture;
+          stopwatch.stop();
+          final elapsed = stopwatch.elapsedMilliseconds;
+          // Tolerance 5 milliseconds
+          expect(elapsed, lessThanOrEqualTo(5));
+        });
+      });
+    });
 
     tearDown(() {
       inputStreamController.close();
