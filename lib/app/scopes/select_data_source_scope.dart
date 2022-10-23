@@ -67,6 +67,7 @@ class _AutoRouteState extends AutoRouterState {
       if (env.isDev)
         BluetoothDataSource(
           bluetoothSerial: GetIt.I(),
+          connectToAddress: GetIt.I(),
           id: id,
         ),
       DemoDataSource(

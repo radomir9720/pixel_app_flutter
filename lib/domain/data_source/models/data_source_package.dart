@@ -101,7 +101,7 @@ class DataSourcePackage extends UnmodifiableListView<int> {
     }
     // Check ending byte
     if (this[length - 1] != endingByte) {
-      throw const InvalidEndingByteDataSourcePackageException();
+      throw InvalidEndingByteDataSourcePackageException(this);
     }
 
     final checkSum = sublist(length - 3, length - 1);
@@ -194,8 +194,8 @@ class InvalidStartingByteDataSourcePackageException
 
 class InvalidEndingByteDataSourcePackageException
     extends DataSourcePackageException {
-  const InvalidEndingByteDataSourcePackageException()
-      : super('Invalid ending byte');
+  const InvalidEndingByteDataSourcePackageException(List<int> package)
+      : super('Invalid ending byte. Package: $package');
 }
 
 class WrongCheckSumDataSourcePackageException

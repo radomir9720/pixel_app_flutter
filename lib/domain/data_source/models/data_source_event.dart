@@ -12,6 +12,7 @@ extension ToTwoBytesExtension on int {
   }
 }
 
+@immutable
 abstract class DataSourceEvent {
   const DataSourceEvent();
 
@@ -20,6 +21,7 @@ abstract class DataSourceEvent {
     DataSourceUpdateValueIncomingEvent.new,
     DataSourceHandshakeIncomingEvent.new,
     DataSourceGetParameterValueIncomingEvent.new,
+    DataSourceSubscriptionResponseIncomingEvent.new,
   ];
 
   static DataSourceIncomingEvent fromPackage(DataSourcePackage package) {
@@ -108,6 +110,7 @@ abstract class DataSourceIncomingEvent extends DataSourceEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   });
 
   @override
@@ -222,13 +225,14 @@ class DataSourceHandshakeIncomingEvent extends DataSourceIncomingEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   }) {
     return handshake?.call() ?? orElse();
   }
 }
 
 class DataSourceGetParameterValueIncomingEvent extends DataSourceIncomingEvent {
-  DataSourceGetParameterValueIncomingEvent(super.package);
+  const DataSourceGetParameterValueIncomingEvent(super.package);
 
   @override
   int get requestType => DataSourceRequestType.bufferRequest.value;
@@ -239,6 +243,7 @@ class DataSourceGetParameterValueIncomingEvent extends DataSourceIncomingEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   }) {
     return getParameterValue
             ?.call(DataSourceParameterId.fromInt(package.parameterId)) ??
@@ -260,11 +265,33 @@ class DataSourceUpdateValueIncomingEvent extends DataSourceIncomingEvent {
     R Function()? handshake,
     R Function(DataSourceParameterId id)? getParameterValue,
     R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
   }) {
     return updateValue
             ?.call(DataSourceParameterId.fromInt(package.parameterId)) ??
         orElse();
   }
+}
+
+class DataSourceSubscriptionResponseIncomingEvent
+    extends DataSourceIncomingEvent {
+  const DataSourceSubscriptionResponseIncomingEvent(super.package);
+
+  @override
+  R maybeWhen<R>({
+    required R Function() orElse,
+    R Function()? handshake,
+    R Function(DataSourceParameterId id)? getParameterValue,
+    R Function(DataSourceParameterId id)? updateValue,
+    R Function(DataSourceParameterId id)? subscriptionResponse,
+  }) {
+    return subscriptionResponse
+            ?.call(DataSourceParameterId.fromInt(package.parameterId)) ??
+        orElse();
+  }
+
+  @override
+  int get requestType => DataSourceRequestType.subscription.value;
 }
 
 // Exceptions

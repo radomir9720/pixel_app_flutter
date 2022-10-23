@@ -105,7 +105,10 @@ Future<void> configureDependencies(Environment env) async {
 Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
   final gh = GetItHelper(getIt)
     ..factory<Environment>(() => env)
-    ..factory<FlutterBluetoothSerial>(() => FlutterBluetoothSerial.instance);
+    ..factory<FlutterBluetoothSerial>(() => FlutterBluetoothSerial.instance)
+    ..factory<Future<BluetoothConnection> Function(String address)>(
+      () => BluetoothConnection.toAddress,
+    );
 
   await gh.factoryAsync<SharedPreferences>(
     SharedPreferences.getInstance,

@@ -143,6 +143,8 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
             _onParameterValueUpdated(id, event.package.data.toInt),
         getParameterValue: (id) =>
             _onParameterValueUpdated(id, event.package.data.toInt),
+        subscriptionResponse: (id) =>
+            _onParameterValueUpdated(id, event.package.data.toInt),
         handshake: () {
           final id = event.package.parameterId;
           // Do not respond to handshake response from MainECU
