@@ -188,7 +188,6 @@ class BluetoothDataSource extends DataSource {
 
       // Starting byte was found
       // Removing every byte until starting byte(exclusive)
-      // buffer.popFirst(indexOfStartingByte);
       buffer.popFirst(indexOfStartingByte);
 
       // Check the buffer lenght after popFirst() method.
@@ -248,7 +247,8 @@ class BluetoothDataSource extends DataSource {
 
       // Starting byte was found
       // Removing every byte until starting byte(exclusive)
-      // + 1 because above we took a sublist of buffer, which begins from 2 item
+      // + 1 because above we took a sublist of buffer, which begins
+      // from second item
       buffer.popFirst(indexOfStartingByte + 1);
     }
 
