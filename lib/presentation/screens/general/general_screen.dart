@@ -60,34 +60,28 @@ class HandsetGeneralScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final landscape = Screen.of(context).isLandscape;
 
-    return Padding(
-      padding:
-          const EdgeInsets.symmetric(vertical: 32, horizontal: 16).copyWith(
-        left: landscape ? 82 : 16,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SpeedWidget(),
-                if (landscape) const StatisticWidget(),
-              ],
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SpeedWidget(),
+              if (landscape) const StatisticWidget(),
+            ],
           ),
+        ),
+        const SizedBox(height: 32),
+        if (!landscape) ...[
+          const StatisticWidget(useWrap: true),
           const SizedBox(height: 32),
-          if (!landscape) ...[
-            const StatisticWidget(useWrap: true),
-            const SizedBox(height: 32),
-          ],
-          if (landscape)
-            FastActionsWidget.oneRow()
-          else
-            FastActionsWidget.manyRows()
         ],
-      ),
+        if (landscape)
+          FastActionsWidget.oneRow()
+        else
+          FastActionsWidget.manyRows()
+      ],
     );
   }
 }
