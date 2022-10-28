@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
         GeneralRoute(),
         CarInfoRoute(),
         NavigatorRoute(),
-        AppsRoute(),
+        AppsFlow(),
         ChargingRoute(),
       ],
       builder: (context, child, animation) {

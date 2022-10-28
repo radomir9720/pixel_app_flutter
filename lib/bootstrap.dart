@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
 import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
@@ -106,6 +107,7 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
   final gh = GetItHelper(getIt)
     ..factory<Environment>(() => env)
     ..factory<FlutterBluetoothSerial>(() => FlutterBluetoothSerial.instance)
+    ..factory<InstalledApps>(InstalledApps.new)
     ..factory<Future<BluetoothConnection> Function(String address)>(
       () => BluetoothConnection.toAddress,
     );
