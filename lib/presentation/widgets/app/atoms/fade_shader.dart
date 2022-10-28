@@ -1,27 +1,48 @@
 import 'package:flutter/material.dart';
 
-enum FadeSide {
-  left,
-  top,
-  right,
-  bottom;
+@immutable
+class EnableFadeSideState {
+  const EnableFadeSideState({
+    required this.enableStart,
+    required this.enableEnd,
+  });
 
-  R when<R>({
-    required R Function() left,
-    required R Function() top,
-    required R Function() right,
-    required R Function() bottom,
+  final bool enableStart;
+  final bool enableEnd;
+
+  bool get bothDisabled => !enableStart && !enableEnd;
+
+  EnableFadeSideState copyWith({
+    bool? enableStart,
+    bool? enableEnd,
   }) {
-    switch (this) {
-      case FadeSide.left:
-        return left();
-      case FadeSide.top:
-        return top();
-      case FadeSide.right:
-        return right();
-      case FadeSide.bottom:
-        return bottom();
-    }
+    return EnableFadeSideState(
+      enableStart: enableStart ?? this.enableStart,
+      enableEnd: enableEnd ?? this.enableEnd,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is EnableFadeSideState &&
+        other.enableStart == enableStart &&
+        other.enableEnd == enableEnd;
+  }
+
+  @override
+  int get hashCode => enableStart.hashCode ^ enableEnd.hashCode;
+}
+
+class EnableFadeSideChangeNotifier extends ValueNotifier<EnableFadeSideState> {
+  EnableFadeSideChangeNotifier(super.value);
+
+  void update({
+    bool? enableStart,
+    bool? enableEnd,
+  }) {
+    value = value.copyWith(enableStart: enableStart, enableEnd: enableEnd);
   }
 }
 
@@ -29,82 +50,86 @@ class FadeShader extends StatelessWidget {
   const FadeShader({
     super.key,
     required this.child,
-    required this.side,
-    required this.enable,
-    this.dimension = 16,
+    this.shadeDimensionFactor = kDefaultShadeDimensionFactor,
+    required this.axis,
+    required this.enableFadeSideChangeNotifier,
   });
+
+  factory FadeShader.vertical({
+    Key? key,
+    required Widget child,
+    required EnableFadeSideChangeNotifier enableFadeSideChangeNotifier,
+    double shadeDimensionFactor = kDefaultShadeDimensionFactor,
+  }) =>
+      FadeShader(
+        key: key,
+        enableFadeSideChangeNotifier: enableFadeSideChangeNotifier,
+        shadeDimensionFactor: shadeDimensionFactor,
+        axis: Axis.vertical,
+        child: child,
+      );
+
+  factory FadeShader.horizontal({
+    Key? key,
+    required Widget child,
+    required EnableFadeSideChangeNotifier enableFadeSideChangeNotifier,
+    double shadeDimensionFactor = kDefaultShadeDimensionFactor,
+  }) =>
+      FadeShader(
+        key: key,
+        enableFadeSideChangeNotifier: enableFadeSideChangeNotifier,
+        shadeDimensionFactor: shadeDimensionFactor,
+        axis: Axis.horizontal,
+        child: child,
+      );
+
+  static const kDefaultShadeDimensionFactor = .05;
 
   @protected
   final Widget child;
 
   @protected
-  final FadeSide side;
+  final double shadeDimensionFactor;
 
   @protected
-  final double dimension;
+  final EnableFadeSideChangeNotifier enableFadeSideChangeNotifier;
 
   @protected
-  final ValueNotifier<bool> enable;
+  final Axis axis;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: enable,
-      builder: (context, enable, child) {
-        return ShaderMask(
-          shaderCallback: (rect) {
-            if (!enable) {
-              return const LinearGradient(colors: [Colors.black, Colors.black])
-                  .createShader(Rect.zero);
-            }
-
-            return LinearGradient(
-              begin: side.when(
-                left: () => Alignment.centerRight,
-                top: () => Alignment.topCenter,
-                right: () => Alignment.centerRight,
-                bottom: () => Alignment.topCenter,
-              ),
-              end: side.when(
-                left: () => Alignment.centerLeft,
-                top: () => Alignment.bottomCenter,
-                right: () => Alignment.centerLeft,
-                bottom: () => Alignment.bottomCenter,
-              ),
-              colors: side.when(
-                left: () => [
-                  Colors.black,
-                  Colors.transparent,
-                ],
-                top: () => [
-                  Colors.transparent,
-                  Colors.black,
-                ],
-                right: () => [
-                  Colors.transparent,
-                  Colors.black,
-                ],
-                bottom: () => [
-                  Colors.black,
-                  Colors.transparent,
-                ],
-              ),
-            ).createShader(
-              side.when(
-                left: () => Offset.zero & Size(dimension, rect.height),
-                top: () => Offset.zero & Size(rect.width, dimension),
-                right: () =>
-                    Offset(rect.width - dimension, 0) &
-                    Size(dimension, rect.height),
-                bottom: () =>
-                    Offset(0, rect.height - dimension) &
-                    Size(rect.width, dimension),
-              ),
-            );
-          },
-          blendMode: BlendMode.dstIn,
-          child: child,
-        );
+    return ValueListenableBuilder<EnableFadeSideState>(
+      valueListenable: enableFadeSideChangeNotifier,
+      builder: (context, state, child) {
+        return state.bothDisabled
+            ? const SizedBox.shrink()
+            : ShaderMask(
+                shaderCallback: (rect) {
+                  return LinearGradient(
+                    begin: axis == Axis.vertical
+                        ? Alignment.topCenter
+                        : Alignment.centerLeft,
+                    end: axis == Axis.vertical
+                        ? Alignment.bottomCenter
+                        : Alignment.centerRight,
+                    stops: [
+                      if (state.enableStart) .0,
+                      shadeDimensionFactor,
+                      1 - shadeDimensionFactor,
+                      if (state.enableEnd) 1,
+                    ],
+                    colors: [
+                      if (state.enableStart) Colors.transparent,
+                      Colors.black,
+                      Colors.black,
+                      if (state.enableEnd) Colors.transparent,
+                    ],
+                  ).createShader(Offset.zero & Size(rect.width, rect.height));
+                },
+                blendMode: BlendMode.dstIn,
+                child: child,
+              );
       },
       child: child,
     );
