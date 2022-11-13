@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:pixel_app_flutter/app/scopes/apps_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/developer_tools_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/select_data_source_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/selected_data_source_scope.dart';
@@ -29,6 +30,7 @@ mixin RouteNames {
   static const homeFlow = 'HomeFlow';
   static const selectDataSourceFlow = 'SelectDataSourceFlow';
   static const developerToolsFlow = 'DeveloperToolsFlow';
+  static const appsFlow = 'AppsFlow';
   static const requestsExchangeLogsFlow = 'RequestsExchangeLogsFlow';
   static const requestsExchangeLogsFilterFlow =
       'RequestsExchangeLogsFilterFlow';
@@ -101,7 +103,14 @@ const _selectDataSourceRouter = AutoRoute<void>(
             ),
             AutoRoute<void>(
               path: 'apps',
-              page: AppsScreen,
+              page: AppsScope,
+              name: RouteNames.appsFlow,
+              children: [
+                AutoRoute<void>(
+                  path: '',
+                  page: AppsScreen,
+                ),
+              ],
             ),
             AutoRoute<void>(
               path: 'charging',

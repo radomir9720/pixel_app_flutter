@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/atoms/fade_shader.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/measure_size.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/molecules/shade_scrollable.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 @protected
@@ -134,8 +134,8 @@ class _FastActionsWidgetState extends State<FastActionsWidget> {
               )
             else
               // One row mode
-              FadeScrollableShaderMask(
-                scrollDirection: Axis.horizontal,
+              ShadeSingleChildScrollView(
+                axis: Axis.horizontal,
                 child: Row(
                   children: List<Widget>.generate(widget.buttonsCnt, (index) {
                     return FilterChip(
@@ -150,81 +150,6 @@ class _FastActionsWidgetState extends State<FastActionsWidget> {
           ],
         );
       },
-    );
-  }
-}
-
-class FadeScrollableShaderMask extends StatefulWidget {
-  const FadeScrollableShaderMask({
-    super.key,
-    required this.child,
-    required this.scrollDirection,
-  });
-
-  @protected
-  final Widget child;
-
-  @protected
-  final Axis scrollDirection;
-
-  @override
-  State<FadeScrollableShaderMask> createState() =>
-      _FadeScrollableShaderMaskState();
-}
-
-class _FadeScrollableShaderMaskState extends State<FadeScrollableShaderMask> {
-  late final ScrollController controller;
-
-  final enableStartShadeNotifier = ValueNotifier(false);
-  final enableEndShadeNotifier = ValueNotifier(true);
-
-  @override
-  void initState() {
-    super.initState();
-    controller = ScrollController();
-    controller.addListener(onPositionChanged);
-  }
-
-  void onPositionChanged() {
-    final enableStart = enableStartShadeNotifier.value;
-    final enableEnd = enableEndShadeNotifier.value;
-
-    if (controller.offset <= 0) {
-      if (enableStart) enableStartShadeNotifier.value = false;
-    } else if (controller.offset >= controller.position.maxScrollExtent) {
-      if (enableEnd) enableEndShadeNotifier.value = false;
-    } else {
-      if (!enableStart || !enableEnd) {
-        enableEndShadeNotifier.value = true;
-        enableStartShadeNotifier.value = true;
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    controller
-      ..removeListener(onPositionChanged)
-      ..dispose();
-    enableEndShadeNotifier.dispose();
-    enableStartShadeNotifier.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeShader(
-      enable: enableEndShadeNotifier,
-      side: FadeSide.right,
-      child: FadeShader(
-        enable: enableStartShadeNotifier,
-        side: FadeSide.left,
-        child: SingleChildScrollView(
-          scrollDirection: widget.scrollDirection,
-          controller: controller,
-          child: widget.child,
-        ),
-      ),
     );
   }
 }

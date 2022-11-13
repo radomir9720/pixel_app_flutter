@@ -118,7 +118,11 @@
     "requestDirectionFilterDialogTitle": "Фильтр по направлению запросов",
 
     "dontTurnOffTheScreenButtonCaption": "Не выключать экран",
-    "errorTogglingDTOMessage": "Ошибка при переключении режима \"Не выключать экран\""
+    "errorTogglingDTOMessage": "Ошибка при переключении режима \"Не выключать экран\"",
+
+    "errorLaunchingTheAppMessage": "Неизвестная ошибка при запуске приложения",
+    "errorGettingApplicationsListMessage": "Ошибка при получении списка приложений. Информация передана разработчикам",
+    "noAppNameCaption": "Без имени"
 
 
 }

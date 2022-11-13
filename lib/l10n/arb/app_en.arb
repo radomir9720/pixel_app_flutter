@@ -118,5 +118,9 @@
     "requestDirectionFilterDialogTitle": "Request direction filter",
 
     "dontTurnOffTheScreenButtonCaption": "Don't turn off the screen",
-    "errorTogglingDTOMessage": "Error toggling \"Don't turn off the screen\" mode"
+    "errorTogglingDTOMessage": "Error toggling \"Don't turn off the screen\" mode",
+
+    "errorLaunchingTheAppMessage": "Unknown error while launching the app",
+    "errorGettingApplicationsListMessage": "Error while getting applications list. Information was sent to developers",
+    "noAppNameCaption": "No app name"
 }

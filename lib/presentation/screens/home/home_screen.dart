@@ -21,15 +21,14 @@ class HomeScreen extends StatelessWidget {
         GeneralRoute(),
         CarInfoRoute(),
         NavigatorRoute(),
-        AppsRoute(),
+        AppsFlow(),
         ChargingRoute(),
       ],
       builder: (context, child, animation) {
         final tabsRouter = AutoTabsRouter.of(context);
         final screenData = Screen.of(context);
         final screenType = screenData.type;
-        final landscape = !screenType.isHandset ||
-            screenData.size.width > screenData.size.height;
+        final landscape = !screenType.isHandset || screenData.isLandscape;
         final showSideNavBarTitle =
             !screenType.isHandset && screenData.size.width > 700;
 
@@ -45,7 +44,17 @@ class HomeScreen extends StatelessWidget {
                     Positioned.fill(
                       child: FadeTransition(
                         opacity: animation,
-                        child: child,
+                        child: Padding(
+                          padding: screenType.isHandset
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 32,
+                                ).copyWith(
+                                  left: landscape ? 87 : 16,
+                                )
+                              : EdgeInsets.zero,
+                          child: child,
+                        ),
                       ),
                     ),
                     if (landscape)

@@ -1,6 +1,6 @@
 name: pixel_app_flutter
 description: A Very Good Project created by Very Good CLI.
-version: 0.2.0+3
+version: 0.3.0+4
 publish_to: none
 
 environment:
@@ -20,6 +20,7 @@ dependencies:
   equatable: ^2.0.5
   auto_route: ^5.0.0
   flutter_svg: ^1.1.5
+  image_pixels: ^3.0.0
   flutter_bloc: ^8.1.1
   re_seedwork:
     git:
@@ -35,6 +36,7 @@ dependencies:
 
   # platform
   wakelock: ^0.6.2
+  installed_apps: ^1.3.1
   package_info_plus: ^2.0.0
   shared_preferences: ^2.0.15
   # flutter_bluetooth_serial: ^0.4.0
