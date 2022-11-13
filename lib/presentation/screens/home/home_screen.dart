@@ -28,8 +28,7 @@ class HomeScreen extends StatelessWidget {
         final tabsRouter = AutoTabsRouter.of(context);
         final screenData = Screen.of(context);
         final screenType = screenData.type;
-        final landscape = !screenType.isHandset ||
-            screenData.size.width > screenData.size.height;
+        final landscape = !screenType.isHandset || screenData.isLandscape;
         final showSideNavBarTitle =
             !screenType.isHandset && screenData.size.width > 700;
 
@@ -46,12 +45,14 @@ class HomeScreen extends StatelessWidget {
                       child: FadeTransition(
                         opacity: animation,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 32,
-                          ).copyWith(
-                            left: landscape ? 87 : 16,
-                          ),
+                          padding: screenType.isHandset
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 32,
+                                ).copyWith(
+                                  left: landscape ? 87 : 16,
+                                )
+                              : EdgeInsets.zero,
                           child: child,
                         ),
                       ),

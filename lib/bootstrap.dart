@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -21,6 +22,8 @@ import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
 import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/scopes/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
+import 'package:pixel_app_flutter/data/services/apps_service.dart';
+import 'package:pixel_app_flutter/data/services/apps_service_mock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum Environment {
@@ -107,7 +110,14 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
   final gh = GetItHelper(getIt)
     ..factory<Environment>(() => env)
     ..factory<FlutterBluetoothSerial>(() => FlutterBluetoothSerial.instance)
-    ..factory<InstalledApps>(InstalledApps.new)
+    ..factory<GetInstalledAppsCallback>(() {
+      if (Platform.isAndroid) return InstalledApps.getInstalledApps;
+      return InstalledAppsMock.getInstalledApps;
+    })
+    ..factory<StartAppCallback>(() {
+      if (Platform.isAndroid) return InstalledApps.startApp;
+      return InstalledAppsMock.startApp;
+    })
     ..factory<Future<BluetoothConnection> Function(String address)>(
       () => BluetoothConnection.toAddress,
     );

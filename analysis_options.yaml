@@ -6,6 +6,7 @@ analyzer:
     - "build/**"
     # Generated code
     - "**/*.g.dart"
+    - "**/*.gr.dart"
     - "**/*.config.dart"
     - "**/*.freezed.dart"
 

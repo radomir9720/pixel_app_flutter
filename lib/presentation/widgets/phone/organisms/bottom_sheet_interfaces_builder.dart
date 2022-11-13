@@ -53,37 +53,34 @@ class _BottomSheetInterfacesBuilderState
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.enable) {
-      return widget.builder(sheetController);
-    }
-
     return Material(
       child: Stack(
         children: [
           widget.builder(sheetController),
-          AnimatedBottomSheet(
-            controller: sheetController,
-            content: BottomSheetLayer(
-              stickUpHeight: sheetController.stickUpHeight,
-            ),
-            stickUpWidget: AnimatedBuilder(
-              animation: sheetController,
-              builder: (context, child) {
-                return AnimatedOpacity(
-                  duration: stickInitAnimationDuration,
-                  opacity: sheetController.initialized ? 1 : 0,
-                  child: Transform.rotate(
-                    angle: sheetController.mainRangeProgress * math.pi,
-                    child: child,
-                  ),
-                );
-              },
-              child: const Icon(
-                PixelIcons.showUp,
-                size: 16,
+          if (widget.enable)
+            AnimatedBottomSheet(
+              controller: sheetController,
+              content: BottomSheetLayer(
+                stickUpHeight: sheetController.stickUpHeight,
+              ),
+              stickUpWidget: AnimatedBuilder(
+                animation: sheetController,
+                builder: (context, child) {
+                  return AnimatedOpacity(
+                    duration: stickInitAnimationDuration,
+                    opacity: sheetController.initialized ? 1 : 0,
+                    child: Transform.rotate(
+                      angle: sheetController.mainRangeProgress * math.pi,
+                      child: child,
+                    ),
+                  );
+                },
+                child: const Icon(
+                  PixelIcons.showUp,
+                  size: 16,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

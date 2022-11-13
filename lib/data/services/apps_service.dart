@@ -1,15 +1,29 @@
 import 'package:injectable/injectable.dart';
-import 'package:installed_apps/installed_apps.dart';
+import 'package:installed_apps/app_info.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
+typedef GetInstalledAppsCallback = Future<List<AppInfo>> Function([
+  bool excludeSystemApps,
+  bool withIcon,
+  String packageNamePrefix,
+]);
+
+typedef StartAppCallback = Future<bool?> Function(String packageName);
+
 @Injectable(as: AppsService)
 class AppsServiceImpl implements AppsService {
-  const AppsServiceImpl({required this.installedApps});
+  const AppsServiceImpl({
+    required this.getInstalledAppsCallback,
+    required this.startAppCallback,
+  });
 
   @protected
-  final InstalledApps installedApps;
+  final GetInstalledAppsCallback getInstalledAppsCallback;
+
+  @protected
+  final StartAppCallback startAppCallback;
 
   @override
   Future<Result<GetAppsListAppServiceError, List<ApplicationInfo>>>
@@ -18,7 +32,7 @@ class AppsServiceImpl implements AppsService {
     bool withIcon = true,
     String packageNamePrefix = '',
   }) async {
-    final res = await InstalledApps.getInstalledApps(
+    final res = await getInstalledAppsCallback(
       excludeSystemApps,
       withIcon,
       packageNamePrefix,
@@ -43,7 +57,7 @@ class AppsServiceImpl implements AppsService {
   Future<Result<StartAppAppsServiceError, void>> startApp(
     String packageName,
   ) async {
-    final success = await InstalledApps.startApp(packageName) ?? false;
+    final success = await startAppCallback(packageName) ?? false;
     if (!success) return const Result.error(StartAppAppsServiceError.unknown);
     return const Result.value(null);
   }

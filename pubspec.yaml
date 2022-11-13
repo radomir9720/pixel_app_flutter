@@ -20,6 +20,7 @@ dependencies:
   equatable: ^2.0.5
   auto_route: ^5.0.0
   flutter_svg: ^1.1.5
+  image_pixels: ^3.0.0
   flutter_bloc: ^8.1.1
   re_seedwork:
     git:

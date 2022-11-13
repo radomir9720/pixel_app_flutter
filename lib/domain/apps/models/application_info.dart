@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -11,6 +12,21 @@ class ApplicationInfo {
     this.versionName,
     this.versionCode,
   });
+
+  factory ApplicationInfo.fromMap(Map<String, dynamic> map) {
+    return ApplicationInfo(
+      name: map['name'] as String?,
+      icon: map['icon'] != null
+          ? Uint8List.fromList(map['icon'] as List<int>)
+          : null,
+      packageName: map['packageName'] as String?,
+      versionName: map['versionName'] as String?,
+      versionCode: map['versionCode'] as int?,
+    );
+  }
+
+  factory ApplicationInfo.fromJson(String source) =>
+      ApplicationInfo.fromMap(jsonDecode(source) as Map<String, dynamic>);
 
   final String? name;
   final Uint8List? icon;
@@ -37,5 +53,22 @@ class ApplicationInfo {
         packageName.hashCode ^
         versionName.hashCode ^
         versionCode.hashCode;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'icon': icon?.toList(),
+      'packageName': packageName,
+      'versionName': versionName,
+      'versionCode': versionCode,
+    };
+  }
+
+  String toJson() => jsonEncode(toMap());
+
+  @override
+  String toString() {
+    return toJson();
   }
 }

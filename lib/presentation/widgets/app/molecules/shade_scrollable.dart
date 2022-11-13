@@ -82,7 +82,28 @@ class ShadeListViewBuilder extends ShadeScrollable {
             return ListView.builder(
               controller: controller,
               scrollDirection: axis,
-              primary: false,
+              itemCount: itemCount,
+              itemBuilder: itemBuilder,
+            );
+          },
+        );
+}
+
+class ShadeGridViewBuilder extends ShadeScrollable {
+  ShadeGridViewBuilder({
+    super.key,
+    super.axis,
+    required SliverGridDelegate gridDelegate,
+    required int itemCount,
+    required Widget Function(BuildContext context, int index) itemBuilder,
+    EdgeInsets padding = EdgeInsets.zero,
+  }) : super(
+          scrollable: (controller) {
+            return GridView.builder(
+              padding: padding,
+              controller: controller,
+              scrollDirection: axis,
+              gridDelegate: gridDelegate,
               itemCount: itemCount,
               itemBuilder: itemBuilder,
             );
@@ -99,7 +120,6 @@ class ShadeSingleChildScrollView extends ShadeScrollable {
           scrollable: (controller) {
             return SingleChildScrollView(
               controller: controller,
-              primary: false,
               scrollDirection: axis,
               child: child,
             );
