@@ -21,7 +21,7 @@ StarPixel is conceived as an electric car that absolutely anyone can build, usin
 
 The main purpose of this application is to manage the functions of the car. it is also considered to be used as an on-board computer.
 
-For now, while the IT team of this project is in search of the connection protocol realization in the best way, the app connects to the hardware through bluetooth. In the future we plan to implement connection through WIFI and HTTP, so that user can choose the interface connection, which suits him best.
+For now, while the IT team of this project is in search of the connection protocol realization in the best way, the app connects to the hardware through bluetooth. In the future we plan to implement connection through USB, WIFI and HTTP, so that user can choose the interface connection, which suits him best.
 
 As the main hardware was choosen esp32. The software for esp32(called MainECU) [lives here](https://github.com/starfactorypixel/MainECU).
 The MainECU is the connecting link between this application and car interfaces.
@@ -62,17 +62,18 @@ The MainECU is the connecting link between this application and car interfaces.
   
   *Analytics and Crashlytics*
 
-
-## <a name="what-should-be-implemented">What should be implemented</a>
----
-
 * __Launcher(for android)__
   
   *On android there is an option to choose the application as the default laucher. That way you can have an android device specially to use it as on-board computer*
 
+
+## <a name="what-should-be-implemented">What should be implemented</a>
+---
+
+
 * __Other connection options__
   
-  *At the moment at least via WIFI and HTTP*
+  *Via USB, WIFI, and HTTP*
 
 * __Bluetooth connection on iOS__
   
