@@ -685,11 +685,20 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.1.3"
-      resolved-ref: "103a43d340fbec52e896e851a9301ffe5b3989d1"
+      ref: "0.1.4"
+      resolved-ref: "0993db92e464e8a6cab4ad418dd46ad0f0eeae60"
       url: "https://github.com/radomir9720/re_seedwork.git"
     source: git
-    version: "0.1.3"
+    version: "0.1.4"
+  re_widgets:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "0.1.1"
+      resolved-ref: c3340382b28270b6785afeea23bf5418e9097614
+      url: "https://github.com/radomir9720/re_widgets.git"
+    source: git
+    version: "0.1.1+2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -990,5 +999,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.17.0 <3.0.0"
-  flutter: ">=3.0.5"
+  dart: ">=2.18.0 <3.0.0"
+  flutter: ">=3.3.7"

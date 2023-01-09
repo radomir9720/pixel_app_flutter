@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/atoms/measure_size.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/molecules/shade_scrollable.dart';
 import 'package:re_seedwork/re_seedwork.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 @protected
 enum FastActionWidgetMode {
@@ -134,7 +133,7 @@ class _FastActionsWidgetState extends State<FastActionsWidget> {
               )
             else
               // One row mode
-              ShadeSingleChildScrollView(
+              FadeSingleChildScrollView(
                 axis: Axis.horizontal,
                 child: Row(
                   children: List<Widget>.generate(widget.buttonsCnt, (index) {

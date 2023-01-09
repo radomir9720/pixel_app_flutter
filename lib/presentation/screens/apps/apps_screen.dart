@@ -6,9 +6,9 @@ import 'package:image_pixels/image_pixels.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/molecules/shade_scrollable.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class AppsScreen extends StatefulWidget {
   const AppsScreen({super.key});
@@ -50,13 +50,13 @@ class _AppsScreenState extends State<AppsScreen> {
     return BlocBuilder<GetAppsListBloc, GetAppsListState>(
       builder: (context, state) {
         return state.maybeWhen(
-          loading: (s) {
+          orElse: (s) {
             return const Center(child: CircularProgressIndicator());
           },
           failure: (payload, error) {
             return const _ErrorGettingApplicationsListWidget();
           },
-          orElse: (apps) {
+          success: (apps) {
             final screen = Screen.of(context, watch: false);
             return screen.whenType(
               orElse: () => _TabletBody(apps: apps),
@@ -97,7 +97,7 @@ class _TabletBody extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: SizedBox(
               width: MediaQuery.of(context).size.width * .7,
-              child: ShadeGridViewBuilder(
+              child: FadeGridViewBuilder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 37),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -174,8 +174,9 @@ class _HandsetBody extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Expanded(
-          child: ShadeListViewBuilder(
-            itemCount: apps.length,
+          child: FadeListViewBuilder(
+            // itemCount: apps.length,
+            itemCount: 8,
             itemBuilder: (context, index) {
               final app = apps[index];
               final icon = app.icon;

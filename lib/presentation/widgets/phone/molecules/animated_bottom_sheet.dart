@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/atoms/measure_size.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class AnimatedBottomSheet extends StatelessWidget {
   const AnimatedBottomSheet({
