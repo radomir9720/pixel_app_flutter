@@ -29,7 +29,7 @@ dependencies:
   re_widgets:
     git:
       url: https://github.com/radomir9720/re_widgets.git
-      ref: "0.1.1"
+      ref: "0.1.2"
 
   # codegen
   freezed_annotation: ^2.1.0
