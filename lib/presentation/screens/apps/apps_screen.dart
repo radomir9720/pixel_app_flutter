@@ -175,8 +175,7 @@ class _HandsetBody extends StatelessWidget {
         const SizedBox(height: 20),
         Expanded(
           child: FadeListViewBuilder(
-            // itemCount: apps.length,
-            itemCount: 8,
+            itemCount: apps.length,
             itemBuilder: (context, index) {
               final app = apps[index];
               final icon = app.icon;
