@@ -40,7 +40,6 @@ class MaterialTheme {
       backgroundColor: colors.background,
       dialogBackgroundColor: colors.background,
       scaffoldBackgroundColor: colors.background,
-
       errorColor: colors.error,
       disabledColor: colors.disabled,
       appBarTheme: AppBarTheme(
@@ -61,13 +60,9 @@ class MaterialTheme {
         onBackground: colors.text,
         brightness: brightness,
       ),
-
       primaryColor: colors.primary,
-
       shadowColor: colors.border,
-
       dividerColor: colors.border,
-
       textTheme: TextTheme(
         headline2: TextStyle(
           fontSize: 22.fo,
@@ -88,16 +83,13 @@ class MaterialTheme {
           fontWeight: FontWeight.w500,
         ),
       ),
-
       tabBarTheme: TabBarTheme(
         labelColor: colors.text,
       ),
-
       iconTheme: IconThemeData(
         size: 24.si,
         color: colors.text,
       ),
-
       chipTheme: ChipThemeData(
         labelStyle: TextStyle(
           height: 1.21,
@@ -115,7 +107,6 @@ class MaterialTheme {
         shape: ElevatedButtonBorder(colors: colors),
         selectedColor: colors.primaryAccent.withOpacity(.15),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
@@ -139,6 +130,10 @@ class MaterialTheme {
           }),
           shape: ElevatedButtonBorder(colors: colors),
         ),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        // Color from [InputDecorator()._getIconColor()]
+        suffixIconColor: Colors.white70,
       ),
     );
   }

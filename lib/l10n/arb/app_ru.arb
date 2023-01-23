@@ -122,7 +122,8 @@
 
     "errorLaunchingTheAppMessage": "Неизвестная ошибка при запуске приложения",
     "errorGettingApplicationsListMessage": "Ошибка при получении списка приложений. Информация передана разработчикам",
-    "noAppNameCaption": "Без имени"
+    "noAppNameCaption": "Без имени",
 
+    "searchTextFieldHint": "Поиск"
 
 }
