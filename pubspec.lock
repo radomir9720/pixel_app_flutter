@@ -694,11 +694,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.1.2"
-      resolved-ref: bfc051e8d10b27d56ad2f14f341e1767a212a37b
+      ref: "0.1.3"
+      resolved-ref: "970a4d1fa93a3ad0b1b0a115a83e686656e119e2"
       url: "https://github.com/radomir9720/re_widgets.git"
     source: git
-    version: "0.1.2+3"
+    version: "0.1.3+4"
   shared_preferences:
     dependency: "direct main"
     description:
