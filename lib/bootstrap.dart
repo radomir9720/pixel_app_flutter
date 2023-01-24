@@ -103,7 +103,7 @@ Future<void> configureDependencies(Environment env) async {
   final getIt = GetIt.instance;
 
   await _configureManualDeps(getIt, env);
-  $initGetIt(getIt, environment: env.value);
+  getIt.init(environment: env.value);
 }
 
 Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
