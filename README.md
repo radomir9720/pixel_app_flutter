@@ -7,15 +7,16 @@
 
 ## Navigation
 
-  * [About](#about)
-  * [What is currently implemented](#what-is-currently-implemented)
-  * [What should be implemented](#what-should-be-implemented)
-  * [How can i contribute?](#how-can-i-contribute)
-  * [How to lauch the project](#how-to-launch-the-project)
+- [About](#about)
+- [What is currently implemented](#what-is-currently-implemented)
+- [What should be implemented](#what-should-be-implemented)
+- [How can i contribute?](#how-can-i-contribute)
+- [How to lauch the project](#how-to-lauch-the-project)
+- [Running Tests](#running-tests)
 
 ## <a name="about">About</a>
 ---
-This project is an application written using Dart and Flutter for an ambitious open source project called [StarPixel](https://wiki.starpixel.org/books/informaciya-dlya-novickov/page/obshhee-polozenie)(be careful, the site is in russian 😅).
+This project is an application written using Dart and Flutter for an ambitious open source project called [StarPixel](https://wiki.starpixel.org/books/informaciya-dlya-novickov/page/obshhee-polozenie).
 
 StarPixel is conceived as an electric car that absolutely anyone can build, using opensource information like drawings and software.
 
@@ -135,7 +136,7 @@ Again, if you want to lauch the app on __MacOS__, the commands above won't work,
 
 ---
 
-## Running Tests 🧪
+## <a name="running-tests">Running Tests 🧪</a>
 
 To run all unit and widget tests use the following command:
 
