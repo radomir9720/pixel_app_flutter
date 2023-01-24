@@ -6,6 +6,7 @@ class GradientScaffold extends Scaffold {
     super.bottomNavigationBar,
     super.backgroundColor,
     super.extendBody,
+    super.resizeToAvoidBottomInset,
     super.key,
   }) : super(
           body: Builder(

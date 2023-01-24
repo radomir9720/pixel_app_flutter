@@ -21,28 +21,28 @@ class FormFactorAdaptive extends StatelessWidget {
   });
 
   @protected
-  final Widget Function() orElse;
+  final Widget Function(ScreenData screenData) orElse;
 
   @protected
-  final Widget Function()? tablet;
+  final Widget Function(ScreenData screenData)? tablet;
 
   @protected
-  final Widget Function()? desktop;
+  final Widget Function(ScreenData screenData)? desktop;
 
   @protected
-  final Widget Function()? handset;
+  final Widget Function(ScreenData screenData)? handset;
 
   @override
   Widget build(BuildContext context) {
     final screen = Screen.of(context);
 
     return screen.whenType<Widget?>(
-          orElse: orElse,
-          tablet: tablet,
-          handset: handset,
-          desktop: desktop,
+          orElse: () => orElse(screen),
+          tablet: () => tablet?.call(screen),
+          handset: () => handset?.call(screen),
+          desktop: () => desktop?.call(screen),
         ) ??
-        orElse();
+        orElse(screen);
   }
 }
 

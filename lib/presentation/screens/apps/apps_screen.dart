@@ -65,8 +65,10 @@ class _AppsScreenState extends State<AppsScreen> {
             return BlocProvider(
               create: (context) => SearchAppCubit(apps: apps),
               child: FormFactorAdaptive(
-                orElse: () => _TabletBody(apps: apps),
-                handset: () => const _HandsetBody(),
+                orElse: (_) => _TabletBody(apps: apps),
+                handset: (screenData) => _HandsetBody(
+                  orientation: screenData.orientation,
+                ),
               ),
             );
           },

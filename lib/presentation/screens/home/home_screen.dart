@@ -38,6 +38,7 @@ class HomeScreen extends StatelessWidget {
             if (landscape) sheetController.changeBottomPadding(0);
 
             return GradientScaffold(
+              resizeToAvoidBottomInset: false,
               body: SafeArea(
                 child: Stack(
                   children: [

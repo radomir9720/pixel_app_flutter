@@ -1,7 +1,10 @@
 part of '../apps_screen.dart';
 
 class _HandsetBody extends StatefulWidget {
-  const _HandsetBody();
+  const _HandsetBody({required this.orientation});
+
+  @protected
+  final Orientation orientation;
 
   @override
   State<_HandsetBody> createState() => _HandsetBodyState();
@@ -38,6 +41,13 @@ class _HandsetBodyState extends State<_HandsetBody> {
   }
 
   @override
+  void didUpdateWidget(covariant _HandsetBody oldWidget) {
+    textFieldHeightNotifier.expandToMax();
+    scrollController.jumpTo(0);
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     scrollController
       ..removeListener(onControllerScroll)
@@ -46,9 +56,82 @@ class _HandsetBodyState extends State<_HandsetBody> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.l10n.appsTabTitle,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        //
+        const SizedBox(height: 20),
+        //
+        SearchAppTextField(
+          heightNotifier: textFieldHeightNotifier,
+        ),
+        // const SizedBox(height: 20),
+        BlocBuilder<SearchAppCubit, SearchAppState>(
+          builder: (context, state) {
+            final itemCount = state.apps.length;
+            final searchString = state.searchString;
+
+            return Expanded(
+              child: Scrollbar(
+                controller: scrollController,
+                child: widget.orientation == Orientation.portrait
+                    ? FadeListViewBuilder(
+                        itemCount: itemCount,
+                        createController: () => scrollController,
+                        disposeController: false,
+                        padding: const EdgeInsets.only(top: 16),
+                        itemBuilder: (context, index) {
+                          return _AppListTile(
+                            app: state.apps[index],
+                            searchString: searchString,
+                          );
+                        },
+                      )
+                    : FadeGridViewBuilder(
+                        itemCount: itemCount,
+                        disposeController: false,
+                        createController: () => scrollController,
+                        padding: const EdgeInsets.only(top: 16),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: 56,
+                        ),
+                        itemBuilder: (context, index) {
+                          return _AppListTile(
+                            app: state.apps[index],
+                            searchString: searchString,
+                          );
+                        },
+                      ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _AppListTile extends StatelessWidget {
+  const _AppListTile({required this.app, required this.searchString});
+
+  @protected
+  final ApplicationInfo app;
+
+  @protected
+  final String searchString;
+
   TextSpan hightlightTitlePart({
     required String highlightInTitle,
     required String fullTitle,
+    required Color highlightColor,
   }) {
     final title = fullTitle;
 
@@ -74,7 +157,7 @@ class _HandsetBodyState extends State<_HandsetBody> {
             style: TextStyle(
               backgroundColor:
                   part.toLowerCase() == highlightInTitle.toLowerCase()
-                      ? AppColors.of(context).primaryAccent
+                      ? highlightColor
                       : null,
             ),
           );
@@ -85,72 +168,38 @@ class _HandsetBodyState extends State<_HandsetBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.l10n.appsTabTitle,
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        //
-        const SizedBox(height: 20),
-        //
-        SearchAppTextField(
-          heightNotifier: textFieldHeightNotifier,
-        ),
-        // const SizedBox(height: 20),
-        BlocBuilder<SearchAppCubit, SearchAppState>(
-          builder: (context, state) {
-            return Expanded(
-              child: Scrollbar(
-                controller: scrollController,
-                child: FadeListViewBuilder(
-                  itemCount: state.apps.length,
-                  createController: () => scrollController,
-                  disposeController: false,
-                  padding: const EdgeInsets.only(top: 16),
-                  itemBuilder: (context, index) {
-                    final app = state.apps[index];
-                    final icon = app.icon;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: InkWell(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(6)),
-                        onTap: () {
-                          final packageName = app.packageName;
-                          if (packageName == null) return;
-                          context.read<LaunchAppCubit>().launchApp(packageName);
-                        },
-                        child: Row(
-                          children: [
-                            if (icon == null)
-                              const Icon(Icons.image_not_supported_outlined)
-                            else
-                              Image.memory(
-                                icon,
-                                height: 46,
-                                width: 46,
-                              ),
-                            const SizedBox(width: 14),
-                            RichText(
-                              text: hightlightTitlePart(
-                                fullTitle:
-                                    app.name ?? context.l10n.noAppNameCaption,
-                                highlightInTitle: state.searchString,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+    final icon = app.icon;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
+        onTap: () {
+          final packageName = app.packageName;
+          if (packageName == null) return;
+          context.read<LaunchAppCubit>().launchApp(packageName);
+        },
+        child: Row(
+          children: [
+            if (icon == null)
+              const Icon(Icons.image_not_supported_outlined)
+            else
+              Image.memory(
+                icon,
+                height: 46,
+                width: 46,
               ),
-            );
-          },
+            const SizedBox(width: 14),
+            RichText(
+              text: hightlightTitlePart(
+                highlightInTitle: searchString,
+                fullTitle: app.name ?? context.l10n.noAppNameCaption,
+                highlightColor: AppColors.of(context).primaryAccent,
+              ),
+            )
+          ],
         ),
-      ],
+      ),
     );
   }
 }

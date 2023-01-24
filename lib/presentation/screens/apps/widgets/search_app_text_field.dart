@@ -22,6 +22,10 @@ class SearchAppTextFieldHeightNotifier extends ValueNotifier<double?> {
   }
 
   void decrease(num v) => increase(v * -1);
+
+  void expandToMax() {
+    value = maxHeight;
+  }
 }
 
 class SearchAppTextField extends StatefulWidget {
