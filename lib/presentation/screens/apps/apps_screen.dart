@@ -1,14 +1,22 @@
 import 'dart:async';
 
+import 'package:animated_scroll_view/animated_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_pixels/image_pixels.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/molecules/shade_scrollable.dart';
+import 'package:pixel_app_flutter/presentation/app/icons.dart';
+import 'package:pixel_app_flutter/presentation/screens/apps/widgets/app_title.dart';
+import 'package:pixel_app_flutter/presentation/screens/apps/widgets/search_app_text_field.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
+import 'package:re_widgets/re_widgets.dart';
+
+part './body/handset_apps_screen_body.dart';
+part './body/tablet_apps_screen_body.dart';
+part './widgets/error_getting_applications_list.dart';
 
 class AppsScreen extends StatefulWidget {
   const AppsScreen({super.key});
@@ -31,12 +39,8 @@ class _AppsScreenState extends State<AppsScreen> {
         .listen(onLaunchAppFailure);
   }
 
-  void onLaunchAppFailure(AsyncData<String?, Object> event) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.errorLaunchingTheAppMessage),
-      ),
-    );
+  void onLaunchAppFailure(AsyncData<String?, Object> state) {
+    context.showSnackBar(context.l10n.errorLaunchingTheAppMessage);
   }
 
   @override
@@ -50,17 +54,16 @@ class _AppsScreenState extends State<AppsScreen> {
     return BlocBuilder<GetAppsListBloc, GetAppsListState>(
       builder: (context, state) {
         return state.maybeWhen(
-          loading: (s) {
+          orElse: (s) {
             return const Center(child: CircularProgressIndicator());
           },
           failure: (payload, error) {
             return const _ErrorGettingApplicationsListWidget();
           },
-          orElse: (apps) {
-            final screen = Screen.of(context, watch: false);
-            return screen.whenType(
-              orElse: () => _TabletBody(apps: apps),
-              handset: () => _HandsetBody(apps: apps),
+          success: (apps) {
+            return BlocProvider(
+              create: (context) => SearchAppCubit(apps: apps),
+              child: const _ResponsiveAppsScreenBody(),
             );
           },
         );
@@ -69,172 +72,101 @@ class _AppsScreenState extends State<AppsScreen> {
   }
 }
 
-class _TabletBody extends StatelessWidget {
-  const _TabletBody({
-    required this.apps,
-  });
-
-  @protected
-  final List<ApplicationInfo> apps;
-
-  @protected
-  static const kBorderRadius = BorderRadius.all(Radius.circular(8));
+class _ResponsiveAppsScreenBody extends StatefulWidget {
+  const _ResponsiveAppsScreenBody();
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 37),
-          child: Text(
-            context.l10n.appsTabTitle,
-            style: Theme.of(context).textTheme.headline4,
-          ),
-        ),
-        Expanded(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * .7,
-              child: ShadeGridViewBuilder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 37),
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 220,
-                  childAspectRatio: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: apps.length,
-                itemBuilder: (context, index) {
-                  final app = apps[index];
-                  final icon = app.icon;
-
-                  return ImagePixels(
-                    imageProvider: icon == null ? null : MemoryImage(icon),
-                    builder: (context, img) {
-                      return Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: img.hasImage
-                              ? () {
-                                  final packageName = app.packageName;
-                                  if (packageName == null) return;
-                                  context
-                                      .read<LaunchAppCubit>()
-                                      .launchApp(packageName);
-                                }
-                              : null,
-                          borderRadius: kBorderRadius,
-                          child: Ink(
-                            key: ValueKey(app.name),
-                            decoration: BoxDecoration(
-                              borderRadius: kBorderRadius,
-                              color: img.hasImage
-                                  ? img.pixelColorAtAlignment
-                                          ?.call(Alignment.center) ??
-                                      Colors.white
-                                  : AppColors.of(context).background,
-                            ),
-                            child: icon == null
-                                ? const Icon(Icons.image_not_supported_outlined)
-                                : img.hasImage
-                                    ? RawImage(image: img.uiImage)
-                                    : const SizedBox.shrink(),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  State<_ResponsiveAppsScreenBody> createState() =>
+      _ResponsiveAppsScreenBodyState();
 }
 
-class _HandsetBody extends StatelessWidget {
-  const _HandsetBody({required this.apps});
-
-  @protected
-  final List<ApplicationInfo> apps;
+class _ResponsiveAppsScreenBodyState extends State<_ResponsiveAppsScreenBody> {
+  late final StreamSubscription<void> pinnedAppsSubscription;
+  final eventController = DefaultEventController<ApplicationInfo>();
+  late final ItemsNotifier<ApplicationInfo> itemsNotifier;
+  final searchTextFieldController = TextEditingController();
+  bool forceNotify = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.l10n.appsTabTitle,
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        const SizedBox(height: 20),
-        Expanded(
-          child: ShadeListViewBuilder(
-            itemCount: apps.length,
-            itemBuilder: (context, index) {
-              final app = apps[index];
-              final icon = app.icon;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(Radius.circular(6)),
-                  onTap: () {
-                    final packageName = app.packageName;
-                    if (packageName == null) return;
-                    context.read<LaunchAppCubit>().launchApp(packageName);
-                  },
-                  child: Row(
-                    children: [
-                      if (icon == null)
-                        const Icon(Icons.image_not_supported_outlined)
-                      else
-                        Image.memory(
-                          icon,
-                          height: 46,
-                          width: 46,
-                        ),
-                      const SizedBox(width: 14),
-                      Text(app.name ?? context.l10n.noAppNameCaption),
-                    ],
-                  ),
-                ),
-              );
-            },
+  void initState() {
+    super.initState();
+
+    itemsNotifier = DefaultItemsNotifier(
+      onItemsUpdate: (updatedList) {
+        context.read<SearchAppCubit>().update(
+              filtered: ApplicationsEntity(updatedList),
+            );
+      },
+    );
+
+    pinnedAppsSubscription =
+        context.read<ManagePinnedAppsBloc>().stream.listen(onPinAppResult);
+  }
+
+  void onPinAppResult(ManagePinnedAppsState state) {
+    state.maybeWhen(
+      orElse: () {},
+      success: (app) {
+        var newIndex = 0;
+        final state = context.read<SearchAppCubit>().state;
+        final apps = state.all;
+        final allAppsSorted = apps.updateApp(app).sorted;
+        final filtered = allAppsSorted.filterByName(state.searchString);
+        context.read<SearchAppCubit>().update(all: allAppsSorted);
+        newIndex = filtered.indexOf(app);
+        if (newIndex == -1) {
+          Future<void>.error('Error finding new index for unpinned element');
+          return;
+        }
+
+        eventController.add(
+          MoveItemEvent(
+            item: app,
+            newIndex: newIndex,
+            forceNotify: forceNotify,
           ),
-        ),
-      ],
+        );
+      },
+      failure: (error) {
+        final e = error;
+        final appName = e.appName ?? '';
+        final message = e.type.when(
+          add: () => context.l10n.errorPinningApp(appName),
+          remove: () => context.l10n.errorPinningApp(appName),
+        );
+        context.showSnackBar(message);
+      },
     );
   }
-}
 
-class _ErrorGettingApplicationsListWidget extends StatelessWidget {
-  const _ErrorGettingApplicationsListWidget();
+  @override
+  void dispose() {
+    eventController.close();
+    pinnedAppsSubscription.cancel();
+    searchTextFieldController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.error_outline,
-            size: 75,
-            color: AppColors.of(context).error,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            context.l10n.errorGettingApplicationsListMessage,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+    return FormFactorResponsive(
+      orElse: (_) {
+        forceNotify = true;
+        return _TabletBody(
+          itemsNotifier: itemsNotifier,
+          eventController: eventController,
+          searchTextFieldController: searchTextFieldController,
+        );
+      },
+      handset: (screenData) {
+        forceNotify = screenData.orientation == Orientation.landscape;
+        return _HandsetBody(
+          itemsNotifier: itemsNotifier,
+          eventController: eventController,
+          orientation: screenData.orientation,
+          searchTextFieldController: searchTextFieldController,
+        );
+      },
     );
   }
 }

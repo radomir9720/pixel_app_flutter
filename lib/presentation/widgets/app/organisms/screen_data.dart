@@ -11,6 +11,41 @@ enum ScreenType {
   bool get isHandset => this == ScreenType.handset;
 }
 
+class FormFactorResponsive extends StatelessWidget {
+  const FormFactorResponsive({
+    super.key,
+    required this.orElse,
+    this.tablet,
+    this.desktop,
+    this.handset,
+  });
+
+  @protected
+  final Widget Function(ScreenData screenData) orElse;
+
+  @protected
+  final Widget Function(ScreenData screenData)? tablet;
+
+  @protected
+  final Widget Function(ScreenData screenData)? desktop;
+
+  @protected
+  final Widget Function(ScreenData screenData)? handset;
+
+  @override
+  Widget build(BuildContext context) {
+    final screen = Screen.of(context);
+
+    return screen.whenType<Widget?>(
+          orElse: () => orElse(screen),
+          tablet: () => tablet?.call(screen),
+          handset: () => handset?.call(screen),
+          desktop: () => desktop?.call(screen),
+        ) ??
+        orElse(screen);
+  }
+}
+
 class Screen extends StatelessWidget {
   const Screen({
     super.key,

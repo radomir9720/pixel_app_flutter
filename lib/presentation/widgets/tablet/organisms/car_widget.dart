@@ -2,11 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/atoms/measure_size.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/atoms/unbounded_hit_test_stack.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/atoms/car_interface_pointer.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/car_interface_switcher.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class CarWidget extends StatefulWidget {
   const CarWidget({super.key});

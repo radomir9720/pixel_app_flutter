@@ -122,5 +122,24 @@
 
     "errorLaunchingTheAppMessage": "Unknown error while launching the app",
     "errorGettingApplicationsListMessage": "Error while getting applications list. Information was sent to developers",
-    "noAppNameCaption": "No app name"
+    "noAppNameCaption": "No app name",
+
+    "searchTextFieldHint": "Search",
+
+    "errorPinningApp": "Failed to pin the app {appName}",
+    "@errorPinningApp": {
+        "placeholders": {
+            "appName": {
+                "type": "String"
+            }
+        }
+    },
+    "errorUnpinningApp": "Failed to unpin the app {appName}",
+    "@errorUnpinningApp": {
+        "placeholders": {
+            "appName": {
+                "type": "String"
+            }
+        }
+    }
 }

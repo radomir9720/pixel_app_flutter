@@ -12,6 +12,8 @@ class PixelIcons {
 
   static const String _fontFamily = 'PixelIcons';
 
+  static const IconData pinOutline = IconData(0xe91b, fontFamily: _fontFamily);
+  static const IconData pin = IconData(0xe91c, fontFamily: _fontFamily);
   static const IconData wifi = IconData(0xe900, fontFamily: _fontFamily);
   static const IconData bluetooth = IconData(0xe901, fontFamily: _fontFamily);
   static const IconData usb = IconData(0xe902, fontFamily: _fontFamily);

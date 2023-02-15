@@ -7,21 +7,22 @@
 
 ## Navigation
 
-  * [About](#about)
-  * [What is currently implemented](#what-is-currently-implemented)
-  * [What should be implemented](#what-should-be-implemented)
-  * [How can i contribute?](#how-can-i-contribute)
-  * [How to lauch the project](#how-to-launch-the-project)
+- [About](#about)
+- [What is currently implemented](#what-is-currently-implemented)
+- [What should be implemented](#what-should-be-implemented)
+- [How can i contribute?](#how-can-i-contribute)
+- [How to lauch the project](#how-to-lauch-the-project)
+- [Running Tests](#running-tests)
 
 ## <a name="about">About</a>
 ---
-This project is an application written using Dart and Flutter for an ambitious open source project called [StarPixel](https://wiki.starpixel.org/books/informaciya-dlya-novickov/page/obshhee-polozenie)(be careful, the site is in russian 😅).
+This project is an application written using Dart and Flutter for an ambitious open source project called [StarPixel](https://wiki.starpixel.org/books/informaciya-dlya-novickov/page/obshhee-polozenie).
 
 StarPixel is conceived as an electric car that absolutely anyone can build, using opensource information like drawings and software.
 
 The main purpose of this application is to manage the functions of the car. it is also considered to be used as an on-board computer.
 
-For now, while the IT team of this project is in search of the connection protocol realization in the best way, the app connects to the hardware through bluetooth. In the future we plan to implement connection through WIFI and HTTP, so that user can choose the interface connection, which suits him best.
+For now, while the IT team of this project is in search of the connection protocol realization in the best way, the app connects to the hardware through bluetooth. In the future we plan to implement connection through USB, WIFI and HTTP, so that user can choose the interface connection, which suits him best.
 
 As the main hardware was choosen esp32. The software for esp32(called MainECU) [lives here](https://github.com/starfactorypixel/MainECU).
 The MainECU is the connecting link between this application and car interfaces.
@@ -62,17 +63,18 @@ The MainECU is the connecting link between this application and car interfaces.
   
   *Analytics and Crashlytics*
 
-
-## <a name="what-should-be-implemented">What should be implemented</a>
----
-
 * __Launcher(for android)__
   
   *On android there is an option to choose the application as the default laucher. That way you can have an android device specially to use it as on-board computer*
 
+
+## <a name="what-should-be-implemented">What should be implemented</a>
+---
+
+
 * __Other connection options__
   
-  *At the moment at least via WIFI and HTTP*
+  *Via USB, WIFI, and HTTP*
 
 * __Bluetooth connection on iOS__
   
@@ -134,7 +136,7 @@ Again, if you want to lauch the app on __MacOS__, the commands above won't work,
 
 ---
 
-## Running Tests 🧪
+## <a name="running-tests">Running Tests 🧪</a>
 
 To run all unit and widget tests use the following command:
 

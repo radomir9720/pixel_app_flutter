@@ -2,9 +2,79 @@
   "metadata": {
     "name": "StarPixel",
     "lastOpened": 0,
-    "created": 1662554178929
+    "created": 1676192405037
   },
   "iconSets": [
+    {
+      "selection": [
+        {
+          "order": 1,
+          "id": 1,
+          "name": "pinOutline",
+          "prevSize": 24,
+          "code": 59675,
+          "tempChar": ""
+        },
+        {
+          "order": 2,
+          "id": 0,
+          "name": "pin",
+          "prevSize": 24,
+          "code": 59676,
+          "tempChar": ""
+        }
+      ],
+      "id": 3,
+      "metadata": {
+        "name": "Typicons (subset)",
+        "url": "http://typicons.com/",
+        "designer": "Stephen Hutchings",
+        "designerURL": "https://github.com/stephenhutchings",
+        "license": "CC BY-SA 3.0",
+        "licenseURL": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "iconsHash": 1073131028,
+        "importSize": {
+          "width": 24,
+          "height": 24
+        }
+      },
+      "height": 1024,
+      "prevSize": 24,
+      "icons": [
+        {
+          "id": 1,
+          "paths": [
+            "M988.835 276.664l-240.53-241.854c-45.242-45.483-124.115-45.964-170.261-0.361-11.792 11.792-21.056 26.231-25.148 37.842-39.286 81.942-81.461 133.261-135.607 164.064l-13.056 6.317c-58.237 29.178-137.471 58.9-283.908 58.9-16.003 0-31.344 3.129-46.085 9.144-29.119 12.153-52.883 35.797-65.096 65.217-11.973 29.119-11.973 62.629 0 91.749 6.256 14.981 15.041 28.337 26.171 39.166l194.627 194.627-229.942 322.052 321.991-229.942 194.145 194.145c11.19 11.371 24.427 20.395 39.466 26.532 14.861 6.197 30.261 9.266 46.085 9.266s31.224-3.129 46.025-9.266c29.961-12.334 53.124-35.617 64.976-64.856 6.197-14.559 9.325-30.503 9.325-46.205 0-146.556 29.72-225.73 58.839-284.028 29.841-59.681 82.363-105.164 165.688-145.232 16.305-6.256 30.683-15.402 42.776-27.495 46.446-47.047 46.205-123.393-0.481-169.779zM673.102 565.506c-49.273 98.847-71.473 202.749-71.895 337.152l-480.88-480.759c128.688 0 229.461-20.154 324.638-65.217l14.139-6.317c84.168-42.054 148.481-113.888 203.832-230.664l236.079 243.72c-112.083 53.725-183.857 117.919-225.911 202.086z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "tags": [
+            "pinOutline"
+          ],
+          "grid": 24
+        },
+        {
+          "id": 0,
+          "paths": [
+            "M749.654 18.82c-24.859-24.988-65.249-25.115-90.364-0.256-6.646 6.646-11.247 14.506-14.379 22.687-53.17 110.941-111.708 173.505-185.584 210.443-82.887 40.9-178.042 69.338-331.417 69.338-8.308 0-16.615 1.598-24.413 4.857-15.657 6.518-28.055 18.98-34.574 34.574-6.454 15.594-6.454 33.232 0 48.824 3.259 7.86 7.925 14.954 13.868 20.833l207.248 207.248-289.943 386.632 386.632-289.943 207.183 207.183c5.879 6.008 12.972 10.609 20.833 13.868 7.796 3.259 16.104 4.985 24.413 4.985s16.615-1.725 24.413-4.985c15.657-6.518 28.118-18.853 34.574-34.574 3.259-7.733 4.92-16.104 4.92-24.348 0-153.375 28.374-248.532 69.21-330.139 36.874-73.876 99.438-132.413 210.443-185.584 8.244-3.132 16.040-7.733 22.623-14.379 24.859-25.115 24.732-65.503-0.256-90.364l-255.434-256.903z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "tags": [
+            "pin"
+          ],
+          "grid": 24
+        }
+      ],
+      "invisible": false,
+      "colorThemes": []
+    },
     {
       "selection": [
         {
@@ -13,7 +83,7 @@
           "name": "wifi",
           "prevSize": 32,
           "code": 59648,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 6,
@@ -21,7 +91,7 @@
           "name": "bluetooth",
           "prevSize": 32,
           "code": 59649,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 7,
@@ -29,7 +99,7 @@
           "name": "usb",
           "prevSize": 32,
           "code": 59650,
-          "tempChar": ""
+          "tempChar": ""
         }
       ],
       "id": 2,
@@ -98,7 +168,7 @@
           "name": "info",
           "prevSize": 32,
           "code": 59651,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 23,
@@ -106,7 +176,7 @@
           "name": "back",
           "prevSize": 32,
           "code": 59652,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 24,
@@ -114,7 +184,7 @@
           "name": "close",
           "prevSize": 32,
           "code": 59653,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 25,
@@ -122,7 +192,7 @@
           "name": "charging",
           "prevSize": 32,
           "code": 59654,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 26,
@@ -130,7 +200,7 @@
           "name": "apps",
           "prevSize": 32,
           "code": 59655,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 27,
@@ -138,7 +208,7 @@
           "name": "navigator",
           "prevSize": 32,
           "code": 59656,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 21,
@@ -146,7 +216,7 @@
           "name": "car",
           "prevSize": 32,
           "code": 59657,
-          "tempChar": ""
+          "tempChar": ""
         }
       ],
       "id": 1,
@@ -279,7 +349,7 @@
           "name": "hideDown",
           "prevSize": 32,
           "code": 59673,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 31,
@@ -287,7 +357,7 @@
           "name": "showUp",
           "prevSize": 32,
           "code": 59674,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 28,
@@ -295,7 +365,7 @@
           "name": "about",
           "prevSize": 32,
           "code": 59658,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 29,
@@ -303,7 +373,7 @@
           "name": "licenses",
           "prevSize": 32,
           "code": 59659,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 8,
@@ -311,7 +381,7 @@
           "name": "fastActions",
           "prevSize": 32,
           "code": 59660,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 9,
@@ -319,7 +389,7 @@
           "name": "power",
           "prevSize": 32,
           "code": 59661,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 10,
@@ -327,7 +397,7 @@
           "name": "windshieldBlower",
           "prevSize": 32,
           "code": 59662,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 11,
@@ -335,7 +405,7 @@
           "name": "airflow",
           "prevSize": 32,
           "code": 59663,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 12,
@@ -343,7 +413,7 @@
           "name": "fan",
           "prevSize": 32,
           "code": 59664,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 13,
@@ -351,7 +421,7 @@
           "name": "belt",
           "prevSize": 32,
           "code": 59665,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 14,
@@ -359,7 +429,7 @@
           "name": "settings",
           "prevSize": 32,
           "code": 59666,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 15,
@@ -367,7 +437,7 @@
           "name": "unlocked",
           "prevSize": 32,
           "code": 59667,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 16,
@@ -375,7 +445,7 @@
           "name": "locked",
           "prevSize": 32,
           "code": 59668,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 17,
@@ -383,7 +453,7 @@
           "name": "light",
           "prevSize": 32,
           "code": 59669,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 18,
@@ -391,7 +461,7 @@
           "name": "speedometer",
           "prevSize": 32,
           "code": 59670,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 19,
@@ -399,7 +469,7 @@
           "name": "sunCharging",
           "prevSize": 32,
           "code": 59671,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 20,
@@ -407,7 +477,7 @@
           "name": "battery",
           "prevSize": 32,
           "code": 59672,
-          "tempChar": ""
+          "tempChar": ""
         }
       ],
       "id": 0,
@@ -739,7 +809,6 @@
       "colorThemeIdx": 0
     }
   ],
-  "uid": -1,
   "preferences": {
     "showGlyphs": true,
     "showCodes": true,
@@ -772,5 +841,6 @@
     },
     "historySize": 50,
     "gridSize": 16
-  }
+  },
+  "uid": -1
 }
