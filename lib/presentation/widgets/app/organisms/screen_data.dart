@@ -11,8 +11,8 @@ enum ScreenType {
   bool get isHandset => this == ScreenType.handset;
 }
 
-class FormFactorAdaptive extends StatelessWidget {
-  const FormFactorAdaptive({
+class FormFactorResponsive extends StatelessWidget {
+  const FormFactorResponsive({
     super.key,
     required this.orElse,
     this.tablet,

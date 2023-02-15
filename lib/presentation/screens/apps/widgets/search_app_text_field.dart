@@ -31,12 +31,16 @@ class SearchAppTextFieldHeightNotifier extends ValueNotifier<double?> {
 class SearchAppTextField extends StatefulWidget {
   const SearchAppTextField({
     super.key,
+    required this.controller,
     required this.heightNotifier,
     this.contentPadding = const EdgeInsets.only(top: 5),
   });
 
   @protected
   final SearchAppTextFieldHeightNotifier heightNotifier;
+
+  @protected
+  final TextEditingController controller;
 
   @protected
   final EdgeInsets contentPadding;
@@ -46,25 +50,22 @@ class SearchAppTextField extends StatefulWidget {
 }
 
 class _SearchAppTextFieldState extends State<SearchAppTextField> {
-  final textController = TextEditingController();
   final focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    textController.addListener(onTextControllerChange);
+    widget.controller.addListener(onTextControllerChange);
   }
 
   void onTextControllerChange() {
-    context.read<SearchAppCubit>().search(textController.text);
+    context.read<SearchAppCubit>().search(widget.controller.text);
   }
 
   @override
   void dispose() {
     focusNode.dispose();
-    textController
-      ..removeListener(onTextControllerChange)
-      ..dispose();
+    widget.controller.removeListener(onTextControllerChange);
     super.dispose();
   }
 
@@ -112,7 +113,7 @@ class _SearchAppTextFieldState extends State<SearchAppTextField> {
                                           ),
                                         ),
                                         onPressed: () {
-                                          textController.clear();
+                                          widget.controller.clear();
                                           focusNode.unfocus();
                                         },
                                         child: Text(
@@ -140,7 +141,7 @@ class _SearchAppTextFieldState extends State<SearchAppTextField> {
       },
       child: TextField(
         focusNode: focusNode,
-        controller: textController,
+        controller: widget.controller,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           isDense: true,

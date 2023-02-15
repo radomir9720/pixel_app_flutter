@@ -6,40 +6,45 @@ import 'package:re_seedwork/re_seedwork.dart';
 part 'get_apps_list_bloc.freezed.dart';
 
 @freezed
-class GetAppsListEvent with _$GetAppsListEvent {
+class GetAppsListEvent extends EffectEvent with _$GetAppsListEvent {
   const factory GetAppsListEvent.loadAppsList() = _LoadAppsList;
 }
 
-typedef GetAppsListState = AsyncData<List<ApplicationInfo>, Object>;
+typedef GetAppsListState = AsyncData<ApplicationsEntity, Object>;
 
-class GetAppsListBloc extends Bloc<GetAppsListEvent, GetAppsListState> {
-  GetAppsListBloc({required this.appsService})
-      : super(const GetAppsListState.initial([])) {
-    on<_LoadAppsList>(_loadAppsList);
+class GetAppsListBloc extends Bloc<GetAppsListEvent, GetAppsListState>
+    with BlocEventHandlerMixin {
+  GetAppsListBloc({
+    required this.appsService,
+    required this.pinnedAppsStorage,
+  }) : super(GetAppsListState.initial(ApplicationsEntity.empty())) {
+    on<_LoadAppsList>(
+      (event, emit) =>
+          handle<Result<GetAppsListAppServiceError, List<ApplicationInfo>>>(
+        event: event,
+        emit: emit,
+        inLoading: (_) => state.inLoading(),
+        inFailure: (_) => state.inFailure(),
+        action: appsService.getAppsList,
+        onActionResult: (actionResult) async {
+          return actionResult.when(
+            error: state.inFailure,
+            value: (value) {
+              final pinned = pinnedAppsStorage.data.toList();
+
+              return AsyncData.success(
+                ApplicationsEntity(value).markPinned(pinned).sorted,
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 
   @protected
   final AppsService appsService;
 
-  Future<void> _loadAppsList(
-    GetAppsListEvent event,
-    Emitter<GetAppsListState> emit,
-  ) async {
-    emit(state.inLoading());
-
-    try {
-      final res = await appsService.getAppsList();
-
-      emit(
-        res.when(
-          error: state.inFailure,
-          value: AsyncData.success,
-        ),
-      );
-    } catch (e) {
-      emit(state.inFailure());
-
-      rethrow;
-    }
-  }
+  @protected
+  final PinnedAppsStorage pinnedAppsStorage;
 }

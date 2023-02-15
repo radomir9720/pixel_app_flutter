@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:animated_scroll_view/animated_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_pixels/image_pixels.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
+import 'package:pixel_app_flutter/presentation/app/icons.dart';
+import 'package:pixel_app_flutter/presentation/screens/apps/widgets/app_title.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/widgets/search_app_text_field.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -36,12 +39,8 @@ class _AppsScreenState extends State<AppsScreen> {
         .listen(onLaunchAppFailure);
   }
 
-  void onLaunchAppFailure(AsyncData<String?, Object> event) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.errorLaunchingTheAppMessage),
-      ),
-    );
+  void onLaunchAppFailure(AsyncData<String?, Object> state) {
+    context.showSnackBar(context.l10n.errorLaunchingTheAppMessage);
   }
 
   @override
@@ -64,14 +63,108 @@ class _AppsScreenState extends State<AppsScreen> {
           success: (apps) {
             return BlocProvider(
               create: (context) => SearchAppCubit(apps: apps),
-              child: FormFactorAdaptive(
-                orElse: (_) => _TabletBody(apps: apps),
-                handset: (screenData) => _HandsetBody(
-                  orientation: screenData.orientation,
-                ),
-              ),
+              child: const _ResponsiveAppsScreenBody(),
             );
           },
+        );
+      },
+    );
+  }
+}
+
+class _ResponsiveAppsScreenBody extends StatefulWidget {
+  const _ResponsiveAppsScreenBody();
+
+  @override
+  State<_ResponsiveAppsScreenBody> createState() =>
+      _ResponsiveAppsScreenBodyState();
+}
+
+class _ResponsiveAppsScreenBodyState extends State<_ResponsiveAppsScreenBody> {
+  late final StreamSubscription<void> pinnedAppsSubscription;
+  final eventController = DefaultEventController<ApplicationInfo>();
+  late final ItemsNotifier<ApplicationInfo> itemsNotifier;
+  final searchTextFieldController = TextEditingController();
+  bool forceNotify = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    itemsNotifier = DefaultItemsNotifier(
+      onItemsUpdate: (updatedList) {
+        context.read<SearchAppCubit>().update(
+              filtered: ApplicationsEntity(updatedList),
+            );
+      },
+    );
+
+    pinnedAppsSubscription =
+        context.read<ManagePinnedAppsBloc>().stream.listen(onPinAppResult);
+  }
+
+  void onPinAppResult(ManagePinnedAppsState state) {
+    state.maybeWhen(
+      orElse: () {},
+      success: (app) {
+        var newIndex = 0;
+        final state = context.read<SearchAppCubit>().state;
+        final apps = state.all;
+        final allAppsSorted = apps.updateApp(app).sorted;
+        final filtered = allAppsSorted.filterByName(state.searchString);
+        context.read<SearchAppCubit>().update(all: allAppsSorted);
+        newIndex = filtered.indexOf(app);
+        if (newIndex == -1) {
+          Future<void>.error('Error finding new index for unpinned element');
+          return;
+        }
+
+        eventController.add(
+          MoveItemEvent(
+            item: app,
+            newIndex: newIndex,
+            forceNotify: forceNotify,
+          ),
+        );
+      },
+      failure: (error) {
+        final e = error;
+        final appName = e.appName ?? '';
+        final message = e.type.when(
+          add: () => context.l10n.errorPinningApp(appName),
+          remove: () => context.l10n.errorPinningApp(appName),
+        );
+        context.showSnackBar(message);
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    eventController.close();
+    pinnedAppsSubscription.cancel();
+    searchTextFieldController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FormFactorResponsive(
+      orElse: (_) {
+        forceNotify = true;
+        return _TabletBody(
+          itemsNotifier: itemsNotifier,
+          eventController: eventController,
+          searchTextFieldController: searchTextFieldController,
+        );
+      },
+      handset: (screenData) {
+        forceNotify = screenData.orientation == Orientation.landscape;
+        return _HandsetBody(
+          itemsNotifier: itemsNotifier,
+          eventController: eventController,
+          orientation: screenData.orientation,
+          searchTextFieldController: searchTextFieldController,
         );
       },
     );

@@ -124,6 +124,23 @@
     "errorGettingApplicationsListMessage": "Ошибка при получении списка приложений. Информация передана разработчикам",
     "noAppNameCaption": "Без имени",
 
-    "searchTextFieldHint": "Поиск"
+    "searchTextFieldHint": "Поиск",
+
+    "errorPinningApp": "Не удалось закрепить приложение {appName}",
+    "@errorPinningApp": {
+        "placeholders": {
+            "appName": {
+                "type": "String"
+            }
+        }
+    },
+    "errorUnpinningApp": "Не удалось открепить приложение {appName}",
+    "@errorUnpinningApp": {
+        "placeholders": {
+            "appName": {
+                "type": "String"
+            }
+        }
+    }
 
 }

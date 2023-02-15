@@ -15,13 +15,27 @@ class AppsScope extends AutoRouter {
         providers: [
           // services
           Provider<AppsService>(create: (context) => GetIt.I()),
+
+          // storages
+          InheritedProvider<PinnedAppsStorage>(
+            create: (context) => GetIt.I()..read(),
+            lazy: false,
+          ),
+
           // blocs
           BlocProvider(
-            create: (context) => GetAppsListBloc(appsService: context.read())
-              ..add(const GetAppsListEvent.loadAppsList()),
+            create: (context) => GetAppsListBloc(
+              appsService: context.read(),
+              pinnedAppsStorage: context.read(),
+            )..add(const GetAppsListEvent.loadAppsList()),
           ),
           BlocProvider(
             create: (context) => LaunchAppCubit(appsService: context.read()),
+          ),
+          BlocProvider(
+            create: (context) => ManagePinnedAppsBloc(
+              pinnedAppsStorage: context.read(),
+            ),
           ),
         ],
         child: content,

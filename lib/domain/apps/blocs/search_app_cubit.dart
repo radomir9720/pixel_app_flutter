@@ -4,11 +4,18 @@ import 'package:pixel_app_flutter/domain/apps/apps.dart';
 
 @immutable
 class SearchAppState {
-  const SearchAppState({required this.apps, required this.searchString});
+  const SearchAppState({
+    required this.all,
+    required this.filtered,
+    required this.searchString,
+  });
 
-  const SearchAppState.initial(this.apps) : searchString = '';
+  const SearchAppState.initial(this.all)
+      : filtered = all,
+        searchString = '';
 
-  final List<ApplicationInfo> apps;
+  final ApplicationsEntity all;
+  final ApplicationsEntity filtered;
   final String searchString;
 
   @override
@@ -16,42 +23,49 @@ class SearchAppState {
     if (identical(this, other)) return true;
 
     return other is SearchAppState &&
-        listEquals(other.apps, apps) &&
+        listEquals(other.all, all) &&
+        listEquals(other.filtered, filtered) &&
         other.searchString == searchString;
   }
 
   @override
-  int get hashCode => apps.hashCode ^ searchString.hashCode;
+  int get hashCode => all.hashCode ^ filtered.hashCode ^ searchString.hashCode;
 
   SearchAppState copyWith({
-    List<ApplicationInfo>? apps,
+    ApplicationsEntity? all,
+    ApplicationsEntity? filtered,
     String? searchString,
   }) {
     return SearchAppState(
-      apps: apps ?? this.apps,
+      all: all ?? this.all,
+      filtered: filtered ?? this.filtered,
       searchString: searchString ?? this.searchString,
     );
   }
 }
 
 class SearchAppCubit extends Cubit<SearchAppState> {
-  SearchAppCubit({required this.apps}) : super(SearchAppState.initial(apps));
+  SearchAppCubit({required ApplicationsEntity apps})
+      : super(SearchAppState.initial(ApplicationsEntity(apps).sorted));
 
-  final List<ApplicationInfo> apps;
-
-  void reset() => emit(SearchAppState.initial(apps));
+  void update({
+    ApplicationsEntity? all,
+    ApplicationsEntity? filtered,
+  }) {
+    emit(
+      state.copyWith(
+        all: all,
+        filtered: filtered,
+      ),
+    );
+  }
 
   void search(String name) {
-    if (name.isEmpty) return emit(SearchAppState.initial(apps));
+    if (name.isEmpty) return emit(SearchAppState.initial(state.all));
     emit(
       state.copyWith(
         searchString: name,
-        apps: [
-          ...apps.where(
-            (element) =>
-                (element.name ?? '').toLowerCase().contains(name.toLowerCase()),
-          )
-        ],
+        filtered: state.all.filterByName(name),
       ),
     );
   }

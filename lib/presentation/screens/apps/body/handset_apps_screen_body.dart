@@ -1,20 +1,32 @@
 part of '../apps_screen.dart';
 
 class _HandsetBody extends StatefulWidget {
-  const _HandsetBody({required this.orientation});
+  const _HandsetBody({
+    required this.orientation,
+    required this.itemsNotifier,
+    required this.eventController,
+    required this.searchTextFieldController,
+  });
 
   @protected
   final Orientation orientation;
+
+  @protected
+  final ItemsNotifier<ApplicationInfo> itemsNotifier;
+
+  @protected
+  final DefaultEventController<ApplicationInfo> eventController;
+
+  @protected
+  final TextEditingController searchTextFieldController;
 
   @override
   State<_HandsetBody> createState() => _HandsetBodyState();
 }
 
 class _HandsetBodyState extends State<_HandsetBody> {
-  // double? height;
-  double maxHeight = 0;
-
   final scrollController = ScrollController();
+
   double? prevScrollOffset;
   final textFieldHeightNotifier = SearchAppTextFieldHeightNotifier()
     ..setDefaultHeight(40);
@@ -70,46 +82,68 @@ class _HandsetBodyState extends State<_HandsetBody> {
         //
         SearchAppTextField(
           heightNotifier: textFieldHeightNotifier,
+          controller: widget.searchTextFieldController,
         ),
-        // const SizedBox(height: 20),
+        //
         BlocBuilder<SearchAppCubit, SearchAppState>(
           builder: (context, state) {
-            final itemCount = state.apps.length;
             final searchString = state.searchString;
+            final apps = [...state.filtered];
 
             return Expanded(
               child: Scrollbar(
                 controller: scrollController,
-                child: widget.orientation == Orientation.portrait
-                    ? FadeListViewBuilder(
-                        itemCount: itemCount,
-                        createController: () => scrollController,
-                        disposeController: false,
-                        padding: const EdgeInsets.only(top: 16),
-                        itemBuilder: (context, index) {
-                          return _AppListTile(
-                            app: state.apps[index],
-                            searchString: searchString,
-                          );
-                        },
-                      )
-                    : FadeGridViewBuilder(
-                        itemCount: itemCount,
-                        disposeController: false,
-                        createController: () => scrollController,
-                        padding: const EdgeInsets.only(top: 16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisExtent: 56,
+                child: FadeScrollable(
+                  createController: () => scrollController,
+                  disposeController: false,
+                  scrollable: (_) {
+                    return CustomScrollView(
+                      controller: scrollController,
+                      slivers: [
+                        const SliverPadding(padding: EdgeInsets.only(top: 20)),
+                        //
+                        if (widget.orientation == Orientation.portrait)
+                          SliverAnimatedListView<ApplicationInfo>(
+                            items: apps,
+                            itemsNotifier: widget.itemsNotifier,
+                            eventController: widget.eventController,
+                            idMapper: (obj) => obj.packageName ?? '',
+                            itemBuilder: (item) {
+                              return _AppListTile(
+                                app: item,
+                                searchString: searchString,
+                                eventController: widget.eventController,
+                              );
+                            },
+                          )
+                        else
+                          SliverAnimatedGridView<ApplicationInfo>(
+                            items: apps,
+                            eventController: widget.eventController,
+                            itemsNotifier: widget.itemsNotifier,
+                            idMapper: (obj) => obj.packageName ?? '',
+                            itemBuilder: (item) {
+                              return _AppListTile(
+                                app: item,
+                                searchString: searchString,
+                                eventController: widget.eventController,
+                                forceNotify: true,
+                              );
+                            },
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisExtent: 56,
+                            ),
+                          ),
+                        //
+                        const SliverToBoxAdapter(
+                          child: AvoidBottomInsetWidget(),
                         ),
-                        itemBuilder: (context, index) {
-                          return _AppListTile(
-                            app: state.apps[index],
-                            searchString: searchString,
-                          );
-                        },
-                      ),
+                      ],
+                    );
+                  },
+                ),
               ),
             );
           },
@@ -120,7 +154,15 @@ class _HandsetBodyState extends State<_HandsetBody> {
 }
 
 class _AppListTile extends StatelessWidget {
-  const _AppListTile({required this.app, required this.searchString});
+  const _AppListTile({
+    required this.app,
+    required this.searchString,
+    required this.eventController,
+    this.forceNotify = false,
+  });
+
+  @protected
+  final DefaultEventController<ApplicationInfo> eventController;
 
   @protected
   final ApplicationInfo app;
@@ -128,43 +170,8 @@ class _AppListTile extends StatelessWidget {
   @protected
   final String searchString;
 
-  TextSpan hightlightTitlePart({
-    required String highlightInTitle,
-    required String fullTitle,
-    required Color highlightColor,
-  }) {
-    final title = fullTitle;
-
-    if (highlightInTitle.isEmpty) {
-      return TextSpan(text: title);
-    }
-
-    final indexes = RegExp(highlightInTitle, caseSensitive: false)
-        .allMatches(title)
-        .map((e) => [e.start, e.end])
-        .expand((element) => element)
-        .toList();
-
-    final parts = title.splitByIndexes(indexes);
-
-    return TextSpan(
-      children: List.generate(
-        parts.length,
-        (index) {
-          final part = parts[index];
-          return TextSpan(
-            text: part,
-            style: TextStyle(
-              backgroundColor:
-                  part.toLowerCase() == highlightInTitle.toLowerCase()
-                      ? highlightColor
-                      : null,
-            ),
-          );
-        },
-      ),
-    );
-  }
+  @protected
+  final bool forceNotify;
 
   @override
   Widget build(BuildContext context) {
@@ -190,11 +197,26 @@ class _AppListTile extends StatelessWidget {
                 width: 46,
               ),
             const SizedBox(width: 14),
-            RichText(
-              text: hightlightTitlePart(
+            //
+            Expanded(
+              child: AppTitle(
                 highlightInTitle: searchString,
-                fullTitle: app.name ?? context.l10n.noAppNameCaption,
-                highlightColor: AppColors.of(context).primaryAccent,
+                fullTitle: app.name,
+              ),
+            ),
+            //
+            IconButton(
+              onPressed: () {
+                context.read<ManagePinnedAppsBloc>().add(
+                      app.pinned
+                          ? ManagePinnedAppsEvent.remove(app)
+                          : ManagePinnedAppsEvent.add(app),
+                    );
+              },
+              icon: Icon(
+                app.pinned ? PixelIcons.pin : PixelIcons.pinOutline,
+                size: 15,
+                color: app.pinned ? null : AppColors.of(context).borderAccent,
               ),
             )
           ],
