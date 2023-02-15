@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
-import 'package:pixel_app_flutter/domain/apps/apps.dart';
-import 'package:re_seedwork/re_seedwork.dart';
 
 class InstalledAppsMock extends InstalledApps {
   static Future<List<AppInfo>> getInstalledApps([
@@ -13,14 +11,15 @@ class InstalledAppsMock extends InstalledApps {
   ]) async {
     await Future<void>.delayed(const Duration(seconds: 2));
     return List.generate(
-      20,
+      40,
       (index) {
         // ignore: prefer_const_declarations
-        final icon = {...index.isEven ? assistant : airbnb};
-        icon['name'] = '${icon['name']} $index';
-        icon['icon'] =
-            Uint8List.fromList(List.from((icon['icon'] ?? []) as List));
-        return AppInfo.create(icon);
+        final app = {...index.isEven ? assistant : airbnb};
+        app['name'] = '${app['name']} $index';
+        app['package_name'] = '${app['package_name']}$index';
+        app['icon'] =
+            Uint8List.fromList(List.from((app['icon'] ?? []) as List));
+        return AppInfo.create(app);
       },
     );
   }
@@ -30,35 +29,11 @@ class InstalledAppsMock extends InstalledApps {
   }
 }
 
-class AppsServiceMock implements AppsService {
-  @override
-  Future<Result<GetAppsListAppServiceError, List<ApplicationInfo>>>
-      getAppsList({
-    bool excludeSystemApps = true,
-    bool withIcon = true,
-    String packageNamePrefix = '',
-  }) async {
-    return Result.value(
-      List.generate(
-        20,
-        (index) {
-          // ignore: prefer_const_declarations
-          final ass = {...assistant};
-          ass['name'] = '${assistant['name']} $index';
-          return ApplicationInfo.fromMap(ass);
-        },
-      ),
-    );
-  }
-
-  @override
-  Future<Result<StartAppAppsServiceError, void>> startApp(String packageName) {
-    throw UnimplementedError();
-  }
-}
-
 const assistant = {
   'name': 'Assistant∙TODAY',
+  'package_name': 'com.huawei.intelligent',
+  'version_name': '22.0.6.303',
+  'version_code': 220006303,
   'icon': [
     137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, //
     82, 0, 0, 0, 170, 0, 0, 0, 170, 8, 6, 0, 0, 0, 61, //
@@ -628,12 +603,12 @@ const assistant = {
     68, 137, 182, 241, 255, 1, 72, 121, 134, 188, 225, 249, 60, 150, 0, //
     0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130 //
   ],
-  'package_name': 'com.huawei.intelligent',
-  'version_name': '22.0.6.303',
-  'version_code': 220006303
 };
 const airbnb = {
   'name': 'Airbnb',
+  'package_name': 'com.airbnb.android',
+  'version_name': '22.38.1',
+  'version_code': 26002822,
   'icon': [
     137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, //
     0, 0, 0, 170, 0, 0, 0, 170, 8, 6, 0, 0, 0, 61, 118, 212, //
@@ -1568,8 +1543,5 @@ const airbnb = {
     21, 85, 84, 81, 69, 21, 85, 116, 5, 252, 127, 189, 6, 14, 74, 109, //
     122, 57, 5, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, //
     130
-  ],
-  'package_name': 'com.airbnb.android',
-  'version_name': '22.38.1',
-  'version_code': 26002822
+  ]
 };

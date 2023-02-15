@@ -23,7 +23,7 @@ import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/scopes/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
 import 'package:pixel_app_flutter/data/services/apps_service.dart';
-import 'package:pixel_app_flutter/data/services/apps_service_mock.dart';
+import 'package:pixel_app_flutter/data/services/installed_apps_mock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum Environment {
