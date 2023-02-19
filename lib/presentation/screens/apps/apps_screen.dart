@@ -92,15 +92,17 @@ class _ResponsiveAppsScreenBodyState extends State<_ResponsiveAppsScreenBody> {
     super.initState();
 
     itemsNotifier = DefaultItemsNotifier(
-      onItemsUpdate: (updatedList) {
-        context.read<SearchAppCubit>().update(
-              filtered: ApplicationsEntity(updatedList),
-            );
-      },
+      onItemsUpdate: onItemsUpdate,
     );
 
     pinnedAppsSubscription =
         context.read<ManagePinnedAppsBloc>().stream.listen(onPinAppResult);
+  }
+
+  void onItemsUpdate(List<ApplicationInfo> updatedList) {
+    context.read<SearchAppCubit>().update(
+          filtered: ApplicationsEntity(updatedList),
+        );
   }
 
   void onPinAppResult(ManagePinnedAppsState state) {

@@ -26,11 +26,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.0.1"
-      resolved-ref: "769703e1fb765b65841ca8fccceed19ce8dd3b34"
+      ref: "0.2.0"
+      resolved-ref: efbf497943805b362247f1371ebf817f929a4b5f
       url: "https://github.com/radomir9720/animated_scroll_view.git"
     source: git
-    version: "0.1.0"
+    version: "0.2.0"
   args:
     dependency: transitive
     description:
