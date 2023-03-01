@@ -32,6 +32,11 @@ The MainECU is the connecting link between this application and car interfaces.
 
 ## <a name="what-is-implemented">What is currently implemented</a>
 ---
+
+* __USB Data Source__
+  
+  *The ability to connect to `MainECU(eps32)` using `CH34X` and `ATMega16u2` USB to TTL adapters. Connection was tested on `Android` and `MacOS`, but, theoretically, it should also work on `Linux` and `Windows`*
+
 * __Bluetooth Data Source(currently only on android)__
   
   *For now, bluetooth connection with an esp32 device works only on android, because we use esp32 devices with Bluetooth Classic(under v4.0). Apple does not allow to use Bluetooth Classic if the device is not registered with the [MFI Program](https://mfi.apple.com/). There is also esp32 devices with BLE(bluetooth version >=4.0), so if we will decide to replace Bluetooth Classic esp32 devices with Low Energy ones, we will have the oportunity to implement bluetooth connection also on iOS*
@@ -74,7 +79,7 @@ The MainECU is the connecting link between this application and car interfaces.
 
 * __Other connection options__
   
-  *Via USB, WIFI, and HTTP*
+  *Via WIFI, and HTTP*
 
 * __Bluetooth connection on iOS__
   
