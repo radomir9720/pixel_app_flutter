@@ -26,7 +26,7 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
     super.initState();
     dataSourceDeviceListCubit = DataSourceDeviceListCubit(
       dataSource: widget.dataSource,
-    );
+    )..init();
   }
 
   @override
@@ -49,74 +49,71 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
           builder: (context, state) {
             return state.maybeWhen(
               orElse: (_) {
-                return state.payload.isEmpty
-                    ? const UnconstrainedBox(
-                        child: SizedBox.square(
-                          dimension: 30,
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            title: Text(
-                              context.l10n.deviceNameDialogLabel,
-                            ),
-                            trailing: Text(context.l10n.bondedDialogLabel),
-                          ),
-                          const Divider(),
-                          Flexible(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: state.payload.map(
-                                  (e) {
-                                    return ListTile(
-                                      title: Text(
-                                        e.name ??
-                                            context.l10n.noDeviceNameDialogStub,
-                                      ),
-                                      subtitle: Text(e.address),
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        context.router.push(
-                                          ConnectToDataSourceLoadingDialogRoute(
-                                            onInit: () {
-                                              context
-                                                  .read<DataSourceConnectBloc>()
-                                                  .add(
-                                                    DataSourceConnectEvent
-                                                        .connect(
-                                                      DataSourceWithAddress(
-                                                        dataSource:
-                                                            widget.dataSource,
-                                                        address: e.address,
-                                                      ),
-                                                    ),
-                                                  );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      trailing: e.isBonded
-                                          ? Icon(
-                                              Icons.check,
-                                              size: 20,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            )
-                                          : null,
-                                    );
-                                  },
-                                ).toList(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
+                return const UnconstrainedBox(
+                  child: SizedBox.square(
+                    dimension: 30,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               },
               failure: (payload, error) {
                 return Text(context.l10n.errorDiscoveringDevicesMessage);
+              },
+              success: (payload) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      title: Text(
+                        context.l10n.deviceNameDialogLabel,
+                      ),
+                      trailing: Text(context.l10n.bondedDialogLabel),
+                    ),
+                    const Divider(),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: state.payload.map(
+                            (e) {
+                              return ListTile(
+                                title: Text(
+                                  e.name ?? context.l10n.noDeviceNameDialogStub,
+                                ),
+                                subtitle: Text(e.address),
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                  context.router.push(
+                                    ConnectToDataSourceLoadingDialogRoute(
+                                      onInit: () {
+                                        context
+                                            .read<DataSourceConnectBloc>()
+                                            .add(
+                                              DataSourceConnectEvent.connect(
+                                                DataSourceWithAddress(
+                                                  dataSource: widget.dataSource,
+                                                  address: e.address,
+                                                ),
+                                              ),
+                                            );
+                                      },
+                                    ),
+                                  );
+                                },
+                                trailing: e.isBonded
+                                    ? Icon(
+                                        Icons.check,
+                                        size: 20,
+                                        color: Theme.of(context).primaryColor,
+                                      )
+                                    : null,
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
               },
             );
           },

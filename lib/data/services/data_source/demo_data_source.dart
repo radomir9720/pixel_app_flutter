@@ -3,16 +3,18 @@ import 'dart:math' as math;
 import 'dart:math';
 
 import 'package:meta/meta.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/events_stream_controller_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-class DemoDataSource extends DataSource {
+class DemoDataSource extends DataSource
+    with DefaultDataSourceObserverMixin, EventsStreamControllerMixin {
   DemoDataSource({
     required this.generateRandomErrors,
     required this.updatePeriodMillis,
     required super.id,
-  })  : controller = StreamController.broadcast(),
-        subscriptionCallbacks = {},
+  })  : subscriptionCallbacks = {},
         valueCache = {};
 
   @protected
@@ -23,6 +25,11 @@ class DemoDataSource extends DataSource {
 
   @visibleForTesting
   final Map<int, int> valueCache;
+
+  static const kKey = 'demo';
+
+  @override
+  String get key => kKey;
 
   @protected
   Result<E, V> returnValueOrErrorFromList<E extends Enum, V>(
@@ -39,10 +46,7 @@ class DemoDataSource extends DataSource {
   }
 
   @visibleForTesting
-  StreamController<DataSourceDevice>? deviceStream;
-
-  @visibleForTesting
-  final StreamController<DataSourceIncomingEvent> controller;
+  StreamController<List<DataSourceDevice>>? deviceStream;
 
   @visibleForTesting
   final Set<void Function()> subscriptionCallbacks;
@@ -69,7 +73,6 @@ class DemoDataSource extends DataSource {
     await super.dispose();
     timer?.cancel();
     timer = null;
-    await controller.close();
   }
 
   @override
@@ -81,35 +84,34 @@ class DemoDataSource extends DataSource {
   Stream<DataSourceIncomingEvent> get eventStream => controller.stream;
 
   @override
-  Future<Result<GetDeviceListError, Stream<DataSourceDevice>>>
-      getDeviceStream() async {
+  Future<Result<GetDeviceListError, Stream<List<DataSourceDevice>>>>
+      getDevicesStream() async {
     await deviceStream?.close();
     deviceStream = null;
     deviceStream = StreamController.broadcast();
 
+    const device1 = DataSourceDevice(
+      address: 'testAdress1',
+      isBonded: true,
+      name: 'Device 1(bonded)',
+    );
+
+    const device2 = DataSourceDevice(
+      address: 'testAdress2',
+      name: 'Device 2(unbonded)',
+    );
+
     // Adding bonded device to stream
     unawaited(
-      Future<void>.delayed(const Duration(milliseconds: 1300)).then((value) {
-        deviceStream?.sink.add(
-          const DataSourceDevice(
-            address: 'testAdress1',
-            isBonded: true,
-            name: 'Device 1(bonded)',
-          ),
-        );
+      Future<void>.delayed(const Duration(milliseconds: 200)).then((value) {
+        deviceStream?.sink.add([device1]);
       }),
     );
 
     // Adding unbonded device to stream
     unawaited(
       Future<void>.delayed(const Duration(milliseconds: 2500)).then((value) {
-        deviceStream?.sink.add(
-          const DataSourceDevice(
-            address: 'testAdress2',
-            isBonded: false,
-            name: 'Device 2(unbonded)',
-          ),
-        );
+        deviceStream?.sink.add([device1, device2]);
       }),
     );
 
@@ -307,7 +309,4 @@ class DemoDataSource extends DataSource {
 
     controller.sink.add(event);
   }
-
-  @override
-  String get key => 'demo';
 }

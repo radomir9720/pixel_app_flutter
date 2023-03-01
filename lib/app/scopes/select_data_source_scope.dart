@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
-import 'package:pixel_app_flutter/data/services/bluetooth_data_source.dart';
-import 'package:pixel_app_flutter/data/services/demo_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/demo_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_android.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:provider/provider.dart';
 
@@ -59,17 +63,30 @@ class _AutoRouteState extends AutoRouterState {
 
   @override
   void initState() {
+    super.initState();
+
     dataSourceCubit = context.read<DataSourceCubit>();
     final devToolsParamsStorage =
         context.read<DeveloperToolsParametersStorage>();
     final env = context.read<Environment>();
     dataSources = [
-      if (env.isDev)
+      if (Platform.isAndroid) ...[
+        USBAndroidDataSource(
+          id: id,
+          listDevices: GetIt.I(),
+        ),
         BluetoothDataSource(
           bluetoothSerial: GetIt.I(),
           connectToAddress: GetIt.I(),
           id: id,
         ),
+      ] else if (!Platform.isIOS)
+        USBDataSource(
+          id: id,
+          getAvailablePorts: GetIt.I(),
+        ),
+
+      //
       DemoDataSource(
         generateRandomErrors: () {
           return env.isDev &&
@@ -82,7 +99,6 @@ class _AutoRouteState extends AutoRouterState {
         id: id,
       ),
     ];
-    super.initState();
   }
 
   @override

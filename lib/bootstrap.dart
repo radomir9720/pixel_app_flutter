@@ -14,6 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:installed_apps/installed_apps.dart';
@@ -23,8 +24,12 @@ import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/scopes/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
 import 'package:pixel_app_flutter/data/services/apps_service.dart';
+import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_android.dart';
 import 'package:pixel_app_flutter/data/services/installed_apps_mock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:usb_serial/usb_serial.dart';
 
 enum Environment {
   prod(prodKey),
@@ -118,9 +123,13 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
       if (Platform.isAndroid) return InstalledApps.startApp;
       return InstalledAppsMock.startApp;
     })
-    ..factory<Future<BluetoothConnection> Function(String address)>(
+    ..factory<GetBluetoothConnectionCallback>(
       () => BluetoothConnection.toAddress,
-    );
+    )
+    // Android
+    ..factory<ListUsbDevicesCallback>(() => UsbSerial.listDevices)
+    // MacOS, Linux, Windows
+    ..factory<ListUsbPortsCallback>(() => () => SerialPort.availablePorts);
 
   await gh.factoryAsync<SharedPreferences>(
     SharedPreferences.getInstance,

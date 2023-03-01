@@ -78,6 +78,7 @@
     "errorEnablingDataSourceMessage": "Error while enabling data source",
     "demoDataSourceTitle": "Demo",
     "bluetoothDataSourceTitle": "Bluetooth",
+    "usbDataSourceTitle": "USB",
 
     "requestsExchangeLogsListTileLabel": "Requests exchange logs with data source",
     "requestsExchangeLogsScreenTitle": "Requests exchange logs",
