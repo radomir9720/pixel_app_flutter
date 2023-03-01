@@ -1,5 +1,6 @@
 // blocs
 export 'blocs/data_source_connect_bloc.dart';
+export 'blocs/data_source_connection_status_cubit.dart';
 export 'blocs/data_source_cubit.dart';
 export 'blocs/data_source_device_list_cubit.dart';
 export 'blocs/data_source_live_cubit.dart' hide Observer;

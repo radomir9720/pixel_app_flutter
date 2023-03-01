@@ -76,6 +76,8 @@
     "unknownErrorSelectingDataSourceMessage": "Unknown error while selecting data source",
     "unavailableDataSourceErrorMessage": "Data source is unavailable",
     "errorEnablingDataSourceMessage": "Error while enabling data source",
+    "dataSourceConnectionLostMessage": "Connection with the data source is lost",
+    "failedToConnectToDataSourceMessage": "Failed to connect to the data source",
     "demoDataSourceTitle": "Demo",
     "bluetoothDataSourceTitle": "Bluetooth",
     "usbDataSourceTitle": "USB",
