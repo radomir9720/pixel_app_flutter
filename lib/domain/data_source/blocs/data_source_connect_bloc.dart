@@ -93,14 +93,13 @@ class DataSourceConnectBloc
     _Connect event,
     Emitter<DataSourceConnectState> emit,
   ) async {
-    final address = event.dataSourceWithAddress.address;
     emit(state.inLoading());
 
     await Future<void>.delayed(Duration.zero);
 
     try {
-      final dataSource = event.dataSourceWithAddress.dataSource;
-      final result = await dataSource.connect(address);
+      final dswa = event.dataSourceWithAddress;
+      final result = await dswa.dataSource.connect(dswa.address);
 
       emit(
         await result.when(

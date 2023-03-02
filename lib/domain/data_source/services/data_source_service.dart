@@ -5,21 +5,15 @@ import 'package:re_seedwork/re_seedwork.dart';
 typedef Observer = void Function(List<int> package);
 
 abstract class DataSource {
-  DataSource({required this.id}) : observers = {};
+  DataSource({required this.id});
 
   final int id;
 
-  final Set<Observer> observers;
+  void addObserver(Observer observer);
 
-  void addObserver(Observer observer) => observers.add(observer);
+  void removeObserver(Observer observer);
 
-  void removeObserver(Observer observer) => observers.remove(observer);
-
-  void observe(List<int> package) {
-    for (final observer in observers) {
-      observer(package);
-    }
-  }
+  void observe(List<int> package);
 
   String get key;
 
@@ -37,15 +31,13 @@ abstract class DataSource {
 
   Future<Result<DisconnectError, void>> disconnect();
 
-  Future<Result<GetDeviceListError, Stream<DataSourceDevice>>>
-      getDeviceStream();
+  Future<Result<GetDeviceListError, Stream<List<DataSourceDevice>>>>
+      getDevicesStream();
 
   Future<Result<CancelDeviceDiscoveringError, void>> cancelDeviceDiscovering();
 
   @mustCallSuper
-  Future<void> dispose() async {
-    observers.clear();
-  }
+  Future<void> dispose() async {}
 }
 
 enum SendEventError { unknown, noConnection }

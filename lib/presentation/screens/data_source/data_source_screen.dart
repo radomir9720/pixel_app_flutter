@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixel_app_flutter/data/services/bluetooth_data_source.dart';
-import 'package:pixel_app_flutter/data/services/demo_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/demo_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_android.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
@@ -13,6 +15,30 @@ import 'package:pixel_app_flutter/presentation/widgets/common/molecules/settings
 
 class DataSourceScreen extends StatelessWidget {
   const DataSourceScreen({super.key});
+
+  static const _dataSourceIconDataMap = {
+    USBDataSource.kKey: PixelIcons.usb,
+    DemoDataSource.kKey: Icons.bug_report,
+    BluetoothDataSource.kKey: PixelIcons.bluetooth,
+    USBAndroidDataSource.kKey: PixelIcons.usb,
+  };
+
+  IconData _getDataSourceIconDataByKey(String key) {
+    return _dataSourceIconDataMap[key] ?? Icons.source_outlined;
+  }
+
+  String? _getDataSourceTitleByKey(String key, BuildContext context) {
+    switch (key) {
+      case USBDataSource.kKey:
+      case USBAndroidDataSource.kKey:
+        return context.l10n.usbDataSourceTitle;
+      case DemoDataSource.kKey:
+        return context.l10n.demoDataSourceTitle;
+      case BluetoothDataSource.kKey:
+        return context.l10n.bluetoothDataSourceTitle;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +94,9 @@ class DataSourceScreen extends StatelessWidget {
                       .add(SelectDataSourceEvent.select(e));
                 }
 
-                var icon = Icons.source_outlined;
-                var title = e.runtimeType.toString();
-
-                if (e is DemoDataSource) {
-                  icon = Icons.bug_report;
-                  title = context.l10n.demoDataSourceTitle;
-                } else if (e is BluetoothDataSource) {
-                  icon = PixelIcons.bluetooth;
-                  title = context.l10n.bluetoothDataSourceTitle;
-                }
+                final icon = _getDataSourceIconDataByKey(e.key);
+                final title = _getDataSourceTitleByKey(e.key, context) ??
+                    e.runtimeType.toString();
 
                 return SettingsButton(
                   icon: icon,

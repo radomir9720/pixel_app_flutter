@@ -76,8 +76,11 @@
     "unknownErrorSelectingDataSourceMessage": "Неизвестная ошибка при выборе источника данных",
     "unavailableDataSourceErrorMessage": "Источник данных недоступен",
     "errorEnablingDataSourceMessage": "Ошибка при включении источника данных",
+    "dataSourceConnectionLostMessage": "Соединение с источником данных потеряно",
+    "failedToConnectToDataSourceMessage": "Не удалось установить соединение с источником данных",
     "demoDataSourceTitle": "Demo",
     "bluetoothDataSourceTitle": "Bluetooth",
+    "usbDataSourceTitle": "USB",
 
     "requestsExchangeLogsListTileLabel": "Логи обмена запросов с источником данных",
     "requestsExchangeLogsScreenTitle": "Логи обмена запросов",

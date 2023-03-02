@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
 import 'package:provider/provider.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class SelectedDataSourceScope extends AutoRouter {
   const SelectedDataSourceScope({super.key});
@@ -26,20 +29,22 @@ class SelectedDataSourceScope extends AutoRouter {
         },
         listener: (context, state) {},
         builder: (context, state) {
-          final device = state.ds.when(
+          final dswa = state.ds.when(
             presented: (d) => d,
-            undefined: () {
-              throw Exception('At this step data source must be selected');
-            },
+            undefined: () => null,
           );
+
+          if (dswa == null) {
+            return GradientScaffold(body: const SizedBox.shrink());
+          }
 
           return MultiProvider(
             providers: [
               // blocs
               BlocProvider(
-                key: ValueKey('${device.dataSource.key}_${device.address}'),
+                key: ValueKey('${dswa.dataSource.key}_${dswa.address}'),
                 create: (context) => DataSourceLiveCubit(
-                  dataSource: device.dataSource,
+                  dataSource: dswa.dataSource,
                   developerToolsParametersStorage: context.read(),
                 )
                   ..initHandshake()
@@ -67,9 +72,34 @@ class SelectedDataSourceScope extends AutoRouter {
                   },
                   lazy: false,
                 ),
-              ]
+              ],
+              BlocProvider(
+                create: (context) => DataSourceConnectionStatusCubit(
+                  dataSource: dswa.dataSource,
+                  dataSourceStorage: context.read(),
+                ),
+                lazy: false,
+              ),
             ],
-            child: content,
+            child: BlocListener<DataSourceConnectionStatusCubit,
+                DataSourceConnectionStatus>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  orElse: () {},
+                  lost: () {
+                    context.showSnackBar(
+                      context.l10n.dataSourceConnectionLostMessage,
+                    );
+                  },
+                  notEstablished: () {
+                    context.showSnackBar(
+                      context.l10n.failedToConnectToDataSourceMessage,
+                    );
+                  },
+                );
+              },
+              child: content,
+            ),
           );
         },
       );

@@ -5,7 +5,7 @@ class DataSourceDevice {
   const DataSourceDevice({
     this.name,
     required this.address,
-    required this.isBonded,
+    this.isBonded = false,
   });
 
   final String? name;

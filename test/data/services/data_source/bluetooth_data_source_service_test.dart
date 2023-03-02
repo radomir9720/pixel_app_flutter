@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pixel_app_flutter/data/services/bluetooth_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/parse_bytes_package_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
@@ -224,7 +225,7 @@ void main() {
         ds.buffer.addAll([1, 2, 3]);
 
         // act
-        ds.tryParse();
+        ds.tryParse(ds.controller.add);
 
         // assert
         expect(ds.buffer, equals([1, 2, 3]));
@@ -237,7 +238,7 @@ void main() {
 
           // act
           runActionWithZeroDelay(() {
-            ds.tryParse();
+            ds.tryParse(ds.controller.add);
             ds.controller.close();
           });
 
@@ -259,7 +260,7 @@ void main() {
 
           // act
           runActionWithZeroDelay(() {
-            ds.tryParse();
+            ds.tryParse(ds.controller.add);
             ds.controller.close();
           });
 
@@ -283,7 +284,7 @@ void main() {
           ]);
 
           // act
-          runActionWithZeroDelay(ds.tryParse);
+          runActionWithZeroDelay(() => ds.tryParse(ds.controller.add));
 
           // assert
           await expectLater(
@@ -307,7 +308,7 @@ void main() {
 
           // act
           runActionWithZeroDelay(() {
-            ds.tryParse();
+            ds.tryParse(ds.controller.add);
             ds.controller.close();
           });
 
@@ -333,7 +334,7 @@ void main() {
 
           // act
           runActionWithZeroDelay(() {
-            ds.tryParse();
+            ds.tryParse(ds.controller.add);
             ds.controller.close();
           });
 
@@ -356,7 +357,7 @@ void main() {
 
           // act
           runActionWithZeroDelay(() {
-            ds.tryParse();
+            ds.tryParse(ds.controller.add);
             ds.controller.close();
           });
 
@@ -427,63 +428,6 @@ void main() {
     });
 
     test(
-      'getDeviceStream calls FlutterBluetoothSerial.startDiscovery() '
-      'and maps all devices to DataSourceDevice',
-      () async {
-        // arrange
-        final devices = List.generate(
-          5,
-          (index) => BluetoothDiscoveryResult(
-            device: BluetoothDevice(
-              address: '$index',
-              name: '$index',
-            ),
-          ),
-        );
-
-        when(serial.startDiscovery).thenAnswer(
-          (invocation) => Stream.fromIterable(devices),
-        );
-
-        // act
-        final res = await ds.getDeviceStream();
-
-        // assert
-        expect(
-          res,
-          isA<Result<GetDeviceListError, Stream<DataSourceDevice>>>().having(
-            (p0) => p0.when(error: (e) => null, value: (stream) => stream),
-            'returns stream',
-            isA<Stream<DataSourceDevice>>(),
-          ),
-        );
-
-        await res.when(
-          error: (e) {},
-          value: (value) async {
-            final list = await value.toList();
-            expect(
-              list,
-              equals(
-                devices
-                    .map(
-                      (e) => DataSourceDevice(
-                        address: e.device.address,
-                        name: e.device.name,
-                        isBonded: false,
-                      ),
-                    )
-                    .toList(),
-              ),
-            );
-          },
-        );
-
-        verify(serial.startDiscovery).called(1);
-      },
-    );
-
-    test(
       'cancedDeviceDiscovering calls FlutterBluetoothSerial.cancelDiscovery()',
       () async {
         // arrange
@@ -501,6 +445,61 @@ void main() {
 
         verify(serial.cancelDiscovery).called(1);
       },
+    );
+
+    test(
+      'getDeviceStream calls FlutterBluetoothSerial.startDiscovery() '
+      'and maps all devices to DataSourceDevice',
+      () async {
+        // arrange
+        const deviceCnt = 5;
+        final devices = List.generate(
+          deviceCnt,
+          (index) => BluetoothDiscoveryResult(
+            device: BluetoothDevice(
+              address: '$index',
+              name: '$index',
+            ),
+          ),
+        );
+
+        final controller = StreamController<BluetoothDiscoveryResult>();
+
+        when(serial.startDiscovery).thenAnswer(
+          (invocation) => controller.stream,
+        );
+
+        // act
+        final res = await ds.getDevicesStream();
+
+        // assert
+        unawaited(
+          expectLater(
+            res.when(error: (_) => null, value: (s) => s),
+            emitsInOrder(
+              List.generate(
+                deviceCnt,
+                (index) => devices
+                    .sublist(0, index + 1)
+                    .map(
+                      (e) => DataSourceDevice(
+                        address: e.device.address,
+                        name: e.device.name,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ),
+        );
+
+        await controller.addStream(Stream.fromIterable(devices));
+        await controller.close();
+        await ds.cachedDataSourceDevicesStreamController.close();
+
+        verify(serial.startDiscovery).called(1);
+      },
+      timeout: const Timeout(Duration(seconds: 1)),
     );
 
     group('isAvailable', () {
@@ -832,13 +831,13 @@ void main() {
 
         test('becomes true when were received new bytes', () {
           ds.buffer.addAll([1, 2, 3]);
-          ds.tryParse();
+          ds.tryParse(ds.controller.add);
           expect(ds.noBytesInBuffer, isFalse);
         });
 
         test('becomes false when no bytes remained in buffer', () {
           ds.buffer.addAll([60, 0, 145, 0, 125, 1, 11, 229, 141, 62]);
-          ds.tryParse();
+          ds.tryParse(ds.controller.add);
           expect(ds.noBytesInBuffer, isTrue);
         });
       });
@@ -857,7 +856,7 @@ void main() {
             'sets new completer when were received new bytes '
             'and does not complete until there are bytes in buffer', () async {
           ds.buffer.addAll([1, 2, 3]);
-          ds.tryParse();
+          ds.tryParse(ds.controller.add);
 
           await expectLater(
             ds.noBytesInBufferFuture
@@ -868,7 +867,7 @@ void main() {
 
         test('completer when no bytes remained in buffer', () async {
           ds.buffer.addAll([60, 0, 145, 0, 125, 1, 11, 229, 141, 62]);
-          ds.tryParse();
+          ds.tryParse(ds.controller.add);
           final stopwatch = Stopwatch()..start();
           await ds.noBytesInBufferFuture;
           stopwatch.stop();
