@@ -266,21 +266,23 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
   }
 
   void initParametersSubscription() {
-    subscribeToParameterIdList = state.parameters.subscriptionParameterIds
-        .map(DataSourceParameterId.fromInt)
-        .toList();
+    Future.microtask(() {
+      subscribeToParameterIdList = state.parameters.subscriptionParameterIds
+          .map(DataSourceParameterId.fromInt)
+          .toList();
 
-    state.parameters.protocolVersion.when(
-      subscription: () {
-        subscribeTo(subscribeToParameterIdList);
-      },
-      periodicRequests: () {
-        _setNewTimer(
-          state.parameters.requestsPeriodInMillis,
-          subscribeToParameterIdList,
-        );
-      },
-    );
+      state.parameters.protocolVersion.when(
+        subscription: () {
+          subscribeTo(subscribeToParameterIdList);
+        },
+        periodicRequests: () {
+          _setNewTimer(
+            state.parameters.requestsPeriodInMillis,
+            subscribeToParameterIdList,
+          );
+        },
+      );
+    });
   }
 
   void subscribeTo(List<DataSourceParameterId> ids) {

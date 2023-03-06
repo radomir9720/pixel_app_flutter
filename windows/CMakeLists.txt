@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(pixel_app_flutter LANGUAGES CXX)
 
-set(BINARY_NAME "pixel_app_flutter")
+set(BINARY_NAME "Pixel")
 
 cmake_policy(SET CMP0063 NEW)
 

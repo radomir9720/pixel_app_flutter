@@ -59,7 +59,7 @@ class DeveloperToolsParameters {
         protocolVersion = DataSourceProtocolVersion.subscription,
         requestsPeriodInMillis = 800,
         enableHandshakeResponse = true,
-        handshakeResponseTimeoutInMillis = 1000,
+        handshakeResponseTimeoutInMillis = 0,
         subscriptionParameterIds = const [
           125, //speed
           174, // voltage
