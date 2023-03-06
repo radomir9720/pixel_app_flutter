@@ -72,11 +72,16 @@ Future<void> bootstrap(
   // SizeProvider.initialize(sizeConverter:
   // const SizeConverter(fo: fo, si: si));
 
-  await Firebase.initializeApp();
+  final initFirebase = Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
 
-  await CrashlyticsHelper.initialize();
+  if (initFirebase) {
+    await Firebase.initializeApp();
 
-  await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(kReleaseMode);
+    await CrashlyticsHelper.initialize();
+
+    await FirebaseAnalytics.instance
+        .setAnalyticsCollectionEnabled(kReleaseMode);
+  }
 
   FlutterError.onError = CrashlyticsHelper.recordFlutterError;
 
@@ -89,12 +94,13 @@ Future<void> bootstrap(
       MainScope(
         child: await builder(
           () => [
-            FirebaseAnalyticsObserver(
-              analytics: FirebaseAnalytics.instance,
-              routeFilter: (route) {
-                return route is PageRoute || route is DialogRoute;
-              },
-            ),
+            if (initFirebase)
+              FirebaseAnalyticsObserver(
+                analytics: FirebaseAnalytics.instance,
+                routeFilter: (route) {
+                  return route is PageRoute || route is DialogRoute;
+                },
+              ),
           ],
         ),
       ),
