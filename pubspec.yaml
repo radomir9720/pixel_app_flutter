@@ -35,7 +35,7 @@ dependencies:
   animated_scroll_view:
     git:
       url: https://github.com/radomir9720/animated_scroll_view.git
-      ref: "0.2.0"
+      ref: "0.4.0"
 
   # codegen
   freezed_annotation: ^2.1.0
