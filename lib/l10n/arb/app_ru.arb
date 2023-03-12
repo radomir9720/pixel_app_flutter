@@ -81,6 +81,7 @@
     "demoDataSourceTitle": "Demo",
     "bluetoothDataSourceTitle": "Bluetooth",
     "usbDataSourceTitle": "USB",
+    "usbOrBluetoothDataSourceTitle": "USB/Bluetooth",
 
     "requestsExchangeLogsListTileLabel": "Логи обмена запросов с источником данных",
     "requestsExchangeLogsScreenTitle": "Логи обмена запросов",

@@ -1,20 +1,21 @@
-# Pixel App Flutter
+<h1>Pixel App Flutter</h1>
 
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
 
 
-## Navigation
+<h2>Navigation</h2>
 
 - [About](#about)
 - [What is currently implemented](#what-is-currently-implemented)
 - [What should be implemented](#what-should-be-implemented)
 - [How can i contribute?](#how-can-i-contribute)
 - [How to lauch the project](#how-to-lauch-the-project)
-- [Running Tests](#running-tests)
+- [Running Tests 🧪](#running-tests-)
 
-## <a name="about">About</a>
+
+## About
 ---
 This project is an application written using Dart and Flutter for an ambitious open source project called [StarPixel](https://wiki.starpixel.org/books/informaciya-dlya-novickov/page/obshhee-polozenie).
 
@@ -22,7 +23,6 @@ StarPixel is conceived as an electric car that absolutely anyone can build, usin
 
 The main purpose of this application is to manage the functions of the car. it is also considered to be used as an on-board computer.
 
-For now, while the IT team of this project is in search of the connection protocol realization in the best way, the app connects to the hardware through bluetooth. In the future we plan to implement connection through USB, WIFI and HTTP, so that user can choose the interface connection, which suits him best.
 
 As the main hardware was choosen esp32. The software for esp32(called MainECU) [lives here](https://github.com/starfactorypixel/MainECU).
 The MainECU is the connecting link between this application and car interfaces.
@@ -30,20 +30,35 @@ The MainECU is the connecting link between this application and car interfaces.
 [Click here to open the design project in figma](https://www.figma.com/file/8A4BWY3FPJMMPZXdEnLtGt/StarPixel?node-id=286%3A493).
 
 
-## <a name="what-is-implemented">What is currently implemented</a>
+## What is currently implemented
 ---
-
-* __USB Data Source__
+* __USB, Bluetooth, and Demo data sources__
   
-  *The ability to connect to `MainECU(eps32)` using `CH34X` and `ATMega16u2` USB to TTL adapters. Connection was tested on `Android` and `MacOS`, but, theoretically, it should also work on `Linux` and `Windows`*
-
-* __Bluetooth Data Source(currently only on android)__
+  Below is the table with data source support for each platform at the present moment.
   
-  *For now, bluetooth connection with an esp32 device works only on android, because we use esp32 devices with Bluetooth Classic(under v4.0). Apple does not allow to use Bluetooth Classic if the device is not registered with the [MFI Program](https://mfi.apple.com/). There is also esp32 devices with BLE(bluetooth version >=4.0), so if we will decide to replace Bluetooth Classic esp32 devices with Low Energy ones, we will have the oportunity to implement bluetooth connection also on iOS*
+  |             |Android|iOS|Windows|MacOS|Linux|
+  |-------------|:-----:|:-:|:-----:|:---:|:---:|
+  |**Bluetooth**|✔️     |✖️|✖️     |✔️  |❔   |
+  |**USB**      |✔️     |✖️|✔️     |✔️  |❔   |
+  |**WIFI**     |✖️     |✖️|✖️     |✖️  |✖️  |
+  |**HTTP**     |✖️     |✖️|✖️     |✖️  |✖️  |
+  |**Demo**     |✔️     |✔️|✔️     |✔️  |✔️  |
 
-* __Demo Data Source__
+  * __USB Data Source__
+    
+    *The ability to connect to `MainECU(eps32)` using `CH34X` and `ATMega16u2` USB to TTL adapters. Connection was tested on `Android`, `MacOS` and `Windows`, but, theoretically, it should also work on `Linux`. 
+    On `iOS` this connection type is not available because of [MFI Program](https://mfi.apple.com/).*
 
-  *The purpose is to connect to a mocked service like to a real one. It generates random values(like speed and voltage). This way you can work on UI, for example, without the need to connect to a real device(maybe you din't have it at all).*
+  * __Bluetooth Data Source__
+    
+    *For now, bluetooth connection with an esp32 device works only on   `Android` and `MacOS`. On `iOS` connection via `Bluetooth` is not availalbe because we use esp32 devices with Bluetooth Classic(under v4.0). Apple does not allow to use Bluetooth Classic if the device is not registered with the [MFI Program](https://mfi.apple.com/). There is also esp32 devices with BLE(bluetooth version >=4.0), so if we will decide to replace Bluetooth Classic esp32 devices with Low Energy ones, we will have the oportunity to implement bluetooth connection also on iOS*
+
+
+  * __Demo Data Source__
+
+    *The purpose is to connect to a mocked service like to a real one. It generates random values(like speed and voltage). This way you can work on UI, for example, without the need to connect to a real device(maybe you din't have it at all).*
+  
+  </br>
 
 * __Responsive UI__
   
@@ -73,7 +88,7 @@ The MainECU is the connecting link between this application and car interfaces.
   *On android there is an option to choose the application as the default laucher. That way you can have an android device specially to use it as on-board computer*
 
 
-## <a name="what-should-be-implemented">What should be implemented</a>
+## What should be implemented
 ---
 
 
@@ -85,11 +100,11 @@ The MainECU is the connecting link between this application and car interfaces.
   
   *The reason why it's not implemented for now is in the [What is currently implemented](#what-is-currently-implemented) section*
 
-## <a name="how-can-i-contribute">How can i contribute?</a>
+## How can i contribute?
 ---
 If you want to work constantly on this project please [read the general regulations](https://wiki.starpixel.org/books/informaciya-dlya-novickov/page/obshhee-polozenie). Also there you will find instructions on how to join the team. Here is [the StarPixel discord server](https://discord.gg/ZfhKuAX4).
 
-## <a name="how-to-launch-the-project">How to lauch the project</a>
+## How to lauch the project
 ---
 This project currently runs on __Android__, __iOS__, and __MacOS__. For other platforms it may require some setup. Therefore, below will be instructions on how to lauch this project on these platforms.
 
@@ -141,7 +156,7 @@ Again, if you want to lauch the app on __MacOS__, the commands above won't work,
 
 ---
 
-## <a name="running-tests">Running Tests 🧪</a>
+## Running Tests 🧪
 
 To run all unit and widget tests use the following command:
 

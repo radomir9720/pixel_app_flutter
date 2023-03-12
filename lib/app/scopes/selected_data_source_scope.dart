@@ -42,13 +42,25 @@ class SelectedDataSourceScope extends AutoRouter {
             providers: [
               // blocs
               BlocProvider(
-                key: ValueKey('${dswa.dataSource.key}_${dswa.address}'),
+                key: ValueKey('cs_${dswa.dataSource.key}_${dswa.address}'),
+                create: (context) => DataSourceConnectionStatusCubit(
+                  dataSource: dswa.dataSource,
+                  dataSourceStorage: context.read(),
+                ),
+                lazy: false,
+              ),
+              BlocProvider(
+                key: ValueKey('dsl_${dswa.dataSource.key}_${dswa.address}'),
                 create: (context) => DataSourceLiveCubit(
                   dataSource: dswa.dataSource,
                   developerToolsParametersStorage: context.read(),
-                )
-                  ..initHandshake()
-                  ..initParametersSubscription(),
+                  onHandshakeTimeout: context
+                      .read<DataSourceConnectionStatusCubit>()
+                      .registerHandshakeTimeoutError,
+                  onSuccessfulHandshake: (cubit) {
+                    cubit.initParametersSubscription();
+                  },
+                )..initHandshake(),
               ),
               if (context.watch<Environment>().isDev) ...[
                 BlocProvider(
@@ -73,30 +85,19 @@ class SelectedDataSourceScope extends AutoRouter {
                   lazy: false,
                 ),
               ],
-              BlocProvider(
-                create: (context) => DataSourceConnectionStatusCubit(
-                  dataSource: dswa.dataSource,
-                  dataSourceStorage: context.read(),
-                ),
-                lazy: false,
-              ),
             ],
             child: BlocListener<DataSourceConnectionStatusCubit,
                 DataSourceConnectionStatus>(
               listener: (context, state) {
-                state.maybeWhen(
-                  orElse: () {},
-                  lost: () {
-                    context.showSnackBar(
-                      context.l10n.dataSourceConnectionLostMessage,
-                    );
-                  },
-                  notEstablished: () {
-                    context.showSnackBar(
+                final error = state.maybeWhen(
+                  orElse: () => null,
+                  lost: () => context.l10n.dataSourceConnectionLostMessage,
+                  notEstablished: () =>
                       context.l10n.failedToConnectToDataSourceMessage,
-                    );
-                  },
+                  handshakeTimeout: () =>
+                      context.l10n.failedToConnectToDataSourceMessage,
                 );
+                if (error != null) context.showSnackBar(error);
               },
               child: content,
             ),

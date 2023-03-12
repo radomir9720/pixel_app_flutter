@@ -7,7 +7,8 @@ enum DataSourceConnectionStatus {
   lost,
   connected,
   disconnected,
-  notEstablished;
+  notEstablished,
+  handshakeTimeout;
 
   static DataSourceConnectionStatus fromDataSource(
     Optional<DataSourceWithAddress> dswa,
@@ -23,6 +24,7 @@ enum DataSourceConnectionStatus {
     T Function()? connected,
     T Function()? disconnected,
     T Function()? notEstablished,
+    T Function()? handshakeTimeout,
   }) {
     switch (this) {
       case DataSourceConnectionStatus.lost:
@@ -33,6 +35,8 @@ enum DataSourceConnectionStatus {
         return disconnected?.call() ?? orElse();
       case DataSourceConnectionStatus.notEstablished:
         return notEstablished?.call() ?? orElse();
+      case DataSourceConnectionStatus.handshakeTimeout:
+        return handshakeTimeout?.call() ?? orElse();
     }
   }
 }
@@ -47,20 +51,29 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
         super(
           DataSourceConnectionStatus.fromDataSource(dataSourceStorage.data),
         ) {
-    _registerLostConnection(status: DataSourceConnectionStatus.notEstablished);
+    _registerDisconnectStatusWithDebounce(
+      status: DataSourceConnectionStatus.notEstablished,
+    );
     subscribe(
       dataSource.eventStream,
-      (event) => _registerLostConnection(),
+      (event) => _registerDisconnectStatusWithDebounce(),
     );
   }
 
-  void _registerLostConnection({
+  void _registerDisconnectStatusWithDebounce({
     DataSourceConnectionStatus status = DataSourceConnectionStatus.lost,
-  }) {
-    debouncer.run(() {
-      emit(status);
-      dataSourceStorage.put(const Optional.undefined());
-    });
+  }) =>
+      debouncer.run(() => _registerDisconnectStatus(status));
+
+  void _registerDisconnectStatus(DataSourceConnectionStatus status) {
+    if (isClosed) return;
+    emit(status);
+    dataSourceStorage.put(const Optional.undefined());
+    Future<void>.error(status);
+  }
+
+  void registerHandshakeTimeoutError() {
+    _registerDisconnectStatus(DataSourceConnectionStatus.handshakeTimeout);
   }
 
   @protected
@@ -71,4 +84,10 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
 
   @protected
   final Debouncer debouncer;
+
+  @override
+  Future<void> close() {
+    debouncer.dispose();
+    return super.close();
+  }
 }

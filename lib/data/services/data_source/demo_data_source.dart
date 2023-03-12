@@ -15,7 +15,8 @@ class DemoDataSource extends DataSource
     required this.updatePeriodMillis,
     required super.id,
   })  : subscriptionCallbacks = {},
-        valueCache = {};
+        valueCache = {},
+        isInitialHandshake = true;
 
   @protected
   final int Function() updatePeriodMillis;
@@ -30,6 +31,10 @@ class DemoDataSource extends DataSource
 
   @override
   String get key => kKey;
+
+  @protected
+  @visibleForTesting
+  bool isInitialHandshake;
 
   @protected
   Result<E, V> returnValueOrErrorFromList<E extends Enum, V>(
@@ -168,8 +173,10 @@ class DemoDataSource extends DataSource
           (value) {
             final package = DataSourcePackage.builder(
               secondConfigByte: int.parse('10010000', radix: 2),
-              parameterId: 0xFFFF,
+              parameterId: isInitialHandshake ? 0 : 0xFFFF,
             );
+
+            isInitialHandshake = false;
 
             observe(package);
 

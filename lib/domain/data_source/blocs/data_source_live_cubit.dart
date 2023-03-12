@@ -111,8 +111,12 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
   DataSourceLiveCubit({
     required this.dataSource,
     required this.developerToolsParametersStorage,
+    required this.onHandshakeTimeout,
+    this.onSuccessfulHandshake,
+    this.hadshakeTimeout = const Duration(seconds: 5),
   })  : observers = {},
         initDateTime = DateTime.now(),
+        handshakeResponseReceived = false,
         super(
           DataSourceLiveState(
             speed: 0,
@@ -148,7 +152,11 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
         handshake: () {
           final id = event.package.parameterId;
           // Do not respond to handshake response from MainECU
-          if (id == 0) return;
+          if (id == 0) {
+            if (!handshakeResponseReceived) onSuccessfulHandshake?.call(this);
+            handshakeResponseReceived = true;
+            return;
+          }
           final enableResponse =
               developerToolsParametersStorage.data.enableHandshakeResponse;
           if (!enableResponse) return;
@@ -163,14 +171,39 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
         orElse: () {},
       );
     });
+
+    Future<void>.delayed(hadshakeTimeout).then(
+      (value) {
+        if (isClosed) return;
+        if (!handshakeResponseReceived) onHandshakeTimeout();
+      },
+    );
   }
 
-  Timer? timer;
+  @protected
+  @visibleForTesting
+  Timer? periodicRequestsTimer;
 
+  @protected
+  @visibleForTesting
+  bool handshakeResponseReceived;
+
+  @protected
+  final void Function(DataSourceLiveCubit cubit)? onSuccessfulHandshake;
+
+  @protected
+  final void Function() onHandshakeTimeout;
+
+  @protected
+  @visibleForTesting
   final DateTime initDateTime;
 
+  @protected
+  @visibleForTesting
   late final List<DataSourceParameterId> subscribeToParameterIdList;
 
+  @protected
+  @visibleForTesting
   final Set<Observer> observers;
 
   @protected
@@ -178,6 +211,15 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
 
   @protected
   final DeveloperToolsParametersStorage developerToolsParametersStorage;
+
+  /// How long to wait for handshake response.
+  /// If handshake response is not received until [hadshakeTimeout] end,
+  /// the connection should be closed, because there is something
+  /// wrong with the connection or with `MainECU` itself.
+  ///
+  /// Defaults to 5 seconds
+  @protected
+  final Duration hadshakeTimeout;
 
   int get handhsakeId {
     final diff = DateTime.now().difference(initDateTime).inMilliseconds;
@@ -227,13 +269,13 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
   }
 
   void _cancelTimer() {
-    timer?.cancel();
-    timer = null;
+    periodicRequestsTimer?.cancel();
+    periodicRequestsTimer = null;
   }
 
   void _setNewTimer(int requestPeriod, List<DataSourceParameterId> ids) {
     _cancelTimer();
-    timer = Timer.periodic(
+    periodicRequestsTimer = Timer.periodic(
       Duration(milliseconds: requestPeriod),
       (timer) {
         for (final id in ids) {
@@ -266,23 +308,21 @@ class DataSourceLiveCubit extends Cubit<DataSourceLiveState>
   }
 
   void initParametersSubscription() {
-    Future.microtask(() {
-      subscribeToParameterIdList = state.parameters.subscriptionParameterIds
-          .map(DataSourceParameterId.fromInt)
-          .toList();
+    subscribeToParameterIdList = state.parameters.subscriptionParameterIds
+        .map(DataSourceParameterId.fromInt)
+        .toList();
 
-      state.parameters.protocolVersion.when(
-        subscription: () {
-          subscribeTo(subscribeToParameterIdList);
-        },
-        periodicRequests: () {
-          _setNewTimer(
-            state.parameters.requestsPeriodInMillis,
-            subscribeToParameterIdList,
-          );
-        },
-      );
-    });
+    state.parameters.protocolVersion.when(
+      subscription: () {
+        subscribeTo(subscribeToParameterIdList);
+      },
+      periodicRequests: () {
+        _setNewTimer(
+          state.parameters.requestsPeriodInMillis,
+          subscribeToParameterIdList,
+        );
+      },
+    );
   }
 
   void subscribeTo(List<DataSourceParameterId> ids) {
