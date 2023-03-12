@@ -12,6 +12,7 @@ import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/settings_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/settings_base_layout.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class DataSourceScreen extends StatelessWidget {
   const DataSourceScreen({super.key});
@@ -31,6 +32,9 @@ class DataSourceScreen extends StatelessWidget {
     switch (key) {
       case USBDataSource.kKey:
       case USBAndroidDataSource.kKey:
+        if (context.platform.isMacOS) {
+          return context.l10n.usbOrBluetoothDataSourceTitle;
+        }
         return context.l10n.usbDataSourceTitle;
       case DemoDataSource.kKey:
         return context.l10n.demoDataSourceTitle;
