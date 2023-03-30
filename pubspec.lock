@@ -25,12 +25,10 @@ packages:
   animated_scroll_view:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "0.4.0"
-      resolved-ref: f51d136c4c87cafc833f9fe869faacca80f6b7e8
-      url: "https://github.com/radomir9720/animated_scroll_view.git"
-    source: git
-    version: "0.4.0"
+      name: animated_scroll_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
   args:
     dependency: transitive
     description:
