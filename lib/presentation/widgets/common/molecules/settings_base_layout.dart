@@ -11,6 +11,7 @@ class SettingsBaseLayout extends StatelessWidget {
     required this.buttons,
     this.bottom = const SizedBox.shrink(),
     this.showBottom = true,
+    this.bottomLeft,
   });
 
   @protected
@@ -24,6 +25,9 @@ class SettingsBaseLayout extends StatelessWidget {
 
   @protected
   final bool showBottom;
+
+  @protected
+  final Widget? bottomLeft;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +119,7 @@ class SettingsBaseLayout extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: closeButtonPadding,
-                    child: const PCloseButton(),
+                    child: bottomLeft ?? const PCloseButton(),
                   ),
                 ),
                 Expanded(

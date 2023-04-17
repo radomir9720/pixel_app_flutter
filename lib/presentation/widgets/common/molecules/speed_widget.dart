@@ -50,7 +50,7 @@ class SpeedWidget extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: context
-                        .watch<DataSourceLiveCubit>()
+                        .watch<GeneralDataCubit>()
                         .state
                         .speed
                         .toString(),

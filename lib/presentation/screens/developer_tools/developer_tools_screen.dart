@@ -84,7 +84,12 @@ class DeveloperToolsScreen extends StatelessWidget {
                     context.router
                         .push<List<int>>(
                       ChangeParametersSubscriptionDialogRoute(
-                        initialChoosedOptions: state.subscriptionParameterIds,
+                        initialChoosedOptions: [
+                          ...context
+                              .read<OutgoingPackagesCubit>()
+                              .state
+                              .subscriptionParameterIds,
+                        ],
                         title: context
                             .l10n.whichParametersToSubscribeToListTileLabel,
                         alwasysVisibleOptions: DataSourceParameterId.all
@@ -102,11 +107,15 @@ class DeveloperToolsScreen extends StatelessWidget {
                       if (value != null) {
                         context
                             .read<DeveloperToolsParametersCubit>()
-                            .update(subscriptionParameterIds: value);
+                            .update(subscriptionParameterIds: value.toSet());
                       }
                     });
                   },
-                  trailing: Text(state.subscriptionParameterIds.join(', ')),
+                  trailing: BlocSelector<OutgoingPackagesCubit,
+                      DeveloperToolsParameters, Set<int>>(
+                    selector: (state) => state.subscriptionParameterIds,
+                    builder: (context, state) => Text(state.join(', ')),
+                  ),
                 ),
                 SwitchListTile(
                   value: state.enableHandshakeResponse,

@@ -10,7 +10,7 @@ import firebase_core
 import firebase_crashlytics
 import flutter_libserialport
 import package_info_plus_macos
-import shared_preferences_macos
+import shared_preferences_foundation
 import wakelock_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {

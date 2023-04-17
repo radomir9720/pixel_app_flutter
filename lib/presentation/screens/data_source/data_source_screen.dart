@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
 import 'package:pixel_app_flutter/data/services/data_source/demo_data_source.dart';
 import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
@@ -10,6 +11,8 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/glue_title.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/settings_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/settings_base_layout.dart';
 import 'package:re_widgets/re_widgets.dart';
@@ -84,12 +87,30 @@ class DataSourceScreen extends StatelessWidget {
               .ds
               .when(undefined: () => null, presented: (v) => v);
 
+          final showCloseButton =
+              context.router.root.current.name != SelectDataSourceFlow.name;
+          final showDevToolsButton = context.watch<Environment>().isDev;
           return SettingsBaseLayout(
             screenTitle: currentDataSource != null
                 ? context.l10n.dataSourceScreenTitle
                 : context.l10n.selectDataSourceScreenTitle,
-            // TODO(radomir9720): ew
-            showBottom: context.router.current.parent?.parent?.name != 'Root',
+            bottomLeft: showCloseButton
+                ? null
+                : showDevToolsButton
+                    ? GlueTitle(
+                        alignment: Alignment.centerLeft,
+                        title: context.l10n.developerToolsButtonCaption
+                            .replaceAll(' ', '\n'),
+                        side: GlueTitleSide.bottom,
+                        child: PIconButton(
+                          onPressed: () {
+                            context.router.push(const DeveloperToolsFlow());
+                          },
+                          icon: PixelIcons.settings,
+                          size: PIconButtonSize.normal,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
             buttons: state.payload.all.map(
               (e) {
                 void onPressed() {

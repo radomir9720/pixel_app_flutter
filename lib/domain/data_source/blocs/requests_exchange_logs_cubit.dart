@@ -23,7 +23,7 @@ abstract class RequestsExchangeLogsStateBase<T> {
 
 @immutable
 class ProcessedRequestsExchangeLogsState
-    extends RequestsExchangeLogsStateBase<DataSourceEvent> {
+    extends RequestsExchangeLogsStateBase<DataSourcePackage> {
   const ProcessedRequestsExchangeLogsState(super.data, super.dateTime);
 
   @override
@@ -44,9 +44,10 @@ class ProcessedRequestsExchangeLogsState
     required List<int> requestType,
     required List<int> direction,
   }) {
-    return (parameterId.isEmpty || parameterId.contains(data.parameterId)) &&
-        (requestType.isEmpty || requestType.contains(data.requestType)) &&
-        (direction.isEmpty || direction.contains(data.requestDirection));
+    return (parameterId.isEmpty ||
+            parameterId.contains(data.parameterId.value)) &&
+        (requestType.isEmpty || requestType.contains(data.requestType.value)) &&
+        (direction.isEmpty || direction.contains(data.directionFlag.value));
   }
 }
 
@@ -72,11 +73,13 @@ class RawRequestsExchangeLogsState
     required List<int> requestType,
     required List<int> direction,
   }) {
-    final package = DataSourcePackage.instanceOrNUll(data);
+    final package = DataSourceIncomingPackage.instanceOrNUll(data);
     if (package == null) return true;
-    return (parameterId.isEmpty || parameterId.contains(package.parameterId)) &&
-        (requestType.isEmpty || requestType.contains(package.requestType)) &&
-        (direction.isEmpty || direction.contains(package.directionFlag));
+    return (parameterId.isEmpty ||
+            parameterId.contains(package.parameterId.value)) &&
+        (requestType.isEmpty ||
+            requestType.contains(package.requestType.value)) &&
+        (direction.isEmpty || direction.contains(package.directionFlag.value));
   }
 }
 
@@ -91,11 +94,11 @@ abstract class RequestsExchangeLogsCubitBase<S,
 }
 
 class ProcessedRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
-    DataSourceEvent, ProcessedRequestsExchangeLogsState> {
+    DataSourcePackage, ProcessedRequestsExchangeLogsState> {
   ProcessedRequestsExchangeLogsCubit({super.maxItems});
 
   @override
-  void add(DataSourceEvent data) {
+  void add(DataSourcePackage data) {
     // Just in case
     if (isClosed) return;
 

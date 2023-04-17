@@ -58,6 +58,7 @@
     "licencesButtonCaption": "Лицензии",
     "aboutButtonCaption": "О приложении",
     "settingScreenTitle": "Настройки",
+    "updateButtonCaption": "Обновить",
 
     "dataSourceScreenTitle": "Источник данных",
     "selectDataSourceScreenTitle": "Выберите источник данных",
@@ -145,6 +146,54 @@
                 "type": "String"
             }
         }
-    }
+    },
+
+    "chargingGeneralTabTitle": "Основное",
+    "chargingTemperatureTabTitle": "Температура",
+    "chargingVoltageTabTitle": "Напряжение",
+    
+    "totalVoltageTileTitle": "Общее напряжение",
+    "totalCurrentTileTitle": "Общий ток заряда/разряда",
+    "maximumRegisteredTemperatureTileTitle": "Максимально зафиксированная температура",
+
+    "voltageValue": "{value} В",
+    "@voltageValue": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "currentValue": "{value} A",
+    "@currentValue": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "celsiusValue": "{value} °C",
+    "@celsiusValue": {
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
+
+    "mosTileTitle": "МОП-транзистор(MOS)",
+    "balancerTileTitle": "Балансировщик",
+    "cellNTileTitle": "Ячейка {number}",
+    "@cellNTileTitle": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+
+    "minCellsVoltageTileTitle": "Минимальное напряжение на ячейках",
+    "maxCellsVoltageTileTitle": "Максимальное напряжение на ячейках",
+    "deltaCellsVoltageTileTitle": "Дельта напряжения на ячейках"
 
 }

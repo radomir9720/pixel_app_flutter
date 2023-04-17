@@ -66,8 +66,8 @@ class ManagePinnedAppsBloc
         return handle<Result<ErrorWritingPinnedAppsStorage, Set<String>>>(
           event: event,
           emit: emit,
-          inLoading: (_) => const ManagePinnedAppsState.loading(),
-          inFailure: (_) => failureState,
+          inLoading: () => const ManagePinnedAppsState.loading(),
+          inFailure: () => failureState,
           action: () async {
             final packageName = event.app.packageName;
             if (packageName == null) {
@@ -96,8 +96,8 @@ class ManagePinnedAppsBloc
         return handle<Result<ErrorRemovingPinnedAppsStorage, Set<String>>>(
           event: event,
           emit: emit,
-          inLoading: (_) => const ManagePinnedAppsState.loading(),
-          inFailure: (_) => failureState,
+          inLoading: () => const ManagePinnedAppsState.loading(),
+          inFailure: () => failureState,
           action: () async {
             final packageName = event.app.packageName;
             if (packageName == null) {

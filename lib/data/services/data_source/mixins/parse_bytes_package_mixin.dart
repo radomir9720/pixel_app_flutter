@@ -20,7 +20,7 @@ extension PopFirstExtension on List<int> {
   }
 }
 
-typedef OnNewEventCallback = void Function(DataSourceIncomingEvent event);
+typedef OnNewPackageCallback = void Function(DataSourceIncomingPackage package);
 
 mixin ParseBytesPackageMixin on DataSource {
   @protected
@@ -60,19 +60,19 @@ mixin ParseBytesPackageMixin on DataSource {
   @visibleForTesting
   void onNewPackage({
     required Uint8List rawPackage,
-    required OnNewEventCallback onNewEventCallback,
+    required OnNewPackageCallback onNewPackageCallback,
   }) {
     observe(rawPackage);
 
     buffer.addAll(rawPackage);
 
-    tryParse(onNewEventCallback);
+    tryParse(onNewPackageCallback);
   }
 
   @protected
   @nonVirtual
   @visibleForTesting
-  void tryParse(OnNewEventCallback onNewEvent) {
+  void tryParse(OnNewPackageCallback onNewPackage) {
     if (buffer.isEmpty) return;
     if (noBytesInBuffer) noBytesInBufferCompleter = Completer();
 
@@ -142,10 +142,8 @@ mixin ParseBytesPackageMixin on DataSource {
     // from buffer, parsing it, and adding to events stream
     if (potentialEndingByte == endingByte) {
       final package = buffer.popFirst(indexOfPotentialEndingByte + 1);
-      final dataSourceEvent =
-          DataSourceEvent.fromPackage(DataSourcePackage(package));
-      // controller.sink.add(dataSourceEvent);
-      onNewEvent(dataSourceEvent);
+      final parsedPackage = DataSourceIncomingPackage.parse(package);
+      onNewPackage(parsedPackage);
     } else {
       // If the ending byte was not found at the index where it should be,
       // then trying to find the next starting byte, and remove everything until
@@ -167,7 +165,7 @@ mixin ParseBytesPackageMixin on DataSource {
     }
 
     if (buffer.isNotEmpty) {
-      debouncer.run(() => tryParse(onNewEvent));
+      debouncer.run(() => tryParse(onNewPackage));
     } else {
       noBytesInBufferCompleter?.complete();
     }

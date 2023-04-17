@@ -23,8 +23,8 @@ class GetAppsListBloc extends Bloc<GetAppsListEvent, GetAppsListState>
           handle<Result<GetAppsListAppServiceError, List<ApplicationInfo>>>(
         event: event,
         emit: emit,
-        inLoading: (_) => state.inLoading(),
-        inFailure: (_) => state.inFailure(),
+        inLoading: () => state.inLoading(),
+        inFailure: () => state.inFailure(),
         action: appsService.getAppsList,
         onActionResult: (actionResult) async {
           return actionResult.when(
