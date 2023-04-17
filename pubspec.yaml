@@ -14,24 +14,25 @@ dependencies:
     sdk: flutter
 
   # dart
-  bloc: ^8.1.0
+  bloc: ^8.1.1
   intl: ^0.17.0
   crclib: ^3.0.0
+  rxdart: ^0.27.7
   equatable: ^2.0.5
-  auto_route: ^5.0.0
+  auto_route: ^5.0.4
   flutter_svg: ^1.1.5
   image_pixels: ^3.0.0
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
   re_seedwork:
     git:
       url: https://github.com/radomir9720/re_seedwork.git
-      ref: "0.2.0"
+      ref: "0.3.0"
 
   # ui
   re_widgets:
     git:
       url: https://github.com/radomir9720/re_widgets.git
-      ref: "0.2.0"
+      ref: "0.2.1"
   animated_scroll_view: ^0.5.0
 
   # codegen
@@ -46,7 +47,7 @@ dependencies:
   usb_serial: ^0.4.0
   installed_apps: ^1.3.1
   package_info_plus: ^1.4.2
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.1.0
   flutter_libserialport: ^0.3.0
   flutter_bluetooth_serial:
     git:
@@ -54,16 +55,16 @@ dependencies:
       ref: "chore/make_BluetoothStreamSink_public"
 
   # firebase
-  firebase_core: ^2.4.1
-  firebase_analytics: ^10.1.0
-  firebase_crashlytics: ^3.0.11
+  firebase_core: ^2.9.0
+  firebase_analytics: ^10.2.0
+  firebase_crashlytics: ^3.1.0
 
 dev_dependencies:
   #  test
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
-  bloc_test: ^9.1.0
+  bloc_test: ^9.1.1
 
   # linter
   very_good_analysis: ^3.0.1
@@ -71,7 +72,7 @@ dev_dependencies:
   # codegen
   freezed: ^2.1.0
   build_runner: ^2.2.0
-  auto_route_generator: ^5.0.0
+  auto_route_generator: ^5.0.2
   injectable_generator: ^2.1.3
 
 flutter:
