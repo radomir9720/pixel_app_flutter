@@ -17,9 +17,11 @@ abstract class DataSource {
 
   String get key;
 
-  Stream<DataSourceIncomingEvent> get eventStream;
+  Stream<DataSourceIncomingPackage> get packageStream;
 
-  Future<Result<SendEventError, void>> sendEvent(DataSourceOutgoingEvent event);
+  Future<Result<SendPackageError, void>> sendPackage(
+    DataSourceOutgoingPackage package,
+  );
 
   Future<bool> get isEnabled;
 
@@ -40,7 +42,7 @@ abstract class DataSource {
   Future<void> dispose() async {}
 }
 
-enum SendEventError { unknown, noConnection }
+enum SendPackageError { unknown, noConnection }
 
 enum ConnectError { unknown, bondingError, unableToSubscribe }
 

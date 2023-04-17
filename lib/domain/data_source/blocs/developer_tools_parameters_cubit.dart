@@ -23,7 +23,7 @@ class DeveloperToolsParametersCubit extends Cubit<DeveloperToolsParameters>
 
   void update({
     int? requestsPeriodInMillis,
-    List<int>? subscriptionParameterIds,
+    Set<int>? subscriptionParameterIds,
     DataSourceProtocolVersion? protocolVersion,
     bool? enableRandomErrorGenerationForDemoDataSource,
     bool? enableHandshakeResponse,

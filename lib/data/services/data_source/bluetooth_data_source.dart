@@ -6,7 +6,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/cached_devices_stream_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
-import 'package:pixel_app_flutter/data/services/data_source/mixins/events_stream_controller_mixin.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/parse_bytes_package_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -19,7 +19,7 @@ class BluetoothDataSource extends DataSource
     with
         ParseBytesPackageMixin,
         CachedDevicesStreamMixin,
-        EventsStreamControllerMixin,
+        PackageStreamControllerMixin,
         DefaultDataSourceObserverMixin {
   BluetoothDataSource({
     required super.id,
@@ -48,22 +48,20 @@ class BluetoothDataSource extends DataSource
   String get key => kKey;
 
   @override
-  Stream<DataSourceIncomingEvent> get eventStream => controller.stream;
+  Stream<DataSourceIncomingPackage> get packageStream => controller.stream;
 
   @override
-  Future<Result<SendEventError, void>> sendEvent(
-    DataSourceOutgoingEvent event,
+  Future<Result<SendPackageError, void>> sendPackage(
+    DataSourceOutgoingPackage package,
   ) async {
     final _sink = sink;
     if (_sink == null) {
-      return const Result.error(SendEventError.noConnection);
+      return const Result.error(SendPackageError.noConnection);
     }
-
-    final package = event.toPackage();
 
     observe(package);
 
-    _sink.add(package);
+    _sink.add(package.toUint8List);
 
     return const Result.value(null);
   }
@@ -125,7 +123,7 @@ class BluetoothDataSource extends DataSource
     subscription = input.listen(
       (rawPackage) => onNewPackage(
         rawPackage: rawPackage,
-        onNewEventCallback: controller.add,
+        onNewPackageCallback: controller.add,
       ),
     );
 

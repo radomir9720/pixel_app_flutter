@@ -4,18 +4,19 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
-import 'package:pixel_app_flutter/data/services/data_source/mixins/events_stream_controller_mixin.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/outgoing_data_source_packages.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 class DemoDataSource extends DataSource
-    with DefaultDataSourceObserverMixin, EventsStreamControllerMixin {
+    with DefaultDataSourceObserverMixin, PackageStreamControllerMixin {
   DemoDataSource({
     required this.generateRandomErrors,
     required this.updatePeriodMillis,
     required super.id,
   })  : subscriptionCallbacks = {},
-        valueCache = {},
         isInitialHandshake = true;
 
   @protected
@@ -23,9 +24,6 @@ class DemoDataSource extends DataSource
 
   @protected
   final bool Function() generateRandomErrors;
-
-  @visibleForTesting
-  final Map<int, int> valueCache;
 
   static const kKey = 'demo';
 
@@ -86,7 +84,7 @@ class DemoDataSource extends DataSource
   }
 
   @override
-  Stream<DataSourceIncomingEvent> get eventStream => controller.stream;
+  Stream<DataSourceIncomingPackage> get packageStream => controller.stream;
 
   @override
   Future<Result<GetDeviceListError, Stream<List<DataSourceDevice>>>>
@@ -150,60 +148,82 @@ class DemoDataSource extends DataSource
   }
 
   @override
-  Future<Result<SendEventError, void>> sendEvent(
-    DataSourceOutgoingEvent event,
+  Future<Result<SendPackageError, void>> sendPackage(
+    DataSourceOutgoingPackage package,
   ) async {
-    observe(event.toPackage());
+    observe(package);
 
-    return event.maybeWhen(
-      getParameterValue: (id) {
-        const version = DataSourceProtocolVersion.periodicRequests;
-        if (id == const DataSourceParameterId.speed()) {
-          _sendNewSpeedCallback(version: version);
-        } else if (id == const DataSourceParameterId.current()) {
-          _sendNewCurrentCallback(version: version);
-        } else if (id == const DataSourceParameterId.voltage()) {
-          _sendNewVoltageCallback(version: version);
-        }
+    final parameterId = package.parameterId;
 
-        return const Result.value(null);
-      },
+    return package.requestType.maybeWhen(
+      bufferRequest: () => _updateValue(parameterId),
+      valueUpdate: () => _updateValue(parameterId),
       handshake: () {
         Future<void>.delayed(const Duration(seconds: 1)).then(
           (value) {
-            final package = DataSourcePackage.builder(
-              secondConfigByte: int.parse('10010000', radix: 2),
+            final package = DataSourceIncomingPackage.fromConvertible(
+              secondConfigByte: 0x90, // 10010000(incoming 0x10)
               parameterId: isInitialHandshake ? 0 : 0xFFFF,
+              convertible: isInitialHandshake
+                  ? const EmptyHandshakeBody()
+                  : const HandshakeID(0xFFFF),
             );
 
             isInitialHandshake = false;
 
             observe(package);
 
-            if (!controller.isClosed) {
-              controller.sink.add(
-                DataSourceHandshakeIncomingEvent(package),
-              );
-            }
+            if (!controller.isClosed) controller.add(package);
           },
         );
 
         return const Result.value(null);
       },
-      subscribe: (id) {
-        id.when(
-          speed: () {
-            subscriptionCallbacks.add(_sendNewSpeedCallback);
-          },
-          voltage: () {
-            subscriptionCallbacks.add(_sendNewVoltageCallback);
-          },
-          current: () {
-            subscriptionCallbacks.add(_sendNewCurrentCallback);
-          },
-          light: () {},
-          custom: (_) {},
-        );
+      subscription: () {
+        if (parameterId.value > OutgoingUnsubscribePackage.kOperand) {
+          // Unsubscribe package
+          parameterId
+            ..voidOn<SpeedParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewSpeedCallback),
+            )
+            ..voidOn<VoltageParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewVoltageCallback),
+            )
+            ..voidOn<CurrentParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewCurrentCallback),
+            )
+            ..voidOn<HighVoltageParameterId>(
+              () => subscriptionCallbacks.remove(_sendHighVoltageCallback),
+            )
+            ..voidOn<HighCurrentParameterId>(
+              () => subscriptionCallbacks.remove(_sendHighCurrentCallback),
+            )
+            ..voidOn<MaxTemperatureParameterId>(
+              () => subscriptionCallbacks.remove(_sendMaxTemperatureCallback),
+            );
+
+          return const Result.value(null);
+        }
+
+        parameterId
+          ..voidOn<SpeedParameterId>(
+            () => subscriptionCallbacks.add(_sendNewSpeedCallback),
+          )
+          ..voidOn<VoltageParameterId>(
+            () => subscriptionCallbacks.add(_sendNewVoltageCallback),
+          )
+          ..voidOn<CurrentParameterId>(
+            () => subscriptionCallbacks.add(_sendNewCurrentCallback),
+          )
+          ..voidOn<HighVoltageParameterId>(
+            () => subscriptionCallbacks.add(_sendHighVoltageCallback),
+          )
+          ..voidOn<HighCurrentParameterId>(
+            () => subscriptionCallbacks.add(_sendHighCurrentCallback),
+          )
+          ..voidOn<MaxTemperatureParameterId>(
+            () => subscriptionCallbacks.add(_sendMaxTemperatureCallback),
+          );
 
         timer ??= Timer.periodic(
           Duration(milliseconds: updatePeriodMillis()),
@@ -216,25 +236,56 @@ class DemoDataSource extends DataSource
 
         return const Result.value(null);
       },
-      unsubscribe: (id) {
-        id.when(
-          speed: () {
-            subscriptionCallbacks.remove(_sendNewSpeedCallback);
-          },
-          voltage: () {
-            subscriptionCallbacks.remove(_sendNewVoltageCallback);
-          },
-          current: () {
-            subscriptionCallbacks.remove(_sendNewCurrentCallback);
-          },
-          light: () {},
-          custom: (_) {},
-        );
-
-        return const Result.value(null);
-      },
       orElse: () => const Result.value(null),
     );
+  }
+
+  Result<SendPackageError, void> _updateValue(DataSourceParameterId id) {
+    const v = DataSourceProtocolVersion.periodicRequests;
+
+    id
+      ..voidOn<SpeedParameterId>(() => _sendNewSpeedCallback(version: v))
+      ..voidOn<CurrentParameterId>(() => _sendNewCurrentCallback(version: v))
+      ..voidOn<VoltageParameterId>(() => _sendNewVoltageCallback(version: v))
+      ..voidOn<LowVoltageMinMaxDeltaParameterId>(_sendNewLowVoltageCallback)
+      ..voidOn<HighVoltageParameterId>(_sendHighVoltageCallback)
+      ..voidOn<HighCurrentParameterId>(_sendHighCurrentCallback)
+      ..voidOn<MaxTemperatureParameterId>(_sendMaxTemperatureCallback)
+      //
+      ..voidOn<TemperatureFirstBatchParameterId>(
+        _sendTemperatureFirstBatchCallback,
+      )
+      ..voidOn<TemperatureSecondBatchParameterId>(
+        _sendTemperatureSecondBatchCallback,
+      )
+      ..voidOn<TemperatureThirdBatchParameterId>(
+        _sendTemperatureThirdBatchCallback,
+      )
+      //
+      ..voidOn<LowVoltageOneToThreeParameterId>(
+        _sendLowVoltageOneToThreeCallback,
+      )
+      ..voidOn<LowVoltageFourToSixParameterId>(_sendLowVoltageFourToSixCallback)
+      ..voidOn<LowVoltageSevenToNineParameterId>(
+        _sendLowVoltageSevenToNineCallback,
+      )
+      ..voidOn<LowVoltageTenToTwelveParameterId>(
+        _sendLowVoltageTenToTwelveCallback,
+      )
+      ..voidOn<LowVoltageThirteenToFifteenParameterId>(
+        _sendLowVoltageThirteenToFifteenCallback,
+      )
+      ..voidOn<LowVoltageSixteenToEighteenParameterId>(
+        _sendLowVoltageSixteenToEighteenCallback,
+      )
+      ..voidOn<LowVoltageNineteenToTwentyOneParameterId>(
+        _sendLowVoltageNineteenToTwentyOneCallback,
+      )
+      ..voidOn<LowVoltageTwentyTwoToTwentyFourParameterId>(
+        _sendLowVoltageTwentyTwoToTwentyFourCallback,
+      );
+
+    return const Result.value(null);
   }
 
   @override
@@ -245,15 +296,12 @@ class DemoDataSource extends DataSource
   void _sendNewSpeedCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
-    final lastValue =
-        valueCache[const DataSourceParameterId.speed().value] ?? 0;
-    final newValue =
-        (lastValue + Random().nextInt(10) * (Random().nextBool() ? 1 : -1))
-            .clamp(0, 100);
-    valueCache[const DataSourceParameterId.speed().value] = newValue;
     _updateValueCallback(
       const DataSourceParameterId.speed(),
-      newValue,
+      Speed(
+        status: _getRandomStatus,
+        speed: Random().nextInt(101),
+      ),
       version,
     );
   }
@@ -261,15 +309,9 @@ class DemoDataSource extends DataSource
   void _sendNewVoltageCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
-    final lastValue =
-        valueCache[const DataSourceParameterId.voltage().value] ?? 80000;
-    final newValue =
-        (lastValue + Random().nextInt(2000) * (Random().nextBool() ? 1 : -1))
-            .clamp(0, 100000);
-    valueCache[const DataSourceParameterId.voltage().value] = newValue;
     _updateValueCallback(
       const DataSourceParameterId.voltage(),
-      newValue,
+      Voltage(value: randomDoubleUint32, status: _getRandomStatus),
       version,
     );
   }
@@ -277,43 +319,316 @@ class DemoDataSource extends DataSource
   void _sendNewCurrentCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
-    final lastValue =
-        valueCache[const DataSourceParameterId.current().value] ?? 200;
-    final newValue =
-        (lastValue + Random().nextInt(20) * (Random().nextBool() ? 1 : -1))
-            .clamp(0, 255);
-    valueCache[const DataSourceParameterId.current().value] = newValue;
-
     _updateValueCallback(
       const DataSourceParameterId.current(),
-      newValue,
+      Current(value: randomDoubleUint32, status: _getRandomStatus),
       version,
     );
   }
 
-  void _updateValueCallback(
-    DataSourceParameterId parameterId,
-    int value,
-    DataSourceProtocolVersion version,
-  ) {
-    final requestType = version.when(
-      subscription: () => '10010101',
-      periodicRequests: () => '10000001',
-    );
-
-    final package = DataSourcePackage.builder(
-      secondConfigByte: int.parse(requestType, radix: 2),
-      parameterId: parameterId.value,
-      data: value,
+  void _sendNewLowVoltageCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.lowVoltageMinMaxDelta().value,
+      convertible: LowVoltageMinMaxDelta(
+        min: Random().nextDouble() * 65535,
+        max: Random().nextDouble() * 65535,
+        delta: Random().nextDouble() * 65535,
+        status: _getRandomStatus,
+      ),
     );
 
     observe(package);
 
-    final event = version.when(
-      subscription: () => DataSourceUpdateValueIncomingEvent(package),
-      periodicRequests: () => DataSourceGetParameterValueIncomingEvent(package),
+    controller.sink.add(package);
+  }
+
+  void _sendHighVoltageCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.highVoltage().value,
+      convertible: HighVoltage(
+        value: Random().nextDouble() * 4294967,
+        status: _getRandomStatus,
+      ),
     );
 
-    controller.sink.add(event);
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendHighCurrentCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.highCurrent().value,
+      convertible: HighCurrent(
+        value: (Random().nextDouble() * 2147483).randomSign,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendMaxTemperatureCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.maxTemperature().value,
+      convertible: MaxTemperature(
+        value: randomInt8,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendTemperatureFirstBatchCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.temperatureFirstBatch().value,
+      convertible: BatteryTemperatureFirstBatch(
+        balancer: randomInt8,
+        mos: randomInt8,
+        first: randomInt8,
+        second: randomInt8,
+        third: randomInt8,
+        fourth: randomInt8,
+        fifth: randomInt8,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendTemperatureSecondBatchCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.temperatureSecondBatch().value,
+      convertible: BatteryTemperatureSecondBatch(
+        sixth: randomInt8,
+        seventh: randomInt8,
+        eighth: randomInt8,
+        ninth: randomInt8,
+        tenth: randomInt8,
+        eleventh: randomInt8,
+        twelfth: randomInt8,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendTemperatureThirdBatchCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.temperatureThirdBatch().value,
+      convertible: BatteryTemperatureThirdBatch(
+        thirteenth: randomInt8,
+        fourteenth: randomInt8,
+        fifteenth: randomInt8,
+        sixteenth: randomInt8,
+        seventeenth: randomInt8,
+        eighteenth: randomInt8,
+        nineteenth: randomInt8,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageOneToThreeCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.lowVoltageOneToThree().value,
+      convertible: BatteryLowVoltageOneToThree(
+        first: randomDoubleUint16,
+        second: randomDoubleUint16,
+        third: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageFourToSixCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.lowVoltageFourToSix().value,
+      convertible: BatteryLowVoltageFourToSix(
+        fourth: randomDoubleUint16,
+        fifth: randomDoubleUint16,
+        sixth: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageSevenToNineCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.lowVoltageSevenToNine().value,
+      convertible: BatteryLowVoltageSevenToNine(
+        seventh: randomDoubleUint16,
+        eighth: randomDoubleUint16,
+        ninth: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageTenToTwelveCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: const DataSourceParameterId.lowVoltageTenToTwelve().value,
+      convertible: BatteryLowVoltageTenToTwelve(
+        tenth: randomDoubleUint16,
+        eleventh: randomDoubleUint16,
+        twelfth: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageThirteenToFifteenCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId:
+          const DataSourceParameterId.lowVoltageThirteenToFifteen().value,
+      convertible: BatteryLowVoltageThirteenToFifteen(
+        thirteenth: randomDoubleUint16,
+        fourteenth: randomDoubleUint16,
+        fifteenth: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageSixteenToEighteenCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId:
+          const DataSourceParameterId.lowVoltageSixteenToEighteen().value,
+      convertible: BatteryLowVoltageSixteenToEighteen(
+        sixteenth: randomDoubleUint16,
+        seventeenth: randomDoubleUint16,
+        eighteenth: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageNineteenToTwentyOneCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId:
+          const DataSourceParameterId.lowVoltageNineteenToTwentyOne().value,
+      convertible: BatteryLowVoltageNineteenToTwentyOne(
+        nineteenth: randomDoubleUint16,
+        twentieth: randomDoubleUint16,
+        twentyFirst: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  void _sendLowVoltageTwentyTwoToTwentyFourCallback() {
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId:
+          const DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour().value,
+      convertible: BatteryLowVoltageTwentyTwoToTwentyFour(
+        twentySecond: randomDoubleUint16,
+        twentyThird: randomDoubleUint16,
+        twentyFourth: randomDoubleUint16,
+        status: _getRandomStatus,
+      ),
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+
+  PeriodicValueStatus get _getRandomStatus {
+    return PeriodicValueStatus.values[Random().nextInt(
+      PeriodicValueStatus.values.length,
+    )];
+  }
+
+  int get randomInt8 {
+    return Random().nextInt(128).randomSign;
+  }
+
+  double get randomDoubleUint16 => Random().nextDouble() * 0xFFFF;
+  double get randomDoubleUint32 => Random().nextDouble() * 0xFFFFFFFF;
+
+  void _updateValueCallback(
+    DataSourceParameterId parameterId,
+    // int value,
+    BytesConvertible convertible,
+    DataSourceProtocolVersion version,
+  ) {
+    final requestType = version.when(
+      subscription: () => 0x95, //'10010101'
+      periodicRequests: () => 0x81, //'10000001'
+    );
+
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: requestType,
+      parameterId: parameterId.value,
+      convertible: convertible,
+    );
+
+    observe(package);
+
+    controller.sink.add(package);
+  }
+}
+
+extension NumExtension<T extends num> on T {
+  T get randomSign {
+    return Random().nextBool() ? this * -1 as T : this;
   }
 }

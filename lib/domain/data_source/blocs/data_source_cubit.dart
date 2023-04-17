@@ -28,4 +28,16 @@ class DataSourceCubit extends Cubit<DataSourceState> with ConsumerBlocMixin {
 
   @protected
   final DataSourceStorage dataSourceStorage;
+
+  @override
+  Future<void> close() async {
+    await state.ds.when(
+      undefined: () async {},
+      presented: (p) async {
+        await p.dataSource.disconnect();
+        await p.dataSource.dispose();
+      },
+    );
+    return super.close();
+  }
 }

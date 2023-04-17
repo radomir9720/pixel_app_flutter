@@ -105,10 +105,10 @@ class _AutoRouteState extends AutoRouterState {
   void dispose() {
     final selected = dataSourceCubit.state.ds
         .when(undefined: () => null, presented: (p) => p.dataSource);
-    final selectedUniqieId = '${selected?.key}_${selected?.id}';
+    final selectedUniqueId = '${selected?.key}_${selected?.id}';
     for (final ds in dataSources) {
       final dsUniqueId = '${ds.key}_${ds.id}';
-      if (dsUniqueId != selectedUniqieId) {
+      if (dsUniqueId != selectedUniqueId) {
         ds.dispose();
       }
     }

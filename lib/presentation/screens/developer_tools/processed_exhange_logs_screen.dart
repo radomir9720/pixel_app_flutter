@@ -34,8 +34,8 @@ class ProcessedExchangeLogsScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final reverseIndex = items.length - index - 1;
             final item = items[reverseIndex];
-            return ExchangeLogCard.fromDataSourceEvent(
-              event: item.data,
+            return ExchangeLogCard.fromPackage(
+              package: item.data,
               dateTime: item.dateTime,
             );
           },

@@ -11,6 +11,9 @@ enum DataSourceRequestDirection {
     );
   }
 
+  bool get isOutgoing => this == DataSourceRequestDirection.outgoing;
+  bool get isIncoming => this == DataSourceRequestDirection.incoming;
+
   R when<R>({
     required R Function() outgoing,
     required R Function() incoming,

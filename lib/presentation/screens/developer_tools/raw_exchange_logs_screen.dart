@@ -33,8 +33,8 @@ class RawExchangeLogsScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final reverseIndex = items.length - index - 1;
             final item = items[reverseIndex];
-            return ExchangeLogCard.fromPackage(
-              package: item.data,
+            return ExchangeLogCard.fromBytes(
+              bytes: item.data,
               dateTime: item.dateTime,
             );
           },

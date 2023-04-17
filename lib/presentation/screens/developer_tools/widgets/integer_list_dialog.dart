@@ -62,29 +62,33 @@ class _IntegerListDialogState extends State<IntegerListDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            children: [
-              ...{
-                ...widget.alwasysVisibleOptions,
-                ...newValue,
-              }.map((current) {
-                return FilterChip(
-                  label: Text('$current'),
-                  showCheckmark: false,
-                  selected: newValue.contains(current),
-                  onSelected: (selected) {
-                    if (selected) {
-                      newValue.add(current);
-                    } else {
-                      newValue.remove(current);
-                    }
-                    setState(() {});
-                  },
-                );
-              }),
-            ],
+          Flexible(
+            child: SingleChildScrollView(
+              child: Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: [
+                  ...{
+                    ...widget.alwasysVisibleOptions,
+                    ...newValue,
+                  }.map((current) {
+                    return FilterChip(
+                      label: Text('$current'),
+                      showCheckmark: false,
+                      selected: newValue.contains(current),
+                      onSelected: (selected) {
+                        if (selected) {
+                          newValue.add(current);
+                        } else {
+                          newValue.remove(current);
+                        }
+                        setState(() {});
+                      },
+                    );
+                  }),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           if (showCustomIdTextField)

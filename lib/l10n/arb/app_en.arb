@@ -58,6 +58,7 @@
     "licencesButtonCaption": "Licences",
     "aboutButtonCaption": "About",
     "settingScreenTitle": "Settings",
+    "updateButtonCaption": "Update",
 
     "dataSourceScreenTitle": "Data source",
     "selectDataSourceScreenTitle": "Select data source",
@@ -145,5 +146,53 @@
                 "type": "String"
             }
         }
-    }
+    },
+
+    "chargingGeneralTabTitle": "General",
+    "chargingTemperatureTabTitle": "Temperature",
+    "chargingVoltageTabTitle": "Voltage",
+    
+    "totalVoltageTileTitle": "Total voltage",
+    "totalCurrentTileTitle": "Total charge/discharge current",
+    "maximumRegisteredTemperatureTileTitle": "Maximum registered temperature",
+
+    "voltageValue": "{value} V",
+    "@voltageValue": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "currentValue": "{value} A",
+    "@currentValue": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "celsiusValue": "{value} °C",
+    "@celsiusValue": {
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
+
+    "balancerTileTitle": "Balancer",
+    "mosTileTitle": "MOS",
+    "cellNTileTitle": "Cell {number}",
+    "@cellNTileTitle": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+
+    "minCellsVoltageTileTitle": "Minimum cells voltage",
+    "maxCellsVoltageTileTitle": "Maximum cells voltage",
+    "deltaCellsVoltageTileTitle": "Delta cells voltage"
 }

@@ -48,6 +48,8 @@ abstract class AppColorsData with EquatableMixin {
 
   Color get errorPastel;
 
+  Color get warning;
+
   Color get successPastel;
 
   Color get border;
@@ -118,6 +120,9 @@ class _AppColorsDataDark extends AppColorsData {
 
   @override
   Color get errorPastel => const Color(0xFFEF5350);
+
+  @override
+  Color get warning => const Color(0xFFFFC107);
 
   @override
   Color get successPastel => const Color(0xffA5D6A7);

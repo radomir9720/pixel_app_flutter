@@ -4,7 +4,7 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/devices_periodic_stream_mixin.dart';
-import 'package:pixel_app_flutter/data/services/data_source/mixins/events_stream_controller_mixin.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/parse_bytes_package_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -15,7 +15,7 @@ class USBDataSource extends DataSource
     with
         DevicesPeriodicStreamMixin,
         ParseBytesPackageMixin,
-        EventsStreamControllerMixin,
+        PackageStreamControllerMixin,
         DefaultDataSourceObserverMixin {
   USBDataSource({
     required super.id,
@@ -64,7 +64,7 @@ class USBDataSource extends DataSource
       _readSubscription = r.stream.listen((rawPackage) {
         onNewPackage(
           rawPackage: rawPackage,
-          onNewEventCallback: controller.add,
+          onNewPackageCallback: controller.add,
         );
       });
 
@@ -75,19 +75,17 @@ class USBDataSource extends DataSource
   }
 
   @override
-  Future<Result<SendEventError, void>> sendEvent(
-    DataSourceOutgoingEvent event,
+  Future<Result<SendPackageError, void>> sendPackage(
+    DataSourceOutgoingPackage package,
   ) async {
     final sp = serialPort;
     if (sp == null || !sp.isOpen) {
-      return const Result.error(SendEventError.noConnection);
+      return const Result.error(SendPackageError.noConnection);
     }
-
-    final package = event.toPackage();
 
     observe(package);
 
-    sp.write(package);
+    sp.write(package.toUint8List);
 
     return const Result.value(null);
   }
@@ -98,7 +96,7 @@ class USBDataSource extends DataSource
   }
 
   @override
-  Stream<DataSourceIncomingEvent> get eventStream => controller.stream;
+  Stream<DataSourceIncomingPackage> get packageStream => controller.stream;
 
   @override
   Future<Result<GetDeviceListError, Stream<List<DataSourceDevice>>>>

@@ -36,6 +36,17 @@ class MainScope extends SingleChildStatelessWidget {
           )..add(const AlwaysOnDisplayToggleEvent.init()),
           lazy: false,
         ),
+
+        if (GetIt.I.get<Environment>().isDev) ...[
+          BlocProvider(
+            create: (context) => ProcessedRequestsExchangeLogsCubit(),
+            lazy: false,
+          ),
+          BlocProvider(
+            create: (context) => RawRequestsExchangeLogsCubit(),
+            lazy: false,
+          ),
+        ],
       ],
       child: child,
     );

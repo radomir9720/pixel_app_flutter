@@ -45,7 +45,7 @@ class DeveloperToolsParameters {
       ),
       requestsPeriodInMillis: map['requestsPeriodInMillis'] as int,
       subscriptionParameterIds:
-          (map['subscriptionParameterIds'] as List).cast<int>(),
+          (map['subscriptionParameterIds'] as Set).cast<int>(),
       enableRandomErrorGenerationForDemoDataSource:
           map['enableRandomErrorGenerationForDemoDataSource'] as bool,
       enableHandshakeResponse: map['enableHandshakeResponse'] as bool,
@@ -60,17 +60,17 @@ class DeveloperToolsParameters {
         requestsPeriodInMillis = 800,
         enableHandshakeResponse = true,
         handshakeResponseTimeoutInMillis = 0,
-        subscriptionParameterIds = const [
-          125, //speed
-          174, // voltage
-          239, // current
-        ];
+        subscriptionParameterIds = const {
+          // 125, //speed
+          // 174, // voltage
+          // 239, // current
+        };
 
   final DataSourceProtocolVersion protocolVersion;
 
   final int requestsPeriodInMillis;
 
-  final List<int> subscriptionParameterIds;
+  final Set<int> subscriptionParameterIds;
 
   final bool enableRandomErrorGenerationForDemoDataSource;
 
@@ -82,7 +82,7 @@ class DeveloperToolsParameters {
     return <String, dynamic>{
       'protocolVersion': protocolVersion.name,
       'requestsPeriodInMillis': requestsPeriodInMillis,
-      'subscriptionParameterIds': subscriptionParameterIds,
+      'subscriptionParameterIds': subscriptionParameterIds.toList(),
       'enableRandomErrorGenerationForDemoDataSource':
           enableRandomErrorGenerationForDemoDataSource,
       'enableHandshakeResponse': enableHandshakeResponse,
@@ -128,7 +128,7 @@ class DeveloperToolsParameters {
   DeveloperToolsParameters copyWith({
     DataSourceProtocolVersion? protocolVersion,
     int? requestsPeriodInMillis,
-    List<int>? subscriptionParameterIds,
+    Set<int>? subscriptionParameterIds,
     bool? enableRandomErrorGenerationForDemoDataSource,
     bool? enableHandshakeResponse,
     int? handshakeResponseTimeoutInMillis,
