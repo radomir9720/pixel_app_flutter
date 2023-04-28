@@ -86,6 +86,7 @@ class _HandsetBodyState extends State<_HandsetBody> {
         ),
         //
         BlocBuilder<SearchAppCubit, SearchAppState>(
+          buildWhen: (previous, current) => current.shouldRebuild,
           builder: (context, state) {
             final searchString = state.searchString;
             final apps = [...state.filtered];

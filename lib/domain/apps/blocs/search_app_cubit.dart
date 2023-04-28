@@ -8,38 +8,49 @@ class SearchAppState {
     required this.all,
     required this.filtered,
     required this.searchString,
+    this.shouldRebuild = true,
   });
 
   const SearchAppState.initial(this.all)
       : filtered = all,
-        searchString = '';
+        searchString = '',
+        shouldRebuild = true;
 
   final ApplicationsEntity all;
   final ApplicationsEntity filtered;
   final String searchString;
+  final bool shouldRebuild;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is SearchAppState &&
-        listEquals(other.all, all) &&
-        listEquals(other.filtered, filtered) &&
-        other.searchString == searchString;
+        other.all == all &&
+        other.filtered == filtered &&
+        other.searchString == searchString &&
+        other.shouldRebuild == shouldRebuild;
   }
 
   @override
-  int get hashCode => all.hashCode ^ filtered.hashCode ^ searchString.hashCode;
+  int get hashCode {
+    return all.hashCode ^
+        filtered.hashCode ^
+        searchString.hashCode ^
+        shouldRebuild.hashCode;
+  }
 
   SearchAppState copyWith({
     ApplicationsEntity? all,
     ApplicationsEntity? filtered,
     String? searchString,
+    bool? shouldRebuild,
   }) {
     return SearchAppState(
       all: all ?? this.all,
       filtered: filtered ?? this.filtered,
       searchString: searchString ?? this.searchString,
+      shouldRebuild: shouldRebuild ?? this.shouldRebuild,
     );
   }
 }
@@ -56,6 +67,7 @@ class SearchAppCubit extends Cubit<SearchAppState> {
       state.copyWith(
         all: all,
         filtered: filtered,
+        shouldRebuild: false,
       ),
     );
   }
@@ -66,6 +78,7 @@ class SearchAppCubit extends Cubit<SearchAppState> {
       state.copyWith(
         searchString: name,
         filtered: state.all.filterByName(name),
+        shouldRebuild: true,
       ),
     );
   }
