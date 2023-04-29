@@ -16,9 +16,8 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     final tabsRouter = AutoTabsRouter.of(context);
-    final isHandset = Screen.of(context, watch: false).type.isHandset;
+    final isHandset = Screen.of(context).type.isHandset;
 
     // If screenType changed from handset to other type, then changing tab to
     // general, as CarInfoScreen should be available only on handset screen type
