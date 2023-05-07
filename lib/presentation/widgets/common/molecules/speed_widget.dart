@@ -39,7 +39,7 @@ class SpeedWidget extends StatelessWidget {
         children: [
           Text(
             context.l10n.speedInfoPanelTitle,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(
             height: 16,

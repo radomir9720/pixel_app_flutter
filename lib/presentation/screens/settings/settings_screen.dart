@@ -75,7 +75,7 @@ class SettingsScreen extends StatelessWidget {
         screenTitle: context.l10n.settingScreenTitle,
         bottom: Text(
           context.l10n.appVersion(context.read<PackageInfo>().version),
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ),
     );

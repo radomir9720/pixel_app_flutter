@@ -35,7 +35,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
       children: [
         Text(
           context.l10n.carInfoTabTitle,
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(height: 20),
         const Divider(),

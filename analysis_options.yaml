@@ -1,4 +1,4 @@
-include: package:very_good_analysis/analysis_options.3.0.1.yaml
+include: package:very_good_analysis/analysis_options.4.0.0.yaml
 
 analyzer:
   exclude:
@@ -14,3 +14,6 @@ linter:
   rules:
     sort_pub_dependencies: false
     public_member_api_docs: false
+    avoid_returning_this: false
+    always_put_required_named_parameters_first: false
+    no_leading_underscores_for_local_identifiers: false

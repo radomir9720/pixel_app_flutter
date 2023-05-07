@@ -36,7 +36,7 @@ class ChargingScreen extends StatelessWidget {
             padding: titlePadding,
             child: Text(
               context.l10n.chargingTabTitle,
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
           const SizedBox(height: 16),

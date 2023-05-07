@@ -68,7 +68,7 @@ class SettingsBaseLayout extends StatelessWidget {
               child: Text(
                 screenTitle,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.displayMedium,
               ),
             ),
           ),
