@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:pixel_app_flutter/presentation/widgets/common/molecules/fast_actions_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/speed_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/statistic_widget.dart';
 
@@ -10,24 +9,24 @@ class TabletUpperInfoPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Expanded(
+      children: const [
+        Expanded(
           flex: 6,
           child: SpeedWidget(),
         ),
-        const Expanded(
+        Expanded(
           flex: 4,
           child: Align(
             child: StatisticWidget(),
           ),
         ),
-        Expanded(
-          flex: 8,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: FastActionsWidget.manyRows(),
-          ),
-        ),
+        // Expanded(
+        //   flex: 8,
+        //   child: Align(
+        //     alignment: Alignment.centerRight,
+        //     child: FastActionsWidget.manyRows(),
+        //   ),
+        // ),
       ],
     );
     // CustomMultiChildLayout(

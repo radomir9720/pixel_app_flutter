@@ -14,6 +14,10 @@ enum PeriodicValueStatus {
     return PeriodicValueStatus.values.firstWhere((element) => element.id == id);
   }
 
+  static bool isValid(int value) {
+    return values.any((element) => element.id == value);
+  }
+
   List<int> get toBytes => id.toBytesInt8;
 
   T when<T>({

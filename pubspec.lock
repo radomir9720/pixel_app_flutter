@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: animated_scroll_view
-      sha256: "64b47da391be0adb1d63c9bc7dfe2d85df43f5ba6da1a8915e2cb90d9332d272"
+      sha256: "6e1f055cade70322abc1f5569bc02879c2cafa0a3e08f4b5b34343e6901c932f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.2"
+    version: "1.0.1+1"
   args:
     dependency: transitive
     description:

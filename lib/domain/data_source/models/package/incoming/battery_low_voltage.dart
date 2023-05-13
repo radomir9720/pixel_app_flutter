@@ -1,14 +1,17 @@
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/function_id_validation_mixins.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/request_type_validation_mixins.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 
 class BatteryLowVoltageOneToThreeIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageOneToThree>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageOneToThreeIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageOneToThree> get dataBytesToModelConverter =>
+  BytesConverter<BatteryLowVoltageOneToThree> get bytesConverter =>
       BatteryLowVoltageOneToThreeConverter();
 
   @override
@@ -17,11 +20,13 @@ class BatteryLowVoltageOneToThreeIncomingDataSourcePackage
 
 class BatteryLowVoltageFourToSixIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageFourToSix>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageFourToSixIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageFourToSix> get dataBytesToModelConverter =>
+  BytesConverter<BatteryLowVoltageFourToSix> get bytesConverter =>
       BatteryLowVoltageFourToSixConverter();
 
   @override
@@ -30,11 +35,13 @@ class BatteryLowVoltageFourToSixIncomingDataSourcePackage
 
 class BatteryLowVoltageSevenToNineIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageSevenToNine>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageSevenToNineIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageSevenToNine> get dataBytesToModelConverter =>
+  BytesConverter<BatteryLowVoltageSevenToNine> get bytesConverter =>
       BatteryLowVoltageSevenToNineConverter();
 
   @override
@@ -43,11 +50,13 @@ class BatteryLowVoltageSevenToNineIncomingDataSourcePackage
 
 class BatteryLowVoltageTenToTwelveIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageTenToTwelve>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageTenToTwelveIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageTenToTwelve> get dataBytesToModelConverter =>
+  BytesConverter<BatteryLowVoltageTenToTwelve> get bytesConverter =>
       BatteryLowVoltageTenToTwelveConverter();
 
   @override
@@ -56,13 +65,14 @@ class BatteryLowVoltageTenToTwelveIncomingDataSourcePackage
 
 class BatteryLowVoltageThirteenToFifteenIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageThirteenToFifteen>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageThirteenToFifteenIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageThirteenToFifteen>
-      get dataBytesToModelConverter =>
-          BatteryLowVoltageThirteenToFifteenConverter();
+  BytesConverter<BatteryLowVoltageThirteenToFifteen> get bytesConverter =>
+      BatteryLowVoltageThirteenToFifteenConverter();
 
   @override
   bool get validParameterId => parameterId.isLowVoltageThirteenToFifteen;
@@ -70,13 +80,14 @@ class BatteryLowVoltageThirteenToFifteenIncomingDataSourcePackage
 
 class BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageSixteenToEighteen>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageSixteenToEighteen>
-      get dataBytesToModelConverter =>
-          BatteryLowVoltageSixteenToEighteenConverter();
+  BytesConverter<BatteryLowVoltageSixteenToEighteen> get bytesConverter =>
+      BatteryLowVoltageSixteenToEighteenConverter();
 
   @override
   bool get validParameterId => parameterId.isLowVoltageSixteenToEighteen;
@@ -84,13 +95,14 @@ class BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage
 
 class BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageNineteenToTwentyOne>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageNineteenToTwentyOne>
-      get dataBytesToModelConverter =>
-          BatteryLowVoltageNineteenToTwentyOneConverter();
+  BytesConverter<BatteryLowVoltageNineteenToTwentyOne> get bytesConverter =>
+      BatteryLowVoltageNineteenToTwentyOneConverter();
 
   @override
   bool get validParameterId => parameterId.isLowVoltageNineteenToTwentyOne;
@@ -98,13 +110,14 @@ class BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage
 
 class BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageTwentyTwoToTwentyFour>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryLowVoltageTwentyTwoToTwentyFour>
-      get dataBytesToModelConverter =>
-          BatteryLowVoltageTwentyTwoToTwentyFourConverter();
+  BytesConverter<BatteryLowVoltageTwentyTwoToTwentyFour> get bytesConverter =>
+      BatteryLowVoltageTwentyTwoToTwentyFourConverter();
 
   @override
   bool get validParameterId => parameterId.isLowVoltageTwentyTwoToTwentyFour;

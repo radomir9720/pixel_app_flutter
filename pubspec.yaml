@@ -36,7 +36,7 @@ dependencies:
     git:
       url: https://github.com/radomir9720/re_widgets.git
       ref: "0.2.1"
-  animated_scroll_view: ^0.5.1
+  animated_scroll_view: ^1.0.1
 
   # codegen
   freezed_annotation: ^2.1.0

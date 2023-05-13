@@ -4,7 +4,7 @@ enum DataSourceRequestType {
   canRequest(0x02),
   handshake(0x10),
   subscription(0x11),
-  valueUpdate(0x15);
+  event(0x15);
 
   const DataSourceRequestType(this.value);
 
@@ -13,8 +13,12 @@ enum DataSourceRequestType {
   static DataSourceRequestType fromInt(int value) {
     return DataSourceRequestType.values.firstWhere(
       (element) => element.value == value,
-      orElse: () => throw Exception('VALUE: $value'),
+      orElse: () => throw Exception('Invalid request type: $value'),
     );
+  }
+
+  static bool isValid(int value) {
+    return values.any((element) => element.value == value);
   }
 
   R maybeWhen<R>({
@@ -24,7 +28,7 @@ enum DataSourceRequestType {
     R Function()? canRequest,
     R Function()? handshake,
     R Function()? subscription,
-    R Function()? valueUpdate,
+    R Function()? event,
   }) {
     switch (this) {
       case DataSourceRequestType.mirror:
@@ -37,13 +41,13 @@ enum DataSourceRequestType {
         return handshake?.call() ?? orElse();
       case DataSourceRequestType.subscription:
         return subscription?.call() ?? orElse();
-      case DataSourceRequestType.valueUpdate:
-        return valueUpdate?.call() ?? orElse();
+      case DataSourceRequestType.event:
+        return event?.call() ?? orElse();
     }
   }
 
   bool get isSubscription => this == DataSourceRequestType.subscription;
-  bool get isValueUpdate => this == DataSourceRequestType.valueUpdate;
+  bool get isEvent => this == DataSourceRequestType.event;
   bool get isHandshake => this == DataSourceRequestType.handshake;
   bool get isBufferRequest => this == DataSourceRequestType.bufferRequest;
 }

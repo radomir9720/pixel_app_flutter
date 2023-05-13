@@ -36,6 +36,7 @@ class RawExchangeLogsScreen extends StatelessWidget {
             return ExchangeLogCard.fromBytes(
               bytes: item.data,
               dateTime: item.dateTime,
+              direction: item.direction,
             );
           },
         );

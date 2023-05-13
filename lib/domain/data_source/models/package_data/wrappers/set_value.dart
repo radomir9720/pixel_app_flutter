@@ -1,0 +1,78 @@
+import 'package:equatable/equatable.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/data_source_package_data_exceptions.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
+
+abstract class SetValueBody extends BytesConvertible {
+  const SetValueBody();
+
+  @override
+  SetValueConverter<SetValueBody> get bytesConverter;
+}
+
+abstract class SetValueConverter<T extends SetValueBody>
+    extends BytesConverter<T> {
+  const SetValueConverter();
+
+  @override
+  T fromBytes(List<int> bytes) {
+    throw const ShouldNotBeCalledDataSourcePackageDataException(
+      'SetValueConverter.fromBytes()',
+      'SetValueBody is intended to be used only for outgoing packages, '
+          'therefore only toBytes() method can be used',
+    );
+  }
+
+  List<int> getBodyBytes(T model);
+
+  @override
+  List<int> toBytes(T model) {
+    return [
+      FunctionId.setValueWithParam.value,
+      ...getBodyBytes(model),
+    ];
+  }
+}
+
+abstract class SetValueResult extends BytesConvertible with EquatableMixin {
+  const SetValueResult({required this.success});
+
+  const SetValueResult.success() : success = true;
+
+  const SetValueResult.error() : success = false;
+
+  final bool success;
+
+  @override
+  SetValueResultConverter<SetValueResult> get bytesConverter;
+
+  @override
+  List<Object?> get props => [success];
+}
+
+abstract class SetValueResultConverter<T extends SetValueResult>
+    extends BytesConverter<T> {
+  const SetValueResultConverter();
+
+  T fromBytesResult({required bool success, required List<int> body});
+
+  @override
+  T fromBytes(List<int> bytes) {
+    return fromBytesResult(
+      success: bytes[0] == FunctionId.successSetValueWithParamId,
+      body: bytes.sublist(1),
+    );
+  }
+
+  List<int> toBytesBody(T model);
+
+  @override
+  List<int> toBytes(T model) {
+    return [
+      if (model.success)
+        FunctionId.successSetValueWithParamId
+      else
+        FunctionId.errorSettingValueWithParamId,
+      ...toBytesBody(model),
+    ];
+  }
+}

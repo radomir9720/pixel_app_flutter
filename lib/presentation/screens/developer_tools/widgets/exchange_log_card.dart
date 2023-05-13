@@ -10,6 +10,7 @@ class ExchangeLogCard extends StatelessWidget {
     super.key,
     required List<int> bytes,
     required this.dateTime,
+    this.direction,
   })  : _rawPackage = bytes,
         _package = null;
 
@@ -17,6 +18,7 @@ class ExchangeLogCard extends StatelessWidget {
     super.key,
     required DataSourcePackage package,
     required this.dateTime,
+    this.direction,
   })  : _rawPackage = null,
         _package = package;
 
@@ -25,6 +27,9 @@ class ExchangeLogCard extends StatelessWidget {
 
   @protected
   final DataSourcePackage? _package;
+
+  @protected
+  final DataSourceRequestDirection? direction;
 
   @protected
   final DateTime dateTime;
@@ -50,8 +55,7 @@ class ExchangeLogCard extends StatelessWidget {
       '_package',
     );
 
-    final direction = _package?.directionFlag ??
-        DataSourceIncomingPackage.instanceOrNUll(_bytes)?.directionFlag;
+    final _direction = _package?.directionFlag ?? direction;
 
     return Container(
       color: Theme.of(context).cardColor,
@@ -64,7 +68,7 @@ class ExchangeLogCard extends StatelessWidget {
               children: [
                 Text(
                   whenDirection(
-                    direction?.value,
+                    _direction?.value,
                     incoming: () => context.l10n.incomingListTileLabel,
                     outgoing: () => context.l10n.outgoingListTileLabel,
                     unknown: (id) => 'Unknown${id == null ? '' : ': "$id"'}',
@@ -75,13 +79,13 @@ class ExchangeLogCard extends StatelessWidget {
                 ),
                 Icon(
                   whenDirection(
-                    direction?.value,
+                    _direction?.value,
                     incoming: () => Icons.arrow_circle_left,
                     outgoing: () => Icons.arrow_circle_right,
                     unknown: (id) => Icons.question_mark,
                   ),
                   color: whenDirection(
-                    direction?.value,
+                    _direction?.value,
                     incoming: () => AppColors.of(context).successPastel,
                     outgoing: () => AppColors.of(context).primaryAccent,
                     unknown: (id) => AppColors.of(context).errorAccent,

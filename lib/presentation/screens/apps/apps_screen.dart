@@ -121,12 +121,10 @@ class _ResponsiveAppsScreenBodyState extends State<_ResponsiveAppsScreenBody> {
           return;
         }
 
-        eventController.add(
-          MoveItemEvent(
-            item: app,
-            newIndex: newIndex,
-            forceNotify: forceNotify,
-          ),
+        eventController.moveAdaptive(
+          item: app,
+          newIndex: newIndex,
+          forceNotify: forceNotify,
         );
       },
       failure: (error) {

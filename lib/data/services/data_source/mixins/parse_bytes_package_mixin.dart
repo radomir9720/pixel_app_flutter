@@ -62,7 +62,7 @@ mixin ParseBytesPackageMixin on DataSource {
     required Uint8List rawPackage,
     required OnNewPackageCallback onNewPackageCallback,
   }) {
-    observe(rawPackage);
+    observe(rawPackage, null, DataSourceRequestDirection.incoming);
 
     buffer.addAll(rawPackage);
 
@@ -143,6 +143,7 @@ mixin ParseBytesPackageMixin on DataSource {
     if (potentialEndingByte == endingByte) {
       final package = buffer.popFirst(indexOfPotentialEndingByte + 1);
       final parsedPackage = DataSourceIncomingPackage.parse(package);
+      observe(null, parsedPackage, DataSourceRequestDirection.incoming);
       onNewPackage(parsedPackage);
     } else {
       // If the ending byte was not found at the index where it should be,

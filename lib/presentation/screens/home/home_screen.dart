@@ -156,9 +156,8 @@ class _SideNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 0,
-      bottom: 0,
-      left: isHandset ? 16 : 32,
+      bottom: 50,
+      left: isHandset ? 16 : 40,
       child: Center(
         child: SideNavBar(
           showTitle: showTitle,

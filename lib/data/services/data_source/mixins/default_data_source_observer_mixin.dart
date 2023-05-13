@@ -1,4 +1,4 @@
-import 'package:pixel_app_flutter/domain/data_source/services/data_source_service.dart';
+import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 
 mixin DefaultDataSourceObserverMixin on DataSource {
   final observers = <Observer>{};
@@ -10,9 +10,34 @@ mixin DefaultDataSourceObserverMixin on DataSource {
   void removeObserver(Observer observer) => observers.remove(observer);
 
   @override
-  void observe(List<int> package) {
+  void observe(
+    List<int>? package,
+    DataSourceIncomingPackage? parsed,
+    DataSourceRequestDirection direction,
+  ) {
     for (final observer in observers) {
-      observer(package);
+      observer(package, parsed, direction);
+    }
+  }
+
+  void observeIncoming(List<int> package) {
+    for (final observer in observers) {
+      observer(package, null, DataSourceRequestDirection.incoming);
+    }
+  }
+
+  void observeOutgoing(List<int> package) {
+    for (final observer in observers) {
+      observer(package, null, DataSourceRequestDirection.outgoing);
+    }
+  }
+
+  void observeAll(
+    List<List<int>> packages,
+    DataSourceRequestDirection direction,
+  ) {
+    for (final package in packages) {
+      observe(package, null, direction);
     }
   }
 

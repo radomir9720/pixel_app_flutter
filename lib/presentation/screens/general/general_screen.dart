@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pixel_app_flutter/domain/data_source/blocs/lights_cubit.dart';
+import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/fast_actions_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/speed_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/statistic_widget.dart';
+import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/blinker_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/organisms/car_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/organisms/tablet_upper_info_panel.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class GeneralScreen extends StatelessWidget {
   const GeneralScreen({super.key});
@@ -13,11 +18,50 @@ class GeneralScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenData = Screen.of(context);
 
-    return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
-      child: screenData.whenType(
-        orElse: () => const TabletGeneralScreenBody(),
-        handset: () => const HandsetGeneralScreenBody(),
+    return BlocListener<LightsCubit, LightsState>(
+      listenWhen: (previous, current) {
+        final error = current.whenFailure<MapEntry<String, LightsStateError>?>(
+          previous,
+          leftTurnSignal: (error) =>
+              MapEntry(context.l10n.leftBlinkerButtonCaption, error),
+          rightTurnSignal: (error) =>
+              MapEntry(context.l10n.rightBlinkerButtonCaption, error),
+          hazardBeam: (error) =>
+              MapEntry(context.l10n.hazardBeamButtonCaption, error),
+          sideBeam: (error) =>
+              MapEntry(context.l10n.parkingLightsButtonCaption, error),
+          lowBeam: (error) =>
+              MapEntry(context.l10n.lowBeamButtonCaption, error),
+          highBeam: (error) {
+            return MapEntry(context.l10n.highBeamButtonCaption, error);
+          },
+          noFailure: () => null,
+        );
+
+        if (error == null) return false;
+
+        final reason = error.value.when(
+          timeout: () => context.l10n.positiveAnswerDidNotComeErrorMessage,
+          mainECUError: () => context.l10n.errorFromMainECUErrorMessage,
+          differs: () =>
+              context.l10n.notAllBlocksReturnedSuccessResponseErrorMessage,
+        );
+
+        context.showSnackBar(
+          context.l10n.errorSwitchingFeatureMessage(
+            error.key.toLowerCase(),
+            reason,
+          ),
+        );
+        return false;
+      },
+      listener: (context, state) {},
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: screenData.whenType(
+          orElse: () => const TabletGeneralScreenBody(),
+          handset: () => const HandsetGeneralScreenBody(),
+        ),
       ),
     );
   }
@@ -43,9 +87,15 @@ class TabletGeneralScreenBody extends StatelessWidget {
             child: TabletUpperInfoPanel(),
           ),
           Positioned(
-            right: MediaQuery.of(context).size.width * .25,
-            bottom: MediaQuery.of(context).size.height * .25,
+            right: 0,
+            left: 0,
+            bottom: MediaQuery.of(context).size.height * .3,
             child: const CarWidget(),
+          ),
+          const Positioned(
+            left: 0,
+            bottom: 400,
+            child: BlinkerButton(),
           ),
         ],
       ),

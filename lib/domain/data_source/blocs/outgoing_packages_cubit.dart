@@ -55,8 +55,7 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
   void _subscribeTo(Set<DataSourceParameterId> parameterIds) {
     for (final parameterId in parameterIds) {
       final package = OutgoingSubscribePackage(parameterId: parameterId);
-      log(package);
-      dataSource.sendPackage(package);
+      sendPackage(package);
     }
   }
 
@@ -82,23 +81,25 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
   void _unsubscribeFrom(Set<DataSourceParameterId> parameterIds) {
     for (final parameterId in parameterIds) {
       final package = OutgoingUnsubscribePackage(parameterId: parameterId);
-      log(package);
-      dataSource.sendPackage(package);
+      sendPackage(package);
     }
   }
 
   void getValue(DataSourceParameterId id) {
     final package = OutgoingValueRequestPackage(parameterId: id);
-    log(package);
-    dataSource.sendPackage(package);
+    sendPackage(package);
   }
 
   void getValues(List<DataSourceParameterId> ids) {
     for (final id in ids) {
       final package = OutgoingValueRequestPackage(parameterId: id);
-      log(package);
-      dataSource.sendPackage(package);
+      sendPackage(package);
     }
+  }
+
+  void sendPackage(DataSourceOutgoingPackage package) {
+    log(package);
+    dataSource.sendPackage(package);
   }
 
   void _cancelTimer() {

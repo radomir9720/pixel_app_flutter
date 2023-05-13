@@ -8,6 +8,7 @@ class InterfaceButton extends StatelessWidget {
     required this.bottom,
     this.onPressed,
     this.disabled = false,
+    this.customIconColor,
   });
 
   factory InterfaceButton.withTitle({
@@ -15,6 +16,7 @@ class InterfaceButton extends StatelessWidget {
     required IconData icon,
     VoidCallback? onPressed,
     bool disabled = false,
+    Color? backgroundColor,
   }) =>
       InterfaceButton(
         bottom: Text(
@@ -26,6 +28,7 @@ class InterfaceButton extends StatelessWidget {
         icon: icon,
         onPressed: onPressed,
         disabled: disabled,
+        customIconColor: backgroundColor,
       );
 
   @protected
@@ -41,6 +44,9 @@ class InterfaceButton extends StatelessWidget {
   final bool disabled;
 
   @protected
+  final Color? customIconColor;
+
+  @protected
   static const textStyle = TextStyle(
     fontSize: 11,
     height: 1.21,
@@ -48,15 +54,18 @@ class InterfaceButton extends StatelessWidget {
     fontStyle: FontStyle.normal,
   );
 
+  @protected
+  static const kBorderRadius = BorderRadius.all(Radius.circular(12));
   @override
   Widget build(BuildContext context) {
     final color =
         disabled ? AppColors.of(context).disabled : AppColors.of(context).text;
 
     return Material(
-      color: Colors.transparent,
+      color: customIconColor ?? Colors.transparent,
+      borderRadius: kBorderRadius,
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: kBorderRadius,
         onTap: onPressed,
         child: Padding(
           padding: const EdgeInsets.all(6),
