@@ -48,6 +48,30 @@ abstract class DataSourceParameterId {
   const factory DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour() =
       LowVoltageTwentyTwoToTwentyFourParameterId;
 
+  const factory DataSourceParameterId.frontSideBeam() =
+      FrontSideBeamParameterId;
+  const factory DataSourceParameterId.tailSideBeam() = TailSideBeamParameterId;
+  const factory DataSourceParameterId.lowBeam() = LowBeamParameterId;
+  const factory DataSourceParameterId.highBeam() = HighBeamParameterId;
+  const factory DataSourceParameterId.frontHazardBeam() =
+      FrontHazardBeamParameterId;
+  const factory DataSourceParameterId.tailHazardBeam() =
+      TailHazardBeamParameterId;
+  const factory DataSourceParameterId.frontCustomBeam() =
+      FrontCustomBeamParameterId;
+  const factory DataSourceParameterId.tailCustomBeam() =
+      TailCustomBeamParameterId;
+  const factory DataSourceParameterId.frontLeftTurnSignal() =
+      FrontLeftTurnSignalParameterId;
+  const factory DataSourceParameterId.frontRightTurnSignal() =
+      FrontRightTurnSignalParameterId;
+  const factory DataSourceParameterId.tailLeftTurnSignal() =
+      TailLeftTurnSignalParameterId;
+  const factory DataSourceParameterId.tailRightTurnSignal() =
+      TailRightTurnSignalParameterId;
+  const factory DataSourceParameterId.brakeLight() = BrakeLightParameterId;
+  const factory DataSourceParameterId.reverseLight() = ReverseLightParameterId;
+
   bool get isSpeed => this is SpeedParameterId;
 
   bool get isLight => this is LightParameterId;
@@ -56,7 +80,7 @@ abstract class DataSourceParameterId {
 
   bool get isVoltage => this is VoltageParameterId;
 
-  bool get isLowVoltage => this is LowVoltageMinMaxDeltaParameterId;
+  bool get isLowVoltageMinMaxDelta => this is LowVoltageMinMaxDeltaParameterId;
 
   bool get isHighVoltage => this is HighVoltageParameterId;
 
@@ -68,7 +92,7 @@ abstract class DataSourceParameterId {
   bool get isTemperatureSecond => this is TemperatureSecondBatchParameterId;
   bool get isTemperatureThird => this is TemperatureThirdBatchParameterId;
 
-//
+  //
 
   bool get isLowVoltageOneToThree => this is LowVoltageOneToThreeParameterId;
   bool get isLowVoltageFourToSix => this is LowVoltageFourToSixParameterId;
@@ -82,6 +106,21 @@ abstract class DataSourceParameterId {
       this is LowVoltageNineteenToTwentyOneParameterId;
   bool get isLowVoltageTwentyTwoToTwentyFour =>
       this is LowVoltageTwentyTwoToTwentyFourParameterId;
+
+  bool get isFrontSideBeam => this is FrontSideBeamParameterId;
+  bool get isTailSideBeam => this is TailSideBeamParameterId;
+  bool get isLowBeam => this is LowBeamParameterId;
+  bool get isHighBeam => this is HighBeamParameterId;
+  bool get isFrontHazardBeam => this is FrontHazardBeamParameterId;
+  bool get isTailHazardBeam => this is TailHazardBeamParameterId;
+  bool get isFrontCustomBeam => this is FrontCustomBeamParameterId;
+  bool get isTailCustomBeam => this is TailCustomBeamParameterId;
+  bool get isFrontLeftTurnSignal => this is FrontLeftTurnSignalParameterId;
+  bool get isFrontRightTurnSignal => this is FrontRightTurnSignalParameterId;
+  bool get isTailLeftTurnSignal => this is TailLeftTurnSignalParameterId;
+  bool get isTailRightTurnSignal => this is TailRightTurnSignalParameterId;
+  bool get isBrakeLight => this is BrakeLightParameterId;
+  bool get isReverseLight => this is ReverseLightParameterId;
 
   void voidOn<T extends DataSourceParameterId>(void Function() function) {
     if (this is T) function();
@@ -111,6 +150,21 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.lowVoltageSixteenToEighteen(),
       DataSourceParameterId.lowVoltageNineteenToTwentyOne(),
       DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour(),
+      //
+      DataSourceParameterId.frontSideBeam(),
+      DataSourceParameterId.tailSideBeam(),
+      DataSourceParameterId.lowBeam(),
+      DataSourceParameterId.highBeam(),
+      DataSourceParameterId.frontHazardBeam(),
+      DataSourceParameterId.tailHazardBeam(),
+      DataSourceParameterId.frontCustomBeam(),
+      DataSourceParameterId.tailCustomBeam(),
+      DataSourceParameterId.frontLeftTurnSignal(),
+      DataSourceParameterId.frontRightTurnSignal(),
+      DataSourceParameterId.tailLeftTurnSignal(),
+      DataSourceParameterId.tailRightTurnSignal(),
+      DataSourceParameterId.brakeLight(),
+      DataSourceParameterId.reverseLight(),
     ];
   }
 
@@ -205,4 +259,65 @@ class LowVoltageNineteenToTwentyOneParameterId extends DataSourceParameterId {
 
 class LowVoltageTwentyTwoToTwentyFourParameterId extends DataSourceParameterId {
   const LowVoltageTwentyTwoToTwentyFourParameterId() : super(0x0052);
+}
+
+abstract class SideBeamParameterId extends DataSourceParameterId {
+  const SideBeamParameterId(super.value);
+}
+
+// Lights
+class FrontSideBeamParameterId extends SideBeamParameterId {
+  const FrontSideBeamParameterId() : super(0x00C4);
+}
+
+class TailSideBeamParameterId extends SideBeamParameterId {
+  const TailSideBeamParameterId() : super(0x00E4);
+}
+
+class LowBeamParameterId extends DataSourceParameterId {
+  const LowBeamParameterId() : super(0x00C5);
+}
+
+class HighBeamParameterId extends DataSourceParameterId {
+  const HighBeamParameterId() : super(0x00C6);
+}
+
+class FrontHazardBeamParameterId extends DataSourceParameterId {
+  const FrontHazardBeamParameterId() : super(0x00C9);
+}
+
+class TailHazardBeamParameterId extends DataSourceParameterId {
+  const TailHazardBeamParameterId() : super(0x00E9);
+}
+
+class FrontCustomBeamParameterId extends DataSourceParameterId {
+  const FrontCustomBeamParameterId() : super(0x00CA);
+}
+
+class TailCustomBeamParameterId extends DataSourceParameterId {
+  const TailCustomBeamParameterId() : super(0x00EA);
+}
+
+class FrontLeftTurnSignalParameterId extends DataSourceParameterId {
+  const FrontLeftTurnSignalParameterId() : super(0x00C7);
+}
+
+class FrontRightTurnSignalParameterId extends DataSourceParameterId {
+  const FrontRightTurnSignalParameterId() : super(0x00C8);
+}
+
+class TailLeftTurnSignalParameterId extends DataSourceParameterId {
+  const TailLeftTurnSignalParameterId() : super(0x00E7);
+}
+
+class TailRightTurnSignalParameterId extends DataSourceParameterId {
+  const TailRightTurnSignalParameterId() : super(0x00E8);
+}
+
+class BrakeLightParameterId extends DataSourceParameterId {
+  const BrakeLightParameterId() : super(0x00E5);
+}
+
+class ReverseLightParameterId extends DataSourceParameterId {
+  const ReverseLightParameterId() : super(0x00E6);
 }

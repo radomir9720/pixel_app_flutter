@@ -73,6 +73,7 @@
 
     "cancelButtonCaption": "Отменить",
     "saveButtonCaption": "Сохранить",
+    "sendButtonCaption": "Отправить",
 
     "unknownErrorSelectingDataSourceMessage": "Неизвестная ошибка при выборе источника данных",
     "unavailableDataSourceErrorMessage": "Источник данных недоступен",
@@ -121,6 +122,15 @@
     "requestTypeFilterDialogTitle": "Фильтр по типу запроса",
     "requestDirectionListTileLabel": "Направление запроса",
     "requestDirectionFilterDialogTitle": "Фильтр по направлению запросов",
+
+    "packagesExchangeConsoleScreenTitle": "Консоль обмена пакетами",
+    "invalidRequestTypeMessage": "Неправильный тип запроса",
+    "invalidParameterIDMessage": "Неправильный идентификтор параметра",
+    "invalidDataFormatMessage": "Некорректный формат данных",
+    "requestTypeHint": "Тип запроса",
+    "parameterIDHint": "ID параметра",
+    "packageDataHint": "0x01 0xFF...",
+    "packageDataLabel": "Данные запроса",
 
     "dontTurnOffTheScreenButtonCaption": "Не выключать экран",
     "errorTogglingDTOMessage": "Ошибка при переключении режима \"Не выключать экран\"",
@@ -194,6 +204,31 @@
 
     "minCellsVoltageTileTitle": "Минимальное напряжение на ячейках",
     "maxCellsVoltageTileTitle": "Максимальное напряжение на ячейках",
-    "deltaCellsVoltageTileTitle": "Дельта напряжения на ячейках"
+    "deltaCellsVoltageTileTitle": "Дельта напряжения на ячейках",
 
+    "parkingLightsButtonCaption": "Габаритные огни",
+    "lowBeamButtonCaption": "Ближний свет",
+    "highBeamButtonCaption": "Дальний свет",
+    "leftBlinkerButtonCaption": "Левый поворотник",
+    "rightBlinkerButtonCaption": "Правый поворотник",
+    "hazardBeamButtonCaption": "Аварийный сигнал",
+
+    "onShortStatusMessage": "Вкл",
+    "offShortStatusMessage": "Выкл",
+    "loadingStatusMessage": "Загрузка",
+
+    "errorSwitchingFeatureMessage": "Не удалось переключить {featureName}. {reason}",
+    "@errorSwitchingFeatureMessage": {
+        "placeholders": {
+            "featureName": {
+                "type": "String"
+            },
+            "reason": {
+                "type": "String"
+            }
+        }
+    },
+    "notAllBlocksReturnedSuccessResponseErrorMessage": "Не от всех блоков пришел положительный ответ",
+    "positiveAnswerDidNotComeErrorMessage": "Положительный ответ не пришел",
+    "errorFromMainECUErrorMessage": "Ошибка от MainECU"
 }

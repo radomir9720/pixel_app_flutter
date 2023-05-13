@@ -41,7 +41,7 @@ class _TabletBodyState extends State<_TabletBody> {
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 37),
           child: Text(
             context.l10n.appsTabTitle,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         Expanded(

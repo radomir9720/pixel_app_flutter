@@ -1,10 +1,16 @@
 export 'battery_low_voltage.dart';
 export 'battery_temperature.dart';
 export 'current.dart';
+export 'error_with_code_and_section.dart';
 export 'handshake.dart';
+export 'hazard_beam.dart';
+export 'high_beam.dart';
 export 'high_current.dart';
 export 'high_voltage.dart';
+export 'low_beam.dart';
 export 'low_voltage_min_max_delta.dart';
 export 'max_temperature.dart';
+export 'side_beam.dart';
 export 'speed.dart';
+export 'turn_signal.dart';
 export 'voltage.dart';

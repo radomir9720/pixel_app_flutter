@@ -1,14 +1,17 @@
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/function_id_validation_mixins.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/request_type_validation_mixins.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 
 class BatteryTemperatureFirstBatchIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryTemperatureFirstBatch>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryTemperatureFirstBatchIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryTemperatureFirstBatch> get dataBytesToModelConverter =>
+  BytesConverter<BatteryTemperatureFirstBatch> get bytesConverter =>
       BatteryTemperatureFirstBatchConverter();
 
   @override
@@ -17,11 +20,13 @@ class BatteryTemperatureFirstBatchIncomingDataSourcePackage
 
 class BatteryTemperatureSecondBatchIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryTemperatureSecondBatch>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryTemperatureSecondBatchIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryTemperatureSecondBatch> get dataBytesToModelConverter =>
+  BytesConverter<BatteryTemperatureSecondBatch> get bytesConverter =>
       BatteryTemperatureSecondBatchConverter();
 
   @override
@@ -30,11 +35,13 @@ class BatteryTemperatureSecondBatchIncomingDataSourcePackage
 
 class BatteryTemperatureThirdBatchIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryTemperatureThirdBatch>
-    with IsValueUpdateOrBufferRequestMixin {
+    with
+        IsEventOrBufferRequestRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin {
   BatteryTemperatureThirdBatchIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<BatteryTemperatureThirdBatch> get dataBytesToModelConverter =>
+  BytesConverter<BatteryTemperatureThirdBatch> get bytesConverter =>
       BatteryTemperatureThirdBatchConverter();
 
   @override

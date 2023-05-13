@@ -169,6 +169,12 @@ class DeveloperToolsScreen extends StatelessWidget {
                     context.router.push(const RequestsExchangeLogsFlow());
                   },
                 ),
+                ListTile(
+                  title: Text(context.l10n.packagesExchangeConsoleScreenTitle),
+                  onTap: () {
+                    context.router.push(const PackagesExchangeConsoleRoute());
+                  },
+                ),
               ],
             ).toList(),
           );

@@ -1,16 +1,20 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 
 @immutable
-abstract class RequestsExchangeLogsStateBase<T> {
+abstract class RequestsExchangeLogsStateBase<T> with EquatableMixin {
   const RequestsExchangeLogsStateBase(
     this.data,
     this.dateTime,
+    this.direction,
   );
 
   final T data;
+
+  final DataSourceRequestDirection direction;
 
   final DateTime dateTime;
 
@@ -19,24 +23,19 @@ abstract class RequestsExchangeLogsStateBase<T> {
     required List<int> requestType,
     required List<int> direction,
   });
+
+  @override
+  List<Object?> get props => [data, dateTime, direction];
 }
 
 @immutable
 class ProcessedRequestsExchangeLogsState
     extends RequestsExchangeLogsStateBase<DataSourcePackage> {
-  const ProcessedRequestsExchangeLogsState(super.data, super.dateTime);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is ProcessedRequestsExchangeLogsState &&
-        other.data == data &&
-        other.dateTime == dateTime;
-  }
-
-  @override
-  int get hashCode => data.hashCode ^ dateTime.hashCode;
+  const ProcessedRequestsExchangeLogsState(
+    super.data,
+    super.dateTime,
+    super.direction,
+  );
 
   @override
   bool filter({
@@ -53,19 +52,11 @@ class ProcessedRequestsExchangeLogsState
 
 class RawRequestsExchangeLogsState
     extends RequestsExchangeLogsStateBase<List<int>> {
-  const RawRequestsExchangeLogsState(super.data, super.dateTime);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is RawRequestsExchangeLogsState &&
-        listEquals(other.data, data) &&
-        other.dateTime == dateTime;
-  }
-
-  @override
-  int get hashCode => data.hashCode ^ dateTime.hashCode;
+  const RawRequestsExchangeLogsState(
+    super.data,
+    super.dateTime,
+    super.direction,
+  );
 
   @override
   bool filter({
@@ -74,12 +65,14 @@ class RawRequestsExchangeLogsState
     required List<int> direction,
   }) {
     final package = DataSourceIncomingPackage.instanceOrNUll(data);
-    if (package == null) return true;
+    // if (package == null) return true;
     return (parameterId.isEmpty ||
+            package == null ||
             parameterId.contains(package.parameterId.value)) &&
         (requestType.isEmpty ||
+            package == null ||
             requestType.contains(package.requestType.value)) &&
-        (direction.isEmpty || direction.contains(package.directionFlag.value));
+        (direction.isEmpty || direction.contains(this.direction.value));
   }
 }
 
@@ -90,7 +83,7 @@ abstract class RequestsExchangeLogsCubitBase<S,
   @visibleForTesting
   final int maxItems;
 
-  void add(S data);
+  void add(S data, DataSourceRequestDirection direction);
 }
 
 class ProcessedRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
@@ -98,13 +91,13 @@ class ProcessedRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
   ProcessedRequestsExchangeLogsCubit({super.maxItems});
 
   @override
-  void add(DataSourcePackage data) {
+  void add(DataSourcePackage data, DataSourceRequestDirection direction) {
     // Just in case
     if (isClosed) return;
 
     emit([
       ...state.reversed.take(maxItems - 1).toList().reversed,
-      ProcessedRequestsExchangeLogsState(data, DateTime.now())
+      ProcessedRequestsExchangeLogsState(data, DateTime.now(), direction)
     ]);
   }
 }
@@ -114,13 +107,13 @@ class RawRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
   RawRequestsExchangeLogsCubit({super.maxItems});
 
   @override
-  void add(List<int> data) {
+  void add(List<int> data, DataSourceRequestDirection direction) {
     // Just in case
     if (isClosed) return;
 
     emit([
       ...state.reversed.take(maxItems - 1).toList().reversed,
-      RawRequestsExchangeLogsState(data, DateTime.now())
+      RawRequestsExchangeLogsState(data, DateTime.now(), direction)
     ]);
   }
 }

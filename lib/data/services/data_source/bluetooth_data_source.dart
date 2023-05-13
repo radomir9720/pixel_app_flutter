@@ -8,6 +8,7 @@ import 'package:pixel_app_flutter/data/services/data_source/mixins/cached_device
 import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/parse_bytes_package_mixin.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/send_packages_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
@@ -20,7 +21,8 @@ class BluetoothDataSource extends DataSource
         ParseBytesPackageMixin,
         CachedDevicesStreamMixin,
         PackageStreamControllerMixin,
-        DefaultDataSourceObserverMixin {
+        DefaultDataSourceObserverMixin,
+        SendPackagesMixin {
   BluetoothDataSource({
     required super.id,
     required this.bluetoothSerial,
@@ -59,7 +61,7 @@ class BluetoothDataSource extends DataSource
       return const Result.error(SendPackageError.noConnection);
     }
 
-    observe(package);
+    observeOutgoing(package);
 
     _sink.add(package.toUint8List);
 

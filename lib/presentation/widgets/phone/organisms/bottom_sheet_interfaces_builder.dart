@@ -107,7 +107,7 @@ class BottomSheetLayer extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(24),
         ),
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
         boxShadow: const [
           BoxShadow(
             blurRadius: 4,

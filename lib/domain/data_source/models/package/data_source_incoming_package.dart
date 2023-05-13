@@ -1,6 +1,11 @@
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/data_source_package_exceptions.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/incoming_data_source_packages.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/function_id_validation_mixins.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/request_type_validation_mixins.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/set_uint8_result_body_bytes_converter_mixin.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/uint8_with_status_body_bytes_converter_mixin.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/implementations/set_uint8_body.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 
 abstract class DataSourceIncomingPackage<T extends BytesConvertible>
@@ -49,14 +54,17 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
   bool isValid() {
     return directionFlag == DataSourceRequestDirection.incoming &&
         validRequestType &&
-        validParameterId;
+        validParameterId &&
+        validFunctionId;
   }
 
   bool get validRequestType;
 
   bool get validParameterId;
 
-  BytesConverter<T> get dataBytesToModelConverter;
+  bool get validFunctionId;
+
+  BytesConverter<T> get bytesConverter;
 
   static List<DataSourceIncomingPackage Function(List<int> source)>
       getBuilders<T extends BytesConvertible>() {
@@ -82,10 +90,26 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
       BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage.new,
       BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage.new,
       BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage.new,
+      //
+      TailSideBeamSetIncomingDataSourcePackage.new,
+      FrontSideBeamSetIncomingDataSourcePackage.new,
+      //
+      LowBeamSetIncomingDataSourcePackage.new,
+      HighBeamSetIncomingDataSourcePackage.new,
+      //
+      FrontHazardBeamSetIncomingDataSourcePackage.new,
+      TailHazardBeamSetIncomingDataSourcePackage.new,
+      //
+      FrontLeftTurnSignalIncomingDataSourcePackage.new,
+      FrontRightTurnSignalIncomingDataSourcePackage.new,
+      TailLeftTurnSignalIncomingDataSourcePackage.new,
+      TailRightTurnSignalIncomingDataSourcePackage.new,
+      //
+      ErrorWithCodeAndSectionIncomingDataSourcePackage.new,
     ];
   }
 
-  T get dataModel => dataBytesToModelConverter.fromBytes(data);
+  T get dataModel => bytesConverter.fromBytes(data);
 }
 
 extension VoidOnModelExtension on DataSourceIncomingPackage {
@@ -95,4 +119,22 @@ extension VoidOnModelExtension on DataSourceIncomingPackage {
   ) {
     if (this is T) fn((this as T).dataModel);
   }
+}
+
+abstract class SetUint8ResultIncomingDataSourcePackage
+    extends DataSourceIncomingPackage<SetUint8ResultBody>
+    with
+        IsEventOrSubscriptionAnswerRequestTypeMixin,
+        IsSetResponseFunctionIdMixin,
+        SetUint8ResultBodyBytesConverterMixin {
+  SetUint8ResultIncomingDataSourcePackage(super.source);
+}
+
+abstract class Uint8WithstatusIncomingDataSourcePackage
+    extends DataSourceIncomingPackage<Uint8WithStatusBody>
+    with
+        IsEventOrBufferRequestOrSubscriptionAnswerRequestTypeMixin,
+        IsPeriodicValueStatusFunctionIdMixin,
+        Uint8WithStatusBodyBytesConverterMixin {
+  Uint8WithstatusIncomingDataSourcePackage(super.source);
 }

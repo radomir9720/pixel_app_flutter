@@ -73,6 +73,7 @@
 
     "cancelButtonCaption": "Cancel",
     "saveButtonCaption": "Save",
+    "sendButtonCaption": "Send",
 
     "unknownErrorSelectingDataSourceMessage": "Unknown error while selecting data source",
     "unavailableDataSourceErrorMessage": "Data source is unavailable",
@@ -121,6 +122,15 @@
     "requestTypeFilterDialogTitle": "Request type",
     "requestDirectionListTileLabel": "Request direction",
     "requestDirectionFilterDialogTitle": "Request direction filter",
+
+    "packagesExchangeConsoleScreenTitle": "Packages exchange console",
+    "invalidRequestTypeMessage": "Invalid request type",
+    "invalidParameterIDMessage": "Invalid parameter ID",
+    "invalidDataFormatMessage": "Incorrect data format",
+    "requestTypeHint": "Request type",
+    "parameterIDHint": "Parameter ID",
+    "packageDataHint": "0x01 0xFF...",
+    "packageDataLabel": "Request data",
 
     "dontTurnOffTheScreenButtonCaption": "Don't turn off the screen",
     "errorTogglingDTOMessage": "Error toggling \"Don't turn off the screen\" mode",
@@ -194,5 +204,31 @@
 
     "minCellsVoltageTileTitle": "Minimum cells voltage",
     "maxCellsVoltageTileTitle": "Maximum cells voltage",
-    "deltaCellsVoltageTileTitle": "Delta cells voltage"
+    "deltaCellsVoltageTileTitle": "Delta cells voltage",
+
+    "parkingLightsButtonCaption": "Parking lights",
+    "lowBeamButtonCaption": "Low beam",
+    "highBeamButtonCaption": "High beam",
+    "leftBlinkerButtonCaption": "Left turn signal",
+    "rightBlinkerButtonCaption": "Right turn signal",
+    "hazardBeamButtonCaption": "Blinker",
+
+    "onShortStatusMessage": "On",
+    "offShortStatusMessage": "Off",
+    "loadingStatusMessage": "Loading",
+
+    "errorSwitchingFeatureMessage": "Error switching {featureName}. {reason}",
+    "@errorSwitchingFeatureMessage": {
+        "placeholders": {
+            "featureName": {
+                "type": "String"
+            },
+            "reason": {
+                "type": "String"
+            }
+        }
+    },
+    "notAllBlocksReturnedSuccessResponseErrorMessage": "Not all the blocks returned positive answer",
+    "positiveAnswerDidNotComeErrorMessage": "Positive answer did not come",
+    "errorFromMainECUErrorMessage": "MainECU error"
 }

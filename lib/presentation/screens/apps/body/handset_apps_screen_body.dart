@@ -75,7 +75,7 @@ class _HandsetBodyState extends State<_HandsetBody> {
       children: [
         Text(
           context.l10n.appsTabTitle,
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         //
         const SizedBox(height: 20),
@@ -86,6 +86,7 @@ class _HandsetBodyState extends State<_HandsetBody> {
         ),
         //
         BlocBuilder<SearchAppCubit, SearchAppState>(
+          buildWhen: (previous, current) => current.shouldRebuild,
           builder: (context, state) {
             final searchString = state.searchString;
             final apps = [...state.filtered];

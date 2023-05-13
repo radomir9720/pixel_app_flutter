@@ -12,8 +12,11 @@ class PixelIcons {
 
   static const String _fontFamily = 'PixelIcons';
 
-  static const IconData pinOutline = IconData(0xe91b, fontFamily: _fontFamily);
-  static const IconData pin = IconData(0xe91c, fontFamily: _fontFamily);
+  static const IconData hazardBeam = IconData(0xe91d, fontFamily: _fontFamily);
+  static const IconData lowBeam = IconData(0xe91e, fontFamily: _fontFamily);
+  static const IconData highBeam = IconData(0xe91f, fontFamily: _fontFamily);
+  static const IconData parkingLights =
+      IconData(0xe920, fontFamily: _fontFamily);
   static const IconData wifi = IconData(0xe900, fontFamily: _fontFamily);
   static const IconData bluetooth = IconData(0xe901, fontFamily: _fontFamily);
   static const IconData usb = IconData(0xe902, fontFamily: _fontFamily);
@@ -42,4 +45,6 @@ class PixelIcons {
   static const IconData speedometer = IconData(0xe916, fontFamily: _fontFamily);
   static const IconData sunCharging = IconData(0xe917, fontFamily: _fontFamily);
   static const IconData battery = IconData(0xe918, fontFamily: _fontFamily);
+  static const IconData pinOutline = IconData(0xe91b, fontFamily: _fontFamily);
+  static const IconData pin = IconData(0xe91c, fontFamily: _fontFamily);
 }

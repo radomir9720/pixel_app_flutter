@@ -2,24 +2,31 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/data_source_incoming_package.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 
-mixin IsValueUpdateMixin<T extends BytesConvertible>
+mixin IsEventRequestTypeMixin<T extends BytesConvertible>
     on DataSourceIncomingPackage<T> {
   @override
-  bool get validRequestType => requestType.isValueUpdate;
+  bool get validRequestType => requestType.isEvent;
 }
 
-mixin IsValueUpdateOrBufferRequestMixin<T extends BytesConvertible>
+mixin IsEventOrBufferRequestRequestTypeMixin<T extends BytesConvertible>
     on DataSourceIncomingPackage<T> {
   @override
   bool get validRequestType =>
-      requestType.isValueUpdate || requestType.isBufferRequest;
+      requestType.isEvent || requestType.isBufferRequest;
 }
 
-mixin IsValueUpdateOrBufferRequestOrSubscriptionAnswerMixin<
+mixin IsEventOrBufferRequestOrSubscriptionAnswerRequestTypeMixin<
     T extends BytesConvertible> on DataSourceIncomingPackage<T> {
   @override
   bool get validRequestType =>
-      requestType.isValueUpdate ||
+      requestType.isEvent ||
       requestType.isBufferRequest ||
       requestType.isSubscription;
+}
+
+mixin IsEventOrSubscriptionAnswerRequestTypeMixin<T extends BytesConvertible>
+    on DataSourceIncomingPackage<T> {
+  @override
+  bool get validRequestType =>
+      requestType.isEvent || requestType.isSubscription;
 }

@@ -7,7 +7,7 @@ enum FunctionId {
 
   /// ID, saying that value was set successfuly.
   /// This id comes as result of [setValueWithParam]
-  successSetValueWithParam(0x41),
+  successSetValueWithParam(successSetValueWithParamId),
 
   /// ID, saying that value request was successful.
   /// This id comes as result of [requestValue]
@@ -28,15 +28,15 @@ enum FunctionId {
 
   /// ID, saying that an error was encountered while setting a value,
   /// This id comes as result of [setValueWithParam].
-  errorSettingValueWithParam(0xC1),
+  errorSettingValueWithParam(errorSettingValueWithParamId),
 
   /// ID, saying that an error was encountered while requesting a value,
   /// This id comes as result of [requestValue].
   errorRequestingValue(0xD1),
 
-  /// ID, saying that an error was encountered while ending an event from the
+  /// ID, saying that an error was encountered while sending an event from the
   /// L2 level
-  errorEvent(0xE6);
+  errorEvent(errorEventId);
 
   const FunctionId(this.value);
 
@@ -49,4 +49,9 @@ enum FunctionId {
   static const okIncomingPeriodicValueId = 0x61;
   static const warningIncomingPeriodicValueId = 0x62;
   static const criticalIncomingPeriodicValueId = 0x63;
+  //
+  static const successSetValueWithParamId = 0x41;
+  static const errorSettingValueWithParamId = 0xC1;
+  //
+  static const errorEventId = 0xE6;
 }

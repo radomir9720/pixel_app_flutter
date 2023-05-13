@@ -26,7 +26,7 @@ class UpdateButton extends StatelessWidget {
           child: Center(
             child: Text(
               context.l10n.updateButtonCaption,
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
         ),

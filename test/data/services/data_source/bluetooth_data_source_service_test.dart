@@ -786,7 +786,9 @@ void main() {
         const incomingPackage = [60, 0, 144, 0, 0, 0, 222, 71, 62];
         // var incomingEventsCounter = 0;
         final events = <List<int>>[];
-        ds.addObserver(events.add);
+        ds.addObserver((raw, parsed, direction) {
+          if (raw != null) events.add(raw);
+        });
 
         // act
         await ds.sendPackage(outgoingEvent);
@@ -810,7 +812,7 @@ void main() {
       () async {
         // arrange
         await ds.connect(deviceAddress);
-        ds.addObserver((package) {});
+        ds.addObserver((_, __, ___) {});
 
         // act
         ds.debouncer.run(() {});

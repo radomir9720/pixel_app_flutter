@@ -37,10 +37,8 @@ class MaterialTheme {
         space: 1.si,
       ),
       canvasColor: colors.background,
-      backgroundColor: colors.background,
       dialogBackgroundColor: colors.background,
       scaffoldBackgroundColor: colors.background,
-      errorColor: colors.error,
       disabledColor: colors.disabled,
       appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -64,19 +62,19 @@ class MaterialTheme {
       shadowColor: colors.border,
       dividerColor: colors.border,
       textTheme: TextTheme(
-        headline2: TextStyle(
+        displayMedium: TextStyle(
           fontSize: 22.fo,
           height: 1.21,
           color: colors.textAccent,
           fontWeight: FontWeight.w600,
         ),
-        headline4: TextStyle(
+        headlineMedium: TextStyle(
           height: 1.21,
           fontSize: 17.fo,
           color: colors.textAccent,
           fontWeight: FontWeight.w600,
         ),
-        bodyText2: TextStyle(
+        bodyMedium: TextStyle(
           fontSize: 14.fo,
           height: 1.23,
           color: colors.text,

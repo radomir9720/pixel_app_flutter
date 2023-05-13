@@ -17,3 +17,5 @@ export 'implementations/request_value_body.dart';
 export 'implementations/speed.dart';
 export 'implementations/voltage.dart';
 export 'implementations/current.dart';
+export 'implementations/error_with_code_and_section.dart';
+export 'implementations/uint8_with_status_body.dart';

@@ -8,12 +8,10 @@ class ProcessedExchangeLogsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pauseUpdating = context.watch<PauseLogsUpdatingCubit>().state;
-
     return BlocBuilder<ProcessedRequestsExchangeLogsCubit,
         List<ProcessedRequestsExchangeLogsState>>(
       buildWhen: (previous, current) {
-        return !pauseUpdating;
+        return !context.read<PauseLogsUpdatingCubit>().state;
       },
       builder: (context, state) {
         final filter = context.watch<RequestsExchangeLogsFilterCubit>().state;

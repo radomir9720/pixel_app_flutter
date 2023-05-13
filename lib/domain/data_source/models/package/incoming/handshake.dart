@@ -8,6 +8,9 @@ abstract class HandshakeIncomingDataSourcePackage<T extends BytesConvertible>
 
   @override
   bool get validRequestType => requestType.isHandshake;
+
+  @override
+  bool get validFunctionId => true;
 }
 
 class HandshakeInitialIncomingDataSourcePackage
@@ -19,7 +22,7 @@ class HandshakeInitialIncomingDataSourcePackage
       parameterId.value == OutgoingInitialHandshakePackage.kParameterId;
 
   @override
-  BytesConverter<EmptyHandshakeBody> get dataBytesToModelConverter =>
+  BytesConverter<EmptyHandshakeBody> get bytesConverter =>
       const HandshakeInitializationConverter();
 }
 
@@ -28,7 +31,7 @@ class HandshakePingIncomingDataSourcePackage
   HandshakePingIncomingDataSourcePackage(super.source);
 
   @override
-  BytesConverter<HandshakeID> get dataBytesToModelConverter =>
+  BytesConverter<HandshakeID> get bytesConverter =>
       const HandshakePingConverter();
 
   @override

@@ -14,6 +14,7 @@ import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dar
 import 'package:pixel_app_flutter/presentation/screens/data_source/data_source_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/data_source/select_device_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/developer_tools_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/developer_tools/packages_exchange_console_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/processed_exhange_logs_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/raw_exchange_logs_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/requests_exchange_logs_filter_screen.dart';

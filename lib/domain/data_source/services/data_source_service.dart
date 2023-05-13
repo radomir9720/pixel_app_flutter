@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-typedef Observer = void Function(List<int> package);
+typedef Observer = void Function(
+  List<int>? raw,
+  DataSourceIncomingPackage? parsed,
+  DataSourceRequestDirection direction,
+);
 
 abstract class DataSource {
   DataSource({required this.id});
@@ -13,7 +17,11 @@ abstract class DataSource {
 
   void removeObserver(Observer observer);
 
-  void observe(List<int> package);
+  void observe(
+    List<int>? raw,
+    DataSourceIncomingPackage? parsed,
+    DataSourceRequestDirection direction,
+  );
 
   String get key;
 
@@ -21,6 +29,10 @@ abstract class DataSource {
 
   Future<Result<SendPackageError, void>> sendPackage(
     DataSourceOutgoingPackage package,
+  );
+
+  Future<Result<SendPackageError, void>> sendPackages(
+    List<DataSourceOutgoingPackage> packages,
   );
 
   Future<bool> get isEnabled;

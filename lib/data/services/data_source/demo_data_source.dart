@@ -5,13 +5,18 @@ import 'dart:math';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/send_packages_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/outgoing_data_source_packages.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/implementations/set_uint8_body.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 class DemoDataSource extends DataSource
-    with DefaultDataSourceObserverMixin, PackageStreamControllerMixin {
+    with
+        DefaultDataSourceObserverMixin,
+        PackageStreamControllerMixin,
+        SendPackagesMixin {
   DemoDataSource({
     required this.generateRandomErrors,
     required this.updatePeriodMillis,
@@ -151,27 +156,43 @@ class DemoDataSource extends DataSource
   Future<Result<SendPackageError, void>> sendPackage(
     DataSourceOutgoingPackage package,
   ) async {
-    observe(package);
+    observeOutgoing(package);
 
     final parameterId = package.parameterId;
 
     return package.requestType.maybeWhen(
-      bufferRequest: () => _updateValue(parameterId),
-      valueUpdate: () => _updateValue(parameterId),
+      bufferRequest: () => _updateValue(package),
+      event: () => _updateValue(package),
       handshake: () {
         Future<void>.delayed(const Duration(seconds: 1)).then(
           (value) {
-            final package = DataSourceIncomingPackage.fromConvertible(
+            final ping = DataSourceIncomingPackage.fromConvertible(
               secondConfigByte: 0x90, // 10010000(incoming 0x10)
-              parameterId: isInitialHandshake ? 0 : 0xFFFF,
-              convertible: isInitialHandshake
-                  ? const EmptyHandshakeBody()
-                  : const HandshakeID(0xFFFF),
+              parameterId: 0xFFFF,
+              convertible: const HandshakeID(0xFFFF),
             );
+
+            final package = isInitialHandshake
+                ? DataSourceIncomingPackage.fromConvertible(
+                    secondConfigByte: 0x90, // 10010000(incoming 0x10)
+                    parameterId: 0,
+                    convertible: const EmptyHandshakeBody(),
+                  )
+                : ping;
+
+            if (isInitialHandshake) {
+              Future<void>.delayed(const Duration(seconds: 1)).then(
+                (value) {
+                  observeIncoming(ping);
+
+                  if (!controller.isClosed) controller.add(ping);
+                },
+              );
+            }
 
             isInitialHandshake = false;
 
-            observe(package);
+            observeIncoming(package);
 
             if (!controller.isClosed) controller.add(package);
           },
@@ -182,7 +203,9 @@ class DemoDataSource extends DataSource
       subscription: () {
         if (parameterId.value > OutgoingUnsubscribePackage.kOperand) {
           // Unsubscribe package
-          parameterId
+          DataSourceParameterId.fromInt(
+            parameterId.value - OutgoingUnsubscribePackage.kOperand,
+          )
             ..voidOn<SpeedParameterId>(
               () => subscriptionCallbacks.remove(_sendNewSpeedCallback),
             )
@@ -223,7 +246,46 @@ class DemoDataSource extends DataSource
           )
           ..voidOn<MaxTemperatureParameterId>(
             () => subscriptionCallbacks.add(_sendMaxTemperatureCallback),
-          );
+          )
+          // Lights
+          ..voidOn<FrontSideBeamParameterId>(() {
+            _sendSetUint8ResultCallback(const FrontSideBeamParameterId());
+          })
+          ..voidOn<TailSideBeamParameterId>(() {
+            _sendSetUint8ResultCallback(const TailSideBeamParameterId());
+          })
+          ..voidOn<LowBeamParameterId>(() {
+            _sendSetUint8ResultCallback(const LowBeamParameterId());
+          })
+          ..voidOn<HighBeamParameterId>(() {
+            _sendSetUint8ResultCallback(const HighBeamParameterId());
+          })
+          ..voidOn<FrontHazardBeamParameterId>(() {
+            _sendSetUint8ResultCallback(const FrontHazardBeamParameterId());
+          })
+          ..voidOn<TailHazardBeamParameterId>(() {
+            _sendSetUint8ResultCallback(const TailHazardBeamParameterId());
+          })
+          ..voidOn<FrontLeftTurnSignalParameterId>(() {
+            _sendSetUint8ResultCallback(
+              const FrontLeftTurnSignalParameterId(),
+            );
+          })
+          ..voidOn<FrontRightTurnSignalParameterId>(() {
+            _sendSetUint8ResultCallback(
+              const FrontRightTurnSignalParameterId(),
+            );
+          })
+          ..voidOn<TailLeftTurnSignalParameterId>(() {
+            _sendSetUint8ResultCallback(
+              const TailLeftTurnSignalParameterId(),
+            );
+          })
+          ..voidOn<TailRightTurnSignalParameterId>(() {
+            _sendSetUint8ResultCallback(
+              const TailRightTurnSignalParameterId(),
+            );
+          });
 
         timer ??= Timer.periodic(
           Duration(milliseconds: updatePeriodMillis()),
@@ -240,7 +302,10 @@ class DemoDataSource extends DataSource
     );
   }
 
-  Result<SendPackageError, void> _updateValue(DataSourceParameterId id) {
+  Result<SendPackageError, void> _updateValue(
+    DataSourceOutgoingPackage package,
+  ) {
+    final id = package.parameterId;
     const v = DataSourceProtocolVersion.periodicRequests;
 
     id
@@ -283,7 +348,68 @@ class DemoDataSource extends DataSource
       )
       ..voidOn<LowVoltageTwentyTwoToTwentyFourParameterId>(
         _sendLowVoltageTwentyTwoToTwentyFourCallback,
-      );
+      )
+      // Lights
+      ..voidOn<FrontSideBeamParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const FrontSideBeamParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<TailSideBeamParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const TailSideBeamParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<LowBeamParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const LowBeamParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<HighBeamParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const HighBeamParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<FrontHazardBeamParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const FrontHazardBeamParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<TailHazardBeamParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const TailHazardBeamParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<FrontLeftTurnSignalParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const FrontLeftTurnSignalParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<FrontRightTurnSignalParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const FrontRightTurnSignalParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<TailLeftTurnSignalParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const TailLeftTurnSignalParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<TailRightTurnSignalParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const TailRightTurnSignalParameterId(),
+          package.boolData,
+        );
+      });
 
     return const Result.value(null);
   }
@@ -296,6 +422,7 @@ class DemoDataSource extends DataSource
   void _sendNewSpeedCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
+    // print('send new speed, $subscriptionCallbacks');
     _updateValueCallback(
       const DataSourceParameterId.speed(),
       Speed(
@@ -338,7 +465,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -353,7 +480,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -368,7 +495,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -383,7 +510,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -404,7 +531,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -425,7 +552,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -446,7 +573,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -463,7 +590,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -480,7 +607,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -497,7 +624,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -514,7 +641,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -532,7 +659,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -550,7 +677,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -568,7 +695,7 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
@@ -586,8 +713,35 @@ class DemoDataSource extends DataSource
       ),
     );
 
-    observe(package);
+    observeIncoming(package);
 
+    controller.sink.add(package);
+  }
+
+  Future<void> _sendSetUint8ResultCallback(
+    DataSourceParameterId parameterId, [
+    bool? requiredResult,
+  ]) async {
+    await Future<void>.delayed(
+      // Duration(milliseconds: Random().nextInt(1000) + 500),
+      const Duration(milliseconds: 100),
+    );
+    final _requiredResult = requiredResult ?? randomBool;
+
+    final package = DataSourceIncomingPackage.fromConvertible(
+      secondConfigByte: 0x95, // 10010101(incoming 0x15)
+      parameterId: parameterId.value,
+      convertible: SetUint8ResultBody(
+        success: !generateRandomErrors() || ninetyPercentSuccessBool,
+        value: (!generateRandomErrors() || ninetyPercentSuccessBool
+                ? _requiredResult
+                : !_requiredResult)
+            .toInt,
+      ),
+    );
+
+    observeIncoming(package);
+    if (controller.isClosed) return;
     controller.sink.add(package);
   }
 
@@ -600,6 +754,10 @@ class DemoDataSource extends DataSource
   int get randomInt8 {
     return Random().nextInt(128).randomSign;
   }
+
+  bool get ninetyPercentSuccessBool => Random().nextDouble() <= .9;
+
+  bool get randomBool => Random().nextBool();
 
   double get randomDoubleUint16 => Random().nextDouble() * 0xFFFF;
   double get randomDoubleUint32 => Random().nextDouble() * 0xFFFFFFFF;
@@ -621,14 +779,26 @@ class DemoDataSource extends DataSource
       convertible: convertible,
     );
 
-    observe(package);
+    observeIncoming(package);
 
     controller.sink.add(package);
   }
+}
+
+extension on DataSourceOutgoingPackage {
+  bool get boolData => data[1].toBool;
 }
 
 extension NumExtension<T extends num> on T {
   T get randomSign {
     return Random().nextBool() ? this * -1 as T : this;
   }
+}
+
+extension on bool {
+  int get toInt => this ? 0xFF : 0;
+}
+
+extension on int {
+  bool get toBool => this == 255;
 }

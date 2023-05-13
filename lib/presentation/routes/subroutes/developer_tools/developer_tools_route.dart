@@ -10,6 +10,10 @@ const _developerToolsRoute = AutoRoute<void>(
       page: DeveloperToolsScreen,
     ),
     AutoRoute<void>(
+      path: 'packages-exchange-console',
+      page: PackagesExchangeConsoleScreen,
+    ),
+    AutoRoute<void>(
       path: 'exchange-logs',
       page: EmptyRouterScreen,
       name: RouteNames.requestsExchangeLogsFlow,
@@ -29,34 +33,34 @@ const _developerToolsRoute = AutoRoute<void>(
             ),
           ],
         ),
-        AutoRoute<void>(
-          path: 'filter',
-          page: EmptyRouterScreen,
-          name: RouteNames.requestsExchangeLogsFilterFlow,
-          children: [
-            AutoRoute(
-              initial: true,
-              page: RequestsExchangeLogsFilterScreen,
-            ),
-            CustomRoute<List<int>>(
-              page: IntegerListDialog,
-              path: 'parameter-id',
-              name: RouteNames.filterParameterIdDialogRoute,
-              customRouteBuilder: dialogRouteBuilder,
-            ),
-            CustomRoute<List<int>>(
-              page: IntegerListDialog,
-              path: 'request-type',
-              name: RouteNames.filterRequestTypeDialogRoute,
-              customRouteBuilder: dialogRouteBuilder,
-            ),
-            CustomRoute<List<int>>(
-              page: IntegerListDialog,
-              path: 'direction',
-              name: RouteNames.filterDirectionDialogRoute,
-              customRouteBuilder: dialogRouteBuilder,
-            ),
-          ],
+      ],
+    ),
+    AutoRoute<void>(
+      path: 'filter',
+      page: EmptyRouterScreen,
+      name: RouteNames.requestsExchangeLogsFilterFlow,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: RequestsExchangeLogsFilterScreen,
+        ),
+        CustomRoute<List<int>>(
+          page: IntegerListDialog,
+          path: 'parameter-id',
+          name: RouteNames.filterParameterIdDialogRoute,
+          customRouteBuilder: dialogRouteBuilder,
+        ),
+        CustomRoute<List<int>>(
+          page: IntegerListDialog,
+          path: 'request-type',
+          name: RouteNames.filterRequestTypeDialogRoute,
+          customRouteBuilder: dialogRouteBuilder,
+        ),
+        CustomRoute<List<int>>(
+          page: IntegerListDialog,
+          path: 'direction',
+          name: RouteNames.filterDirectionDialogRoute,
+          customRouteBuilder: dialogRouteBuilder,
         ),
       ],
     ),

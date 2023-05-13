@@ -62,8 +62,20 @@ class SelectedDataSourceScope extends AutoRouter {
                 create: (context) {
                   if (context.read<Environment>().isDev) {
                     context.read<DataSource>().addObserver(
-                          context.read<RawRequestsExchangeLogsCubit>().add,
-                        );
+                      (raw, parsed, direction) {
+                        if (raw != null) {
+                          context.read<RawRequestsExchangeLogsCubit>().add(
+                                raw,
+                                direction,
+                              );
+                          if (parsed != null) {
+                            context
+                                .read<ProcessedRequestsExchangeLogsCubit>()
+                                .add(parsed, direction);
+                          }
+                        }
+                      },
+                    );
                   }
 
                   return DataSourceConnectionStatusCubit(
@@ -72,7 +84,12 @@ class SelectedDataSourceScope extends AutoRouter {
                     developerToolsParametersStorage: context.read(),
                     loggers: [
                       if (context.read<Environment>().isDev)
-                        context.read<ProcessedRequestsExchangeLogsCubit>().add
+                        (outgoing) => context
+                            .read<ProcessedRequestsExchangeLogsCubit>()
+                            .add(
+                              outgoing,
+                              DataSourceRequestDirection.outgoing,
+                            )
                     ],
                   )..initHandshake();
                 },
@@ -84,9 +101,26 @@ class SelectedDataSourceScope extends AutoRouter {
                   developerToolsParametersStorage: context.read(),
                   loggers: [
                     if (context.read<Environment>().isDev)
-                      context.read<ProcessedRequestsExchangeLogsCubit>().add
+                      (outgoing) => context
+                          .read<ProcessedRequestsExchangeLogsCubit>()
+                          .add(
+                            outgoing,
+                            DataSourceRequestDirection.outgoing,
+                          )
                   ],
                 ),
+              ),
+
+              BlocProvider(
+                create: (context) => LightsCubit(
+                  dataSource: context.read(),
+                )
+                  ..subscribeToSideBeam()
+                  ..subscribeToHazardBeam()
+                  ..subscribeToHighBeam()
+                  ..subscribeToLowBeam()
+                  ..subscribeToTurnSignals(),
+                lazy: false,
               ),
             ],
             child: BlocConsumer<DataSourceConnectionStatusCubit,

@@ -118,11 +118,7 @@ abstract class DataSourcePackage extends UnmodifiableListView<int> {
 
   DataSourceParameterId get parameterId {
     return DataSourceParameterId.fromInt(
-      int.parse(
-        firstParameterIDByte.toRadixString(2) +
-            secondParameterIDByte.toRadixString(2),
-        radix: 2,
-      ),
+      [firstParameterIDByte, secondParameterIDByte].toIntFromUint16,
     );
   }
 

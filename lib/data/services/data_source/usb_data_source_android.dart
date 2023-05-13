@@ -5,6 +5,7 @@ import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_
 import 'package:pixel_app_flutter/data/services/data_source/mixins/devices_periodic_stream_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/parse_bytes_package_mixin.dart';
+import 'package:pixel_app_flutter/data/services/data_source/mixins/send_packages_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:usb_serial/usb_serial.dart';
@@ -24,7 +25,8 @@ class USBAndroidDataSource extends DataSource
         DevicesPeriodicStreamMixin,
         ParseBytesPackageMixin,
         PackageStreamControllerMixin,
-        DefaultDataSourceObserverMixin {
+        DefaultDataSourceObserverMixin,
+        SendPackagesMixin {
   USBAndroidDataSource({
     required super.id,
     required this.listDevices,
@@ -95,9 +97,7 @@ class USBAndroidDataSource extends DataSource
       return const Result.error(SendPackageError.noConnection);
     }
 
-    // final package = event.toPackage();
-
-    observe(package);
+    observeOutgoing(package);
 
     await port.write(package.toUint8List);
 
