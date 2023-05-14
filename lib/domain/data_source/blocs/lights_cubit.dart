@@ -428,8 +428,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     required int newValue,
     required LightsState Function(
       AsyncData<bool, LightsStateError> newState,
-    )
-        newStateBuilder,
+    ) newStateBuilder,
   }) {
     if (!success) {
       emit(
@@ -452,8 +451,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     required AsyncData<TwoBoolsState, LightsStateError> newFeatureState,
     required LightsState Function(
       AsyncData<TwoBoolsState, LightsStateError> newState,
-    )
-        newStateBuilder,
+    ) newStateBuilder,
   }) {
     final newFeaturePayload = newFeatureState.payload;
     final waitingFor = newFeaturePayload.waitingForSwitch;
@@ -572,8 +570,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     required AsyncData<T, LightsStateError> Function() newFeatureStateBuilder,
     required LightsState Function(
       AsyncData<T, LightsStateError> newState,
-    )
-        newStateBuilder,
+    ) newStateBuilder,
     required T loadingState,
   }) {
     emit(newStateBuilder(AsyncData.loading(loadingState)));
@@ -697,8 +694,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
         newFeatureStateBuilder,
     required LightsState Function(
       AsyncData<bool, LightsStateError> newState,
-    )
-        newStateBuilder,
+    ) newStateBuilder,
     required List<DataSourceParameterId> parameterIds,
   }) {
     final currentState = newFeatureStateBuilder();
@@ -737,8 +733,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
         newFeatureStateBuilder,
     required LightsState Function(
       AsyncData<TwoBoolsState, LightsStateError> newState,
-    )
-        newStateBuilder,
+    ) newStateBuilder,
     required List<DataSourceParameterId> parameterIds,
   }) {
     final currentState = newFeatureStateBuilder();
