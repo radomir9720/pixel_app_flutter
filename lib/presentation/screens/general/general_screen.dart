@@ -20,7 +20,7 @@ class GeneralScreen extends StatelessWidget {
 
     return BlocListener<LightsCubit, LightsState>(
       listenWhen: (previous, current) {
-        final error = current.whenFailure<MapEntry<String, LightsStateError>?>(
+        final errors = current.whenFailure<MapEntry<String, LightsStateError>>(
           previous,
           leftTurnSignal: (error) =>
               MapEntry(context.l10n.leftBlinkerButtonCaption, error),
@@ -35,24 +35,25 @@ class GeneralScreen extends StatelessWidget {
           highBeam: (error) {
             return MapEntry(context.l10n.highBeamButtonCaption, error);
           },
-          noFailure: () => null,
         );
 
-        if (error == null) return false;
+        if (errors.isEmpty) return false;
 
-        final reason = error.value.when(
-          timeout: () => context.l10n.positiveAnswerDidNotComeErrorMessage,
-          mainECUError: () => context.l10n.errorFromMainECUErrorMessage,
-          differs: () =>
-              context.l10n.notAllBlocksReturnedSuccessResponseErrorMessage,
-        );
+        for (final error in errors) {
+          final reason = error.value.when(
+            timeout: () => context.l10n.positiveAnswerDidNotComeErrorMessage,
+            mainECUError: () => context.l10n.errorFromMainECUErrorMessage,
+            differs: () =>
+                context.l10n.notAllBlocksReturnedSuccessResponseErrorMessage,
+          );
+          context.showSnackBar(
+            context.l10n.errorSwitchingFeatureMessage(
+              error.key.toLowerCase(),
+              reason,
+            ),
+          );
+        }
 
-        context.showSnackBar(
-          context.l10n.errorSwitchingFeatureMessage(
-            error.key.toLowerCase(),
-            reason,
-          ),
-        );
         return false;
       },
       listener: (context, state) {},

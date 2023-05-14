@@ -20,6 +20,10 @@ abstract class LightsStateError {
   const factory LightsStateError.timeout() = _TimeoutEnablingError;
   const factory LightsStateError.mainECUError() = _MainECUEnablingError;
 
+  bool get isTimeout => this is _TimeoutEnablingError;
+  bool get differs => this is _StatesDiffersEnablingError;
+  bool get mainECUError => this is _MainECUEnablingError;
+
   R when<R>({
     required R Function() differs,
     required R Function() timeout,
@@ -27,7 +31,7 @@ abstract class LightsStateError {
   });
 }
 
-class _StatesDiffersEnablingError implements LightsStateError {
+class _StatesDiffersEnablingError extends LightsStateError {
   const _StatesDiffersEnablingError({
     required this.first,
     required this.second,
@@ -46,7 +50,7 @@ class _StatesDiffersEnablingError implements LightsStateError {
   }
 }
 
-class _TimeoutEnablingError implements LightsStateError {
+class _TimeoutEnablingError extends LightsStateError {
   const _TimeoutEnablingError();
 
   @override
@@ -59,7 +63,7 @@ class _TimeoutEnablingError implements LightsStateError {
   }
 }
 
-class _MainECUEnablingError implements LightsStateError {
+class _MainECUEnablingError extends LightsStateError {
   const _MainECUEnablingError();
 
   @override
@@ -97,9 +101,10 @@ class TwoBoolsState {
   final bool second;
   final bool? waitingForSwitch;
 
-  bool get isOn => first && second;
+  bool get isOn => first || second;
   bool get isOff => !first && !second;
   bool get differs => first != second;
+  bool get bothOn => first && second;
 
   int get oppositeValue => (!(differs || isOn)).toInt;
   bool get oppositeBool => !differs && !isOn;
@@ -176,7 +181,7 @@ class LightsState with EquatableMixin {
         highBeam
       ].any((element) => element.isFailure);
 
-  R whenFailure<R>(
+  List<R> whenFailure<R>(
     LightsState prevState, {
     required R Function(LightsStateError error) leftTurnSignal,
     required R Function(LightsStateError error) rightTurnSignal,
@@ -184,7 +189,6 @@ class LightsState with EquatableMixin {
     required R Function(LightsStateError error) sideBeam,
     required R Function(LightsStateError error) lowBeam,
     required R Function(LightsStateError error) highBeam,
-    required R Function() noFailure,
   }) {
     final leftTurnSignalError = this.leftTurnSignal.error;
     final rightTurnSignalError = this.rightTurnSignal.error;
@@ -193,25 +197,51 @@ class LightsState with EquatableMixin {
     final highBeamError = this.highBeam.error;
     final sideBeamError = this.sideBeam.error;
 
-    if (leftTurnSignalError != null && !prevState.leftTurnSignal.isFailure) {
-      return leftTurnSignal(leftTurnSignalError);
-    }
-    if (rightTurnSignalError != null && !prevState.rightTurnSignal.isFailure) {
-      return rightTurnSignal(rightTurnSignalError);
-    }
-    if (hazardBeamError != null && !prevState.hazardBeam.isFailure) {
-      return hazardBeam(hazardBeamError);
-    }
-    if (sideBeamError != null && !prevState.sideBeam.isFailure) {
-      return sideBeam(sideBeamError);
-    }
-    if (lowBeamError != null && !prevState.lowBeam.isFailure) {
-      return lowBeam(lowBeamError);
-    }
-    if (highBeamError != null && !prevState.highBeam.isFailure) {
-      return highBeam(highBeamError);
-    }
-    return noFailure();
+    final errors = [
+      _filterError(
+        leftTurnSignalError,
+        prevState.leftTurnSignal.error,
+        leftTurnSignal,
+      ),
+      _filterError(
+        rightTurnSignalError,
+        prevState.rightTurnSignal.error,
+        rightTurnSignal,
+      ),
+      _filterError(
+        hazardBeamError,
+        prevState.hazardBeam.error,
+        hazardBeam,
+      ),
+      _filterError(
+        sideBeamError,
+        prevState.sideBeam.error,
+        sideBeam,
+      ),
+      _filterError(
+        lowBeamError,
+        prevState.lowBeam.error,
+        lowBeam,
+      ),
+      _filterError(
+        highBeamError,
+        prevState.highBeam.error,
+        highBeam,
+      ),
+    ].whereType<R>().toList();
+
+    return errors;
+  }
+
+  R? _filterError<R>(
+    LightsStateError? current,
+    LightsStateError? prev,
+    R Function(LightsStateError) callback,
+  ) {
+    if (current == null) return null;
+    if (current.isTimeout && prev != null && !prev.isTimeout) return null;
+    if (current == prev) return null;
+    return callback(current);
   }
 
   @override
@@ -441,7 +471,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
       return;
     }
 
-    if (waitingFor == null || waitingFor == newFeaturePayload.isOn) {
+    if (waitingFor == null || waitingFor == newFeaturePayload.bothOn) {
       emit(
         newStateBuilder(
           AsyncData.success(
@@ -714,7 +744,15 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     final currentState = newFeatureStateBuilder();
     if (!currentState.isExecuted) return;
 
-    emit(newStateBuilder(const AsyncData.loading(TwoBoolsState.off())));
+    emit(
+      newStateBuilder(
+        AsyncData.loading(
+          const TwoBoolsState.off().copyWith(
+            waitingForSwitch: currentState.payload.oppositeBool,
+          ),
+        ),
+      ),
+    );
 
     _sendSetValuePackages(
       parameterIds,
@@ -725,7 +763,10 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
       if (isClosed) return;
       final currentState = newFeatureStateBuilder();
       final payload = currentState.payload;
-      if (currentState.isSuccess && payload.waitingForSwitch == null) return;
+
+      if (!currentState.payload.differs &&
+          currentState.isSuccess &&
+          payload.waitingForSwitch == null) return;
 
       if (payload.differs || payload.waitingForSwitch != payload.isOn) {
         final failure = payload.differs
