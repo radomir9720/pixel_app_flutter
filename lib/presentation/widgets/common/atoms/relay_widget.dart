@@ -12,6 +12,7 @@ class RelayWidget extends StatefulWidget {
   });
 
   @protected
+  // ignore: avoid_positional_boolean_parameters
   final Widget Function(bool isOn) builder;
 
   @protected

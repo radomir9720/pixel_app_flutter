@@ -5,6 +5,7 @@ import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 typedef GetInstalledAppsCallback = Future<List<AppInfo>> Function([
+  // ignore: avoid_positional_boolean_parameters
   bool excludeSystemApps,
   bool withIcon,
   String packageNamePrefix,

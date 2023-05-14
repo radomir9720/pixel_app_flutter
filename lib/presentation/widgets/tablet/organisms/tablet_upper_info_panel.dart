@@ -7,9 +7,9 @@ class TabletUpperInfoPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Expanded(
           flex: 6,
           child: SpeedWidget(),

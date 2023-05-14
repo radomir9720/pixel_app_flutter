@@ -9,7 +9,7 @@ import firebase_analytics
 import firebase_core
 import firebase_crashlytics
 import flutter_libserialport
-import package_info_plus_macos
+import package_info_plus
 import shared_preferences_foundation
 import wakelock_macos
 
