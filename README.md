@@ -36,7 +36,7 @@ The MainECU is the connecting link between this application and car interfaces.
   
   Below is the table with data source support for each platform at the present moment.
   
-  |             |Android|iOS|Windows|MacOS|Linux|
+  | DataSource  |Android|iOS|Windows|MacOS|Linux|
   |-------------|:-----:|:-:|:-----:|:---:|:---:|
   |**Bluetooth**|✔️     |✖️|✖️     |✔️  |❔   |
   |**USB**      |✔️     |✖️|✔️     |✔️  |❔   |
