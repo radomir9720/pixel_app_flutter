@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -22,7 +21,7 @@ class AppTypography extends StatelessWidget {
   Widget build(BuildContext context) {
     final textScaleFactor = min(
       maxScaleFactor ?? double.infinity,
-      window.textScaleFactor,
+      View.of(context).platformDispatcher.textScaleFactor,
     );
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(
