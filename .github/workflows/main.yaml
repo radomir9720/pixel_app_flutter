@@ -10,5 +10,5 @@ jobs:
     with:
       min_coverage: 0
       flutter_channel: stable
-      flutter_version: 3.7.12
+      flutter_version: 3.10.0
       coverage_excludes: "**/*.g.dart **/*.freezed.dart **/*.config.dart"
