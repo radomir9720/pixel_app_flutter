@@ -5,7 +5,8 @@
     "carInfoTabTitle": "Car Info",
     "navigatorTabTitle": "Navigator",
     "appsTabTitle": "Apps",
-    "chargingTabTitle": "Charging",
+    "batteryTabTitle": "Battery",
+    "motorTabTitle": "Motor",
     "appVersion": "Pixel App. v{version}",
     "@appVersion": {
         "placeholders": {
@@ -230,5 +231,22 @@
     },
     "notAllBlocksReturnedSuccessResponseErrorMessage": "Not all the blocks returned positive answer",
     "positiveAnswerDidNotComeErrorMessage": "Positive answer did not come",
-    "errorFromMainECUErrorMessage": "MainECU error"
+    "errorFromMainECUErrorMessage": "MainECU error",
+
+    "motorScreenTitle": "Motor",
+    "firstTileTitle":  "First",
+    "secondTileTitle":  "Second",
+    "parameterTileTitle": "Parameter",
+    "measurementUnitTileTitle": "Unit of measurement",
+    "speedTileTitle": "Speed",
+    "rpmTileTitle": "Motors rotation",
+    "rpmMeasurementUnit": "RPM",
+    "voltageTileTitle": "Voltage",
+    "wattMeasurementUnit": "W",
+    "currentTileTitle": "Current",
+    "amperMeasurementUnit": "A",
+    "powerTileTitle": "Power(consumed/given)",
+    "motorsTemperatureTileTitle": "Motors temperature",
+    "celsiusMeasurementUnit": "°C",
+    "controllersTemperatureTileTitle": "Controllers temperature"
 }

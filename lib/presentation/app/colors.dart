@@ -122,7 +122,7 @@ class _AppColorsDataDark extends AppColorsData {
   Color get errorPastel => const Color(0xFFEF5350);
 
   @override
-  Color get warning => const Color(0xFFFFC107);
+  Color get warning => const Color.fromARGB(255, 250, 215, 110);
 
   @override
   Color get successPastel => const Color(0xffA5D6A7);
@@ -189,4 +189,8 @@ class InheritedColors extends InheritedWidget {
   bool updateShouldNotify(InheritedColors oldWidget) {
     return colors != oldWidget.colors;
   }
+}
+
+extension AppColorsExtension on BuildContext {
+  AppColorsData get colors => AppColors.of(this);
 }

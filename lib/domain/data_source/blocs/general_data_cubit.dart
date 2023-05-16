@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/incoming_data_source_packages.dart';
@@ -10,60 +10,75 @@ import 'package:re_seedwork/re_seedwork.dart';
 @immutable
 class GeneralDataState with EquatableMixin {
   const GeneralDataState({
+    required this.power,
+    required this.batteryLevel,
+    required this.odometer,
     required this.speed,
-    required this.current,
-    required this.voltage,
   });
 
   const GeneralDataState.initial()
-      : speed = 0,
-        current = 0,
-        voltage = 0;
+      : power = const Int16WithStatusBody.zero(),
+        batteryLevel = const Uint8WithStatusBody.zero(),
+        odometer = const Uint32WithStatusBody.zero(),
+        speed = const TwoUint16WithStatusBody.zero();
 
-  final int speed;
-  final double current;
-  final double voltage;
-
-  GeneralDataState copyWith({
-    int? speed,
-    double? current,
-    double? voltage,
-  }) {
-    return GeneralDataState(
-      speed: speed ?? this.speed,
-      current: current ?? this.current,
-      voltage: voltage ?? this.voltage,
-    );
-  }
+  final Int16WithStatusBody power;
+  final Uint8WithStatusBody batteryLevel;
+  final Uint32WithStatusBody odometer;
+  final TwoUint16WithStatusBody speed;
 
   @override
-  List<Object?> get props => [speed, current, voltage];
+  List<Object?> get props => [
+        power,
+        batteryLevel,
+        odometer,
+        speed,
+      ];
+
+  GeneralDataState copyWith({
+    Int16WithStatusBody? power,
+    Uint8WithStatusBody? batteryLevel,
+    Uint32WithStatusBody? odometer,
+    TwoUint16WithStatusBody? speed,
+  }) {
+    return GeneralDataState(
+      power: power ?? this.power,
+      batteryLevel: batteryLevel ?? this.batteryLevel,
+      odometer: odometer ?? this.odometer,
+      speed: speed ?? this.speed,
+    );
+  }
 }
 
-class GeneralDataCubit extends Cubit<GeneralDataState> with ConsumerBlocMixin
-// , BlocLoggerMixin<DataSourcePackage, GeneralDataState>
-{
-  GeneralDataCubit({
-    required this.dataSource,
-  }) : super(const GeneralDataState.initial()) {
-    subscribe<DataSourceIncomingPackage>(dataSource.packageStream, (value) {
-      value
-        ..voidOnModel<Speed, SpeedIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(speed: model.speed));
+class GeneralDataCubit extends Cubit<GeneralDataState> with ConsumerBlocMixin {
+  GeneralDataCubit({required this.dataSource})
+      : super(const GeneralDataState.initial()) {
+    subscribe<DataSourceIncomingPackage>(dataSource.packageStream, (package) {
+      package
+        ..voidOnModel<Uint8WithStatusBody,
+            BatteryLevelIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(batteryLevel: model));
         })
-        ..voidOnModel<Voltage, VoltageIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(voltage: model.value));
+        ..voidOnModel<Int16WithStatusBody,
+            BatteryPowerIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(power: model));
         })
-        ..voidOnModel<Current, CurrentIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(current: model.value));
+        ..voidOnModel<TwoUint16WithStatusBody,
+            MotorSpeedIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(speed: model));
+        })
+        ..voidOnModel<Uint32WithStatusBody, OdometerIncomingDataSourcePackage>(
+            (model) {
+          emit(state.copyWith(odometer: model));
         });
     });
   }
 
   static Set<DataSourceParameterId> kDefaultSubscribeParameters = {
-    const DataSourceParameterId.speed(),
-    const DataSourceParameterId.voltage(),
-    const DataSourceParameterId.current(),
+    const DataSourceParameterId.motorSpeed(),
+    const DataSourceParameterId.odometer(),
+    const DataSourceParameterId.batteryLevel(),
+    const DataSourceParameterId.batteryPower(),
   };
 
   @protected

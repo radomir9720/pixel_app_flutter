@@ -23,6 +23,7 @@ class HomeScreen extends StatelessWidget {
         NavigatorRoute(),
         AppsFlow(),
         ChargingRoute(),
+        MotorRoute(),
       ],
       builder: (context, child, animation) {
         final tabsRouter = AutoTabsRouter.of(context);
@@ -127,6 +128,7 @@ class _BottomNavBar extends StatelessWidget {
                 PixelIcons.navigator,
                 PixelIcons.apps,
                 PixelIcons.charging,
+                PixelIcons.engine,
               ],
             ),
           );
@@ -186,7 +188,12 @@ class _SideNavBar extends StatelessWidget {
             SideNavBarItem(
               pageIndex: 4,
               icon: PixelIcons.charging,
-              title: context.l10n.chargingTabTitle,
+              title: context.l10n.batteryTabTitle,
+            ),
+            SideNavBarItem(
+              pageIndex: 5,
+              icon: PixelIcons.engine,
+              title: context.l10n.motorTabTitle,
             ),
           ],
           onTap: tabsRouter.setActiveIndex,

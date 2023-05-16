@@ -5,7 +5,8 @@
     "carInfoTabTitle": "О машине",
     "navigatorTabTitle": "Навигатор",
     "appsTabTitle": "Приложения",
-    "chargingTabTitle": "Зарядка",
+    "batteryTabTitle": "Батарея",
+    "motorTabTitle": "Мотор",
     "appVersion": "Pixel App. v{version}",
     "@appVersion": {
         "placeholders": {
@@ -230,5 +231,22 @@
     },
     "notAllBlocksReturnedSuccessResponseErrorMessage": "Не от всех блоков пришел положительный ответ",
     "positiveAnswerDidNotComeErrorMessage": "Положительный ответ не пришел",
-    "errorFromMainECUErrorMessage": "Ошибка от MainECU"
+    "errorFromMainECUErrorMessage": "Ошибка от MainECU",
+
+    "motorScreenTitle": "Мотор",
+    "firstTileTitle":  "Первый",
+    "secondTileTitle":  "Второй",
+    "parameterTileTitle": "Параметр",
+    "measurementUnitTileTitle": "Единица измерения",
+    "speedTileTitle": "Скорость",
+    "rpmTileTitle": "Обороты моторов",
+    "rpmMeasurementUnit": "Об/м",
+    "voltageTileTitle": "Напряжение",
+    "wattMeasurementUnit": "Вт",
+    "currentTileTitle": "Ток",
+    "amperMeasurementUnit": "А",
+    "powerTileTitle": "Мощность(потребляемая/отдаваемая)",
+    "motorsTemperatureTileTitle": "Температура моторов",
+    "celsiusMeasurementUnit": "°C",
+    "controllersTemperatureTileTitle": "Температура контроллеров"
 }

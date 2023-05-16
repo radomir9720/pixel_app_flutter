@@ -12,6 +12,10 @@ class PixelIcons {
 
   static const String _fontFamily = 'PixelIcons';
 
+  static const IconData batteryPlus = IconData(0xe921, fontFamily: _fontFamily);
+  static const IconData batteryMinus =
+      IconData(0xe923, fontFamily: _fontFamily);
+  static const IconData engine = IconData(0xe922, fontFamily: _fontFamily);
   static const IconData hazardBeam = IconData(0xe91d, fontFamily: _fontFamily);
   static const IconData lowBeam = IconData(0xe91e, fontFamily: _fontFamily);
   static const IconData highBeam = IconData(0xe91f, fontFamily: _fontFamily);
