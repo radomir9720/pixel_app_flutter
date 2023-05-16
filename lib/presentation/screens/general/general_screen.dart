@@ -95,7 +95,7 @@ class TabletGeneralScreenBody extends StatelessWidget {
           ),
           const Positioned(
             left: 0,
-            bottom: 400,
+            bottom: 430,
             child: BlinkerButton(),
           ),
         ],

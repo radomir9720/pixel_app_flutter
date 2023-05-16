@@ -5,8 +5,8 @@ void main() {
   group('fromInt() method returns correct instance', () {
     test('(speed)', () {
       expect(
-        DataSourceParameterId.fromInt(125),
-        equals(const DataSourceParameterId.speed()),
+        DataSourceParameterId.fromInt(0x0106),
+        equals(const DataSourceParameterId.motorSpeed()),
       );
     });
     test('(light)', () {
@@ -17,14 +17,14 @@ void main() {
     });
     test('(voltage)', () {
       expect(
-        DataSourceParameterId.fromInt(174),
-        equals(const DataSourceParameterId.voltage()),
+        DataSourceParameterId.fromInt(0x0107),
+        equals(const DataSourceParameterId.motorVoltage()),
       );
     });
     test('(current)', () {
       expect(
-        DataSourceParameterId.fromInt(239),
-        equals(const DataSourceParameterId.current()),
+        DataSourceParameterId.fromInt(0x0108),
+        equals(const DataSourceParameterId.motorCurrent()),
       );
     });
     test('(custom)', () {
@@ -99,7 +99,10 @@ void main() {
   // });
 
   test('hashCode getter returns correct value', () {
-    expect(const DataSourceParameterId.speed().hashCode, equals(125.hashCode));
+    expect(
+      const DataSourceParameterId.motorSpeed().hashCode,
+      equals(0x0106.hashCode),
+    );
     expect(
       const DataSourceParameterId.custom(678).hashCode,
       equals(678.hashCode),
@@ -109,8 +112,8 @@ void main() {
   group('equality operator', () {
     test('returns true when parameter id are equal', () {
       expect(
-        const DataSourceParameterId.current() ==
-            const DataSourceParameterId.current(),
+        const DataSourceParameterId.motorCurrent() ==
+            const DataSourceParameterId.motorCurrent(),
         isTrue,
       );
       expect(
@@ -122,8 +125,8 @@ void main() {
 
     test('returns false when parameter id are not equal', () {
       expect(
-        const DataSourceParameterId.current() ==
-            const DataSourceParameterId.speed(),
+        const DataSourceParameterId.motorCurrent() ==
+            const DataSourceParameterId.motorSpeed(),
         isFalse,
       );
       expect(

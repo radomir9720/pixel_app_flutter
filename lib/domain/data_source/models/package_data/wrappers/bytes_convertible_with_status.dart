@@ -59,3 +59,66 @@ class Uint8WithStatusBytesConverter<T extends IntBytesConvertibleWithStatus>
     ];
   }
 }
+
+class Int16WithStatusBytesConverter<T extends IntBytesConvertibleWithStatus>
+    extends BytesConverter<T> {
+  const Int16WithStatusBytesConverter(this.builder);
+
+  @protected
+  final T Function(int functionId, int value) builder;
+
+  @override
+  T fromBytes(List<int> bytes) {
+    return builder(bytes[0], bytes.sublist(1).toIntFromInt16);
+  }
+
+  @override
+  List<int> toBytes(T model) {
+    return [
+      ...model.status.toBytes,
+      ...model.value.toBytesInt16,
+    ];
+  }
+}
+
+class Uint32WithStatusBytesConverter<T extends IntBytesConvertibleWithStatus>
+    extends BytesConverter<T> {
+  const Uint32WithStatusBytesConverter(this.builder);
+
+  @protected
+  final T Function(int functionId, int value) builder;
+
+  @override
+  T fromBytes(List<int> bytes) {
+    return builder(bytes[0], bytes.sublist(1, 5).toIntFromUint32);
+  }
+
+  @override
+  List<int> toBytes(T model) {
+    return [
+      ...model.status.toBytes,
+      ...model.value.toBytesUint32,
+    ];
+  }
+}
+
+class Int32WithStatusBytesConverter<T extends IntBytesConvertibleWithStatus>
+    extends BytesConverter<T> {
+  const Int32WithStatusBytesConverter(this.builder);
+
+  @protected
+  final T Function(int functionId, int value) builder;
+
+  @override
+  T fromBytes(List<int> bytes) {
+    return builder(bytes[0], bytes.sublist(1, 5).toIntFromInt32);
+  }
+
+  @override
+  List<int> toBytes(T model) {
+    return [
+      ...model.status.toBytes,
+      ...model.value.toBytesInt32,
+    ];
+  }
+}

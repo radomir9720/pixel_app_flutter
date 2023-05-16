@@ -7,6 +7,7 @@ import 'package:pixel_app_flutter/app/scopes/flows/select_data_source_scope.dart
 import 'package:pixel_app_flutter/app/scopes/flows/selected_data_source_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/screens/charging_screen_wrapper.dart';
 import 'package:pixel_app_flutter/app/scopes/screens/general_screen_wrapper.dart';
+import 'package:pixel_app_flutter/app/scopes/screens/motor_screen_wrapper.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/apps_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/car_info/car_info_screen.dart';

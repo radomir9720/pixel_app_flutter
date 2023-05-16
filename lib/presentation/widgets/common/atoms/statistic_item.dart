@@ -8,6 +8,7 @@ class StatisticItem extends StatelessWidget {
     super.key,
     required this.icon,
     required this.value,
+    this.customColor,
     this.measurementUnit,
   });
 
@@ -19,6 +20,9 @@ class StatisticItem extends StatelessWidget {
 
   @protected
   final String? measurementUnit;
+
+  @protected
+  final Color? customColor;
 
   @protected
   static const valueTextStyle = TextStyle(
@@ -39,7 +43,7 @@ class StatisticItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = AppColors.of(context).textAccent;
+    final color = customColor ?? AppColors.of(context).textAccent;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

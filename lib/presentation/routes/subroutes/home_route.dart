@@ -31,5 +31,9 @@ const _homeRoute = AutoRoute<void>(
       path: 'charging',
       page: ChargingScreenWrapper,
     ),
+    AutoRoute<void>(
+      path: 'motor',
+      page: MotorScreenWrapper,
+    ),
   ],
 );

@@ -10,6 +10,8 @@ class Uint8WithStatusBody extends IntBytesConvertibleWithStatus {
   Uint8WithStatusBody.fromFunctionId({required super.id, required super.value})
       : super.fromId();
 
+  const Uint8WithStatusBody.zero() : super.normal(0);
+
   factory Uint8WithStatusBody.builder(int functionId, int value) {
     return Uint8WithStatusBody.fromFunctionId(
       id: functionId,

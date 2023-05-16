@@ -69,42 +69,47 @@ Future<void> bootstrap(
       builder,
   Environment env,
 ) async {
-  // SizeProvider.initialize(sizeConverter:
-  // const SizeConverter(fo: fo, si: si));
-
-  final initFirebase = Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
-
-  if (initFirebase) {
-    await Firebase.initializeApp();
-
-    await CrashlyticsHelper.initialize();
-
-    await FirebaseAnalytics.instance
-        .setAnalyticsCollectionEnabled(kReleaseMode);
-  }
-
-  FlutterError.onError = CrashlyticsHelper.recordFlutterError;
-
-  Bloc.observer = FirebaseBlocObserver();
-
-  await configureDependencies(env);
-
   await runZonedGuarded(
-    () async => runApp(
-      MainScope(
-        child: await builder(
-          () => [
-            if (initFirebase)
-              FirebaseAnalyticsObserver(
-                analytics: FirebaseAnalytics.instance,
-                routeFilter: (route) {
-                  return route is PageRoute || route is DialogRoute;
-                },
-              ),
-          ],
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      // SizeProvider.initialize(sizeConverter:
+      // const SizeConverter(fo: fo, si: si));
+
+      final initFirebase =
+          Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
+
+      if (initFirebase) {
+        await Firebase.initializeApp();
+
+        await CrashlyticsHelper.initialize();
+
+        await FirebaseAnalytics.instance
+            .setAnalyticsCollectionEnabled(kReleaseMode);
+      }
+
+      FlutterError.onError = CrashlyticsHelper.recordFlutterError;
+
+      Bloc.observer = FirebaseBlocObserver();
+
+      await configureDependencies(env);
+
+      runApp(
+        MainScope(
+          child: await builder(
+            () => [
+              if (initFirebase)
+                FirebaseAnalyticsObserver(
+                  analytics: FirebaseAnalytics.instance,
+                  routeFilter: (route) {
+                    return route is PageRoute || route is DialogRoute;
+                  },
+                ),
+            ],
+          ),
         ),
-      ),
-    ),
+      );
+    },
     CrashlyticsHelper.recordError,
   );
 }

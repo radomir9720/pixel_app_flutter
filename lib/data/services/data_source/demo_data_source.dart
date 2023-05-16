@@ -8,7 +8,6 @@ import 'package:pixel_app_flutter/data/services/data_source/mixins/package_strea
 import 'package:pixel_app_flutter/data/services/data_source/mixins/send_packages_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/outgoing_data_source_packages.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/implementations/set_uint8_body.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
@@ -206,14 +205,30 @@ class DemoDataSource extends DataSource
           DataSourceParameterId.fromInt(
             parameterId.value - OutgoingUnsubscribePackage.kOperand,
           )
-            ..voidOn<SpeedParameterId>(
+            ..voidOn<MotorSpeedParameterId>(
               () => subscriptionCallbacks.remove(_sendNewSpeedCallback),
             )
-            ..voidOn<VoltageParameterId>(
+            ..voidOn<MotorVoltageParameterId>(
               () => subscriptionCallbacks.remove(_sendNewVoltageCallback),
             )
-            ..voidOn<CurrentParameterId>(
+            ..voidOn<MotorCurrentParameterId>(
               () => subscriptionCallbacks.remove(_sendNewCurrentCallback),
+            )
+            ..voidOn<MotorPowerParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewPowerCallback),
+            )
+            ..voidOn<MotorTemperatureParameterId>(
+              () => subscriptionCallbacks
+                  .remove(_sendNewMotorTemperatureCallback),
+            )
+            ..voidOn<OdometerParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewOdometerCallback),
+            )
+            ..voidOn<RPMParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewRPMCallback),
+            )
+            ..voidOn<GearAndRollParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewGearAndRollCallback),
             )
             ..voidOn<HighVoltageParameterId>(
               () => subscriptionCallbacks.remove(_sendHighVoltageCallback),
@@ -223,20 +238,41 @@ class DemoDataSource extends DataSource
             )
             ..voidOn<MaxTemperatureParameterId>(
               () => subscriptionCallbacks.remove(_sendMaxTemperatureCallback),
+            )
+            ..voidOn<BatteryLevelParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewBatteryLevelCallback),
+            )
+            ..voidOn<BatteryPowerParameterId>(
+              () => subscriptionCallbacks.remove(_sendNewBatteryPowerCallback),
             );
 
           return const Result.value(null);
         }
 
         parameterId
-          ..voidOn<SpeedParameterId>(
+          ..voidOn<MotorSpeedParameterId>(
             () => subscriptionCallbacks.add(_sendNewSpeedCallback),
           )
-          ..voidOn<VoltageParameterId>(
+          ..voidOn<MotorVoltageParameterId>(
             () => subscriptionCallbacks.add(_sendNewVoltageCallback),
           )
-          ..voidOn<CurrentParameterId>(
+          ..voidOn<MotorCurrentParameterId>(
             () => subscriptionCallbacks.add(_sendNewCurrentCallback),
+          )
+          ..voidOn<MotorPowerParameterId>(
+            () => subscriptionCallbacks.add(_sendNewPowerCallback),
+          )
+          ..voidOn<MotorTemperatureParameterId>(
+            () => subscriptionCallbacks.add(_sendNewMotorTemperatureCallback),
+          )
+          ..voidOn<OdometerParameterId>(
+            () => subscriptionCallbacks.add(_sendNewOdometerCallback),
+          )
+          ..voidOn<RPMParameterId>(
+            () => subscriptionCallbacks.add(_sendNewRPMCallback),
+          )
+          ..voidOn<GearAndRollParameterId>(
+            () => subscriptionCallbacks.add(_sendNewGearAndRollCallback),
           )
           ..voidOn<HighVoltageParameterId>(
             () => subscriptionCallbacks.add(_sendHighVoltageCallback),
@@ -246,6 +282,12 @@ class DemoDataSource extends DataSource
           )
           ..voidOn<MaxTemperatureParameterId>(
             () => subscriptionCallbacks.add(_sendMaxTemperatureCallback),
+          )
+          ..voidOn<BatteryLevelParameterId>(
+            () => subscriptionCallbacks.add(_sendNewBatteryLevelCallback),
+          )
+          ..voidOn<BatteryPowerParameterId>(
+            () => subscriptionCallbacks.add(_sendNewBatteryPowerCallback),
           )
           // Lights
           ..voidOn<FrontSideBeamParameterId>(() {
@@ -309,13 +351,32 @@ class DemoDataSource extends DataSource
     const v = DataSourceProtocolVersion.periodicRequests;
 
     id
-      ..voidOn<SpeedParameterId>(() => _sendNewSpeedCallback(version: v))
-      ..voidOn<CurrentParameterId>(() => _sendNewCurrentCallback(version: v))
-      ..voidOn<VoltageParameterId>(() => _sendNewVoltageCallback(version: v))
+      ..voidOn<MotorSpeedParameterId>(() => _sendNewSpeedCallback(version: v))
+      ..voidOn<MotorCurrentParameterId>(
+        () => _sendNewCurrentCallback(version: v),
+      )
+      ..voidOn<MotorVoltageParameterId>(
+        () => _sendNewVoltageCallback(version: v),
+      )
+      ..voidOn<MotorPowerParameterId>(() => _sendNewPowerCallback(version: v))
+      ..voidOn<OdometerParameterId>(() => _sendNewOdometerCallback(version: v))
+      ..voidOn<GearAndRollParameterId>(
+        () => _sendNewGearAndRollCallback(version: v),
+      )
+      ..voidOn<MotorTemperatureParameterId>(
+        () => _sendNewMotorTemperatureCallback(version: v),
+      )
+      ..voidOn<RPMParameterId>(() => _sendNewRPMCallback(version: v))
       ..voidOn<LowVoltageMinMaxDeltaParameterId>(_sendNewLowVoltageCallback)
       ..voidOn<HighVoltageParameterId>(_sendHighVoltageCallback)
       ..voidOn<HighCurrentParameterId>(_sendHighCurrentCallback)
       ..voidOn<MaxTemperatureParameterId>(_sendMaxTemperatureCallback)
+      ..voidOn<BatteryLevelParameterId>(
+        () => _sendNewBatteryLevelCallback(version: v),
+      )
+      ..voidOn<BatteryPowerParameterId>(
+        () => _sendNewBatteryPowerCallback(version: v),
+      )
       //
       ..voidOn<TemperatureFirstBatchParameterId>(
         _sendTemperatureFirstBatchCallback,
@@ -424,10 +485,12 @@ class DemoDataSource extends DataSource
   }) {
     // print('send new speed, $subscriptionCallbacks');
     _updateValueCallback(
-      const DataSourceParameterId.speed(),
-      Speed(
+      const DataSourceParameterId.motorSpeed(),
+      TwoUint16WithStatusBody(
         status: _getRandomStatus,
-        speed: Random().nextInt(101),
+        // speed: Random().nextInt(101),
+        first: Random().nextInt(1001),
+        second: Random().nextInt(1001),
       ),
       version,
     );
@@ -436,19 +499,166 @@ class DemoDataSource extends DataSource
   void _sendNewVoltageCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
-    _updateValueCallback(
-      const DataSourceParameterId.voltage(),
-      Voltage(value: randomDoubleUint32, status: _getRandomStatus),
-      version,
+    _sendTwoUint16Callback(
+      const DataSourceParameterId.motorVoltage(),
+      version: version,
     );
   }
 
   void _sendNewCurrentCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
+    _sendTwoInt16Callback(
+      const DataSourceParameterId.motorCurrent(),
+      version: version,
+    );
+  }
+
+  void _sendNewPowerCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _sendTwoInt16Callback(
+      const DataSourceParameterId.motorPower(),
+      version: version,
+    );
+  }
+
+  void _sendNewRPMCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _sendTwoUint16Callback(
+      const DataSourceParameterId.rpm(),
+      version: version,
+    );
+  }
+
+  void _sendNewMotorTemperatureCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
     _updateValueCallback(
-      const DataSourceParameterId.current(),
-      Current(value: randomDoubleUint32, status: _getRandomStatus),
+      const MotorTemperatureParameterId(),
+      MotorTemperature(
+        firstMotor: randomInt8,
+        firstController: randomInt8,
+        secondMotor: randomInt8,
+        secondController: randomInt8,
+        status: _getRandomStatus,
+      ),
+      version,
+    );
+  }
+
+  void _sendNewOdometerCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _updateValueCallback(
+      const DataSourceParameterId.odometer(),
+      Uint32WithStatusBody(
+        value: Random().nextInt(0xFFFFFFFF),
+        status: _getRandomStatus,
+      ),
+      version,
+    );
+  }
+
+  void _sendNewGearAndRollCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    final randomGear1 =
+        MotorGear.values[Random().nextInt(MotorGear.values.length)];
+    final randomGear2 =
+        MotorGear.values[Random().nextInt(MotorGear.values.length)];
+    final randomRoll1 = MotorRollDirection
+        .values[Random().nextInt(MotorRollDirection.values.length)];
+    final randomRoll2 = MotorRollDirection
+        .values[Random().nextInt(MotorRollDirection.values.length)];
+    _updateValueCallback(
+      const DataSourceParameterId.gearAndRoll(),
+      MotorGearAndRoll(
+        firstMotorGear: randomGear1,
+        firstMotorRollDirection: randomRoll1,
+        secondMotorGear: randomGear2,
+        secondMotorRollDirection: randomRoll2,
+        status: _getRandomStatus,
+      ),
+      version,
+    );
+  }
+
+  void _sendNewBatteryLevelCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _sendUint8Callback(
+      const DataSourceParameterId.batteryLevel(),
+      version: version,
+      customValueGenerator: () => Random().nextInt(101),
+    );
+  }
+
+  void _sendNewBatteryPowerCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _sendInt16Callback(
+      const DataSourceParameterId.batteryPower(),
+      version: version,
+    );
+  }
+
+  void _sendUint8Callback(
+    DataSourceParameterId id, {
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+    int Function()? customValueGenerator,
+  }) {
+    _updateValueCallback(
+      id,
+      Uint8WithStatusBody(
+        status: _getRandomStatus,
+        value: customValueGenerator?.call() ?? randomUint8,
+      ),
+      version,
+    );
+  }
+
+  void _sendInt16Callback(
+    DataSourceParameterId id, {
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _updateValueCallback(
+      id,
+      Int16WithStatusBody(
+        status: _getRandomStatus,
+        value: randomInt16,
+      ),
+      version,
+    );
+  }
+
+  void _sendTwoInt16Callback(
+    DataSourceParameterId id, {
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _updateValueCallback(
+      id,
+      TwoInt16WithStatusBody(
+        status: _getRandomStatus,
+        first: randomInt16,
+        second: randomInt16,
+      ),
+      version,
+    );
+  }
+
+  void _sendTwoUint16Callback(
+    DataSourceParameterId id, {
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _updateValueCallback(
+      id,
+      TwoUint16WithStatusBody(
+        status: _getRandomStatus,
+        first: randomUint16,
+        second: randomUint16,
+      ),
       version,
     );
   }
@@ -758,6 +968,10 @@ class DemoDataSource extends DataSource
   bool get ninetyPercentSuccessBool => Random().nextDouble() <= .9;
 
   bool get randomBool => Random().nextBool();
+
+  int get randomUint8 => Random().nextInt(0xFF);
+  int get randomUint16 => Random().nextInt(0xFFFF);
+  int get randomInt16 => Random().nextInt(0xFF).randomSign;
 
   double get randomDoubleUint16 => Random().nextDouble() * 0xFFFF;
   double get randomDoubleUint32 => Random().nextDouble() * 0xFFFFFFFF;

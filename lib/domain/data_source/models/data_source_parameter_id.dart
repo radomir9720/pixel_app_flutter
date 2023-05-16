@@ -47,7 +47,10 @@ abstract class DataSourceParameterId {
       LowVoltageNineteenToTwentyOneParameterId;
   const factory DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour() =
       LowVoltageTwentyTwoToTwentyFourParameterId;
+  const factory DataSourceParameterId.batteryLevel() = BatteryLevelParameterId;
+  const factory DataSourceParameterId.batteryPower() = BatteryPowerParameterId;
 
+  //
   const factory DataSourceParameterId.frontSideBeam() =
       FrontSideBeamParameterId;
   const factory DataSourceParameterId.tailSideBeam() = TailSideBeamParameterId;
@@ -71,6 +74,16 @@ abstract class DataSourceParameterId {
       TailRightTurnSignalParameterId;
   const factory DataSourceParameterId.brakeLight() = BrakeLightParameterId;
   const factory DataSourceParameterId.reverseLight() = ReverseLightParameterId;
+  //
+  const factory DataSourceParameterId.rpm() = RPMParameterId;
+  const factory DataSourceParameterId.motorSpeed() = MotorSpeedParameterId;
+  const factory DataSourceParameterId.motorVoltage() = MotorVoltageParameterId;
+  const factory DataSourceParameterId.motorCurrent() = MotorCurrentParameterId;
+  const factory DataSourceParameterId.motorPower() = MotorPowerParameterId;
+  const factory DataSourceParameterId.gearAndRoll() = GearAndRollParameterId;
+  const factory DataSourceParameterId.motorTemperature() =
+      MotorTemperatureParameterId;
+  const factory DataSourceParameterId.odometer() = OdometerParameterId;
 
   bool get isSpeed => this is SpeedParameterId;
 
@@ -106,6 +119,8 @@ abstract class DataSourceParameterId {
       this is LowVoltageNineteenToTwentyOneParameterId;
   bool get isLowVoltageTwentyTwoToTwentyFour =>
       this is LowVoltageTwentyTwoToTwentyFourParameterId;
+  bool get isBatteryLevel => this is BatteryLevelParameterId;
+  bool get isBatteryPower => this is BatteryPowerParameterId;
 
   bool get isFrontSideBeam => this is FrontSideBeamParameterId;
   bool get isTailSideBeam => this is TailSideBeamParameterId;
@@ -121,6 +136,15 @@ abstract class DataSourceParameterId {
   bool get isTailRightTurnSignal => this is TailRightTurnSignalParameterId;
   bool get isBrakeLight => this is BrakeLightParameterId;
   bool get isReverseLight => this is ReverseLightParameterId;
+  //
+  bool get isRPM => this is RPMParameterId;
+  bool get isMotorSpeed => this is MotorSpeedParameterId;
+  bool get isMotorVoltage => this is MotorVoltageParameterId;
+  bool get isMotorCurrent => this is MotorCurrentParameterId;
+  bool get isMotorPower => this is MotorPowerParameterId;
+  bool get isGearAndRoll => this is GearAndRollParameterId;
+  bool get isMotorTemperature => this is MotorTemperatureParameterId;
+  bool get isOdometer => this is OdometerParameterId;
 
   void voidOn<T extends DataSourceParameterId>(void Function() function) {
     if (this is T) function();
@@ -165,6 +189,17 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.tailRightTurnSignal(),
       DataSourceParameterId.brakeLight(),
       DataSourceParameterId.reverseLight(),
+      //
+      DataSourceParameterId.rpm(),
+      DataSourceParameterId.motorSpeed(),
+      DataSourceParameterId.motorVoltage(),
+      DataSourceParameterId.motorCurrent(),
+      DataSourceParameterId.motorPower(),
+      DataSourceParameterId.gearAndRoll(),
+      DataSourceParameterId.motorTemperature(),
+      DataSourceParameterId.odometer(),
+      DataSourceParameterId.batteryLevel(),
+      DataSourceParameterId.batteryPower(),
     ];
   }
 
@@ -197,12 +232,12 @@ class CurrentParameterId extends DataSourceParameterId {
   const CurrentParameterId() : super(239);
 }
 
-class LowVoltageMinMaxDeltaParameterId extends DataSourceParameterId {
-  const LowVoltageMinMaxDeltaParameterId() : super(0x0047);
-}
-
 class CustomParameterId extends DataSourceParameterId {
   const CustomParameterId(super.id);
+}
+
+class LowVoltageMinMaxDeltaParameterId extends DataSourceParameterId {
+  const LowVoltageMinMaxDeltaParameterId() : super(0x0047);
 }
 
 class HighVoltageParameterId extends DataSourceParameterId {
@@ -261,11 +296,19 @@ class LowVoltageTwentyTwoToTwentyFourParameterId extends DataSourceParameterId {
   const LowVoltageTwentyTwoToTwentyFourParameterId() : super(0x0052);
 }
 
+class BatteryLevelParameterId extends DataSourceParameterId {
+  const BatteryLevelParameterId() : super(0x0053);
+}
+
+class BatteryPowerParameterId extends DataSourceParameterId {
+  const BatteryPowerParameterId() : super(0x0054);
+}
+
+// Lights
 abstract class SideBeamParameterId extends DataSourceParameterId {
   const SideBeamParameterId(super.value);
 }
 
-// Lights
 class FrontSideBeamParameterId extends SideBeamParameterId {
   const FrontSideBeamParameterId() : super(0x00C4);
 }
@@ -320,4 +363,36 @@ class BrakeLightParameterId extends DataSourceParameterId {
 
 class ReverseLightParameterId extends DataSourceParameterId {
   const ReverseLightParameterId() : super(0x00E6);
+}
+
+class RPMParameterId extends DataSourceParameterId {
+  const RPMParameterId() : super(0x0105);
+}
+
+class MotorSpeedParameterId extends DataSourceParameterId {
+  const MotorSpeedParameterId() : super(0x0106);
+}
+
+class MotorVoltageParameterId extends DataSourceParameterId {
+  const MotorVoltageParameterId() : super(0x0107);
+}
+
+class MotorCurrentParameterId extends DataSourceParameterId {
+  const MotorCurrentParameterId() : super(0x0108);
+}
+
+class MotorPowerParameterId extends DataSourceParameterId {
+  const MotorPowerParameterId() : super(0x0109);
+}
+
+class GearAndRollParameterId extends DataSourceParameterId {
+  const GearAndRollParameterId() : super(0x010A);
+}
+
+class MotorTemperatureParameterId extends DataSourceParameterId {
+  const MotorTemperatureParameterId() : super(0x010B);
+}
+
+class OdometerParameterId extends DataSourceParameterId {
+  const OdometerParameterId() : super(0x010C);
 }

@@ -122,6 +122,16 @@ class SelectedDataSourceScope extends AutoRouter {
                   ..subscribeToTurnSignals(),
                 lazy: false,
               ),
+              BlocProvider(
+                create: (context) {
+                  context.read<OutgoingPackagesCubit>().subscribeTo(
+                        GeneralDataCubit.kDefaultSubscribeParameters,
+                      );
+                  return GeneralDataCubit(
+                    dataSource: context.read(),
+                  );
+                },
+              )
             ],
             child: BlocConsumer<DataSourceConnectionStatusCubit,
                 DataSourceConnectionStatus>(
