@@ -8,6 +8,13 @@ mixin SetUint8ResultBodyBytesConverterMixin
       const SetUint8ResultBodyConverter();
 }
 
+mixin SuccessEventUint8BodyBytesConverterMixin
+    on DataSourceIncomingPackage<SuccessEventUint8Body> {
+  @override
+  BytesConverter<SuccessEventUint8Body> get bytesConverter =>
+      const SuccessEventUint8BodyConverter();
+}
+
 mixin Uint8WithStatusBodyBytesConverterMixin
     on DataSourceIncomingPackage<Uint8WithStatusBody> {
   @override

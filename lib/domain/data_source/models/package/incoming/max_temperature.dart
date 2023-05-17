@@ -7,7 +7,7 @@ class MaxTemperatureIncomingDataSourcePackage
     extends DataSourceIncomingPackage<MaxTemperature>
     with
         IsEventOrBufferRequestOrSubscriptionAnswerRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+        IsSuccessEventFunctionIdMixin {
   MaxTemperatureIncomingDataSourcePackage(super.source);
 
   @override

@@ -134,9 +134,18 @@ abstract class SetUint8ResultIncomingDataSourcePackage
     extends DataSourceIncomingPackage<SetUint8ResultBody>
     with
         IsEventOrSubscriptionAnswerRequestTypeMixin,
-        IsSetResponseFunctionIdMixin,
+        IsSuccessEventFunctionIdMixin,
         SetUint8ResultBodyBytesConverterMixin {
   SetUint8ResultIncomingDataSourcePackage(super.source);
+}
+
+abstract class SuccessEventUint8IncomingDataSourcePackage
+    extends DataSourceIncomingPackage<SuccessEventUint8Body>
+    with
+        IsEventOrSubscriptionAnswerRequestTypeMixin,
+        IsSuccessEventFunctionIdMixin,
+        SuccessEventUint8BodyBytesConverterMixin {
+  SuccessEventUint8IncomingDataSourcePackage(super.source);
 }
 
 abstract class Uint8WithStatusIncomingDataSourcePackage

@@ -7,7 +7,7 @@ class HighCurrentIncomingDataSourcePackage
     extends DataSourceIncomingPackage<HighCurrent>
     with
         IsEventOrBufferRequestOrSubscriptionAnswerRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+        IsSuccessEventFunctionIdMixin {
   HighCurrentIncomingDataSourcePackage(super.source);
 
   @override

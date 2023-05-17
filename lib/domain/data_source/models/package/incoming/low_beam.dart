@@ -1,6 +1,5 @@
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/bytes_convertible.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/implementations/set_uint8_body.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 
 abstract class LowBeamIncomingDataSourcePackage<T extends BytesConvertible>
     extends DataSourceIncomingPackage<T> {
@@ -14,8 +13,8 @@ mixin _LowBeamParameterIdMixin<T extends BytesConvertible>
 }
 
 class LowBeamSetIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
+    extends SuccessEventUint8IncomingDataSourcePackage
     with _LowBeamParameterIdMixin
-    implements LowBeamIncomingDataSourcePackage<SetUint8ResultBody> {
+    implements LowBeamIncomingDataSourcePackage<SuccessEventUint8Body> {
   LowBeamSetIncomingDataSourcePackage(super.source);
 }

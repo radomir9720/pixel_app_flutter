@@ -5,9 +5,7 @@ import 'package:pixel_app_flutter/domain/data_source/models/package_data/package
 
 class BatteryTemperatureFirstBatchIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryTemperatureFirstBatch>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryTemperatureFirstBatchIncomingDataSourcePackage(super.source);
 
   @override
@@ -20,9 +18,7 @@ class BatteryTemperatureFirstBatchIncomingDataSourcePackage
 
 class BatteryTemperatureSecondBatchIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryTemperatureSecondBatch>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryTemperatureSecondBatchIncomingDataSourcePackage(super.source);
 
   @override
@@ -35,9 +31,7 @@ class BatteryTemperatureSecondBatchIncomingDataSourcePackage
 
 class BatteryTemperatureThirdBatchIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryTemperatureThirdBatch>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryTemperatureThirdBatchIncomingDataSourcePackage(super.source);
 
   @override

@@ -35,15 +35,15 @@ mixin _TailSideBeamParameterIdMixin<T extends BytesConvertible>
 }
 
 class FrontSideBeamSetIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
+    extends SuccessEventUint8IncomingDataSourcePackage
     with _FrontSideBeamParameterIdMixin
-    implements FrontSideBeamIncomingDataSourcePackage<SetUint8ResultBody> {
+    implements FrontSideBeamIncomingDataSourcePackage<SuccessEventUint8Body> {
   FrontSideBeamSetIncomingDataSourcePackage(super.source);
 }
 
 class TailSideBeamSetIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
+    extends SuccessEventUint8IncomingDataSourcePackage
     with _TailSideBeamParameterIdMixin
-    implements TailSideBeamIncomingDataSourcePackage<SetUint8ResultBody> {
+    implements TailSideBeamIncomingDataSourcePackage<SuccessEventUint8Body> {
   TailSideBeamSetIncomingDataSourcePackage(super.source);
 }
