@@ -1,6 +1,5 @@
 import 'package:pixel_app_flutter/domain/data_source/models/package/data_source_incoming_package.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/bytes_convertible.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/implementations/set_uint8_body.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 
 abstract class HazardBeamIncomingDataSourcePackage<T extends BytesConvertible>
     extends DataSourceIncomingPackage<T> {
@@ -36,15 +35,15 @@ mixin _TailHazardBeamParameterIdMixin<T extends BytesConvertible>
 }
 
 class FrontHazardBeamSetIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
+    extends SuccessEventUint8IncomingDataSourcePackage
     with _FrontHazardBeamParameterIdMixin
-    implements FrontHazardBeamIncomingDataSourcePackage<SetUint8ResultBody> {
+    implements FrontHazardBeamIncomingDataSourcePackage<SuccessEventUint8Body> {
   FrontHazardBeamSetIncomingDataSourcePackage(super.source);
 }
 
 class TailHazardBeamSetIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
+    extends SuccessEventUint8IncomingDataSourcePackage
     with _TailHazardBeamParameterIdMixin
-    implements TailHazardBeamIncomingDataSourcePackage<SetUint8ResultBody> {
+    implements TailHazardBeamIncomingDataSourcePackage<SuccessEventUint8Body> {
   TailHazardBeamSetIncomingDataSourcePackage(super.source);
 }

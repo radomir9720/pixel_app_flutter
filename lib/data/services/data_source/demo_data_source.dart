@@ -941,9 +941,15 @@ class DemoDataSource extends DataSource
     final package = DataSourceIncomingPackage.fromConvertible(
       secondConfigByte: 0x95, // 10010101(incoming 0x15)
       parameterId: parameterId.value,
-      convertible: SetUint8ResultBody(
-        success: !generateRandomErrors() || ninetyPercentSuccessBool,
-        value: (!generateRandomErrors() || ninetyPercentSuccessBool
+      // convertible: SetUint8ResultBody(
+      //   success: !generateRandomErrors() || ninetyPercentSuccessBool,
+      //   value: (!generateRandomErrors() || ninetyPercentSuccessBool
+      //           ? _requiredResult
+      //           : !_requiredResult)
+      //       .toInt,
+      // ),
+      convertible: SuccessEventUint8Body(
+        (!generateRandomErrors() || ninetyPercentSuccessBool
                 ? _requiredResult
                 : !_requiredResult)
             .toInt,

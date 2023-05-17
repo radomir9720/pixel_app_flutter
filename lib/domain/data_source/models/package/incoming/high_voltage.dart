@@ -7,7 +7,7 @@ class HighVoltageIncomingDataSourcePackage
     extends DataSourceIncomingPackage<HighVoltage>
     with
         IsEventOrBufferRequestOrSubscriptionAnswerRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+        IsSuccessEventFunctionIdMixin {
   HighVoltageIncomingDataSourcePackage(super.source);
 
   @override

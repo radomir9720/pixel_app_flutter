@@ -36,7 +36,10 @@ enum FunctionId {
 
   /// ID, saying that an error was encountered while sending an event from the
   /// L2 level
-  errorEvent(errorEventId);
+  errorEvent(errorEventId),
+
+  /// ID, response to a request or a set, saying that request/set was successful
+  okEvent(okEventId);
 
   const FunctionId(this.value);
 
@@ -54,4 +57,5 @@ enum FunctionId {
   static const errorSettingValueWithParamId = 0xC1;
   //
   static const errorEventId = 0xE6;
+  static const okEventId = 0x65;
 }

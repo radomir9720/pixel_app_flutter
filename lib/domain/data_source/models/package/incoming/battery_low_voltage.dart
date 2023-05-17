@@ -5,9 +5,7 @@ import 'package:pixel_app_flutter/domain/data_source/models/package_data/package
 
 class BatteryLowVoltageOneToThreeIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageOneToThree>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageOneToThreeIncomingDataSourcePackage(super.source);
 
   @override
@@ -20,9 +18,7 @@ class BatteryLowVoltageOneToThreeIncomingDataSourcePackage
 
 class BatteryLowVoltageFourToSixIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageFourToSix>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageFourToSixIncomingDataSourcePackage(super.source);
 
   @override
@@ -35,9 +31,7 @@ class BatteryLowVoltageFourToSixIncomingDataSourcePackage
 
 class BatteryLowVoltageSevenToNineIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageSevenToNine>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageSevenToNineIncomingDataSourcePackage(super.source);
 
   @override
@@ -50,9 +44,7 @@ class BatteryLowVoltageSevenToNineIncomingDataSourcePackage
 
 class BatteryLowVoltageTenToTwelveIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageTenToTwelve>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageTenToTwelveIncomingDataSourcePackage(super.source);
 
   @override
@@ -65,9 +57,7 @@ class BatteryLowVoltageTenToTwelveIncomingDataSourcePackage
 
 class BatteryLowVoltageThirteenToFifteenIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageThirteenToFifteen>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageThirteenToFifteenIncomingDataSourcePackage(super.source);
 
   @override
@@ -80,9 +70,7 @@ class BatteryLowVoltageThirteenToFifteenIncomingDataSourcePackage
 
 class BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageSixteenToEighteen>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage(super.source);
 
   @override
@@ -95,9 +83,7 @@ class BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage
 
 class BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageNineteenToTwentyOne>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage(super.source);
 
   @override
@@ -110,9 +96,7 @@ class BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage
 
 class BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageTwentyTwoToTwentyFour>
-    with
-        IsEventOrBufferRequestRequestTypeMixin,
-        IsPeriodicValueStatusFunctionIdMixin {
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage(super.source);
 
   @override

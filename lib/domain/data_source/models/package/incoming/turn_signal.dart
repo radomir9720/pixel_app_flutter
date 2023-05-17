@@ -7,8 +7,8 @@ abstract class TurnSignalIncomingDataSourcePackage<T extends BytesConvertible>
 }
 
 class FrontLeftTurnSignalIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
-    implements TurnSignalIncomingDataSourcePackage<SetUint8ResultBody> {
+    extends SuccessEventUint8IncomingDataSourcePackage
+    implements TurnSignalIncomingDataSourcePackage<SuccessEventUint8Body> {
   FrontLeftTurnSignalIncomingDataSourcePackage(super.source);
 
   @override
@@ -16,8 +16,8 @@ class FrontLeftTurnSignalIncomingDataSourcePackage
 }
 
 class FrontRightTurnSignalIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
-    implements TurnSignalIncomingDataSourcePackage<SetUint8ResultBody> {
+    extends SuccessEventUint8IncomingDataSourcePackage
+    implements TurnSignalIncomingDataSourcePackage<SuccessEventUint8Body> {
   FrontRightTurnSignalIncomingDataSourcePackage(super.source);
 
   @override
@@ -25,8 +25,8 @@ class FrontRightTurnSignalIncomingDataSourcePackage
 }
 
 class TailLeftTurnSignalIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
-    implements TurnSignalIncomingDataSourcePackage<SetUint8ResultBody> {
+    extends SuccessEventUint8IncomingDataSourcePackage
+    implements TurnSignalIncomingDataSourcePackage<SuccessEventUint8Body> {
   TailLeftTurnSignalIncomingDataSourcePackage(super.source);
 
   @override
@@ -34,8 +34,8 @@ class TailLeftTurnSignalIncomingDataSourcePackage
 }
 
 class TailRightTurnSignalIncomingDataSourcePackage
-    extends SetUint8ResultIncomingDataSourcePackage
-    implements TurnSignalIncomingDataSourcePackage<SetUint8ResultBody> {
+    extends SuccessEventUint8IncomingDataSourcePackage
+    implements TurnSignalIncomingDataSourcePackage<SuccessEventUint8Body> {
   TailRightTurnSignalIncomingDataSourcePackage(super.source);
 
   @override

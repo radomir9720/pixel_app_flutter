@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/incoming_data_source_packages.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/outgoing_data_source_packages.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/implementations/set_uint8_body.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 abstract class LightsStateError {
@@ -285,56 +285,54 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     subscribe<DataSourceIncomingPackage>(dataSource.packageStream, (package) {
       package
         // SideBeam
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             FrontSideBeamSetIncomingDataSourcePackage>((model) {
-          _onNewSideBeam(value: model.value, success: model.success);
+          _onNewSideBeam(value: model.value);
         })
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             TailSideBeamSetIncomingDataSourcePackage>((model) {
           _onNewSideBeam(
             value: model.value,
             front: false,
-            success: model.success,
           );
         })
 
         // LowBeam
-        ..voidOnModel<SetUint8ResultBody, LowBeamSetIncomingDataSourcePackage>(
-            (model) {
-          _onNewLowBeam(success: model.success, value: model.value);
+        ..voidOnModel<SuccessEventUint8Body,
+            LowBeamSetIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(highBeam: AsyncData.success(model.value.toBool)));
         })
         // HighBeam
-        ..voidOnModel<SetUint8ResultBody, HighBeamSetIncomingDataSourcePackage>(
-            (model) {
-          _onNewHighBeam(value: model.value, success: model.success);
+        ..voidOnModel<SuccessEventUint8Body,
+            HighBeamSetIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(highBeam: AsyncData.success(model.value.toBool)));
         })
         // HazardBeam
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             FrontHazardBeamSetIncomingDataSourcePackage>((model) {
-          _onNewHazardState(value: model.value, success: model.success);
+          _onNewHazardState(value: model.value);
         })
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             TailHazardBeamSetIncomingDataSourcePackage>((model) {
           _onNewHazardState(
             value: model.value,
-            success: model.success,
             front: false,
           );
         })
         // TurnSignal
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             FrontLeftTurnSignalIncomingDataSourcePackage>((model) {
           _onNewTurnSignal(value: model.value);
         })
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             FrontRightTurnSignalIncomingDataSourcePackage>((model) {
           _onNewTurnSignal(value: model.value, left: false);
         })
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             TailLeftTurnSignalIncomingDataSourcePackage>((model) {
           _onNewTurnSignal(value: model.value, front: false);
         })
-        ..voidOnModel<SetUint8ResultBody,
+        ..voidOnModel<SuccessEventUint8Body,
             TailRightTurnSignalIncomingDataSourcePackage>((model) {
           _onNewTurnSignal(value: model.value, front: false, left: false);
         });
@@ -342,12 +340,10 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
   }
 
   void _onNewSideBeam({
-    bool success = true,
     bool front = true,
     required int value,
   }) {
     _onNewTwoBoolsState(
-      success: success,
       newFeatureState: state.sideBeam.copyWith(
         payload: state.sideBeam.payload.copyWith(
           first: front ? value.toBool : null,
@@ -359,12 +355,10 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
   }
 
   void _onNewHazardState({
-    bool success = true,
     bool front = true,
     required int value,
   }) {
     _onNewTwoBoolsState(
-      success: success,
       newFeatureState: state.hazardBeam.copyWith(
         payload: state.hazardBeam.payload.copyWith(
           first: front ? value.toBool : null,
@@ -381,7 +375,6 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     required int value,
   }) {
     _onNewTwoBoolsState(
-      success: true,
       newFeatureState: left
           ? state.leftTurnSignal.copyWith(
               payload: state.leftTurnSignal.payload.copyWith(
@@ -401,53 +394,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     );
   }
 
-  void _onNewLowBeam({
-    bool success = true,
-    required int value,
-  }) {
-    _onNewBoolState(
-      success: success,
-      newValue: value,
-      newStateBuilder: (newState) => state.copyWith(lowBeam: newState),
-    );
-  }
-
-  void _onNewHighBeam({
-    bool success = true,
-    required int value,
-  }) {
-    _onNewBoolState(
-      success: success,
-      newValue: value,
-      newStateBuilder: (newState) => state.copyWith(highBeam: newState),
-    );
-  }
-
-  void _onNewBoolState({
-    required bool success,
-    required int newValue,
-    required LightsState Function(
-      AsyncData<bool, LightsStateError> newState,
-    ) newStateBuilder,
-  }) {
-    if (!success) {
-      emit(
-        newStateBuilder(
-          AsyncData.failure(
-            newValue.toBool,
-            const LightsStateError.mainECUError(),
-          ),
-        ),
-      );
-
-      return;
-    }
-
-    emit(newStateBuilder(AsyncData.success(newValue.toBool)));
-  }
-
   void _onNewTwoBoolsState({
-    required bool success,
     required AsyncData<TwoBoolsState, LightsStateError> newFeatureState,
     required LightsState Function(
       AsyncData<TwoBoolsState, LightsStateError> newState,
@@ -455,19 +402,6 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
   }) {
     final newFeaturePayload = newFeatureState.payload;
     final waitingFor = newFeaturePayload.waitingForSwitch;
-
-    if (!success) {
-      emit(
-        newStateBuilder(
-          AsyncData.failure(
-            newFeaturePayload.copyWith(setWaitingForSwitchToNull: true),
-            const LightsStateError.mainECUError(),
-          ),
-        ),
-      );
-
-      return;
-    }
 
     if (waitingFor == null || waitingFor == newFeaturePayload.bothOn) {
       emit(
