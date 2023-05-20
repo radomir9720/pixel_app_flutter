@@ -258,6 +258,10 @@
     "defaultNavAppTileTitle": "Приложение навигации по умолчанию:",
     "noNavAppsOnDeviceErrorMessage": "Приложений навигации не найдено на устройстве",
     "errorSettingDefaultNavAppMessage": "Ошибка при установке приложения навигации по умолчанию",
+    "notSelectedDropdownHint": "Не выбрано",
+    "errorSwitchingStatisticsOverlayMessage": "Ошибка при включении/выключении плавающего окна статистики",
+    "overlayStatisticsAboveAnotherAppsTileTitle": "Окно статистики поверх других приложений",
+    "overlayStatisticsAboveAnotherAppsHint": "Выводить поверх других приложений плавающее окно с показателями автомобиля",
 
     "enableFastAccessDialogTitle": "Включить \"Быстрый доступ\"?",
     "enableFastAccessHint": "Эта функция позволит одним нажатием кнопки в нижнем меню открывать приложение навигации, выбранное по умолчанию.",

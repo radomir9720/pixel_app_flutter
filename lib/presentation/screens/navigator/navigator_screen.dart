@@ -1,18 +1,16 @@
 import 'dart:io';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/assets.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
-import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
+import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/default_nav_app_tile.dart';
+import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/nav_apps_list_tile.dart';
+import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/switch_fast_access_tile.dart';
+import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/switch_overlay_tile.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/organisms/title_wrapper.dart';
 import 'package:re_seedwork/re_seedwork.dart';
-import 'package:re_widgets/re_widgets.dart';
 
 class NavigatorScreen extends StatefulWidget {
   const NavigatorScreen({super.key});
@@ -37,14 +35,6 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   }
 
   @protected
-  static const kDefaultNavAppTileTextStyle = TextStyle(
-    height: 1.2,
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.normal,
-  );
-
-  @protected
   static const kNoNavAppsErrorTextStyle = TextStyle(
     height: 1.2,
     fontSize: 16,
@@ -58,51 +48,6 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
       title: context.l10n.navigatorTabTitle,
       body: ListView(
         children: [
-          BlocConsumer<NavigatorFastAccessBloc, NavigatorFastAccessState>(
-            listenWhen: (previous, current) => current.isFailure,
-            listener: (context, state) {
-              context.showSnackBar(
-                context.l10n.errorSwitchingFastAccessMessage,
-              );
-            },
-            builder: (context, state) {
-              return SwitchListTile(
-                value: state.payload,
-                title: Text(context.l10n.fastAccessTileTitle),
-                subtitle: Text(context.l10n.fastAccessTileHint),
-                onChanged: (value) async {
-                  bool? turnOn;
-                  if (value) {
-                    final selected =
-                        context.read<NavigatorAppBloc>().state.payload;
-                    if (selected == null) {
-                      await context.showSnackBar(
-                        context.l10n.firstSelectDefaultNavAppErrorMessage,
-                      );
-                      return;
-                    }
-                    turnOn = await context.router
-                        .push<bool>(const EnableFastAccessDialogRoute());
-                  }
-                  if (context.mounted && ((turnOn ?? false) || !value)) {
-                    context
-                        .read<NavigatorFastAccessBloc>()
-                        .add(NavigatorFastAccessEvent.set(value: value));
-                  }
-                },
-              );
-            },
-          ),
-          const Divider(endIndent: 16, indent: 16, height: 32),
-          Padding(
-            padding: const EdgeInsets.all(16).copyWith(top: 0),
-            child: Text(
-              context.l10n.defaultNavAppTileTitle,
-              style: kDefaultNavAppTileTextStyle.copyWith(
-                color: context.colors.text,
-              ),
-            ),
-          ),
           ValueListenableBuilder<_InstalledMapsState>(
             valueListenable: mapsNotifier,
             builder: (context, state, child) {
@@ -126,59 +71,33 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
                     );
                   }
 
-                  return BlocConsumer<NavigatorAppBloc, NavigatorAppState>(
-                    listenWhen: (previous, current) => current.isFailure,
-                    listener: (context, state) {
-                      context.showSnackBar(
-                        context.l10n.errorSettingDefaultNavAppMessage,
-                      );
-                    },
-                    builder: (context, state) {
-                      return Column(
-                        children: List.generate(
-                          payload.length,
-                          (index) {
-                            final item = payload[index];
-                            return RadioListTile<String>(
-                              value: item.platformPackage,
-                              groupValue: state.payload,
-                              title: Text(item.name),
-                              secondary: SizedBox.square(
-                                dimension: 40,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  child: SvgPicture.asset(item.asset),
-                                ),
-                              ),
-                              onChanged: (value) {
-                                if (value == null) return;
-                                context
-                                    .read<NavigatorAppBloc>()
-                                    .add(NavigatorAppEvent.set(value));
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    },
+                  return Column(
+                    children: [
+                      NavAppsListTile(apps: payload),
+                      DefaultNavAppTile(apps: payload),
+                    ],
                   );
                 },
               );
             },
           ),
+          //
+          const Divider(endIndent: 16, indent: 16, height: 32),
+          //
+          const SwitchFastAccessTile(),
+          //
+          const SwitchOverlayTile(),
         ],
       ),
     );
   }
 }
 
-typedef _InstalledMapsState = AsyncData<List<_MapApp>, Object>;
+typedef _InstalledMapsState = AsyncData<List<NavApp>, Object>;
 
 @immutable
-final class _MapApp {
-  const _MapApp({
+final class NavApp {
+  const NavApp({
     required this.asset,
     required this.iosPackage,
     required this.androidPackage,
@@ -210,110 +129,110 @@ final class _InstalledMapsNotifier extends ValueNotifier<_InstalledMapsState> {
   _InstalledMapsNotifier() : super(const _InstalledMapsState.initial([]));
 
   @protected
-  static const kAndroidIdentifiers = <_MapApp>[
-    _MapApp(
+  static const kAndroidIdentifiers = <NavApp>[
+    NavApp(
       androidPackage: 'com.google.android.apps.maps',
       iosPackage: 'comgooglemaps',
       asset: MapIcons.google,
       name: 'Google',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.google.android.apps.mapslite',
       iosPackage: null,
       asset: MapIcons.googleGo,
       name: 'Google Go',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: null,
       iosPackage: 'iosamap',
       asset: MapIcons.apple,
       name: 'Apple',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: null,
       iosPackage: 'qqmap',
       asset: MapIcons.amap,
       name: 'QQ',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: null,
       iosPackage: 'tomtomgo',
       asset: MapIcons.tomtomgo,
       name: 'TomTom Go',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.autonavi.minimap',
       iosPackage: null,
       asset: MapIcons.amap,
       name: 'AutoNavi',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.baidu.BaiduMap',
       iosPackage: 'baidumap',
       asset: MapIcons.baidu,
       name: 'Baidu',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.waze',
       iosPackage: 'waze',
       asset: MapIcons.waze,
       name: 'Waze',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'ru.yandex.yandexnavi',
       iosPackage: 'yandexnavi',
       asset: MapIcons.yandexNavi,
       name: 'Яндекс Навигатор',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'ru.yandex.yandexmaps',
       iosPackage: 'yandexmaps',
       asset: MapIcons.yandexMaps,
       name: 'Яндекс Карты',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.citymapper.app.release',
       iosPackage: 'citymapper',
       asset: MapIcons.citymapper,
       name: 'Citymapper',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.mapswithme.maps.pro',
       iosPackage: 'mapswithme',
       asset: MapIcons.mapswithme,
       name: 'Maps.me',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'net.osmand',
       iosPackage: 'osmandmaps',
       asset: MapIcons.osmand,
       name: 'OsmAnd',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'net.osmand.plus',
       iosPackage: null,
       asset: MapIcons.osmandplus,
       name: 'OsmAnd Plus',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'ru.dublgis.dgismobile',
       iosPackage: 'dgis',
       asset: MapIcons.doubleGis,
       name: '2ГИС',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.tencent.map',
       iosPackage: null,
       asset: MapIcons.tencent,
       name: 'Tencent',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.here.app.maps',
       iosPackage: 'here-location',
       asset: MapIcons.here,
       name: 'Here',
     ),
-    _MapApp(
+    NavApp(
       androidPackage: 'com.huawei.maps.app',
       iosPackage: null,
       asset: MapIcons.petal,

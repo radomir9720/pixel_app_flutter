@@ -5,11 +5,13 @@ import 'package:bg_launcher/bg_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/theme.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/statistic_widget.dart';
+import 'package:provider/provider.dart';
 
 class OverlayGeneralStatistics extends StatefulWidget {
   const OverlayGeneralStatistics({super.key});
@@ -166,15 +168,16 @@ class _OverlayManagerState extends State<OverlayManager>
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    final enabled = context.read<OverlayBloc>().state.payload;
+    if (!enabled) return;
+
     final overlayTitle = context.l10n.statisticInfoPanelTitle;
     if (state == AppLifecycleState.paused) {
       if (await FlutterOverlayWindow.isActive()) return;
 
-      bool? hasPermission = await FlutterOverlayWindow.isPermissionGranted();
-      if (!hasPermission) {
-        hasPermission = await FlutterOverlayWindow.requestPermission();
-      }
-      if (!(hasPermission ?? false)) return;
+      final hasPermission = await FlutterOverlayWindow.isPermissionGranted();
+
+      if (!hasPermission) return;
 
       await FlutterOverlayWindow.showOverlay(
         enableDrag: true,
