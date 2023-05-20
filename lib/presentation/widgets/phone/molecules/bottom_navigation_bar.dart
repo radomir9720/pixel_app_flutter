@@ -7,6 +7,7 @@ class BottomNavBar extends StatelessWidget {
     required this.tabIcons,
     required this.activeIndex,
     required this.onTap,
+    this.onLongTap,
   });
 
   @protected
@@ -17,6 +18,9 @@ class BottomNavBar extends StatelessWidget {
 
   @protected
   final ValueSetter<int> onTap;
+
+  @protected
+  final ValueSetter<int>? onLongTap;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,7 @@ class BottomNavBar extends StatelessWidget {
             return Expanded(
               child: InkWell(
                 onTap: () => onTap(index),
+                onLongPress: () => onLongTap?.call(index),
                 child: BottomNavBarItem(
                   icon: tabIcons[index],
                   selected: index == activeIndex,

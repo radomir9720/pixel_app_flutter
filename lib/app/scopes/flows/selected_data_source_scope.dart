@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
+import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
@@ -55,6 +57,10 @@ class SelectedDataSourceScope extends AutoRouter {
                 key: ValueKey('ds_${dswa.dataSource.key}_${dswa.address}'),
                 value: dswa.dataSource,
               ),
+              Provider<AppsService>(create: (context) => GetIt.I()),
+
+              // storages
+              Provider<NavigatorAppStorage>(create: (context) => GetIt.I()),
 
               // blocs
               BlocProvider(
@@ -131,7 +137,22 @@ class SelectedDataSourceScope extends AutoRouter {
                     dataSource: context.read(),
                   );
                 },
-              )
+              ),
+              BlocProvider(
+                create: (context) =>
+                    LaunchAppCubit(appsService: context.read()),
+              ),
+              BlocProvider(
+                create: (context) => NavigatorAppBloc(storage: context.read())
+                  ..add(const NavigatorAppEvent.load()),
+                lazy: false,
+              ),
+              BlocProvider(
+                create: (context) => NavigatorFastAccessBloc(
+                  storage: context.read(),
+                )..add(const NavigatorFastAccessEvent.load()),
+                lazy: false,
+              ),
             ],
             child: BlocConsumer<DataSourceConnectionStatusCubit,
                 DataSourceConnectionStatus>(

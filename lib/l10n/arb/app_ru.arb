@@ -75,6 +75,7 @@
     "cancelButtonCaption": "Отменить",
     "saveButtonCaption": "Сохранить",
     "sendButtonCaption": "Отправить",
+    "enableButtonCaption": "Включить",
 
     "unknownErrorSelectingDataSourceMessage": "Неизвестная ошибка при выборе источника данных",
     "unavailableDataSourceErrorMessage": "Источник данных недоступен",
@@ -248,5 +249,21 @@
     "powerTileTitle": "Мощность(потребляемая/отдаваемая)",
     "motorsTemperatureTileTitle": "Температура моторов",
     "celsiusMeasurementUnit": "°C",
-    "controllersTemperatureTileTitle": "Температура контроллеров"
+    "controllersTemperatureTileTitle": "Температура контроллеров",
+
+    "errorSwitchingFastAccessMessage": "Ошибка при переключении функции \"Быстрый доступ\"",
+    "fastAccessTileTitle": "Быстрый доступ",
+    "fastAccessTileHint": "Открывайте навигатор одним касанием",
+    "firstSelectDefaultNavAppErrorMessage": "Для включения функции \"Быстрый доступ\" сначала выберите приложение навигации по умолчанию",
+    "defaultNavAppTileTitle": "Приложение навигации по умолчанию:",
+    "noNavAppsOnDeviceErrorMessage": "Приложений навигации не найдено на устройстве",
+    "errorSettingDefaultNavAppMessage": "Ошибка при установке приложения навигации по умолчанию",
+    "notSelectedDropdownHint": "Не выбрано",
+    "errorSwitchingStatisticsOverlayMessage": "Ошибка при включении/выключении плавающего окна статистики",
+    "overlayStatisticsAboveAnotherAppsTileTitle": "Окно статистики поверх других приложений",
+    "overlayStatisticsAboveAnotherAppsHint": "Выводить поверх других приложений плавающее окно с показателями автомобиля",
+
+    "enableFastAccessDialogTitle": "Включить \"Быстрый доступ\"?",
+    "enableFastAccessHint": "Эта функция позволит одним нажатием кнопки в нижнем меню открывать приложение навигации, выбранное по умолчанию.",
+    "enableFastAccessWarning": "Внимание! С включенной функцией \"Быстрый доступ\" на эту страницу можно будет попасть длинным нажатием."
 }

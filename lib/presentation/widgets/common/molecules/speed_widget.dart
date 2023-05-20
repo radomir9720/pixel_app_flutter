@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
@@ -31,12 +30,9 @@ class SpeedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isHandset = Screen.of(context).type.isHandset;
-    final model = context.select<GeneralDataCubit, TwoUint16WithStatusBody>(
+    final model = context.select<GeneralDataCubit, IntWithStatus>(
       (value) => value.state.speed,
     );
-
-    final avgHundredMetersPerHour = (model.first + model.second) / 2;
-    final avgKmPerHour = avgHundredMetersPerHour ~/ 10;
 
     return Padding(
       padding: EdgeInsets.only(right: isHandset ? 0 : 32),
@@ -56,7 +52,7 @@ class SpeedWidget extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: avgKmPerHour.toString(),
+                    text: model.value.toString(),
                     style: speedTextStyle.copyWith(
                       color: AppColors.of(context).textAccent,
                     ),

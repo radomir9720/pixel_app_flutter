@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
+import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/settings/settings.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,11 @@ class MainScope extends SingleChildStatelessWidget {
             service: GetIt.I(),
             storage: GetIt.I(),
           )..add(const AlwaysOnDisplayToggleEvent.init()),
+          lazy: false,
+        ),
+
+        BlocProvider(
+          create: (context) => OverlayBloc(storage: GetIt.I()),
           lazy: false,
         ),
 

@@ -11,3 +11,6 @@ import 'package:pixel_app_flutter/bootstrap.dart';
 void main() {
   bootstrap((ob) => App(observersBuilder: ob), Environment.prod);
 }
+
+@pragma('vm:entry-point')
+void overlayMain() => runOverlay();

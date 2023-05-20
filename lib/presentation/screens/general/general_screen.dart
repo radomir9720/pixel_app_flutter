@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixel_app_flutter/domain/data_source/blocs/lights_cubit.dart';
-import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:nested/nested.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/light_state_error_listener.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/overlay_data_sender.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/fast_actions_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/speed_widget.dart';
@@ -9,7 +9,6 @@ import 'package:pixel_app_flutter/presentation/widgets/common/molecules/statisti
 import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/blinker_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/organisms/car_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/organisms/tablet_upper_info_panel.dart';
-import 'package:re_widgets/re_widgets.dart';
 
 class GeneralScreen extends StatelessWidget {
   const GeneralScreen({super.key});
@@ -18,45 +17,11 @@ class GeneralScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenData = Screen.of(context);
 
-    return BlocListener<LightsCubit, LightsState>(
-      listenWhen: (previous, current) {
-        final errors = current.whenFailure<MapEntry<String, LightsStateError>>(
-          previous,
-          leftTurnSignal: (error) =>
-              MapEntry(context.l10n.leftBlinkerButtonCaption, error),
-          rightTurnSignal: (error) =>
-              MapEntry(context.l10n.rightBlinkerButtonCaption, error),
-          hazardBeam: (error) =>
-              MapEntry(context.l10n.hazardBeamButtonCaption, error),
-          sideBeam: (error) =>
-              MapEntry(context.l10n.parkingLightsButtonCaption, error),
-          lowBeam: (error) =>
-              MapEntry(context.l10n.lowBeamButtonCaption, error),
-          highBeam: (error) {
-            return MapEntry(context.l10n.highBeamButtonCaption, error);
-          },
-        );
-
-        if (errors.isEmpty) return false;
-
-        for (final error in errors) {
-          final reason = error.value.when(
-            timeout: () => context.l10n.positiveAnswerDidNotComeErrorMessage,
-            mainECUError: () => context.l10n.errorFromMainECUErrorMessage,
-            differs: () =>
-                context.l10n.notAllBlocksReturnedSuccessResponseErrorMessage,
-          );
-          context.showSnackBar(
-            context.l10n.errorSwitchingFeatureMessage(
-              error.key.toLowerCase(),
-              reason,
-            ),
-          );
-        }
-
-        return false;
-      },
-      listener: (context, state) {},
+    return Nested(
+      children: const [
+        LightStateErrorListener(),
+        OverlayDataSender(),
+      ],
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: screenData.whenType(

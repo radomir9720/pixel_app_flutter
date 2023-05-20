@@ -6,15 +6,15 @@ import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/inc
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-@sealed
 @immutable
-class MotorDataState with EquatableMixin {
+final class MotorDataState with EquatableMixin {
   const MotorDataState({
     required this.current,
     required this.voltage,
     required this.temperature,
     required this.gearAndRoll,
     required this.rpm,
+    required this.speed,
     required this.power,
   });
 
@@ -24,6 +24,7 @@ class MotorDataState with EquatableMixin {
         temperature = const MotorTemperature.zero(),
         gearAndRoll = MotorGearAndRoll.unknown(),
         rpm = const TwoUint16WithStatusBody.zero(),
+        speed = const TwoUint16WithStatusBody.zero(),
         power = const TwoInt16WithStatusBody.zero();
 
   final TwoInt16WithStatusBody current;
@@ -31,6 +32,7 @@ class MotorDataState with EquatableMixin {
   final MotorTemperature temperature;
   final MotorGearAndRoll gearAndRoll;
   final TwoUint16WithStatusBody rpm;
+  final TwoUint16WithStatusBody speed;
   final TwoInt16WithStatusBody power;
 
   MotorDataState copyWith({
@@ -39,6 +41,7 @@ class MotorDataState with EquatableMixin {
     MotorTemperature? temperature,
     MotorGearAndRoll? gearAndRoll,
     TwoUint16WithStatusBody? rpm,
+    TwoUint16WithStatusBody? speed,
     TwoInt16WithStatusBody? power,
   }) {
     return MotorDataState(
@@ -47,6 +50,7 @@ class MotorDataState with EquatableMixin {
       temperature: temperature ?? this.temperature,
       gearAndRoll: gearAndRoll ?? this.gearAndRoll,
       rpm: rpm ?? this.rpm,
+      speed: speed ?? this.speed,
       power: power ?? this.power,
     );
   }
@@ -58,6 +62,7 @@ class MotorDataState with EquatableMixin {
         temperature,
         gearAndRoll,
         rpm,
+        speed,
         power,
       ];
 }
@@ -87,6 +92,10 @@ class MotorDataCubit extends Cubit<MotorDataState> with ConsumerBlocMixin {
         ..voidOnModel<TwoUint16WithStatusBody, RPMIncomingDataSourcePackage>(
             (model) {
           emit(state.copyWith(rpm: model));
+        })
+        ..voidOnModel<TwoUint16WithStatusBody,
+            MotorSpeedIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(speed: model));
         })
         ..voidOnModel<TwoInt16WithStatusBody,
             MotorPowerIncomingDataSourcePackage>((model) {

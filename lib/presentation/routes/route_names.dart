@@ -5,6 +5,7 @@ mixin RouteNames {
   static const selectDataSourceFlow = 'SelectDataSourceFlow';
   static const developerToolsFlow = 'DeveloperToolsFlow';
   static const appsFlow = 'AppsFlow';
+  static const navigatorFlow = 'NavigatorFlow';
   static const requestsExchangeLogsFlow = 'RequestsExchangeLogsFlow';
   static const requestsExchangeLogsFilterFlow =
       'RequestsExchangeLogsFilterFlow';
@@ -23,4 +24,5 @@ mixin RouteNames {
   static const filterParameterIdDialogRoute = 'FilterParameterIdDialogRoute';
   static const filterRequestTypeDialogRoute = 'FilterRequestTypeDialogRoute';
   static const filterDirectionDialogRoute = 'FilterDirectionDialogRoute';
+  static const enableFastAccessDialogRoute = 'EnableFastAccessDialogRoute';
 }

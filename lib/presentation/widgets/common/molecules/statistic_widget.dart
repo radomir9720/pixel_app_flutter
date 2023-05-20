@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
@@ -18,44 +17,17 @@ class StatisticWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = <Widget>[
-      BlocSelector<GeneralDataCubit, GeneralDataState, Uint8WithStatusBody>(
+      BlocSelector<GeneralDataCubit, GeneralDataState, IntWithStatus>(
         selector: (state) => state.batteryLevel,
-        builder: (context, state) {
-          return StatisticItem(
-            icon: PixelIcons.battery,
-            value: '${state.value}%',
-            customColor: context.colorFromStatus(state.status),
-          );
-        },
+        builder: (context, state) => BatteryLevelStatisticItem(item: state),
       ),
-      BlocSelector<GeneralDataCubit, GeneralDataState, Uint32WithStatusBody>(
+      BlocSelector<GeneralDataCubit, GeneralDataState, IntWithStatus>(
         selector: (state) => state.odometer,
-        builder: (context, state) {
-          final km = state.value ~/ 10;
-          return StatisticItem(
-            icon: PixelIcons.speedometer,
-            value: context.l10n.km(km),
-            measurementUnit: context.l10n.kmMeasurementUnit,
-            customColor: context.colorFromStatus(state.status),
-          );
-        },
+        builder: (context, state) => OdometerStatisticItem(item: state),
       ),
-      BlocSelector<GeneralDataCubit, GeneralDataState, Int16WithStatusBody>(
+      BlocSelector<GeneralDataCubit, GeneralDataState, IntWithStatus>(
         selector: (state) => state.power,
-        builder: (context, state) {
-          final value = state.value;
-          return StatisticItem(
-            icon: value < 1 ? PixelIcons.batteryMinus : PixelIcons.batteryPlus,
-            value: '${value.abs()}',
-            measurementUnit: 'Вт',
-            customColor: context.colorFromStatus(
-              state.status,
-              onNormal: () {
-                return value > 0 ? context.colors.successPastel : null;
-              },
-            ),
-          );
-        },
+        builder: (context, state) => PowerStatisticItem(item: state),
       )
     ];
 
@@ -93,6 +65,62 @@ class StatisticWidget extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class BatteryLevelStatisticItem extends StatelessWidget {
+  const BatteryLevelStatisticItem({super.key, required this.item});
+
+  @protected
+  final IntWithStatus item;
+
+  @override
+  Widget build(BuildContext context) {
+    return StatisticItem(
+      icon: PixelIcons.battery,
+      value: '${item.value}%',
+      customColor: context.colorFromStatus(item.status),
+    );
+  }
+}
+
+class OdometerStatisticItem extends StatelessWidget {
+  const OdometerStatisticItem({super.key, required this.item});
+
+  @protected
+  final IntWithStatus item;
+
+  @override
+  Widget build(BuildContext context) {
+    return StatisticItem(
+      icon: PixelIcons.speedometer,
+      value: context.l10n.km(item.value),
+      measurementUnit: context.l10n.kmMeasurementUnit,
+      customColor: context.colorFromStatus(item.status),
+    );
+  }
+}
+
+class PowerStatisticItem extends StatelessWidget {
+  const PowerStatisticItem({super.key, required this.item});
+
+  @protected
+  final IntWithStatus item;
+
+  @override
+  Widget build(BuildContext context) {
+    final value = item.value;
+    return StatisticItem(
+      icon: value < 1 ? PixelIcons.batteryMinus : PixelIcons.batteryPlus,
+      value: '${value.abs()}',
+      measurementUnit: context.l10n.wattMeasurementUnit,
+      customColor: context.colorFromStatus(
+        item.status,
+        onNormal: () {
+          return value > 0 ? context.colors.successPastel : null;
+        },
       ),
     );
   }
