@@ -24,6 +24,7 @@ import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/i
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/slider_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/home/home_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/navigator/navigator_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/enable_fast_access_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/settings/settings_screen.dart';
 
 part 'main_router.gr.dart';
@@ -70,12 +71,14 @@ class MainRouter extends _$MainRouter {}
 Route<T> dialogRouteBuilder<T>(
   BuildContext context,
   Widget child,
-  CustomPage<T> page,
-) {
+  CustomPage<T> page, {
+  Color? barrierColor,
+}) {
   return DialogRoute(
     settings: page,
     builder: (context) => child,
     context: context,
+    barrierColor: barrierColor,
     // expanded: true,
   );
 }

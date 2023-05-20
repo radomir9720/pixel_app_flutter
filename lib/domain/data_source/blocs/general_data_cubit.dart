@@ -4,11 +4,46 @@ import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/incoming_data_source_packages.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/bytes_convertible_with_status.dart';
 import 'package:re_seedwork/re_seedwork.dart';
+
+@immutable
+final class IntWithStatus {
+  const IntWithStatus({
+    required this.value,
+    required this.status,
+  });
+
+  const IntWithStatus.initial()
+      : value = 0,
+        status = PeriodicValueStatus.normal;
+
+  factory IntWithStatus.fromMap(Map<String, dynamic> map) {
+    return IntWithStatus(
+      value: map.parse('value'),
+      status: PeriodicValueStatus.fromId(map.parse('status')),
+    );
+  }
+
+  final int value;
+  final PeriodicValueStatus status;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'value': value,
+      'status': status.id,
+    };
+  }
+}
+
+extension on IntBytesConvertibleWithStatus {
+  IntWithStatus toIntWithStatus([int? customValue]) =>
+      IntWithStatus(value: customValue ?? value, status: status);
+}
 
 @sealed
 @immutable
-class GeneralDataState with EquatableMixin {
+final class GeneralDataState with EquatableMixin {
   const GeneralDataState({
     required this.power,
     required this.batteryLevel,
@@ -17,15 +52,24 @@ class GeneralDataState with EquatableMixin {
   });
 
   const GeneralDataState.initial()
-      : power = const Int16WithStatusBody.zero(),
-        batteryLevel = const Uint8WithStatusBody.zero(),
-        odometer = const Uint32WithStatusBody.zero(),
-        speed = const TwoUint16WithStatusBody.zero();
+      : power = const IntWithStatus.initial(),
+        batteryLevel = const IntWithStatus.initial(),
+        odometer = const IntWithStatus.initial(),
+        speed = const IntWithStatus.initial();
 
-  final Int16WithStatusBody power;
-  final Uint8WithStatusBody batteryLevel;
-  final Uint32WithStatusBody odometer;
-  final TwoUint16WithStatusBody speed;
+  factory GeneralDataState.fromMap(Map<String, dynamic> map) {
+    return GeneralDataState(
+      power: map.parseAndMap('power', IntWithStatus.fromMap),
+      batteryLevel: map.parseAndMap('batteryLevel', IntWithStatus.fromMap),
+      odometer: map.parseAndMap('odometer', IntWithStatus.fromMap),
+      speed: map.parseAndMap('speed', IntWithStatus.fromMap),
+    );
+  }
+
+  final IntWithStatus power;
+  final IntWithStatus batteryLevel;
+  final IntWithStatus odometer;
+  final IntWithStatus speed;
 
   @override
   List<Object?> get props => [
@@ -36,10 +80,10 @@ class GeneralDataState with EquatableMixin {
       ];
 
   GeneralDataState copyWith({
-    Int16WithStatusBody? power,
-    Uint8WithStatusBody? batteryLevel,
-    Uint32WithStatusBody? odometer,
-    TwoUint16WithStatusBody? speed,
+    IntWithStatus? power,
+    IntWithStatus? batteryLevel,
+    IntWithStatus? odometer,
+    IntWithStatus? speed,
   }) {
     return GeneralDataState(
       power: power ?? this.power,
@@ -47,6 +91,15 @@ class GeneralDataState with EquatableMixin {
       odometer: odometer ?? this.odometer,
       speed: speed ?? this.speed,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'power': power.toMap(),
+      'batteryLevel': batteryLevel.toMap(),
+      'odometer': odometer.toMap(),
+      'speed': speed.toMap(),
+    };
   }
 }
 
@@ -57,19 +110,22 @@ class GeneralDataCubit extends Cubit<GeneralDataState> with ConsumerBlocMixin {
       package
         ..voidOnModel<Uint8WithStatusBody,
             BatteryLevelIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(batteryLevel: model));
+          emit(state.copyWith(batteryLevel: model.toIntWithStatus()));
         })
         ..voidOnModel<Int16WithStatusBody,
             BatteryPowerIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(power: model));
+          emit(state.copyWith(power: model.toIntWithStatus()));
         })
         ..voidOnModel<TwoUint16WithStatusBody,
             MotorSpeedIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(speed: model));
+          final avgHundredMetersPerHour = (model.first + model.second) / 2;
+          final avgKmPerHour = avgHundredMetersPerHour ~/ 10;
+          emit(state.copyWith(speed: model.toIntWithStatus(avgKmPerHour)));
         })
         ..voidOnModel<Uint32WithStatusBody, OdometerIncomingDataSourcePackage>(
             (model) {
-          emit(state.copyWith(odometer: model));
+          final km = model.value ~/ 10;
+          emit(state.copyWith(odometer: model.toIntWithStatus(km)));
         });
     });
   }

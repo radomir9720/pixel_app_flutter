@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pixel_app_flutter/app/overlay.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
@@ -63,7 +64,9 @@ class _AppState extends State<App> {
                       value: SystemUiOverlayStyle(
                         statusBarBrightness: Theme.of(context).brightness,
                       ),
-                      child: child ?? const SizedBox.shrink(),
+                      child: OverlayManager(
+                        child: child ?? const SizedBox.shrink(),
+                      ),
                     ),
                   ),
                 ),

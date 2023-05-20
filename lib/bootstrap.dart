@@ -21,6 +21,7 @@ import 'package:installed_apps/installed_apps.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
 import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
+import 'package:pixel_app_flutter/app/overlay.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
 import 'package:pixel_app_flutter/data/services/apps_service.dart';
@@ -62,6 +63,12 @@ enum Environment {
         return dev();
     }
   }
+}
+
+void runOverlay() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(const OverlayGeneralStatistics());
 }
 
 Future<void> bootstrap(

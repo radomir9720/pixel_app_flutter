@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
@@ -20,7 +23,7 @@ class HomeScreen extends StatelessWidget {
       routes: const [
         GeneralRoute(),
         CarInfoRoute(),
-        NavigatorRoute(),
+        NavigatorFlow(),
         AppsFlow(),
         ChargingRoute(),
         MotorRoute(),
@@ -120,7 +123,8 @@ class _BottomNavBar extends StatelessWidget {
           return MeasureSize(
             onChange: onBottomNavBarSizeChange,
             child: BottomNavBar(
-              onTap: tabsRouter.setActiveIndex,
+              onTap: context.onTabTap,
+              onLongTap: context.onTabLongTap,
               activeIndex: tabsRouter.activeIndex,
               tabIcons: const [
                 PixelIcons.car,
@@ -196,10 +200,46 @@ class _SideNavBar extends StatelessWidget {
               title: context.l10n.motorTabTitle,
             ),
           ],
-          onTap: tabsRouter.setActiveIndex,
+          onTap: context.onTabTap,
+          onLongTap: context.onTabLongTap,
           activeIndex: tabsRouter.activeIndex,
         ),
       ),
     );
+  }
+}
+
+extension on BuildContext {
+  Future<void> onTabTap(int index) async {
+    if (index == 2) {
+      if (mounted) {
+        final fastAccess = read<NavigatorFastAccessBloc>().state.payload;
+
+        if (fastAccess) {
+          final selectedApp = read<NavigatorAppBloc>().state.payload;
+
+          if (selectedApp != null) {
+            final isInstalled = await LaunchApp.isAppInstalled(
+              androidPackageName: selectedApp,
+              iosUrlScheme: selectedApp,
+            );
+
+            if (isInstalled == true) {
+              await LaunchApp.openApp(
+                androidPackageName: selectedApp,
+                iosUrlScheme: selectedApp,
+                openStore: false,
+              );
+              return;
+            }
+          }
+        }
+      }
+    }
+    tabsRouter.setActiveIndex(index);
+  }
+
+  Future<void> onTabLongTap(int index) async {
+    if (index == 2) tabsRouter.setActiveIndex(index);
   }
 }

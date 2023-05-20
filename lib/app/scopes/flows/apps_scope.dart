@@ -13,9 +13,6 @@ class AppsScope extends AutoRouter {
     return (context, content) {
       return MultiProvider(
         providers: [
-          // services
-          Provider<AppsService>(create: (context) => GetIt.I()),
-
           // storages
           InheritedProvider<PinnedAppsStorage>(
             create: (context) => GetIt.I()..read(),
@@ -29,9 +26,7 @@ class AppsScope extends AutoRouter {
               pinnedAppsStorage: context.read(),
             )..add(const GetAppsListEvent.loadAppsList()),
           ),
-          BlocProvider(
-            create: (context) => LaunchAppCubit(appsService: context.read()),
-          ),
+
           BlocProvider(
             create: (context) => ManagePinnedAppsBloc(
               pinnedAppsStorage: context.read(),

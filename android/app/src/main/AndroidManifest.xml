@@ -5,9 +5,29 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature android:name="android.hardware.usb.host" />
     <uses-sdk android:minSdkVersion="12" />
+
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+        <package android:name="com.google.android.apps.mapslite" />
+        <package android:name="com.autonavi.minimap" />
+        <package android:name="com.baidu.BaiduMap" />
+        <package android:name="com.waze" />
+        <package android:name="ru.yandex.yandexnavi" />
+        <package android:name="ru.yandex.yandexmaps" />
+        <package android:name="com.citymapper.app.release" />
+        <package android:name="com.mapswithme.maps.pro" />
+        <package android:name="net.osmand" />
+        <package android:name="net.osmand.plus" />
+        <package android:name="ru.dublgis.dgismobile" />
+        <package android:name="com.tencent.map" />
+        <package android:name="com.here.app.maps" />
+        <package android:name="com.huawei.maps.app" />
+    </queries>
+
 
    <application
         android:label="${appName}"
@@ -47,5 +67,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <service android:name="flutter.overlay.window.flutter_overlay_window.OverlayService" android:exported="false" />
     </application>
 </manifest>

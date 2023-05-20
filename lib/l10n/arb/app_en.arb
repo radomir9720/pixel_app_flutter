@@ -75,6 +75,7 @@
     "cancelButtonCaption": "Cancel",
     "saveButtonCaption": "Save",
     "sendButtonCaption": "Send",
+    "enableButtonCaption": "Enable",
 
     "unknownErrorSelectingDataSourceMessage": "Unknown error while selecting data source",
     "unavailableDataSourceErrorMessage": "Data source is unavailable",
@@ -248,5 +249,17 @@
     "powerTileTitle": "Power(consumed/given)",
     "motorsTemperatureTileTitle": "Motors temperature",
     "celsiusMeasurementUnit": "°C",
-    "controllersTemperatureTileTitle": "Controllers temperature"
+    "controllersTemperatureTileTitle": "Controllers temperature",
+
+    "errorSwitchingFastAccessMessage": "Error when switching the feature \"Fast access\"",
+    "fastAccessTileTitle": "Fast access",
+    "fastAccessTileHint": "Open the navigator with one touch",
+    "firstSelectDefaultNavAppErrorMessage": "To enable the function \"Fast access\" first select the default navigation application",
+    "defaultNavAppTileTitle": "Default navigation application:",
+    "noNavAppsOnDeviceErrorMessage": "Navigation applications were not found on the device",
+    "errorSettingDefaultNavAppMessage": "Error when installing the default navigation application",
+
+    "enableFastAccessDialogTitle": "Turn on \"Fast access\"?",
+    "enableFastAccessHint": "This feature will allow you to open the navigation application selected by default with a single click of a button in the lower menu.",
+    "enableFastAccessWarning": "Attention! With the \"Quick Access\" feature enabled, you can get to this page by long pressing."
 }

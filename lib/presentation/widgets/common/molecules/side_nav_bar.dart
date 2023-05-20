@@ -7,6 +7,7 @@ class SideNavBar extends StatelessWidget {
     required this.items,
     required this.activeIndex,
     required this.onTap,
+    this.onLongTap,
     this.showTitle = true,
   });
 
@@ -18,6 +19,9 @@ class SideNavBar extends StatelessWidget {
 
   @protected
   final ValueSetter<int> onTap;
+
+  @protected
+  final ValueSetter<int>? onLongTap;
 
   @protected
   final bool showTitle;
@@ -60,6 +64,7 @@ class SideNavBar extends StatelessWidget {
               height: 42,
               child: InkWell(
                 onTap: () => onTap(item.pageIndex),
+                onLongPress: () => onLongTap?.call(item.pageIndex),
                 borderRadius: borderRadius,
                 child: DecoratedBox(
                   decoration: BoxDecoration(

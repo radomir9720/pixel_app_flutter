@@ -31,11 +31,12 @@ dependencies:
       ref: "0.3.0"
 
   # ui
+  nested: ^1.0.0
+  animated_scroll_view: ^1.0.1
   re_widgets:
     git:
       url: https://github.com/radomir9720/re_widgets.git
       ref: "0.2.1"
-  animated_scroll_view: ^1.0.1
 
   # codegen
   freezed_annotation: ^2.1.0
@@ -47,10 +48,18 @@ dependencies:
   # platform
   wakelock: ^0.6.2
   usb_serial: ^0.4.0
+  bg_launcher: ^0.0.1
   installed_apps: ^1.3.1
   package_info_plus: ^3.1.2
   shared_preferences: ^2.1.0
+  external_app_launcher: ^3.1.0
   flutter_libserialport: ^0.3.0
+  # flutter_overlay_window: ^0.4.3
+  flutter_overlay_window:
+    git: 
+      url: https://github.com/radomir9720/flutter_overlay_window.git
+      ref: "fix/inverted_drag"
+
   flutter_bluetooth_serial:
     git:
       url: https://github.com/radomir9720/flutter_bluetooth_serial.git
@@ -83,6 +92,7 @@ flutter:
 
   assets:
     - assets/svg/car.svg
+    - assets/maps_icons/
 
   fonts:
     - family: Inter

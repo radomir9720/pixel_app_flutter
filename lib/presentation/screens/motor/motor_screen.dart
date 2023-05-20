@@ -44,7 +44,7 @@ class MotorScreen extends StatelessWidget {
                 parameterName: context.l10n.speedTileTitle,
                 builder: () {
                   final state = context
-                      .select((GeneralDataCubit cubit) => cubit.state.speed);
+                      .select((MotorDataCubit cubit) => cubit.state.speed);
 
                   return (
                     '${state.first ~/ 10}',

@@ -14,7 +14,20 @@ const _homeRoute = AutoRoute<void>(
     ),
     AutoRoute<void>(
       path: 'navigator',
-      page: NavigatorScreen,
+      page: EmptyRouterScreen,
+      name: RouteNames.navigatorFlow,
+      children: [
+        AutoRoute<void>(
+          initial: true,
+          page: NavigatorScreen,
+        ),
+        CustomRoute<bool>(
+          path: 'enable-fast-access',
+          name: RouteNames.enableFastAccessDialogRoute,
+          page: EnableFastAccessDialog,
+          customRouteBuilder: enableFastAccessDialofRouteBuilder,
+        ),
+      ],
     ),
     AutoRoute<void>(
       path: 'apps',
@@ -37,3 +50,16 @@ const _homeRoute = AutoRoute<void>(
     ),
   ],
 );
+
+Route<T> enableFastAccessDialofRouteBuilder<T>(
+  BuildContext context,
+  Widget child,
+  CustomPage<T> page,
+) {
+  return dialogRouteBuilder<T>(
+    context,
+    child,
+    page,
+    barrierColor: Colors.transparent,
+  );
+}
