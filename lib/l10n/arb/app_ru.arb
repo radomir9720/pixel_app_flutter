@@ -93,6 +93,7 @@
     "whichParametersToSubscribeToListTileLabel": "На какие параметры подписаться(или отправлять периодические запросы)",
     "requestPeriodInMillisListTileLabel": "Период запросов в миллисекундах",
     "requestPeriodInMillisListTileSubtitle": "Также от этого параметра зависит частота отправки эвентов по подписке в DemoDataSource",
+    "exportLogsListTileLabel": "Экспортировать логи",
     "directionListTileLabel": "Направление",
     "incomingListTileLabel": "Входящий",
     "outgoingListTileLabel": "Исходящий",

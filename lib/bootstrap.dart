@@ -18,9 +18,12 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:installed_apps/installed_apps.dart';
+import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pixel_app_flutter/app/helpers/app_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
-import 'package:pixel_app_flutter/app/helpers/firebase_bloc_observer.dart';
+import 'package:pixel_app_flutter/app/helpers/logger_records_buffer.dart';
+import 'package:pixel_app_flutter/app/helpers/logger_route_observer.dart';
 import 'package:pixel_app_flutter/app/overlay.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/main_scope.dart';
 import 'package:pixel_app_flutter/bootstrap.config.dart';
@@ -76,9 +79,13 @@ Future<void> bootstrap(
       builder,
   Environment env,
 ) async {
+  late final LoggerRecordsBuffer recordsBuffer;
+
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      await configureDependencies(env);
 
       // SizeProvider.initialize(sizeConverter:
       // const SizeConverter(fo: fo, si: si));
@@ -97,14 +104,16 @@ Future<void> bootstrap(
 
       FlutterError.onError = CrashlyticsHelper.recordFlutterError;
 
-      Bloc.observer = FirebaseBlocObserver();
+      recordsBuffer = GetIt.I<LoggerRecordsBuffer>();
 
-      await configureDependencies(env);
+      Bloc.observer = AppBlocObserver(recordsBuffer: recordsBuffer);
 
       runApp(
         MainScope(
           child: await builder(
             () => [
+              LoggerRouteObserver(recordsBuffer: recordsBuffer),
+              //
               if (initFirebase)
                 FirebaseAnalyticsObserver(
                   analytics: FirebaseAnalytics.instance,
@@ -117,7 +126,16 @@ Future<void> bootstrap(
         ),
       );
     },
-    CrashlyticsHelper.recordError,
+    (error, stack) {
+      CrashlyticsHelper.recordError(error, stack);
+      recordsBuffer.add(
+        LogRecord(
+          Level.SEVERE,
+          '$error\nTrace: $stack',
+          'RunZonedError',
+        ),
+      );
+    },
   );
 }
 
@@ -144,6 +162,7 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
     ..factory<GetBluetoothConnectionCallback>(
       () => BluetoothConnection.toAddress,
     )
+    ..lazySingleton<LoggerRecordsBuffer>(LoggerRecordsBuffer.new)
     // Android
     ..factory<ListUsbDevicesCallback>(() => UsbSerial.listDevices)
     // MacOS, Linux, Windows

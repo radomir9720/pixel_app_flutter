@@ -93,6 +93,7 @@
     "whichParametersToSubscribeToListTileLabel": "Which parameters to subscribe to(or send periodic requests)",
     "requestPeriodInMillisListTileLabel": "Request period in milliseconds",
     "requestPeriodInMillisListTileSubtitle": "Also, the frequency of sending events by subscription also depends on this parameter in DemoDataSource",
+    "exportLogsListTileLabel": "Export logs",
     "directionListTileLabel": "Direction",
     "incomingListTileLabel": "Incoming",
     "outgoingListTileLabel": "Outgoing",

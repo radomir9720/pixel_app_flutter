@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pixel_app_flutter/app/helpers/logger_records_buffer.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DeveloperToolsScreen extends StatelessWidget {
   const DeveloperToolsScreen({super.key});
@@ -111,10 +117,16 @@ class DeveloperToolsScreen extends StatelessWidget {
                       }
                     });
                   },
-                  trailing: BlocSelector<OutgoingPackagesCubit,
-                      DeveloperToolsParameters, Set<int>>(
-                    selector: (state) => state.subscriptionParameterIds,
-                    builder: (context, state) => Text(state.join(', ')),
+                  trailing: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 70),
+                    child: BlocSelector<OutgoingPackagesCubit,
+                        DeveloperToolsParameters, Set<int>>(
+                      selector: (state) => state.subscriptionParameterIds,
+                      builder: (context, state) => Text(
+                        state.join(', '),
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
                   ),
                 ),
                 SwitchListTile(
@@ -173,6 +185,19 @@ class DeveloperToolsScreen extends StatelessWidget {
                   title: Text(context.l10n.packagesExchangeConsoleScreenTitle),
                   onTap: () {
                     context.router.push(const PackagesExchangeConsoleRoute());
+                  },
+                ),
+                ListTile(
+                  title: Text(context.l10n.exportLogsListTileLabel),
+                  onTap: () async {
+                    final tempDir = await getTemporaryDirectory();
+                    final items = GetIt.I<LoggerRecordsBuffer>().records;
+                    final string = items.map((e) => e.toString()).join('\n');
+                    final path = '${tempDir.path}/log_${DateTime.now()}.txt';
+                    final f = File(path)..writeAsStringSync(string);
+                    final file = XFile(f.path);
+                    await Share.shareXFiles([file]);
+                    f.deleteSync();
                   },
                 ),
               ],
