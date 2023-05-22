@@ -1,8 +1,10 @@
-import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/double.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/bytes_convertible_with_status.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/mixins.dart';
 
+// TODO(Radomir): package format has changed
 class HighCurrent extends BytesConvertibleWithStatus {
   const HighCurrent({required this.value, required super.status});
 
@@ -23,15 +25,19 @@ class HighCurrent extends BytesConvertibleWithStatus {
       const HighCurrentConverter();
 }
 
-class HighCurrentConverter extends BytesConverter<HighCurrent> {
+class HighCurrentConverter extends BytesConverter<HighCurrent>
+    with PeriodicValueStatusOrOkEventFunctionIdMxixn {
   const HighCurrentConverter();
 
   @override
   HighCurrent fromBytes(List<int> bytes) {
-    return HighCurrent.fromFunctionId(
-      bytes[0],
-      // converting from milliampers to ampers
-      value: bytes.sublist(1).toIntFromInt32.fromMilli,
+    return whenFunctionId(
+      body: bytes,
+      dataParser: (bytes) => bytes.toIntFromInt32.fromMilli,
+      status: (data, status) => HighCurrent(status: status, value: data),
+      okEvent: (data) {
+        return HighCurrent(status: PeriodicValueStatus.normal, value: data);
+      },
     );
   }
 

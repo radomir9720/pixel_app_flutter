@@ -16,6 +16,14 @@ mixin IsSuccessEventFunctionIdMixin<T extends BytesConvertible>
       data.isNotEmpty && data[0] == FunctionId.okEventId;
 }
 
+mixin IsPeriodicValueStatusOrSuccessEventFunctionIdMixin<
+    T extends BytesConvertible> on DataSourceIncomingPackage<T> {
+  @override
+  bool get validFunctionId =>
+      data.isNotEmpty &&
+      (data[0] == FunctionId.okEventId || PeriodicValueStatus.isValid(data[0]));
+}
+
 mixin IsSetResponseFunctionIdMixin<T extends BytesConvertible>
     on DataSourceIncomingPackage<T> {
   static const kSetResponseFunctionIds = [

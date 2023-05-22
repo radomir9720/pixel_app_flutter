@@ -1,6 +1,7 @@
-import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/bytes_convertible_with_status.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/mixins.dart';
 
 class MaxTemperature extends BytesConvertibleWithStatus {
   const MaxTemperature({required this.value, required super.status});
@@ -22,14 +23,27 @@ class MaxTemperature extends BytesConvertibleWithStatus {
       const MaxTemperatureConverter();
 }
 
-class MaxTemperatureConverter extends BytesConverter<MaxTemperature> {
+class MaxTemperatureConverter extends BytesConverter<MaxTemperature>
+    with PeriodicValueStatusOrOkEventFunctionIdMxixn {
   const MaxTemperatureConverter();
 
   @override
   MaxTemperature fromBytes(List<int> bytes) {
-    return MaxTemperature.fromFunctionId(
-      bytes[0],
-      value: bytes.sublist(1).toIntFromInt8,
+    return whenFunctionId(
+      body: bytes,
+      dataParser: (b) => b.toIntFromInt8,
+      status: (data, status) {
+        return MaxTemperature(
+          status: status,
+          value: data,
+        );
+      },
+      okEvent: (data) {
+        return MaxTemperature(
+          status: PeriodicValueStatus.normal,
+          value: data,
+        );
+      },
     );
   }
 
