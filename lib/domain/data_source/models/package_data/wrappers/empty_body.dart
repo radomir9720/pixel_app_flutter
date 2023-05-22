@@ -7,6 +7,9 @@ class EmptyBody extends BytesConvertible {
   @override
   BytesConverter<BytesConvertible> get bytesConverter =>
       const DefaultEmptyBodyConverter();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class DefaultEmptyBodyConverter extends BytesConverter<EmptyBody> {

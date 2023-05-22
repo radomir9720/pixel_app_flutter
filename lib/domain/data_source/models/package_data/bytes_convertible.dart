@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 
-abstract class BytesConvertible {
+abstract class BytesConvertible extends Equatable {
   const BytesConvertible();
 
   BytesConverter get bytesConverter;

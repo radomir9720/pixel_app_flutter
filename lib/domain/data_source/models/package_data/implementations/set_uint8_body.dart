@@ -1,10 +1,9 @@
-import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/set_value.dart';
 
 @sealed
 @immutable
-class SetUint8Body extends SetValueBody with EquatableMixin {
+class SetUint8Body extends SetValueBody {
   const SetUint8Body({required this.value});
 
   final int value;

@@ -116,6 +116,15 @@ class MotorGearAndRoll extends IntBytesConvertibleWithStatus {
     ].toIntFromUint32;
   }
 
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        firstMotorGear,
+        firstMotorRollDirection,
+        secondMotorGear,
+        secondMotorRollDirection,
+      ];
+
   static Uint32WithStatusBytesConverter<MotorGearAndRoll> get converter =>
       const Uint32WithStatusBytesConverter(MotorGearAndRoll.builder);
 
