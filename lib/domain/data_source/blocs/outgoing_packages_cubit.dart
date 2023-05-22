@@ -34,10 +34,11 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
   }
 
   void subscribeTo(Set<DataSourceParameterId> parameterIds) {
+    final newParameters = parameterIds.difference(subscribeToParameterIdList);
     subscribeToParameterIdList.addAll(parameterIds);
 
     state.protocolVersion.when(
-      subscription: () => _subscribeTo(subscribeToParameterIdList),
+      subscription: () => _subscribeTo(newParameters),
       periodicRequests: () => _setNewTimer(
         state.requestsPeriodInMillis,
         subscribeToParameterIdList,
