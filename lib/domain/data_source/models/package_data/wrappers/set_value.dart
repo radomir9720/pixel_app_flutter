@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/data_source_package_data_exceptions.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 
@@ -33,7 +32,7 @@ abstract class SetValueConverter<T extends SetValueBody>
   }
 }
 
-abstract class SetValueResult extends BytesConvertible with EquatableMixin {
+abstract class SetValueResult extends BytesConvertible {
   const SetValueResult({required this.success});
 
   const SetValueResult.success() : success = true;

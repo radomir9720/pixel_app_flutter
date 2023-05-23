@@ -5,7 +5,9 @@ import 'package:pixel_app_flutter/domain/data_source/models/package_data/package
 
 class LowVoltageMinMaxDeltaIncomingDataSourcePackage
     extends DataSourceIncomingPackage<LowVoltageMinMaxDelta>
-    with IsEventRequestTypeMixin, IsSuccessEventFunctionIdMixin {
+    with
+        IsEventRequestTypeMixin,
+        IsPeriodicValueStatusOrSuccessEventFunctionIdMixin {
   LowVoltageMinMaxDeltaIncomingDataSourcePackage(super.source);
 
   @override

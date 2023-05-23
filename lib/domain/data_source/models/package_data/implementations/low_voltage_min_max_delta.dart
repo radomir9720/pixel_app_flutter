@@ -1,8 +1,9 @@
 import 'package:meta/meta.dart';
-import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/double.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/bytes_convertible_with_status.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/mixins.dart';
 
 @sealed
 @immutable
@@ -18,14 +19,7 @@ class LowVoltageMinMaxDelta extends BytesConvertibleWithStatus {
       : min = 0,
         max = 0,
         delta = 0,
-        super.normal();
-
-  LowVoltageMinMaxDelta.fromFunctionId(
-    super.id, {
-    required this.min,
-    required this.max,
-    required this.delta,
-  }) : super.fromId();
+        super(status: PeriodicValueStatus.normal);
 
   final double min;
   final double max;
@@ -40,16 +34,35 @@ class LowVoltageMinMaxDelta extends BytesConvertibleWithStatus {
 }
 
 class LowVoltageMinMaxDeltaConverter
-    implements BytesConverter<LowVoltageMinMaxDelta> {
+    extends BytesConverter<LowVoltageMinMaxDelta>
+    with PeriodicValueStatusOrOkEventFunctionIdMxixn {
   const LowVoltageMinMaxDeltaConverter();
 
   @override
   LowVoltageMinMaxDelta fromBytes(List<int> bytes) {
-    return LowVoltageMinMaxDelta.fromFunctionId(
-      bytes[0],
-      min: bytes.sublist(1, 3).toIntFromUint16.fromMilli,
-      max: bytes.sublist(3, 5).toIntFromUint16.fromMilli,
-      delta: bytes.sublist(5, 7).toIntFromUint16.fromMilli,
+    return whenFunctionId(
+      body: bytes,
+      dataParser: (bytes) => (
+        bytes.sublist(0, 2).toIntFromUint16.fromMilli,
+        bytes.sublist(2, 4).toIntFromUint16.fromMilli,
+        bytes.sublist(4, 6).toIntFromUint16.fromMilli
+      ),
+      status: (data, status) {
+        return LowVoltageMinMaxDelta(
+          status: status,
+          min: data.$1,
+          max: data.$2,
+          delta: data.$3,
+        );
+      },
+      okEvent: (data) {
+        return LowVoltageMinMaxDelta(
+          status: PeriodicValueStatus.normal,
+          min: data.$1,
+          max: data.$2,
+          delta: data.$3,
+        );
+      },
     );
   }
 

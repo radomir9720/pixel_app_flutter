@@ -93,6 +93,7 @@
     "whichParametersToSubscribeToListTileLabel": "На какие параметры подписаться(или отправлять периодические запросы)",
     "requestPeriodInMillisListTileLabel": "Период запросов в миллисекундах",
     "requestPeriodInMillisListTileSubtitle": "Также от этого параметра зависит частота отправки эвентов по подписке в DemoDataSource",
+    "exportLogsListTileLabel": "Экспортировать логи",
     "directionListTileLabel": "Направление",
     "incomingListTileLabel": "Входящий",
     "outgoingListTileLabel": "Исходящий",
@@ -244,6 +245,7 @@
     "rpmMeasurementUnit": "Об/м",
     "voltageTileTitle": "Напряжение",
     "wattMeasurementUnit": "Вт",
+    "voltMeasurementUnit": "В",
     "currentTileTitle": "Ток",
     "amperMeasurementUnit": "А",
     "powerTileTitle": "Мощность(потребляемая/отдаваемая)",
@@ -265,5 +267,24 @@
 
     "enableFastAccessDialogTitle": "Включить \"Быстрый доступ\"?",
     "enableFastAccessHint": "Эта функция позволит одним нажатием кнопки в нижнем меню открывать приложение навигации, выбранное по умолчанию.",
-    "enableFastAccessWarning": "Внимание! С включенной функцией \"Быстрый доступ\" на эту страницу можно будет попасть длинным нажатием."
+    "enableFastAccessWarning": "Внимание! С включенной функцией \"Быстрый доступ\" на эту страницу можно будет попасть длинным нажатием.",
+
+    "motorRollDirectionTileTitle": "Кручение мотора",
+    "motorGearTileTitle": "Передача мотора",
+    "reverseGear": "Задняя",
+    "neutralGear": "Нейтраль",
+    "driveGear":  "Движение",
+    "lowGear":  "Пониженная",
+    "boostGear":  "Повышенная",
+    "unknownGear":  "Неизвестно",
+    "reverseGearShort": "R",
+    "neutralGearShort": "N",
+    "driveGearShort":  "D",
+    "lowGearShort":  "L",
+    "boostGearShort":  "B",
+    "unknownGearShort":  "U",
+    "reverseMotorRollDirection": "Назад",
+    "unknownMotorRollDirection": "Неизвестно",
+    "forwardMotorRollDirection": "Вперед",
+    "stopMotorRollDirection": "Стоп"
 }

@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/bytes_convertible.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/bytes_convertible_with_status.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/function_id.dart';
 
-class BatteryTemperatureFirstBatch extends BytesConvertibleWithStatus {
+class BatteryTemperatureFirstBatch extends BytesConvertible {
   const BatteryTemperatureFirstBatch({
     required this.mos,
     required this.balancer,
@@ -13,7 +13,6 @@ class BatteryTemperatureFirstBatch extends BytesConvertibleWithStatus {
     required this.third,
     required this.fourth,
     required this.fifth,
-    required super.status,
   });
 
   const BatteryTemperatureFirstBatch.zero()
@@ -23,19 +22,7 @@ class BatteryTemperatureFirstBatch extends BytesConvertibleWithStatus {
         second = 0,
         third = 0,
         fourth = 0,
-        fifth = 0,
-        super.normal();
-
-  BatteryTemperatureFirstBatch.fromId(
-    super.id, {
-    required this.mos,
-    required this.balancer,
-    required this.first,
-    required this.second,
-    required this.third,
-    required this.fourth,
-    required this.fifth,
-  }) : super.fromId();
+        fifth = 0;
 
   final int mos;
 
@@ -53,7 +40,6 @@ class BatteryTemperatureFirstBatch extends BytesConvertibleWithStatus {
 
   @override
   List<Object?> get props => [
-        status,
         mos,
         balancer,
         first,
@@ -68,9 +54,8 @@ class BatteryTemperatureFirstBatch extends BytesConvertibleWithStatus {
       BatteryTemperatureFirstBatchConverter();
 }
 
-class BatteryTemperatureSecondBatch extends BytesConvertibleWithStatus
-    with EquatableMixin
-    implements BytesConvertible {
+class BatteryTemperatureSecondBatch extends BytesConvertible
+    with EquatableMixin {
   const BatteryTemperatureSecondBatch({
     required this.sixth,
     required this.seventh,
@@ -79,7 +64,6 @@ class BatteryTemperatureSecondBatch extends BytesConvertibleWithStatus
     required this.tenth,
     required this.eleventh,
     required this.twelfth,
-    required super.status,
   });
 
   const BatteryTemperatureSecondBatch.zero()
@@ -89,19 +73,7 @@ class BatteryTemperatureSecondBatch extends BytesConvertibleWithStatus
         ninth = 0,
         tenth = 0,
         eleventh = 0,
-        twelfth = 0,
-        super.normal();
-
-  BatteryTemperatureSecondBatch.fromId(
-    super.id, {
-    required this.sixth,
-    required this.seventh,
-    required this.eighth,
-    required this.ninth,
-    required this.tenth,
-    required this.eleventh,
-    required this.twelfth,
-  }) : super.fromId();
+        twelfth = 0;
 
   final int sixth;
 
@@ -119,7 +91,6 @@ class BatteryTemperatureSecondBatch extends BytesConvertibleWithStatus
 
   @override
   List<Object?> get props => [
-        status,
         sixth,
         seventh,
         eighth,
@@ -134,9 +105,8 @@ class BatteryTemperatureSecondBatch extends BytesConvertibleWithStatus
       BatteryTemperatureSecondBatchConverter();
 }
 
-class BatteryTemperatureThirdBatch extends BytesConvertibleWithStatus
-    with EquatableMixin
-    implements BytesConvertible {
+class BatteryTemperatureThirdBatch extends BytesConvertible
+    with EquatableMixin {
   const BatteryTemperatureThirdBatch({
     required this.thirteenth,
     required this.fourteenth,
@@ -145,7 +115,6 @@ class BatteryTemperatureThirdBatch extends BytesConvertibleWithStatus
     required this.seventeenth,
     required this.eighteenth,
     required this.nineteenth,
-    required super.status,
   });
 
   const BatteryTemperatureThirdBatch.zero()
@@ -155,19 +124,7 @@ class BatteryTemperatureThirdBatch extends BytesConvertibleWithStatus
         sixteenth = 0,
         seventeenth = 0,
         eighteenth = 0,
-        nineteenth = 0,
-        super.normal();
-
-  BatteryTemperatureThirdBatch.fromId(
-    super.id, {
-    required this.thirteenth,
-    required this.fourteenth,
-    required this.fifteenth,
-    required this.sixteenth,
-    required this.seventeenth,
-    required this.eighteenth,
-    required this.nineteenth,
-  }) : super.fromId();
+        nineteenth = 0;
 
   final int thirteenth;
 
@@ -185,7 +142,6 @@ class BatteryTemperatureThirdBatch extends BytesConvertibleWithStatus
 
   @override
   List<Object?> get props => [
-        status,
         thirteenth,
         fourteenth,
         fifteenth,
@@ -204,11 +160,9 @@ abstract class BatteryTemperatureConverter<T extends BytesConvertible>
     extends BytesConverter<T> {
   const BatteryTemperatureConverter({
     required this.convertibleBuilder,
-    // required this.satisfiesParameter,
   });
 
   final T Function(
-    int functionId,
     int first,
     int second,
     int third,
@@ -218,12 +172,9 @@ abstract class BatteryTemperatureConverter<T extends BytesConvertible>
     int seventh,
   ) convertibleBuilder;
 
-  // final bool Function(DataSourceParameterId parameterId) satisfiesParameter;
-
   @override
   T fromBytes(List<int> bytes) {
     return convertibleBuilder(
-      bytes[0],
       bytes[1],
       bytes[2],
       bytes[3],
@@ -240,7 +191,6 @@ class BatteryTemperatureFirstBatchConverter
   BatteryTemperatureFirstBatchConverter()
       : super(
           convertibleBuilder: (
-            id,
             first,
             second,
             third,
@@ -249,8 +199,7 @@ class BatteryTemperatureFirstBatchConverter
             sixth,
             seventh,
           ) {
-            return BatteryTemperatureFirstBatch.fromId(
-              id,
+            return BatteryTemperatureFirstBatch(
               mos: first,
               balancer: second,
               first: third,
@@ -265,7 +214,7 @@ class BatteryTemperatureFirstBatchConverter
   @override
   List<int> toBytes(BatteryTemperatureFirstBatch model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.mos.toBytesInt8,
       ...model.balancer.toBytesInt8,
       ...model.first.toBytesInt8,
@@ -282,7 +231,6 @@ class BatteryTemperatureSecondBatchConverter
   BatteryTemperatureSecondBatchConverter()
       : super(
           convertibleBuilder: (
-            id,
             first,
             second,
             third,
@@ -291,8 +239,7 @@ class BatteryTemperatureSecondBatchConverter
             sixth,
             seventh,
           ) {
-            return BatteryTemperatureSecondBatch.fromId(
-              id,
+            return BatteryTemperatureSecondBatch(
               sixth: first,
               seventh: second,
               eighth: third,
@@ -307,7 +254,7 @@ class BatteryTemperatureSecondBatchConverter
   @override
   List<int> toBytes(BatteryTemperatureSecondBatch model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.sixth.toBytesInt8,
       ...model.seventh.toBytesInt8,
       ...model.eighth.toBytesInt8,
@@ -324,7 +271,6 @@ class BatteryTemperatureThirdBatchConverter
   BatteryTemperatureThirdBatchConverter()
       : super(
           convertibleBuilder: (
-            id,
             first,
             second,
             third,
@@ -333,8 +279,7 @@ class BatteryTemperatureThirdBatchConverter
             sixth,
             seventh,
           ) {
-            return BatteryTemperatureThirdBatch.fromId(
-              id,
+            return BatteryTemperatureThirdBatch(
               thirteenth: first,
               fourteenth: second,
               fifteenth: third,
@@ -349,7 +294,7 @@ class BatteryTemperatureThirdBatchConverter
   @override
   List<int> toBytes(BatteryTemperatureThirdBatch model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.thirteenth.toBytesInt8,
       ...model.fourteenth.toBytesInt8,
       ...model.fifteenth.toBytesInt8,

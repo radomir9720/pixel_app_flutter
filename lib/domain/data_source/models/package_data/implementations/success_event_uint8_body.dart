@@ -10,6 +10,9 @@ class SuccessEventUint8Body extends SuccessEventBody {
   @override
   BytesConverter<SuccessEventUint8Body> get bytesConverter =>
       const SuccessEventUint8BodyConverter();
+
+  @override
+  List<Object?> get props => [value];
 }
 
 class SuccessEventUint8BodyConverter

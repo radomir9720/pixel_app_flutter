@@ -62,6 +62,15 @@ class _OverlayGeneralStatisticsState extends State<OverlayGeneralStatistics> {
     fontWeight: FontWeight.w400,
   );
 
+  @protected
+  static const kGearTextStyle = TextStyle(
+    height: 1.2,
+    fontSize: 40,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    fontFeatures: [FontFeature.tabularFigures()],
+  );
+
   @override
   Widget build(BuildContext context) {
     return AppColors(
@@ -103,21 +112,56 @@ class _OverlayGeneralStatisticsState extends State<OverlayGeneralStatistics> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      '${value.speed.value} ',
-                                      style: kSpeedTextStyle.copyWith(
-                                        color: context.colors.textAccent,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: '${value.speed.value}',
+                                              style: kSpeedTextStyle.copyWith(
+                                                color:
+                                                    context.colors.textAccent,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: context.l10n
+                                                  .kmPerHourMeasurenentUnit,
+                                              style: kKmhTextStyle.copyWith(
+                                                color:
+                                                    context.colors.textAccent,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                Text(
-                                  context.l10n.kmPerHourMeasurenentUnit,
-                                  style: kKmhTextStyle.copyWith(
-                                    color: context.colors.textAccent,
-                                  ),
+                                const SizedBox(width: 4),
+                                Column(
+                                  children: [
+                                    Text(
+                                      value.gear.when(
+                                        reverse: () =>
+                                            context.l10n.reverseGearShort,
+                                        neutral: () =>
+                                            context.l10n.neutralGearShort,
+                                        drive: () =>
+                                            context.l10n.driveGearShort,
+                                        low: () => context.l10n.lowGearShort,
+                                        boost: () =>
+                                            context.l10n.boostGearShort,
+                                        unknown: () =>
+                                            context.l10n.unknownGearShort,
+                                      ),
+                                      style: kGearTextStyle.copyWith(
+                                        color: context.colors.textAccent,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

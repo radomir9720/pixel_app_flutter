@@ -9,6 +9,9 @@ class HandshakeID extends IntegerWrapper {
   @override
   BytesConverter<HandshakeID> get bytesConverter =>
       const HandshakePingConverter();
+
+  @override
+  List<Object?> get props => [value];
 }
 
 class EmptyHandshakeBody extends EmptyBody {

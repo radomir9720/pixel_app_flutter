@@ -328,12 +328,18 @@ class DemoDataSource extends DataSource
               const TailRightTurnSignalParameterId(),
             );
           });
-
         timer ??= Timer.periodic(
           Duration(milliseconds: updatePeriodMillis()),
           (timer) {
             for (final element in subscriptionCallbacks) {
-              element();
+              try {
+                element();
+              } catch (e, s) {
+                Future<void>.error(
+                  'Got error trying to send a package:\n$e',
+                  s,
+                );
+              }
             }
           },
         );
@@ -685,7 +691,7 @@ class DemoDataSource extends DataSource
       secondConfigByte: 0x95, // 10010101(incoming 0x15)
       parameterId: const DataSourceParameterId.highVoltage().value,
       convertible: HighVoltage(
-        value: Random().nextDouble() * 4294967,
+        value: randomUint16,
         status: _getRandomStatus,
       ),
     );
@@ -700,7 +706,7 @@ class DemoDataSource extends DataSource
       secondConfigByte: 0x95, // 10010101(incoming 0x15)
       parameterId: const DataSourceParameterId.highCurrent().value,
       convertible: HighCurrent(
-        value: (Random().nextDouble() * 2147483).randomSign,
+        value: randomInt16,
         status: _getRandomStatus,
       ),
     );
@@ -737,7 +743,6 @@ class DemoDataSource extends DataSource
         third: randomInt8,
         fourth: randomInt8,
         fifth: randomInt8,
-        status: _getRandomStatus,
       ),
     );
 
@@ -758,7 +763,6 @@ class DemoDataSource extends DataSource
         tenth: randomInt8,
         eleventh: randomInt8,
         twelfth: randomInt8,
-        status: _getRandomStatus,
       ),
     );
 
@@ -779,7 +783,6 @@ class DemoDataSource extends DataSource
         seventeenth: randomInt8,
         eighteenth: randomInt8,
         nineteenth: randomInt8,
-        status: _getRandomStatus,
       ),
     );
 
@@ -796,7 +799,6 @@ class DemoDataSource extends DataSource
         first: randomDoubleUint16,
         second: randomDoubleUint16,
         third: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -813,7 +815,6 @@ class DemoDataSource extends DataSource
         fourth: randomDoubleUint16,
         fifth: randomDoubleUint16,
         sixth: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -830,7 +831,6 @@ class DemoDataSource extends DataSource
         seventh: randomDoubleUint16,
         eighth: randomDoubleUint16,
         ninth: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -847,7 +847,6 @@ class DemoDataSource extends DataSource
         tenth: randomDoubleUint16,
         eleventh: randomDoubleUint16,
         twelfth: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -865,7 +864,6 @@ class DemoDataSource extends DataSource
         thirteenth: randomDoubleUint16,
         fourteenth: randomDoubleUint16,
         fifteenth: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -883,7 +881,6 @@ class DemoDataSource extends DataSource
         sixteenth: randomDoubleUint16,
         seventeenth: randomDoubleUint16,
         eighteenth: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -901,7 +898,6 @@ class DemoDataSource extends DataSource
         nineteenth: randomDoubleUint16,
         twentieth: randomDoubleUint16,
         twentyFirst: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -919,7 +915,6 @@ class DemoDataSource extends DataSource
         twentySecond: randomDoubleUint16,
         twentyThird: randomDoubleUint16,
         twentyFourth: randomDoubleUint16,
-        status: _getRandomStatus,
       ),
     );
 
@@ -977,7 +972,7 @@ class DemoDataSource extends DataSource
 
   int get randomUint8 => Random().nextInt(0xFF);
   int get randomUint16 => Random().nextInt(0xFFFF);
-  int get randomInt16 => Random().nextInt(0xFF).randomSign;
+  int get randomInt16 => Random().nextInt(0x8000).randomSign;
 
   double get randomDoubleUint16 => Random().nextDouble() * 0xFFFF;
   double get randomDoubleUint32 => Random().nextDouble() * 0xFFFFFFFF;

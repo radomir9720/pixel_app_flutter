@@ -29,6 +29,8 @@ class SelectedDataSourceScope extends AutoRouter {
             presented: (p) => p,
           );
 
+          if (currentNullable == null) previousNullable?.dataSource.dispose();
+
           if (previousNullable != null && currentNullable != null) {
             if (previousNullable.dataSource.id !=
                     currentNullable.dataSource.id ||

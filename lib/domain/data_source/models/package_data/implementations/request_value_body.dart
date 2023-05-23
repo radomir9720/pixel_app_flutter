@@ -9,6 +9,9 @@ class RequestValueBody extends BytesConvertible {
   @override
   BytesConverter<BytesConvertible> get bytesConverter =>
       const RequestValueConverter();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class RequestValueConverter extends BytesConverter<RequestValueBody> {

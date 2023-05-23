@@ -19,6 +19,24 @@ enum MotorGear {
       orElse: () => MotorGear.unknown,
     );
   }
+
+  R when<R>({
+    required R Function() reverse,
+    required R Function() neutral,
+    required R Function() drive,
+    required R Function() low,
+    required R Function() boost,
+    required R Function() unknown,
+  }) {
+    return switch (this) {
+      MotorGear.reverse => reverse(),
+      MotorGear.neutral => neutral(),
+      MotorGear.drive => drive(),
+      MotorGear.low => low(),
+      MotorGear.boost => boost(),
+      MotorGear.unknown => unknown(),
+    };
+  }
 }
 
 enum MotorRollDirection {
@@ -35,6 +53,20 @@ enum MotorRollDirection {
       (element) => element.id == id,
       orElse: () => MotorRollDirection.unknown,
     );
+  }
+
+  R when<R>({
+    required R Function() stop,
+    required R Function() forward,
+    required R Function() reverse,
+    required R Function() unknown,
+  }) {
+    return switch (this) {
+      MotorRollDirection.stop => stop(),
+      MotorRollDirection.forward => forward(),
+      MotorRollDirection.reverse => reverse(),
+      MotorRollDirection.unknown => unknown(),
+    };
   }
 }
 
@@ -115,6 +147,15 @@ class MotorGearAndRoll extends IntBytesConvertibleWithStatus {
       secondMotorRollDirection.id,
     ].toIntFromUint32;
   }
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        firstMotorGear,
+        firstMotorRollDirection,
+        secondMotorGear,
+        secondMotorRollDirection,
+      ];
 
   static Uint32WithStatusBytesConverter<MotorGearAndRoll> get converter =>
       const Uint32WithStatusBytesConverter(MotorGearAndRoll.builder);

@@ -1,61 +1,43 @@
+import 'package:equatable/equatable.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/double.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/bytes_convertible_with_status.dart';
 
-class BatteryLowVoltageOneToThree extends BytesConvertibleWithStatus {
+class BatteryLowVoltageOneToThree extends BytesConvertible {
   const BatteryLowVoltageOneToThree({
     required this.first,
     required this.second,
     required this.third,
-    required super.status,
   });
 
   const BatteryLowVoltageOneToThree.zero()
       : first = 0,
         second = 0,
-        third = 0,
-        super.normal();
-
-  BatteryLowVoltageOneToThree.fromId(
-    super.id, {
-    required this.first,
-    required this.second,
-    required this.third,
-  }) : super.fromId();
+        third = 0;
 
   final double first;
   final double second;
   final double third;
 
   @override
-  List<Object?> get props => [status, first, second, third];
+  List<Object?> get props => [first, second, third];
 
   @override
   BytesConverter<BatteryLowVoltageOneToThree> get bytesConverter =>
       BatteryLowVoltageOneToThreeConverter();
 }
 
-class BatteryLowVoltageFourToSix extends BytesConvertibleWithStatus {
+class BatteryLowVoltageFourToSix extends BytesConvertible with EquatableMixin {
   const BatteryLowVoltageFourToSix({
     required this.fourth,
     required this.fifth,
     required this.sixth,
-    required super.status,
   });
 
   const BatteryLowVoltageFourToSix.zero()
       : fourth = 0,
         fifth = 0,
-        sixth = 0,
-        super.normal();
-
-  BatteryLowVoltageFourToSix.fromId(
-    super.id, {
-    required this.fourth,
-    required this.fifth,
-    required this.sixth,
-  }) : super.fromId();
+        sixth = 0;
 
   final double fourth;
   final double fifth;
@@ -65,29 +47,21 @@ class BatteryLowVoltageFourToSix extends BytesConvertibleWithStatus {
   BytesConverter<BatteryLowVoltageFourToSix> get bytesConverter =>
       BatteryLowVoltageFourToSixConverter();
   @override
-  List<Object?> get props => [status, fourth, fifth, sixth];
+  List<Object?> get props => [fourth, fifth, sixth];
 }
 
-class BatteryLowVoltageSevenToNine extends BytesConvertibleWithStatus {
+class BatteryLowVoltageSevenToNine extends BytesConvertible
+    with EquatableMixin {
   const BatteryLowVoltageSevenToNine({
     required this.seventh,
     required this.eighth,
     required this.ninth,
-    required super.status,
   });
 
   const BatteryLowVoltageSevenToNine.zero()
       : seventh = 0,
         eighth = 0,
-        ninth = 0,
-        super.normal();
-
-  BatteryLowVoltageSevenToNine.fromId(
-    super.id, {
-    required this.seventh,
-    required this.eighth,
-    required this.ninth,
-  }) : super.fromId();
+        ninth = 0;
 
   final double seventh;
   final double eighth;
@@ -97,29 +71,21 @@ class BatteryLowVoltageSevenToNine extends BytesConvertibleWithStatus {
   BytesConverter<BatteryLowVoltageSevenToNine> get bytesConverter =>
       BatteryLowVoltageSevenToNineConverter();
   @override
-  List<Object?> get props => [status, seventh, eighth, ninth];
+  List<Object?> get props => [seventh, eighth, ninth];
 }
 
-class BatteryLowVoltageTenToTwelve extends BytesConvertibleWithStatus {
+class BatteryLowVoltageTenToTwelve extends BytesConvertible
+    with EquatableMixin {
   const BatteryLowVoltageTenToTwelve({
     required this.tenth,
     required this.eleventh,
     required this.twelfth,
-    required super.status,
   });
 
   const BatteryLowVoltageTenToTwelve.zero()
       : tenth = 0,
         eleventh = 0,
-        twelfth = 0,
-        super.normal();
-
-  BatteryLowVoltageTenToTwelve.fromId(
-    super.id, {
-    required this.tenth,
-    required this.eleventh,
-    required this.twelfth,
-  }) : super.fromId();
+        twelfth = 0;
 
   final double tenth;
   final double eleventh;
@@ -129,29 +95,21 @@ class BatteryLowVoltageTenToTwelve extends BytesConvertibleWithStatus {
   BytesConverter<BatteryLowVoltageTenToTwelve> get bytesConverter =>
       BatteryLowVoltageTenToTwelveConverter();
   @override
-  List<Object?> get props => [status, tenth, eleventh, twelfth];
+  List<Object?> get props => [tenth, eleventh, twelfth];
 }
 
-class BatteryLowVoltageThirteenToFifteen extends BytesConvertibleWithStatus {
+class BatteryLowVoltageThirteenToFifteen extends BytesConvertible
+    with EquatableMixin {
   const BatteryLowVoltageThirteenToFifteen({
     required this.thirteenth,
     required this.fourteenth,
     required this.fifteenth,
-    required super.status,
   });
 
   const BatteryLowVoltageThirteenToFifteen.zero()
       : thirteenth = 0,
         fourteenth = 0,
-        fifteenth = 0,
-        super.normal();
-
-  BatteryLowVoltageThirteenToFifteen.fromId(
-    super.id, {
-    required this.thirteenth,
-    required this.fourteenth,
-    required this.fifteenth,
-  }) : super.fromId();
+        fifteenth = 0;
 
   final double thirteenth;
   final double fourteenth;
@@ -161,29 +119,21 @@ class BatteryLowVoltageThirteenToFifteen extends BytesConvertibleWithStatus {
   BytesConverter<BatteryLowVoltageThirteenToFifteen> get bytesConverter =>
       BatteryLowVoltageThirteenToFifteenConverter();
   @override
-  List<Object?> get props => [status, thirteenth, fourteenth, fifteenth];
+  List<Object?> get props => [thirteenth, fourteenth, fifteenth];
 }
 
-class BatteryLowVoltageSixteenToEighteen extends BytesConvertibleWithStatus {
+class BatteryLowVoltageSixteenToEighteen extends BytesConvertible
+    with EquatableMixin {
   const BatteryLowVoltageSixteenToEighteen({
     required this.sixteenth,
     required this.seventeenth,
     required this.eighteenth,
-    required super.status,
   });
 
   const BatteryLowVoltageSixteenToEighteen.zero()
       : sixteenth = 0,
         seventeenth = 0,
-        eighteenth = 0,
-        super.normal();
-
-  BatteryLowVoltageSixteenToEighteen.fromId(
-    super.id, {
-    required this.sixteenth,
-    required this.seventeenth,
-    required this.eighteenth,
-  }) : super.fromId();
+        eighteenth = 0;
 
   final double sixteenth;
   final double seventeenth;
@@ -193,28 +143,21 @@ class BatteryLowVoltageSixteenToEighteen extends BytesConvertibleWithStatus {
   BytesConverter<BatteryLowVoltageSixteenToEighteen> get bytesConverter =>
       BatteryLowVoltageSixteenToEighteenConverter();
   @override
-  List<Object?> get props => [status, sixteenth, seventeenth, eighteenth];
+  List<Object?> get props => [sixteenth, seventeenth, eighteenth];
 }
 
-class BatteryLowVoltageNineteenToTwentyOne extends BytesConvertibleWithStatus {
+class BatteryLowVoltageNineteenToTwentyOne extends BytesConvertible
+    with EquatableMixin {
   const BatteryLowVoltageNineteenToTwentyOne({
     required this.nineteenth,
     required this.twentieth,
     required this.twentyFirst,
-    required super.status,
   });
 
   const BatteryLowVoltageNineteenToTwentyOne.zero()
       : nineteenth = 0,
         twentieth = 0,
-        twentyFirst = 0,
-        super.normal();
-  BatteryLowVoltageNineteenToTwentyOne.fromId(
-    super.id, {
-    required this.nineteenth,
-    required this.twentieth,
-    required this.twentyFirst,
-  }) : super.fromId();
+        twentyFirst = 0;
 
   final double nineteenth;
   final double twentieth;
@@ -224,29 +167,20 @@ class BatteryLowVoltageNineteenToTwentyOne extends BytesConvertibleWithStatus {
   BytesConverter<BatteryLowVoltageNineteenToTwentyOne> get bytesConverter =>
       BatteryLowVoltageNineteenToTwentyOneConverter();
   @override
-  List<Object?> get props => [status, nineteenth, twentieth, twentyFirst];
+  List<Object?> get props => [nineteenth, twentieth, twentyFirst];
 }
 
-class BatteryLowVoltageTwentyTwoToTwentyFour
-    extends BytesConvertibleWithStatus {
+class BatteryLowVoltageTwentyTwoToTwentyFour extends BytesConvertible
+    with EquatableMixin {
   const BatteryLowVoltageTwentyTwoToTwentyFour({
     required this.twentySecond,
     required this.twentyThird,
     required this.twentyFourth,
-    required super.status,
   });
   const BatteryLowVoltageTwentyTwoToTwentyFour.zero()
       : twentySecond = 0,
         twentyThird = 0,
-        twentyFourth = 0,
-        super.normal();
-
-  BatteryLowVoltageTwentyTwoToTwentyFour.fromId(
-    super.id, {
-    required this.twentySecond,
-    required this.twentyThird,
-    required this.twentyFourth,
-  }) : super.fromId();
+        twentyFourth = 0;
 
   final double twentySecond;
   final double twentyThird;
@@ -256,7 +190,7 @@ class BatteryLowVoltageTwentyTwoToTwentyFour
   BytesConverter<BatteryLowVoltageTwentyTwoToTwentyFour> get bytesConverter =>
       BatteryLowVoltageTwentyTwoToTwentyFourConverter();
   @override
-  List<Object?> get props => [status, twentySecond, twentyThird, twentyFourth];
+  List<Object?> get props => [twentySecond, twentyThird, twentyFourth];
 }
 
 abstract class BatteryLowVoltageConverter<T extends BytesConvertible>
@@ -266,7 +200,6 @@ abstract class BatteryLowVoltageConverter<T extends BytesConvertible>
   });
 
   final T Function(
-    int id,
     double first,
     double second,
     double third,
@@ -275,7 +208,6 @@ abstract class BatteryLowVoltageConverter<T extends BytesConvertible>
   @override
   T fromBytes(List<int> bytes) {
     return toModelBuilder(
-      bytes[0],
       bytes.sublist(1, 3).toIntFromUint16.fromMilli,
       bytes.sublist(3, 5).toIntFromUint16.fromMilli,
       bytes.sublist(5, 7).toIntFromUint16.fromMilli,
@@ -287,9 +219,8 @@ class BatteryLowVoltageOneToThreeConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageOneToThree> {
   BatteryLowVoltageOneToThreeConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageOneToThree.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageOneToThree(
               first: first,
               second: second,
               third: third,
@@ -300,7 +231,7 @@ class BatteryLowVoltageOneToThreeConverter
   @override
   List<int> toBytes(BatteryLowVoltageOneToThree model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.first.toMilli.toBytesUint16,
       ...model.second.toMilli.toBytesUint16,
       ...model.third.toMilli.toBytesUint16,
@@ -312,9 +243,8 @@ class BatteryLowVoltageFourToSixConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageFourToSix> {
   BatteryLowVoltageFourToSixConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageFourToSix.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageFourToSix(
               fourth: first,
               fifth: second,
               sixth: third,
@@ -325,7 +255,7 @@ class BatteryLowVoltageFourToSixConverter
   @override
   List<int> toBytes(BatteryLowVoltageFourToSix model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.fourth.toMilli.toBytesUint16,
       ...model.fifth.toMilli.toBytesUint16,
       ...model.sixth.toMilli.toBytesUint16,
@@ -337,9 +267,8 @@ class BatteryLowVoltageSevenToNineConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageSevenToNine> {
   BatteryLowVoltageSevenToNineConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageSevenToNine.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageSevenToNine(
               seventh: first,
               eighth: second,
               ninth: third,
@@ -350,7 +279,7 @@ class BatteryLowVoltageSevenToNineConverter
   @override
   List<int> toBytes(BatteryLowVoltageSevenToNine model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.seventh.toMilli.toBytesUint16,
       ...model.eighth.toMilli.toBytesUint16,
       ...model.ninth.toMilli.toBytesUint16,
@@ -362,9 +291,8 @@ class BatteryLowVoltageTenToTwelveConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageTenToTwelve> {
   BatteryLowVoltageTenToTwelveConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageTenToTwelve.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageTenToTwelve(
               tenth: first,
               eleventh: second,
               twelfth: third,
@@ -375,7 +303,7 @@ class BatteryLowVoltageTenToTwelveConverter
   @override
   List<int> toBytes(BatteryLowVoltageTenToTwelve model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.tenth.toMilli.toBytesUint16,
       ...model.eleventh.toMilli.toBytesUint16,
       ...model.twelfth.toMilli.toBytesUint16,
@@ -387,9 +315,8 @@ class BatteryLowVoltageThirteenToFifteenConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageThirteenToFifteen> {
   BatteryLowVoltageThirteenToFifteenConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageThirteenToFifteen.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageThirteenToFifteen(
               thirteenth: first,
               fourteenth: second,
               fifteenth: third,
@@ -399,7 +326,7 @@ class BatteryLowVoltageThirteenToFifteenConverter
   @override
   List<int> toBytes(BatteryLowVoltageThirteenToFifteen model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.thirteenth.toMilli.toBytesUint16,
       ...model.fourteenth.toMilli.toBytesUint16,
       ...model.fifteenth.toMilli.toBytesUint16,
@@ -411,9 +338,8 @@ class BatteryLowVoltageSixteenToEighteenConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageSixteenToEighteen> {
   BatteryLowVoltageSixteenToEighteenConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageSixteenToEighteen.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageSixteenToEighteen(
               sixteenth: first,
               seventeenth: second,
               eighteenth: third,
@@ -423,7 +349,7 @@ class BatteryLowVoltageSixteenToEighteenConverter
   @override
   List<int> toBytes(BatteryLowVoltageSixteenToEighteen model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.sixteenth.toMilli.toBytesUint16,
       ...model.seventeenth.toMilli.toBytesUint16,
       ...model.eighteenth.toMilli.toBytesUint16,
@@ -435,9 +361,8 @@ class BatteryLowVoltageNineteenToTwentyOneConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageNineteenToTwentyOne> {
   BatteryLowVoltageNineteenToTwentyOneConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageNineteenToTwentyOne.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageNineteenToTwentyOne(
               nineteenth: first,
               twentieth: second,
               twentyFirst: third,
@@ -447,7 +372,7 @@ class BatteryLowVoltageNineteenToTwentyOneConverter
   @override
   List<int> toBytes(BatteryLowVoltageNineteenToTwentyOne model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.nineteenth.toMilli.toBytesUint16,
       ...model.twentieth.toMilli.toBytesUint16,
       ...model.twentyFirst.toMilli.toBytesUint16,
@@ -459,9 +384,8 @@ class BatteryLowVoltageTwentyTwoToTwentyFourConverter
     extends BatteryLowVoltageConverter<BatteryLowVoltageTwentyTwoToTwentyFour> {
   BatteryLowVoltageTwentyTwoToTwentyFourConverter()
       : super(
-          toModelBuilder: (id, first, second, third) {
-            return BatteryLowVoltageTwentyTwoToTwentyFour.fromId(
-              id,
+          toModelBuilder: (first, second, third) {
+            return BatteryLowVoltageTwentyTwoToTwentyFour(
               twentySecond: first,
               twentyThird: second,
               twentyFourth: third,
@@ -471,7 +395,7 @@ class BatteryLowVoltageTwentyTwoToTwentyFourConverter
   @override
   List<int> toBytes(BatteryLowVoltageTwentyTwoToTwentyFour model) {
     return [
-      ...model.status.toBytes,
+      FunctionId.okEventId,
       ...model.twentySecond.toMilli.toBytesUint16,
       ...model.twentyThird.toMilli.toBytesUint16,
       ...model.twentyFourth.toMilli.toBytesUint16,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/organisms/title_wrapper.dart';
@@ -78,7 +79,7 @@ class MotorScreen extends StatelessWidget {
                     context.colorFromStatus(state.status),
                   );
                 },
-                unitOfMeasurement: context.l10n.wattMeasurementUnit,
+                unitOfMeasurement: context.l10n.voltMeasurementUnit,
               ),
               _TwoValuesTableRow.builder(
                 parameterName: context.l10n.currentTileTitle,
@@ -134,10 +135,76 @@ class MotorScreen extends StatelessWidget {
                 },
                 unitOfMeasurement: context.l10n.celsiusMeasurementUnit,
               ),
+              _TwoValuesTableRow.builder(
+                parameterName: context.l10n.motorGearTileTitle,
+                builder: () {
+                  final state = context.select(
+                    (MotorDataCubit cubit) {
+                      final gr = cubit.state.gearAndRoll;
+                      return (
+                        gr.firstMotorGear,
+                        gr.secondMotorGear,
+                        gr.status,
+                      );
+                    },
+                  );
+                  return (
+                    state.$1.toLocalizedString(context),
+                    state.$2.toLocalizedString(context),
+                    context.colorFromStatus(state.$3),
+                  );
+                },
+                unitOfMeasurement: '',
+              ),
+              _TwoValuesTableRow.builder(
+                parameterName: context.l10n.motorRollDirectionTileTitle,
+                builder: () {
+                  final state = context.select(
+                    (MotorDataCubit cubit) {
+                      final gr = cubit.state.gearAndRoll;
+                      return (
+                        gr.firstMotorRollDirection,
+                        gr.secondMotorRollDirection,
+                        gr.status,
+                      );
+                    },
+                  );
+                  return (
+                    state.$1.toLocalizedString(context),
+                    state.$2.toLocalizedString(context),
+                    context.colorFromStatus(state.$3),
+                  );
+                },
+                unitOfMeasurement: '',
+              ),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+extension on MotorGear {
+  String toLocalizedString(BuildContext context) {
+    return when(
+      reverse: () => context.l10n.reverseGear,
+      neutral: () => context.l10n.neutralGear,
+      drive: () => context.l10n.driveGear,
+      low: () => context.l10n.lowGear,
+      boost: () => context.l10n.boostGear,
+      unknown: () => context.l10n.unknownGear,
+    );
+  }
+}
+
+extension on MotorRollDirection {
+  String toLocalizedString(BuildContext context) {
+    return when(
+      reverse: () => context.l10n.reverseMotorRollDirection,
+      unknown: () => context.l10n.unknownMotorRollDirection,
+      forward: () => context.l10n.forwardMotorRollDirection,
+      stop: () => context.l10n.stopMotorRollDirection,
     );
   }
 }

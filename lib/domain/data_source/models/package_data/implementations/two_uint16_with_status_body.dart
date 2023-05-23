@@ -47,6 +47,14 @@ class TwoUint16WithStatusBody extends IntBytesConvertibleWithStatus {
     ]);
   }
 
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        first,
+        second,
+        status,
+      ];
+
   static Uint32WithStatusBytesConverter<TwoUint16WithStatusBody>
       get converter =>
           const Uint32WithStatusBytesConverter(TwoUint16WithStatusBody.builder);

@@ -93,6 +93,7 @@
     "whichParametersToSubscribeToListTileLabel": "Which parameters to subscribe to(or send periodic requests)",
     "requestPeriodInMillisListTileLabel": "Request period in milliseconds",
     "requestPeriodInMillisListTileSubtitle": "Also, the frequency of sending events by subscription also depends on this parameter in DemoDataSource",
+    "exportLogsListTileLabel": "Export logs",
     "directionListTileLabel": "Direction",
     "incomingListTileLabel": "Incoming",
     "outgoingListTileLabel": "Outgoing",
@@ -244,6 +245,7 @@
     "rpmMeasurementUnit": "RPM",
     "voltageTileTitle": "Voltage",
     "wattMeasurementUnit": "W",
+    "voltMeasurementUnit": "V",
     "currentTileTitle": "Current",
     "amperMeasurementUnit": "A",
     "powerTileTitle": "Power(consumed/given)",
@@ -265,5 +267,24 @@
 
     "enableFastAccessDialogTitle": "Turn on \"Fast access\"?",
     "enableFastAccessHint": "This feature will allow you to open the navigation application selected by default with a single click of a button in the lower menu.",
-    "enableFastAccessWarning": "Attention! With the \"Quick Access\" feature enabled, you can get to this page by long pressing."
+    "enableFastAccessWarning": "Attention! With the \"Quick Access\" feature enabled, you can get to this page by long pressing.",
+
+    "motorRollDirectionTileTitle": "Motor roll direction",
+    "motorGearTileTitle": "Motor gear",
+    "reverseGear": "Reverse",
+    "neutralGear": "Neutral",
+    "driveGear":  "Drive",
+    "lowGear":  "Low",
+    "boostGear":  "Boost",
+    "unknownGear":  "Unknown",
+    "reverseGearShort": "R",
+    "neutralGearShort": "N",
+    "driveGearShort":  "D",
+    "lowGearShort":  "L",
+    "boostGearShort":  "B",
+    "unknownGearShort":  "U",
+    "reverseMotorRollDirection": "Reverse",
+    "unknownMotorRollDirection": "Unknown",
+    "forwardMotorRollDirection": "Forward",
+    "stopMotorRollDirection": "Stop"
 }

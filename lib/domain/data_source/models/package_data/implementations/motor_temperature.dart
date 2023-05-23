@@ -71,6 +71,16 @@ class MotorTemperature extends IntBytesConvertibleWithStatus {
     ]);
   }
 
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        firstMotor,
+        firstController,
+        secondMotor,
+        secondController,
+        status,
+      ];
+
   static Int32WithStatusBytesConverter<MotorTemperature> get converter =>
       const Int32WithStatusBytesConverter(MotorTemperature.builder);
 

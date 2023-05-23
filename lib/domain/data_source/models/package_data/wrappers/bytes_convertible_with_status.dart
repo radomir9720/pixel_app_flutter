@@ -38,6 +38,9 @@ abstract class IntBytesConvertibleWithStatus
   const IntBytesConvertibleWithStatus.normal(this.value) : super.normal();
 
   final int value;
+
+  @override
+  List<Object?> get props => [...super.props, value];
 }
 
 class Uint8WithStatusBytesConverter<T extends IntBytesConvertibleWithStatus>
