@@ -109,6 +109,7 @@ class MotorDataCubit extends Cubit<MotorDataState> with ConsumerBlocMixin {
     const DataSourceParameterId.motorCurrent(),
     const DataSourceParameterId.rpm(),
     const DataSourceParameterId.gearAndRoll(),
+    const DataSourceParameterId.motorSpeed(),
     const DataSourceParameterId.motorPower(),
     const DataSourceParameterId.motorTemperature(),
   };

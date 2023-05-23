@@ -49,13 +49,15 @@ final class GeneralDataState with EquatableMixin {
     required this.batteryLevel,
     required this.odometer,
     required this.speed,
+    required this.gear,
   });
 
   const GeneralDataState.initial()
       : power = const IntWithStatus.initial(),
         batteryLevel = const IntWithStatus.initial(),
         odometer = const IntWithStatus.initial(),
-        speed = const IntWithStatus.initial();
+        speed = const IntWithStatus.initial(),
+        gear = MotorGear.unknown;
 
   factory GeneralDataState.fromMap(Map<String, dynamic> map) {
     return GeneralDataState(
@@ -63,6 +65,7 @@ final class GeneralDataState with EquatableMixin {
       batteryLevel: map.parseAndMap('batteryLevel', IntWithStatus.fromMap),
       odometer: map.parseAndMap('odometer', IntWithStatus.fromMap),
       speed: map.parseAndMap('speed', IntWithStatus.fromMap),
+      gear: map.parseAndMap('gear', MotorGear.fromId),
     );
   }
 
@@ -70,6 +73,7 @@ final class GeneralDataState with EquatableMixin {
   final IntWithStatus batteryLevel;
   final IntWithStatus odometer;
   final IntWithStatus speed;
+  final MotorGear gear;
 
   @override
   List<Object?> get props => [
@@ -77,6 +81,7 @@ final class GeneralDataState with EquatableMixin {
         batteryLevel,
         odometer,
         speed,
+        gear,
       ];
 
   GeneralDataState copyWith({
@@ -84,12 +89,14 @@ final class GeneralDataState with EquatableMixin {
     IntWithStatus? batteryLevel,
     IntWithStatus? odometer,
     IntWithStatus? speed,
+    MotorGear? gear,
   }) {
     return GeneralDataState(
       power: power ?? this.power,
       batteryLevel: batteryLevel ?? this.batteryLevel,
       odometer: odometer ?? this.odometer,
       speed: speed ?? this.speed,
+      gear: gear ?? this.gear,
     );
   }
 
@@ -99,6 +106,7 @@ final class GeneralDataState with EquatableMixin {
       'batteryLevel': batteryLevel.toMap(),
       'odometer': odometer.toMap(),
       'speed': speed.toMap(),
+      'gear': gear.id,
     };
   }
 }
@@ -115,6 +123,10 @@ class GeneralDataCubit extends Cubit<GeneralDataState> with ConsumerBlocMixin {
         ..voidOnModel<Int16WithStatusBody,
             BatteryPowerIncomingDataSourcePackage>((model) {
           emit(state.copyWith(power: model.toIntWithStatus()));
+        })
+        ..voidOnModel<MotorGearAndRoll,
+            MotorGearAndRollIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(gear: model.gear));
         })
         ..voidOnModel<TwoUint16WithStatusBody,
             MotorSpeedIncomingDataSourcePackage>((model) {
@@ -133,6 +145,7 @@ class GeneralDataCubit extends Cubit<GeneralDataState> with ConsumerBlocMixin {
   static Set<DataSourceParameterId> kDefaultSubscribeParameters = {
     const DataSourceParameterId.motorSpeed(),
     const DataSourceParameterId.odometer(),
+    const DataSourceParameterId.gearAndRoll(),
     const DataSourceParameterId.batteryLevel(),
     const DataSourceParameterId.batteryPower(),
   };

@@ -267,5 +267,24 @@
 
     "enableFastAccessDialogTitle": "Включить \"Быстрый доступ\"?",
     "enableFastAccessHint": "Эта функция позволит одним нажатием кнопки в нижнем меню открывать приложение навигации, выбранное по умолчанию.",
-    "enableFastAccessWarning": "Внимание! С включенной функцией \"Быстрый доступ\" на эту страницу можно будет попасть длинным нажатием."
+    "enableFastAccessWarning": "Внимание! С включенной функцией \"Быстрый доступ\" на эту страницу можно будет попасть длинным нажатием.",
+
+    "motorRollDirectionTileTitle": "Кручение мотора",
+    "motorGearTileTitle": "Передача мотора",
+    "reverseGear": "Задняя",
+    "neutralGear": "Нейтраль",
+    "driveGear":  "Движение",
+    "lowGear":  "Пониженная",
+    "boostGear":  "Повышенная",
+    "unknownGear":  "Неизвестно",
+    "reverseGearShort": "R",
+    "neutralGearShort": "N",
+    "driveGearShort":  "D",
+    "lowGearShort":  "L",
+    "boostGearShort":  "B",
+    "unknownGearShort":  "U",
+    "reverseMotorRollDirection": "Назад",
+    "unknownMotorRollDirection": "Неизвестно",
+    "forwardMotorRollDirection": "Вперед",
+    "stopMotorRollDirection": "Стоп"
 }

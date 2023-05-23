@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/gear_widget.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/light_state_error_listener.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/overlay_data_sender.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
@@ -59,8 +60,13 @@ class TabletGeneralScreenBody extends StatelessWidget {
             child: const CarWidget(),
           ),
           const Positioned(
-            left: 0,
-            bottom: 430,
+            left: 7,
+            bottom: 420,
+            child: GearWidget(),
+          ),
+          const Positioned(
+            right: 0,
+            top: 0,
             child: BlinkerButton(),
           ),
         ],
@@ -82,21 +88,23 @@ class HandsetGeneralScreenBody extends StatelessWidget {
         IntrinsicHeight(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SpeedWidget(),
-              if (landscape) const StatisticWidget(),
+              if (landscape) const StatisticWidget() else const GearWidget(),
             ],
           ),
         ),
-        const SizedBox(height: 32),
         if (!landscape) ...[
+          const SizedBox(height: 32),
           const StatisticWidget(useWrap: true),
           const SizedBox(height: 32),
-        ],
-        if (landscape)
-          FastActionsWidget.oneRow()
-        else
           FastActionsWidget.manyRows()
+        ] else ...[
+          const GearWidget(),
+          const SizedBox(height: 16),
+          FastActionsWidget.oneRow(),
+        ],
       ],
     );
   }
