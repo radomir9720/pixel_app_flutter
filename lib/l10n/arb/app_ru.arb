@@ -245,6 +245,7 @@
     "rpmMeasurementUnit": "Об/м",
     "voltageTileTitle": "Напряжение",
     "wattMeasurementUnit": "Вт",
+    "voltMeasurementUnit": "В",
     "currentTileTitle": "Ток",
     "amperMeasurementUnit": "А",
     "powerTileTitle": "Мощность(потребляемая/отдаваемая)",

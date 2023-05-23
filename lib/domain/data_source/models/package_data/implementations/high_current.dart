@@ -1,24 +1,18 @@
-import 'package:pixel_app_flutter/domain/data_source/extensions/double.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/bytes_convertible_with_status.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/mixins.dart';
 
-// TODO(Radomir): package format has changed
-class HighCurrent extends BytesConvertibleWithStatus {
-  const HighCurrent({required this.value, required super.status});
+class HighCurrent extends IntBytesConvertibleWithStatus {
+  const HighCurrent({
+    required super.value,
+    required super.status,
+  });
 
-  const HighCurrent.zero()
-      : value = 0,
-        super.normal();
+  const HighCurrent.zero() : super.normal(0);
 
-  HighCurrent.fromFunctionId(super.id, {required this.value}) : super.fromId();
-
-  /// Ampers
-  final double value;
-
-  @override
-  List<Object?> get props => [...super.props, value];
+  HighCurrent.fromFunctionId(int id, {required super.value})
+      : super.fromId(id: id);
 
   @override
   BytesConverter<HighCurrent> get bytesConverter =>
@@ -33,7 +27,7 @@ class HighCurrentConverter extends BytesConverter<HighCurrent>
   HighCurrent fromBytes(List<int> bytes) {
     return whenFunctionId(
       body: bytes,
-      dataParser: (bytes) => bytes.toIntFromInt32.fromMilli,
+      dataParser: (bytes) => bytes.toIntFromInt16,
       status: (data, status) => HighCurrent(status: status, value: data),
       okEvent: (data) {
         return HighCurrent(status: PeriodicValueStatus.normal, value: data);
@@ -45,8 +39,7 @@ class HighCurrentConverter extends BytesConverter<HighCurrent>
   List<int> toBytes(HighCurrent model) {
     return [
       ...model.status.toBytes,
-      // converting from ampers to milliampers
-      ...model.value.toMilli.toBytesInt32,
+      ...model.value.toBytesInt16,
     ];
   }
 }

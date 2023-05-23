@@ -245,6 +245,7 @@
     "rpmMeasurementUnit": "RPM",
     "voltageTileTitle": "Voltage",
     "wattMeasurementUnit": "W",
+    "voltMeasurementUnit": "V",
     "currentTileTitle": "Current",
     "amperMeasurementUnit": "A",
     "powerTileTitle": "Power(consumed/given)",

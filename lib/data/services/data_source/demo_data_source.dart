@@ -691,7 +691,7 @@ class DemoDataSource extends DataSource
       secondConfigByte: 0x95, // 10010101(incoming 0x15)
       parameterId: const DataSourceParameterId.highVoltage().value,
       convertible: HighVoltage(
-        value: Random().nextDouble() * 4294967,
+        value: randomUint16,
         status: _getRandomStatus,
       ),
     );
@@ -706,7 +706,7 @@ class DemoDataSource extends DataSource
       secondConfigByte: 0x95, // 10010101(incoming 0x15)
       parameterId: const DataSourceParameterId.highCurrent().value,
       convertible: HighCurrent(
-        value: (Random().nextDouble() * 2147483).randomSign,
+        value: randomInt16,
         status: _getRandomStatus,
       ),
     );
@@ -972,7 +972,7 @@ class DemoDataSource extends DataSource
 
   int get randomUint8 => Random().nextInt(0xFF);
   int get randomUint16 => Random().nextInt(0xFFFF);
-  int get randomInt16 => Random().nextInt(0xFF).randomSign;
+  int get randomInt16 => Random().nextInt(0x8000).randomSign;
 
   double get randomDoubleUint16 => Random().nextDouble() * 0xFFFF;
   double get randomDoubleUint32 => Random().nextDouble() * 0xFFFFFFFF;

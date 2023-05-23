@@ -78,7 +78,7 @@ class MotorScreen extends StatelessWidget {
                     context.colorFromStatus(state.status),
                   );
                 },
-                unitOfMeasurement: context.l10n.wattMeasurementUnit,
+                unitOfMeasurement: context.l10n.voltMeasurementUnit,
               ),
               _TwoValuesTableRow.builder(
                 parameterName: context.l10n.currentTileTitle,
