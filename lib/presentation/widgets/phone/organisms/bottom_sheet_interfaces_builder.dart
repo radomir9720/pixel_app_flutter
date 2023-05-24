@@ -71,13 +71,21 @@ class _BottomSheetInterfacesBuilderState
                     opacity: sheetController.initialized ? 1 : 0,
                     child: Transform.rotate(
                       angle: sheetController.mainRangeProgress * math.pi,
-                      child: child,
+                      child: sheetController.mainRangeProgress == 1
+                          ? child
+                          : UnconstrainedBox(child: child),
                     ),
                   );
                 },
-                child: const Icon(
-                  PixelIcons.showUp,
-                  size: 16,
+                child: const ColoredBox(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      PixelIcons.showUp,
+                      size: 16,
+                    ),
+                  ),
                 ),
               ),
             ),
