@@ -264,6 +264,8 @@
     "errorSwitchingStatisticsOverlayMessage": "Error when turning on/off the statistics floating window",
     "overlayStatisticsAboveAnotherAppsTileTitle": "Statistics window on top of other applications",
     "overlayStatisticsAboveAnotherAppsHint": "Display a floating window with car indicators over other applications",
+    "noDisplayOverOtherAppsPermissionErrorMessage": "Display over other applications permission was not provided. Provide permission in the settings",
+    "openSettingsButtonCaption": "Open settings",
 
     "enableFastAccessDialogTitle": "Turn on \"Fast access\"?",
     "enableFastAccessHint": "This feature will allow you to open the navigation application selected by default with a single click of a button in the lower menu.",

@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart' hide OverlayState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -28,7 +29,18 @@ class SwitchOverlayTile extends StatelessWidget {
                 granted = await FlutterOverlayWindow.requestPermission();
               }
             }
-            if (context.mounted && (!v || (granted ?? false))) {
+            if (context.mounted) {
+              if (!(granted ?? false)) {
+                await context.showSnackBar(
+                  context.l10n.noDisplayOverOtherAppsPermissionErrorMessage,
+                  action: SnackBarAction(
+                    label: context.l10n.openSettingsButtonCaption,
+                    onPressed: AppSettings.openAppSettings,
+                  ),
+                );
+                return;
+              }
+
               context.read<OverlayBloc>().add(OverlayEvent.set(enabled: v));
             }
           },

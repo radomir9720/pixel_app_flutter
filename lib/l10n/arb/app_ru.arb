@@ -264,6 +264,8 @@
     "errorSwitchingStatisticsOverlayMessage": "Ошибка при включении/выключении плавающего окна статистики",
     "overlayStatisticsAboveAnotherAppsTileTitle": "Окно статистики поверх других приложений",
     "overlayStatisticsAboveAnotherAppsHint": "Выводить поверх других приложений плавающее окно с показателями автомобиля",
+    "noDisplayOverOtherAppsPermissionErrorMessage": "Разрешение на отображение поверх других приложений не было предоставлено. Предоставьте разрешение в настройках",
+    "openSettingsButtonCaption": "Открыть настройки",
 
     "enableFastAccessDialogTitle": "Включить \"Быстрый доступ\"?",
     "enableFastAccessHint": "Эта функция позволит одним нажатием кнопки в нижнем меню открывать приложение навигации, выбранное по умолчанию.",
