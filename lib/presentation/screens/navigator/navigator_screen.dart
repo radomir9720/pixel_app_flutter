@@ -11,6 +11,7 @@ import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/switch_
 import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/switch_overlay_tile.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/organisms/title_wrapper.dart';
 import 'package:re_seedwork/re_seedwork.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class NavigatorScreen extends StatefulWidget {
   const NavigatorScreen({super.key});
@@ -86,7 +87,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
           //
           const SwitchFastAccessTile(),
           //
-          const SwitchOverlayTile(),
+          if (context.platform.isAndroid) const SwitchOverlayTile(),
         ],
       ),
     );
