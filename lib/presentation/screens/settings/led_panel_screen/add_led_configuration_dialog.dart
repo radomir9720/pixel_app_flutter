@@ -141,7 +141,8 @@ class _AddLEDConfigurationDialogState extends State<AddLEDConfigurationDialog> {
             state.maybeWhen(
               success: () {
                 context.showSnackBar(
-                    context.l10n.configurationAddedSuccessfullyMessage,);
+                  context.l10n.configurationAddedSuccessfullyMessage,
+                );
                 context.router.pop();
               },
               failure: (error) => context
@@ -155,7 +156,8 @@ class _AddLEDConfigurationDialogState extends State<AddLEDConfigurationDialog> {
                 if (state.isLoading) return;
                 if (nameController.text.isEmpty) {
                   context.showSnackBar(
-                      context.l10n.emptyConfigurationNameErrorMessage,);
+                    context.l10n.emptyConfigurationNameErrorMessage,
+                  );
                   return;
                 }
                 final fileId = int.tryParse(fileIdController.text);
@@ -176,7 +178,8 @@ class _AddLEDConfigurationDialogState extends State<AddLEDConfigurationDialog> {
 
                     if (ms == null) {
                       context.showSnackBar(
-                          context.l10n.enterMillisecondsErrorMessage,);
+                        context.l10n.enterMillisecondsErrorMessage,
+                      );
                       return;
                     }
 
