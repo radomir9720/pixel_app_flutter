@@ -3,12 +3,14 @@ import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/apps_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/developer_tools_scope.dart';
+import 'package:pixel_app_flutter/app/scopes/flows/general_scope.dart';
+import 'package:pixel_app_flutter/app/scopes/flows/led_panel_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/select_data_source_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/selected_data_source_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/screens/charging_screen_wrapper.dart';
-import 'package:pixel_app_flutter/app/scopes/screens/general_screen_wrapper.dart';
 import 'package:pixel_app_flutter/app/scopes/screens/motor_screen_wrapper.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/apps_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/car_info/car_info_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
@@ -22,14 +24,20 @@ import 'package:pixel_app_flutter/presentation/screens/developer_tools/requests_
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/requests_exchange_logs_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/integer_list_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/slider_dialog.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/general_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_panel_switcher_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/home/home_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/navigator/navigator_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/enable_fast_access_dialog.dart';
+import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen/add_led_configuration_dialog.dart';
+import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen/led_panel_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen/remove_led_configuration_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/settings/settings_screen.dart';
 
 part 'main_router.gr.dart';
 part 'route_names.dart';
-part 'subroutes/developer_tools/developer_tools_route.dart';
+part 'subroutes/developer_tools_route.dart';
+part 'subroutes/settings_route.dart';
 part 'subroutes/home_route.dart';
 part 'subroutes/select_data_source_route.dart';
 
@@ -45,10 +53,7 @@ part 'subroutes/select_data_source_route.dart';
       children: [
         _homeRoute,
         //
-        AutoRoute<void>(
-          path: 'settings',
-          page: SettingsScreen,
-        ),
+        _settingsRoute,
         //
         _developerToolsRoute,
         //

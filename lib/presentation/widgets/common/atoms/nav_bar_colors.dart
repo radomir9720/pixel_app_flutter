@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NavBarColors extends ThemeExtension<NavBarColors> {
-  NavBarColors({
+  const NavBarColors({
     required this.icon,
     required this.selectedBackground,
     required this.unselectedBackground,

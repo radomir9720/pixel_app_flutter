@@ -291,41 +291,46 @@ class DemoDataSource extends DataSource
           )
           // Lights
           ..voidOn<FrontSideBeamParameterId>(() {
-            _sendSetUint8ResultCallback(const FrontSideBeamParameterId());
+            _sendSetBoolUint8ResultCallback(const FrontSideBeamParameterId());
           })
           ..voidOn<TailSideBeamParameterId>(() {
-            _sendSetUint8ResultCallback(const TailSideBeamParameterId());
+            _sendSetBoolUint8ResultCallback(const TailSideBeamParameterId());
           })
           ..voidOn<LowBeamParameterId>(() {
-            _sendSetUint8ResultCallback(const LowBeamParameterId());
+            _sendSetBoolUint8ResultCallback(const LowBeamParameterId());
           })
           ..voidOn<HighBeamParameterId>(() {
-            _sendSetUint8ResultCallback(const HighBeamParameterId());
+            _sendSetBoolUint8ResultCallback(const HighBeamParameterId());
           })
           ..voidOn<FrontHazardBeamParameterId>(() {
-            _sendSetUint8ResultCallback(const FrontHazardBeamParameterId());
+            _sendSetBoolUint8ResultCallback(const FrontHazardBeamParameterId());
           })
           ..voidOn<TailHazardBeamParameterId>(() {
-            _sendSetUint8ResultCallback(const TailHazardBeamParameterId());
+            _sendSetBoolUint8ResultCallback(const TailHazardBeamParameterId());
           })
           ..voidOn<FrontLeftTurnSignalParameterId>(() {
-            _sendSetUint8ResultCallback(
+            _sendSetBoolUint8ResultCallback(
               const FrontLeftTurnSignalParameterId(),
             );
           })
           ..voidOn<FrontRightTurnSignalParameterId>(() {
-            _sendSetUint8ResultCallback(
+            _sendSetBoolUint8ResultCallback(
               const FrontRightTurnSignalParameterId(),
             );
           })
           ..voidOn<TailLeftTurnSignalParameterId>(() {
-            _sendSetUint8ResultCallback(
+            _sendSetBoolUint8ResultCallback(
               const TailLeftTurnSignalParameterId(),
             );
           })
           ..voidOn<TailRightTurnSignalParameterId>(() {
-            _sendSetUint8ResultCallback(
+            _sendSetBoolUint8ResultCallback(
               const TailRightTurnSignalParameterId(),
+            );
+          })
+          ..voidOn<CustomImageParameterId>(() {
+            _sendSetUint8ResultCallback(
+              const CustomImageParameterId(),
             );
           });
         timer ??= Timer.periodic(
@@ -418,63 +423,69 @@ class DemoDataSource extends DataSource
       )
       // Lights
       ..voidOn<FrontSideBeamParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const FrontSideBeamParameterId(),
           package.boolData,
         );
       })
       ..voidOn<TailSideBeamParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const TailSideBeamParameterId(),
           package.boolData,
         );
       })
       ..voidOn<LowBeamParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const LowBeamParameterId(),
           package.boolData,
         );
       })
       ..voidOn<HighBeamParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const HighBeamParameterId(),
           package.boolData,
         );
       })
       ..voidOn<FrontHazardBeamParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const FrontHazardBeamParameterId(),
           package.boolData,
         );
       })
       ..voidOn<TailHazardBeamParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const TailHazardBeamParameterId(),
           package.boolData,
         );
       })
       ..voidOn<FrontLeftTurnSignalParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const FrontLeftTurnSignalParameterId(),
           package.boolData,
         );
       })
       ..voidOn<FrontRightTurnSignalParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const FrontRightTurnSignalParameterId(),
           package.boolData,
         );
       })
       ..voidOn<TailLeftTurnSignalParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const TailLeftTurnSignalParameterId(),
           package.boolData,
         );
       })
       ..voidOn<TailRightTurnSignalParameterId>(() {
-        _sendSetUint8ResultCallback(
+        _sendSetBoolUint8ResultCallback(
           const TailRightTurnSignalParameterId(),
           package.boolData,
+        );
+      })
+      ..voidOn<CustomImageParameterId>(() {
+        _sendSetUint8ResultCallback(
+          const CustomImageParameterId(),
+          package.data[1],
         );
       });
 
@@ -489,12 +500,10 @@ class DemoDataSource extends DataSource
   void _sendNewSpeedCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
-    // print('send new speed, $subscriptionCallbacks');
     _updateValueCallback(
       const DataSourceParameterId.motorSpeed(),
       TwoUint16WithStatusBody(
         status: _getRandomStatus,
-        // speed: Random().nextInt(101),
         first: Random().nextInt(1001),
         second: Random().nextInt(1001),
       ),
@@ -670,287 +679,273 @@ class DemoDataSource extends DataSource
   }
 
   void _sendNewLowVoltageCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.lowVoltageMinMaxDelta().value,
-      convertible: LowVoltageMinMaxDelta(
-        min: Random().nextDouble() * 65535,
-        max: Random().nextDouble() * 65535,
-        delta: Random().nextDouble() * 65535,
-        status: _getRandomStatus,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.lowVoltageMinMaxDelta().value,
+        convertible: LowVoltageMinMaxDelta(
+          min: Random().nextDouble() * 65535,
+          max: Random().nextDouble() * 65535,
+          delta: Random().nextDouble() * 65535,
+          status: _getRandomStatus,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendHighVoltageCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.highVoltage().value,
-      convertible: HighVoltage(
-        value: randomUint16,
-        status: _getRandomStatus,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.highVoltage().value,
+        convertible: HighVoltage(
+          value: randomUint16,
+          status: _getRandomStatus,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendHighCurrentCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.highCurrent().value,
-      convertible: HighCurrent(
-        value: randomInt16,
-        status: _getRandomStatus,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.highCurrent().value,
+        convertible: HighCurrent(
+          value: randomInt16,
+          status: _getRandomStatus,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendMaxTemperatureCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.maxTemperature().value,
-      convertible: MaxTemperature(
-        value: randomInt8,
-        status: _getRandomStatus,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.maxTemperature().value,
+        convertible: MaxTemperature(
+          value: randomInt8,
+          status: _getRandomStatus,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendTemperatureFirstBatchCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.temperatureFirstBatch().value,
-      convertible: BatteryTemperatureFirstBatch(
-        balancer: randomInt8,
-        mos: randomInt8,
-        first: randomInt8,
-        second: randomInt8,
-        third: randomInt8,
-        fourth: randomInt8,
-        fifth: randomInt8,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.temperatureFirstBatch().value,
+        convertible: BatteryTemperatureFirstBatch(
+          balancer: randomInt8,
+          mos: randomInt8,
+          first: randomInt8,
+          second: randomInt8,
+          third: randomInt8,
+          fourth: randomInt8,
+          fifth: randomInt8,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendTemperatureSecondBatchCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.temperatureSecondBatch().value,
-      convertible: BatteryTemperatureSecondBatch(
-        sixth: randomInt8,
-        seventh: randomInt8,
-        eighth: randomInt8,
-        ninth: randomInt8,
-        tenth: randomInt8,
-        eleventh: randomInt8,
-        twelfth: randomInt8,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.temperatureSecondBatch().value,
+        convertible: BatteryTemperatureSecondBatch(
+          sixth: randomInt8,
+          seventh: randomInt8,
+          eighth: randomInt8,
+          ninth: randomInt8,
+          tenth: randomInt8,
+          eleventh: randomInt8,
+          twelfth: randomInt8,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendTemperatureThirdBatchCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.temperatureThirdBatch().value,
-      convertible: BatteryTemperatureThirdBatch(
-        thirteenth: randomInt8,
-        fourteenth: randomInt8,
-        fifteenth: randomInt8,
-        sixteenth: randomInt8,
-        seventeenth: randomInt8,
-        eighteenth: randomInt8,
-        nineteenth: randomInt8,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.temperatureThirdBatch().value,
+        convertible: BatteryTemperatureThirdBatch(
+          thirteenth: randomInt8,
+          fourteenth: randomInt8,
+          fifteenth: randomInt8,
+          sixteenth: randomInt8,
+          seventeenth: randomInt8,
+          eighteenth: randomInt8,
+          nineteenth: randomInt8,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageOneToThreeCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.lowVoltageOneToThree().value,
-      convertible: BatteryLowVoltageOneToThree(
-        first: randomDoubleUint16,
-        second: randomDoubleUint16,
-        third: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.lowVoltageOneToThree().value,
+        convertible: BatteryLowVoltageOneToThree(
+          first: randomDoubleUint16,
+          second: randomDoubleUint16,
+          third: randomDoubleUint16,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageFourToSixCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.lowVoltageFourToSix().value,
-      convertible: BatteryLowVoltageFourToSix(
-        fourth: randomDoubleUint16,
-        fifth: randomDoubleUint16,
-        sixth: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.lowVoltageFourToSix().value,
+        convertible: BatteryLowVoltageFourToSix(
+          fourth: randomDoubleUint16,
+          fifth: randomDoubleUint16,
+          sixth: randomDoubleUint16,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageSevenToNineCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.lowVoltageSevenToNine().value,
-      convertible: BatteryLowVoltageSevenToNine(
-        seventh: randomDoubleUint16,
-        eighth: randomDoubleUint16,
-        ninth: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.lowVoltageSevenToNine().value,
+        convertible: BatteryLowVoltageSevenToNine(
+          seventh: randomDoubleUint16,
+          eighth: randomDoubleUint16,
+          ninth: randomDoubleUint16,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageTenToTwelveCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: const DataSourceParameterId.lowVoltageTenToTwelve().value,
-      convertible: BatteryLowVoltageTenToTwelve(
-        tenth: randomDoubleUint16,
-        eleventh: randomDoubleUint16,
-        twelfth: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: const DataSourceParameterId.lowVoltageTenToTwelve().value,
+        convertible: BatteryLowVoltageTenToTwelve(
+          tenth: randomDoubleUint16,
+          eleventh: randomDoubleUint16,
+          twelfth: randomDoubleUint16,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageThirteenToFifteenCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId:
-          const DataSourceParameterId.lowVoltageThirteenToFifteen().value,
-      convertible: BatteryLowVoltageThirteenToFifteen(
-        thirteenth: randomDoubleUint16,
-        fourteenth: randomDoubleUint16,
-        fifteenth: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId:
+            const DataSourceParameterId.lowVoltageThirteenToFifteen().value,
+        convertible: BatteryLowVoltageThirteenToFifteen(
+          thirteenth: randomDoubleUint16,
+          fourteenth: randomDoubleUint16,
+          fifteenth: randomDoubleUint16,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageSixteenToEighteenCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId:
-          const DataSourceParameterId.lowVoltageSixteenToEighteen().value,
-      convertible: BatteryLowVoltageSixteenToEighteen(
-        sixteenth: randomDoubleUint16,
-        seventeenth: randomDoubleUint16,
-        eighteenth: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId:
+            const DataSourceParameterId.lowVoltageSixteenToEighteen().value,
+        convertible: BatteryLowVoltageSixteenToEighteen(
+          sixteenth: randomDoubleUint16,
+          seventeenth: randomDoubleUint16,
+          eighteenth: randomDoubleUint16,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageNineteenToTwentyOneCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId:
-          const DataSourceParameterId.lowVoltageNineteenToTwentyOne().value,
-      convertible: BatteryLowVoltageNineteenToTwentyOne(
-        nineteenth: randomDoubleUint16,
-        twentieth: randomDoubleUint16,
-        twentyFirst: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId:
+            const DataSourceParameterId.lowVoltageNineteenToTwentyOne().value,
+        convertible: BatteryLowVoltageNineteenToTwentyOne(
+          nineteenth: randomDoubleUint16,
+          twentieth: randomDoubleUint16,
+          twentyFirst: randomDoubleUint16,
+        ),
       ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 
   void _sendLowVoltageTwentyTwoToTwentyFourCallback() {
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId:
-          const DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour().value,
-      convertible: BatteryLowVoltageTwentyTwoToTwentyFour(
-        twentySecond: randomDoubleUint16,
-        twentyThird: randomDoubleUint16,
-        twentyFourth: randomDoubleUint16,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId:
+            const DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour().value,
+        convertible: BatteryLowVoltageTwentyTwoToTwentyFour(
+          twentySecond: randomDoubleUint16,
+          twentyThird: randomDoubleUint16,
+          twentyFourth: randomDoubleUint16,
+        ),
       ),
     );
+  }
 
-    observeIncoming(package);
+  Future<void> _sendSetBoolUint8ResultCallback(
+    DataSourceParameterId parameterId, [
+    bool? requiredResult,
+  ]) async {
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    final _requiredResult = requiredResult ?? randomBool;
 
-    controller.sink.add(package);
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: parameterId.value,
+        convertible: SuccessEventUint8Body(
+          (!generateRandomErrors() || ninetyPercentSuccessBool
+                  ? _requiredResult
+                  : !_requiredResult)
+              .toInt,
+        ),
+      ),
+    );
   }
 
   Future<void> _sendSetUint8ResultCallback(
     DataSourceParameterId parameterId, [
-    bool? requiredResult,
+    int? requiredResult,
   ]) async {
-    await Future<void>.delayed(
-      // Duration(milliseconds: Random().nextInt(1000) + 500),
-      const Duration(milliseconds: 100),
-    );
-    final _requiredResult = requiredResult ?? randomBool;
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    final _requiredResult = requiredResult ?? randomUint8;
 
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: 0x95, // 10010101(incoming 0x15)
-      parameterId: parameterId.value,
-      // convertible: SetUint8ResultBody(
-      //   success: !generateRandomErrors() || ninetyPercentSuccessBool,
-      //   value: (!generateRandomErrors() || ninetyPercentSuccessBool
-      //           ? _requiredResult
-      //           : !_requiredResult)
-      //       .toInt,
-      // ),
-      convertible: SuccessEventUint8Body(
-        (!generateRandomErrors() || ninetyPercentSuccessBool
-                ? _requiredResult
-                : !_requiredResult)
-            .toInt,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: parameterId.value,
+        convertible: SuccessEventUint8Body(
+          generateRandomErrors()
+              ? randomBool
+                  ? randomUint8
+                  : _requiredResult
+              : _requiredResult,
+        ),
       ),
     );
+  }
 
+  void _sendPackage(DataSourceIncomingPackage package) {
     observeIncoming(package);
     if (controller.isClosed) return;
     controller.sink.add(package);
@@ -988,15 +983,13 @@ class DemoDataSource extends DataSource
       periodicRequests: () => 0x81, //'10000001'
     );
 
-    final package = DataSourceIncomingPackage.fromConvertible(
-      secondConfigByte: requestType,
-      parameterId: parameterId.value,
-      convertible: convertible,
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: requestType,
+        parameterId: parameterId.value,
+        convertible: convertible,
+      ),
     );
-
-    observeIncoming(package);
-
-    controller.sink.add(package);
   }
 }
 

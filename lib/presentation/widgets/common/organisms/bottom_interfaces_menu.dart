@@ -41,7 +41,7 @@ class BottomInterfacesMenu extends StatelessWidget {
                     : GlueTitleSide.right,
                 child: PIconButton(
                   onPressed: () {
-                    context.router.push(const SettingsRoute());
+                    context.router.push(const SettingsFlow());
                   },
                   icon: PixelIcons.settings,
                   size: isHandset

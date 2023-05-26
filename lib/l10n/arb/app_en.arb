@@ -1,292 +1,347 @@
 {
-    "@@locale": "en",
-    
-    "generalTabTitle": "General",
-    "carInfoTabTitle": "Car Info",
-    "navigatorTabTitle": "Navigator",
-    "appsTabTitle": "Apps",
-    "batteryTabTitle": "Battery",
-    "motorTabTitle": "Motor",
-    "appVersion": "Pixel App. v{version}",
-    "@appVersion": {
-        "placeholders": {
-            "version": {
-                "type": "String"
-            }
-        }
-    },
-
-    "frontButtonCaption": "Front",
-    "airflowButtonCaption": "Airflow",
-    "settingsButtonCaption": "Settings",
-    "powerOffButtonCaption": "Power Off",
-    "leftBeltButtonCaption": "Left belt",
-    "rightBeltButtonCaption": "Right belt",
-
-    "frontTrunkInterfaceTitle": "Front Trunk",
-    "rearTrunkInterfaceTitle": "Rear Trunk",
-    "doorInterfaceTitle": "Door",
-    "leftDoorInterfaceTitle": "Left Door",
-    "rightDoorInterfaceTitle": "Right Door",
-    "trunkInterfaceTitle": "Trunk",
-    "lightsInterfaceTitle": "Lights",
-
-    "autoModeLightsStatus": "Auto Mode",
-
-    "lockedInterfaceStatus": "Locked",
-    "unlockedInterfaceStatus": "Unlocked",
-
-    "speedInfoPanelTitle": "Speed",
-    "statisticInfoPanelTitle": "Statistic",
-    "fastActionsInfoPanelTitle": "Fast actions",
-
-    "kmMeasurementUnit": "km",
-    "kmPerHourMeasurenentUnit": "km/h",
-    "kwPerHourMeasurementUnit": "kW/h",
-
-    "actionSwitchTitle": "Action #{num}",
-    "@actionSwitchTitle": {
-        "placeholders": {
-            "num": {
-                "type": "int"
-            }
-        }
-    },
-
-    "closeButtonCaption": "Close",
-    "dataSourceButtonCaption": "Data Source",
-    "fastActionsButtonCaption": "Fast Actions",
-    "licencesButtonCaption": "Licences",
-    "aboutButtonCaption": "About",
-    "settingScreenTitle": "Settings",
-    "updateButtonCaption": "Update",
-
-    "dataSourceScreenTitle": "Data source",
-    "selectDataSourceScreenTitle": "Select data source",
-
-    "selectDeviceDialogTitle": "Select Device",
-    "deviceNameDialogLabel": "Device name",
-    "bondedDialogLabel": "Bonded",
-    "noDeviceNameDialogStub": "No name",
-    "errorDiscoveringDevicesMessage": "Error while discovering devices",
-    "errorConnectingToDataSourceMessage": "Error connecting to the data source",
-    "successfullyConnectedToDataSourceMessage": "Successfully connected to the data source",
-
-    "cancelButtonCaption": "Cancel",
-    "saveButtonCaption": "Save",
-    "sendButtonCaption": "Send",
-    "enableButtonCaption": "Enable",
-
-    "unknownErrorSelectingDataSourceMessage": "Unknown error while selecting data source",
-    "unavailableDataSourceErrorMessage": "Data source is unavailable",
-    "errorEnablingDataSourceMessage": "Error while enabling data source",
-    "dataSourceConnectionLostMessage": "Connection with the data source is lost",
-    "failedToConnectToDataSourceMessage": "Failed to connect to the data source",
-    "demoDataSourceTitle": "Demo",
-    "bluetoothDataSourceTitle": "Bluetooth",
-    "usbDataSourceTitle": "USB",
-    "usbOrBluetoothDataSourceTitle": "USB/Bluetooth",
-
-    "requestsExchangeLogsListTileLabel": "Requests exchange logs with data source",
-    "requestsExchangeLogsScreenTitle": "Requests exchange logs",
-    "enableDemoDataSourceRandomErrorGenerationListTileLabel": "Enable DemoDataSource random error generation",
-    "whichParametersToSubscribeToListTileLabel": "Which parameters to subscribe to(or send periodic requests)",
-    "requestPeriodInMillisListTileLabel": "Request period in milliseconds",
-    "requestPeriodInMillisListTileSubtitle": "Also, the frequency of sending events by subscription also depends on this parameter in DemoDataSource",
-    "exportLogsListTileLabel": "Export logs",
-    "directionListTileLabel": "Direction",
-    "incomingListTileLabel": "Incoming",
-    "outgoingListTileLabel": "Outgoing",
-    "timeListTileLabel": "Time",
-    "packageListTileLabel": "Package",
-    "indexListTileLabel": "Index",
-    "integerListTileLabel": "int",
-    "hexListTileLabel": "hex",
-    "periodicRequestsProtocolVersionLabel": "Periodic requests",
-    "subscriptionProtocolVersionLabel": "Subscription",
-    "protocolVersionLabel": "Protocol version",
-    "developerToolsButtonCaption": "Developer tools",
-    "developerToolsScreenTitle": "Developer tools",
-    "enterParameterIdTextFieldLabel": "Enter parameter ID",
-    "errorParsingIntegerValueMessage": "Error while parsing an integer",
-    "parameterIdLimitsMessage": "Parameter ID should should be an integer greater or equal than 0 and less or equal than 65535(0xFFFF)",
-    "addCustomIdButtonCaption": "Add custom ID",
-    "enableHandshakeResponseListTileLabel": "Send response to handshake request",
-    "sendHandshakeResponseTimeoutListTileLabel": "How many milliseconds after receiving a handshake request to send the response",
-
-    "processedRequestsTabTitle": "Processed",
-    "rawRequestsTabTitle": "Raw",
-    "addCustomValueIntegerDialogButtonCaption": "Add custom value",
-    "enterValueIntegerDialogTextFieldLabel": "Enter value",
-    "requestsFilterScreenTitle": "Requests filter",
-    "parameterIdListTileLabel": "Parameter ID",
-    "parameterIdFilterDialogTitle": "Parameter ID filter",
-    "requestTypeListTileLabel": "Request type",
-    "requestTypeFilterDialogTitle": "Request type",
-    "requestDirectionListTileLabel": "Request direction",
-    "requestDirectionFilterDialogTitle": "Request direction filter",
-
-    "packagesExchangeConsoleScreenTitle": "Packages exchange console",
-    "invalidRequestTypeMessage": "Invalid request type",
-    "invalidParameterIDMessage": "Invalid parameter ID",
-    "invalidDataFormatMessage": "Incorrect data format",
-    "requestTypeHint": "Request type",
-    "parameterIDHint": "Parameter ID",
-    "packageDataHint": "0x01 0xFF...",
-    "packageDataLabel": "Request data",
-
-    "dontTurnOffTheScreenButtonCaption": "Don't turn off the screen",
-    "errorTogglingDTOMessage": "Error toggling \"Don't turn off the screen\" mode",
-
-    "errorLaunchingTheAppMessage": "Unknown error while launching the app",
-    "errorGettingApplicationsListMessage": "Error while getting applications list. Information was sent to developers",
-    "noAppNameCaption": "No app name",
-
-    "searchTextFieldHint": "Search",
-
-    "errorPinningApp": "Failed to pin the app {appName}",
-    "@errorPinningApp": {
-        "placeholders": {
-            "appName": {
-                "type": "String"
-            }
-        }
-    },
-    "errorUnpinningApp": "Failed to unpin the app {appName}",
-    "@errorUnpinningApp": {
-        "placeholders": {
-            "appName": {
-                "type": "String"
-            }
-        }
-    },
-
-    "chargingGeneralTabTitle": "General",
-    "chargingTemperatureTabTitle": "Temperature",
-    "chargingVoltageTabTitle": "Voltage",
-    
-    "totalVoltageTileTitle": "Total voltage",
-    "totalCurrentTileTitle": "Total charge/discharge current",
-    "maximumRegisteredTemperatureTileTitle": "Maximum registered temperature",
-
-    "voltageValue": "{value} V",
-    "@voltageValue": {
-        "placeholders": {
-            "value": {
-                "type": "String"
-            }
-        }
-    },
-    "currentValue": "{value} A",
-    "@currentValue": {
-        "placeholders": {
-            "value": {
-                "type": "String"
-            }
-        }
-    },
-    "celsiusValue": "{value} °C",
-    "@celsiusValue": {
-        "placeholders": {
-            "value": {
-                "type": "int"
-            }
-        }
-    },
-
-    "balancerTileTitle": "Balancer",
-    "mosTileTitle": "MOS",
-    "cellNTileTitle": "Cell {number}",
-    "@cellNTileTitle": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-
-    "minCellsVoltageTileTitle": "Minimum cells voltage",
-    "maxCellsVoltageTileTitle": "Maximum cells voltage",
-    "deltaCellsVoltageTileTitle": "Delta cells voltage",
-
-    "parkingLightsButtonCaption": "Parking lights",
-    "lowBeamButtonCaption": "Low beam",
-    "highBeamButtonCaption": "High beam",
-    "leftBlinkerButtonCaption": "Left turn signal",
-    "rightBlinkerButtonCaption": "Right turn signal",
-    "hazardBeamButtonCaption": "Blinker",
-
-    "onShortStatusMessage": "On",
-    "offShortStatusMessage": "Off",
-    "loadingStatusMessage": "Loading",
-
-    "errorSwitchingFeatureMessage": "Error switching {featureName}. {reason}",
-    "@errorSwitchingFeatureMessage": {
-        "placeholders": {
-            "featureName": {
-                "type": "String"
-            },
-            "reason": {
-                "type": "String"
-            }
-        }
-    },
-    "notAllBlocksReturnedSuccessResponseErrorMessage": "Not all the blocks returned positive answer",
-    "positiveAnswerDidNotComeErrorMessage": "Positive answer did not come",
-    "errorFromMainECUErrorMessage": "MainECU error",
-
-    "motorScreenTitle": "Motor",
-    "firstTileTitle":  "First",
-    "secondTileTitle":  "Second",
-    "parameterTileTitle": "Parameter",
-    "measurementUnitTileTitle": "Unit of measurement",
-    "speedTileTitle": "Speed",
-    "rpmTileTitle": "Motors rotation",
-    "rpmMeasurementUnit": "RPM",
-    "voltageTileTitle": "Voltage",
-    "wattMeasurementUnit": "W",
-    "voltMeasurementUnit": "V",
-    "currentTileTitle": "Current",
-    "amperMeasurementUnit": "A",
-    "powerTileTitle": "Power(consumed/given)",
-    "motorsTemperatureTileTitle": "Motors temperature",
-    "celsiusMeasurementUnit": "°C",
-    "controllersTemperatureTileTitle": "Controllers temperature",
-
-    "errorSwitchingFastAccessMessage": "Error when switching the feature \"Fast access\"",
-    "fastAccessTileTitle": "Fast access",
-    "fastAccessTileHint": "Open the navigator with one touch",
-    "firstSelectDefaultNavAppErrorMessage": "To enable the function \"Fast access\" first select the default navigation application",
-    "defaultNavAppTileTitle": "Default navigation application:",
-    "noNavAppsOnDeviceErrorMessage": "Navigation applications were not found on the device",
-    "errorSettingDefaultNavAppMessage": "Error when installing the default navigation application",
-    "notSelectedDropdownHint": "Not selected",
-    "errorSwitchingStatisticsOverlayMessage": "Error when turning on/off the statistics floating window",
-    "overlayStatisticsAboveAnotherAppsTileTitle": "Statistics window on top of other applications",
-    "overlayStatisticsAboveAnotherAppsHint": "Display a floating window with car indicators over other applications",
-    "noDisplayOverOtherAppsPermissionErrorMessage": "Display over other applications permission was not provided. Provide permission in the settings",
-    "openSettingsButtonCaption": "Open settings",
-
-    "enableFastAccessDialogTitle": "Turn on \"Fast access\"?",
-    "enableFastAccessHint": "This feature will allow you to open the navigation application selected by default with a single click of a button in the lower menu.",
-    "enableFastAccessWarning": "Attention! With the \"Quick Access\" feature enabled, you can get to this page by long pressing.",
-
-    "motorRollDirectionTileTitle": "Motor roll direction",
-    "motorGearTileTitle": "Motor gear",
-    "reverseGear": "Reverse",
-    "neutralGear": "Neutral",
-    "driveGear":  "Drive",
-    "lowGear":  "Low",
-    "boostGear":  "Boost",
-    "unknownGear":  "Unknown",
-    "reverseGearShort": "R",
-    "neutralGearShort": "N",
-    "driveGearShort":  "D",
-    "lowGearShort":  "L",
-    "boostGearShort":  "B",
-    "unknownGearShort":  "U",
-    "reverseMotorRollDirection": "Reverse",
-    "unknownMotorRollDirection": "Unknown",
-    "forwardMotorRollDirection": "Forward",
-    "stopMotorRollDirection": "Stop"
+  "@@locale": "en",
+  "generalTabTitle": "General",
+  "carInfoTabTitle": "Car Info",
+  "navigatorTabTitle": "Navigator",
+  "appsTabTitle": "Apps",
+  "batteryTabTitle": "Battery",
+  "motorTabTitle": "Motor",
+  "appVersion": "Pixel App. v{version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "frontButtonCaption": "Front",
+  "airflowButtonCaption": "Airflow",
+  "settingsButtonCaption": "Settings",
+  "powerOffButtonCaption": "Power Off",
+  "leftBeltButtonCaption": "Left belt",
+  "rightBeltButtonCaption": "Right belt",
+  "frontTrunkInterfaceTitle": "Front Trunk",
+  "rearTrunkInterfaceTitle": "Rear Trunk",
+  "doorInterfaceTitle": "Door",
+  "leftDoorInterfaceTitle": "Left Door",
+  "rightDoorInterfaceTitle": "Right Door",
+  "trunkInterfaceTitle": "Trunk",
+  "lightsInterfaceTitle": "Lights",
+  "autoModeLightsStatus": "Auto Mode",
+  "lockedInterfaceStatus": "Locked",
+  "unlockedInterfaceStatus": "Unlocked",
+  "speedInfoPanelTitle": "Speed",
+  "statisticInfoPanelTitle": "Statistic",
+  "fastActionsInfoPanelTitle": "Fast actions",
+  "kmMeasurementUnit": "km",
+  "kmPerHourMeasurenentUnit": "km/h",
+  "kwPerHourMeasurementUnit": "kW/h",
+  "actionSwitchTitle": "Action #{num}",
+  "@actionSwitchTitle": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "closeButtonCaption": "Close",
+  "dataSourceButtonCaption": "Data Source",
+  "fastActionsButtonCaption": "Fast Actions",
+  "licencesButtonCaption": "Licences",
+  "aboutButtonCaption": "About",
+  "settingScreenTitle": "Settings",
+  "updateButtonCaption": "Update",
+  "dataSourceScreenTitle": "Data source",
+  "selectDataSourceScreenTitle": "Select data source",
+  "selectDeviceDialogTitle": "Select Device",
+  "deviceNameDialogLabel": "Device name",
+  "bondedDialogLabel": "Bonded",
+  "noDeviceNameDialogStub": "No name",
+  "errorDiscoveringDevicesMessage": "Error while discovering devices",
+  "errorConnectingToDataSourceMessage": "Error connecting to the data source",
+  "successfullyConnectedToDataSourceMessage": "Successfully connected to the data source",
+  "cancelButtonCaption": "Cancel",
+  "saveButtonCaption": "Save",
+  "sendButtonCaption": "Send",
+  "enableButtonCaption": "Enable",
+  "unknownErrorSelectingDataSourceMessage": "Unknown error while selecting data source",
+  "unavailableDataSourceErrorMessage": "Data source is unavailable",
+  "errorEnablingDataSourceMessage": "Error while enabling data source",
+  "dataSourceConnectionLostMessage": "Connection with the data source is lost",
+  "failedToConnectToDataSourceMessage": "Failed to connect to the data source",
+  "demoDataSourceTitle": "Demo",
+  "bluetoothDataSourceTitle": "Bluetooth",
+  "usbDataSourceTitle": "USB",
+  "usbOrBluetoothDataSourceTitle": "USB/Bluetooth",
+  "requestsExchangeLogsListTileLabel": "Requests exchange logs with data source",
+  "requestsExchangeLogsScreenTitle": "Requests exchange logs",
+  "enableDemoDataSourceRandomErrorGenerationListTileLabel": "Enable DemoDataSource random error generation",
+  "whichParametersToSubscribeToListTileLabel": "Which parameters to subscribe to(or send periodic requests)",
+  "requestPeriodInMillisListTileLabel": "Request period in milliseconds",
+  "requestPeriodInMillisListTileSubtitle": "Also, the frequency of sending events by subscription also depends on this parameter in DemoDataSource",
+  "exportLogsListTileLabel": "Export logs",
+  "directionListTileLabel": "Direction",
+  "incomingListTileLabel": "Incoming",
+  "outgoingListTileLabel": "Outgoing",
+  "timeListTileLabel": "Time",
+  "packageListTileLabel": "Package",
+  "indexListTileLabel": "Index",
+  "integerListTileLabel": "int",
+  "hexListTileLabel": "hex",
+  "periodicRequestsProtocolVersionLabel": "Periodic requests",
+  "subscriptionProtocolVersionLabel": "Subscription",
+  "protocolVersionLabel": "Protocol version",
+  "developerToolsButtonCaption": "Developer tools",
+  "developerToolsScreenTitle": "Developer tools",
+  "enterParameterIdTextFieldLabel": "Enter parameter ID",
+  "errorParsingIntegerValueMessage": "Error while parsing an integer",
+  "parameterIdLimitsMessage": "Parameter ID should should be an integer greater or equal than 0 and less or equal than 65535(0xFFFF)",
+  "addCustomIdButtonCaption": "Add custom ID",
+  "enableHandshakeResponseListTileLabel": "Send response to handshake request",
+  "sendHandshakeResponseTimeoutListTileLabel": "How many milliseconds after receiving a handshake request to send the response",
+  "processedRequestsTabTitle": "Processed",
+  "rawRequestsTabTitle": "Raw",
+  "addCustomValueIntegerDialogButtonCaption": "Add custom value",
+  "enterValueIntegerDialogTextFieldLabel": "Enter value",
+  "requestsFilterScreenTitle": "Requests filter",
+  "parameterIdListTileLabel": "Parameter ID",
+  "parameterIdFilterDialogTitle": "Parameter ID filter",
+  "requestTypeListTileLabel": "Request type",
+  "requestTypeFilterDialogTitle": "Request type",
+  "requestDirectionListTileLabel": "Request direction",
+  "requestDirectionFilterDialogTitle": "Request direction filter",
+  "packagesExchangeConsoleScreenTitle": "Packages exchange console",
+  "invalidRequestTypeMessage": "Invalid request type",
+  "invalidParameterIDMessage": "Invalid parameter ID",
+  "invalidDataFormatMessage": "Incorrect data format",
+  "requestTypeHint": "Request type",
+  "parameterIDHint": "Parameter ID",
+  "packageDataHint": "0x01 0xFF...",
+  "packageDataLabel": "Request data",
+  "dontTurnOffTheScreenButtonCaption": "Don't turn off the screen",
+  "errorTogglingDTOMessage": "Error toggling \"Don't turn off the screen\" mode",
+  "errorLaunchingTheAppMessage": "Unknown error while launching the app",
+  "errorGettingApplicationsListMessage": "Error while getting applications list. Information was sent to developers",
+  "noAppNameCaption": "No app name",
+  "searchTextFieldHint": "Search",
+  "errorPinningApp": "Failed to pin the app {appName}",
+  "@errorPinningApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUnpinningApp": "Failed to unpin the app {appName}",
+  "@errorUnpinningApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "chargingGeneralTabTitle": "General",
+  "chargingTemperatureTabTitle": "Temperature",
+  "chargingVoltageTabTitle": "Voltage",
+  "totalVoltageTileTitle": "Total voltage",
+  "totalCurrentTileTitle": "Total charge/discharge current",
+  "maximumRegisteredTemperatureTileTitle": "Maximum registered temperature",
+  "voltageValue": "{value} V",
+  "@voltageValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "currentValue": "{value} A",
+  "@currentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "celsiusValue": "{value} °C",
+  "@celsiusValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "balancerTileTitle": "Balancer",
+  "mosTileTitle": "MOS",
+  "cellNTileTitle": "Cell {number}",
+  "@cellNTileTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "minCellsVoltageTileTitle": "Minimum cells voltage",
+  "maxCellsVoltageTileTitle": "Maximum cells voltage",
+  "deltaCellsVoltageTileTitle": "Delta cells voltage",
+  "parkingLightsButtonCaption": "Parking lights",
+  "lowBeamButtonCaption": "Low beam",
+  "highBeamButtonCaption": "High beam",
+  "leftBlinkerButtonCaption": "Left turn signal",
+  "rightBlinkerButtonCaption": "Right turn signal",
+  "hazardBeamButtonCaption": "Blinker",
+  "onShortStatusMessage": "On",
+  "offShortStatusMessage": "Off",
+  "loadingStatusMessage": "Loading",
+  "errorSwitchingFeatureMessage": "Error switching {featureName}. {reason}",
+  "@errorSwitchingFeatureMessage": {
+    "placeholders": {
+      "featureName": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notAllBlocksReturnedSuccessResponseErrorMessage": "Not all the blocks returned positive answer",
+  "positiveAnswerDidNotComeErrorMessage": "Positive answer did not come",
+  "errorFromMainECUErrorMessage": "MainECU error",
+  "motorScreenTitle": "Motor",
+  "firstTileTitle": "First",
+  "secondTileTitle": "Second",
+  "parameterTileTitle": "Parameter",
+  "measurementUnitTileTitle": "Unit of measurement",
+  "speedTileTitle": "Speed",
+  "rpmTileTitle": "Motors rotation",
+  "rpmMeasurementUnit": "RPM",
+  "voltageTileTitle": "Voltage",
+  "wattMeasurementUnit": "W",
+  "voltMeasurementUnit": "V",
+  "currentTileTitle": "Current",
+  "amperMeasurementUnit": "A",
+  "powerTileTitle": "Power(consumed/given)",
+  "motorsTemperatureTileTitle": "Motors temperature",
+  "celsiusMeasurementUnit": "°C",
+  "controllersTemperatureTileTitle": "Controllers temperature",
+  "errorSwitchingFastAccessMessage": "Error when switching the feature \"Fast access\"",
+  "fastAccessTileTitle": "Fast access",
+  "fastAccessTileHint": "Open the navigator with one touch",
+  "firstSelectDefaultNavAppErrorMessage": "To enable the function \"Fast access\" first select the default navigation application",
+  "defaultNavAppTileTitle": "Default navigation application:",
+  "noNavAppsOnDeviceErrorMessage": "Navigation applications were not found on the device",
+  "errorSettingDefaultNavAppMessage": "Error when installing the default navigation application",
+  "notSelectedDropdownHint": "Not selected",
+  "errorSwitchingStatisticsOverlayMessage": "Error when turning on/off the statistics floating window",
+  "overlayStatisticsAboveAnotherAppsTileTitle": "Statistics window on top of other applications",
+  "overlayStatisticsAboveAnotherAppsHint": "Display a floating window with car indicators over other applications",
+  "noDisplayOverOtherAppsPermissionErrorMessage": "Display over other applications permission was not provided. Provide permission in the settings",
+  "openSettingsButtonCaption": "Open settings",
+  "enableFastAccessDialogTitle": "Turn on \"Fast access\"?",
+  "enableFastAccessHint": "This feature will allow you to open the navigation application selected by default with a single click of a button in the lower menu.",
+  "enableFastAccessWarning": "Attention! With the \"Quick Access\" feature enabled, you can get to this page by long pressing.",
+  "motorRollDirectionTileTitle": "Motor roll direction",
+  "motorGearTileTitle": "Motor gear",
+  "reverseGear": "Reverse",
+  "neutralGear": "Neutral",
+  "driveGear": "Drive",
+  "lowGear": "Low",
+  "boostGear": "Boost",
+  "unknownGear": "Unknown",
+  "reverseGearShort": "R",
+  "neutralGearShort": "N",
+  "driveGearShort": "D",
+  "lowGearShort": "L",
+  "boostGearShort": "B",
+  "unknownGearShort": "U",
+  "reverseMotorRollDirection": "Reverse",
+  "unknownMotorRollDirection": "Unknown",
+  "forwardMotorRollDirection": "Forward",
+  "stopMotorRollDirection": "Stop",
+  "ledPanelSwitcherDialogTitle": "Run LED panel configurations",
+  "noLEDConfigurationsMessage": "There are no configurations yet",
+  "shutdownConfigByTimerMessage": "By timer: {shutdownTimeMillis} ms",
+  "@shutdownConfigByTimerMessage": {
+    "placeholders": {
+      "shutdownTimeMillis": {
+        "type": "int"
+      }
+    }
+  },
+  "manualShutdownMessage": "Manual",
+  "fileIdMessage": "File ID: {fileId}",
+  "@fileIdMessage": {
+    "placeholders": {
+      "fileId": {
+        "type": "int"
+      }
+    }
+  },
+  "errorTurningOffConfigurationMessage": "Error turning off the configuration \"{configName}\"",
+  "@errorTurningOffConfigurationMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorTurningOnConfigurationMessage": "Error turning on the configuration \"{configName}\"",
+  "@errorTurningOnConfigurationMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "switchLEDButtonCaption": "LED",
+  "addLedConfigurationDialogTitle": "Add configuration",
+  "configurationNameInputLabel": "Name",
+  "configurationShutdownTypeLabel": "Shutdown:",
+  "byTimerShutdownType": "By timer",
+  "shutdownAfterInputLabel": "Shutdown after",
+  "millisecondsShortMeasurementUnit": "ms",
+  "configurationAddedSuccessfullyMessage": "Configuration added successfully",
+  "enterMillisecondsErrorMessage": "Enter the number of milliseonds after which the image should turn off",
+  "ledPanelScreenTitle": "LED panel configurations",
+  "configurationNameTileTitle": "Configuration name",
+  "addButtonCaption": "Add",
+  "fileIdTileTitle": "File ID",
+  "manualShutdownType": "Manual",
+  "configurationFileIdInputLabel": "File ID",
+  "enterFileIDErrorMessage": "Enter file ID",
+  "errorAddingConfigurationMessage": "Error adding configuration",
+  "emptyConfigurationNameErrorMessage": "Configuration name must not be empty",
+  "incorrectFileIDErrorMessage": "File ID must be greater than 0 and less than 256",
+  "shutdownTileTitle": "Shutdown",
+  "removeLEDConfigurationDialogTitle": "Remove configuration",
+  "configurationRemovingConfirmationMessage": "Are you sure you want to remove the configuration \"{configName}\"(file ID: {configFileId})?",
+  "@configurationRemovingConfirmationMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      },
+      "configFileId": {
+        "type": "int"
+      }
+    }
+  },
+  "configurationWasRemovedMessage": "The configuration \"{configName}\" was removed",
+  "@configurationWasRemovedMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorRemovingConfiguration": "Error removing the configuration \"{configName}\"",
+  "@errorRemovingConfiguration": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "removeButtonCaption": "Remove",
+  "ledPanelTileTitle": "LED panel",
+  "errorLoadingConfigurations": "Error while loading configurations",
+  "tryAgainButtonCaption": "Try again"
 }

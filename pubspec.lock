@@ -576,13 +576,21 @@ packages:
     source: hosted
     version: "0.6.7"
   json_annotation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: json_annotation
       sha256: b10a7b2ff83d83c777edba3c6a0f97045ddadd56c944e1a23a3fdf43a1bf4467
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  json_serializable:
+    dependency: "direct dev"
+    description:
+      name: json_serializable
+      sha256: "61a60716544392a82726dd0fa1dd6f5f1fd32aec66422b6e229e7b90d52325c4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.7.0"
   libserialport:
     dependency: transitive
     description:
@@ -811,20 +819,20 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.3.0"
-      resolved-ref: fdf6afef2925605f75b24728e1a01d026ff3ae53
+      ref: "0.3.1"
+      resolved-ref: "0310f1b35f31426ade86ce35d0e95f05bf3ee0e8"
       url: "https://github.com/radomir9720/re_seedwork.git"
     source: git
-    version: "0.3.0"
+    version: "0.3.1"
   re_widgets:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.2.1"
-      resolved-ref: bd19556dec038a37c3feabea942cd0459143ac9b
+      ref: "0.2.2"
+      resolved-ref: "5b85fc2fc75cbcdf475c2bc26232724b6b63a1fc"
       url: "https://github.com/radomir9720/re_widgets.git"
     source: git
-    version: "0.2.1+7"
+    version: "0.2.2+8"
   recase:
     dependency: transitive
     description:
@@ -958,6 +966,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  source_helper:
+    dependency: transitive
+    description:
+      name: source_helper
+      sha256: "3b67aade1d52416149c633ba1bb36df44d97c6b51830c2198e934e3fca87ca1f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.3"
   source_map_stack_trace:
     dependency: transitive
     description:

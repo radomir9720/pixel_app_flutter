@@ -1,4 +1,4 @@
-part of '../../main_router.dart';
+part of '../main_router.dart';
 
 const _developerToolsRoute = AutoRoute<void>(
   path: 'developer-tools',

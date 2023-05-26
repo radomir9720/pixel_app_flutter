@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AutoTabsRouter(
       routes: const [
-        GeneralRoute(),
+        GeneralFlow(),
         CarInfoRoute(),
         NavigatorFlow(),
         AppsFlow(),

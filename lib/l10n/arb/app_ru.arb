@@ -1,292 +1,347 @@
 {
-    "@@locale": "ru",
-    
-    "generalTabTitle": "Основное",
-    "carInfoTabTitle": "О машине",
-    "navigatorTabTitle": "Навигатор",
-    "appsTabTitle": "Приложения",
-    "batteryTabTitle": "Батарея",
-    "motorTabTitle": "Мотор",
-    "appVersion": "Pixel App. v{version}",
-    "@appVersion": {
-        "placeholders": {
-            "version": {
-                "type": "String"
-            }
-        }
-    },
-
-    "frontButtonCaption": "Обдув лоб. стекла",
-    "airflowButtonCaption": "Поток воздуха",
-    "settingsButtonCaption": "Настройки",
-    "powerOffButtonCaption": "Откл. питание",
-    "leftBeltButtonCaption": "Левый ремень",
-    "rightBeltButtonCaption": "Правый ремень",
-
-    "frontTrunkInterfaceTitle": "Передний Багажник",
-    "rearTrunkInterfaceTitle": "Задний Багажник",
-    "doorInterfaceTitle": "Дверь",
-    "leftDoorInterfaceTitle": "Левая дверь",
-    "rightDoorInterfaceTitle": "Правая дверь",
-    "trunkInterfaceTitle": "Багажник",
-    "lightsInterfaceTitle": "Фары",
-
-    "autoModeLightsStatus": "Авто Режим",
-
-    "lockedInterfaceStatus": "Закрыто",
-    "unlockedInterfaceStatus": "Открыто",
-
-    "speedInfoPanelTitle": "Скорость",
-    "statisticInfoPanelTitle": "Статистика",
-    "fastActionsInfoPanelTitle": "Быстрые действия",
-
-    "kmMeasurementUnit": "км",
-    "kmPerHourMeasurenentUnit": "км/ч",
-    "kwPerHourMeasurementUnit": "кВт/ч",
-
-    "actionSwitchTitle": "Действие #{num}",
-    "@actionSwitchTitle": {
-        "placeholders": {
-            "num": {
-                "type": "int"
-            }
-        }
-    },
-
-    "closeButtonCaption": "Закрыть",
-    "dataSourceButtonCaption": "Источник Данных",
-    "fastActionsButtonCaption": "Быстрые Действия",
-    "licencesButtonCaption": "Лицензии",
-    "aboutButtonCaption": "О приложении",
-    "settingScreenTitle": "Настройки",
-    "updateButtonCaption": "Обновить",
-
-    "dataSourceScreenTitle": "Источник данных",
-    "selectDataSourceScreenTitle": "Выберите источник данных",
-
-    "selectDeviceDialogTitle": "Выберите устройство",
-    "deviceNameDialogLabel": "Имя устройства",
-    "bondedDialogLabel": "Сопряжено",
-    "noDeviceNameDialogStub": "Нет имени",
-    "errorDiscoveringDevicesMessage": "Ошибка при обнаружении устройств",
-    "errorConnectingToDataSourceMessage": "Ошибка при подключении к источнику данных",
-    "successfullyConnectedToDataSourceMessage": "Успешное подключение к источнику данных",
-
-    "cancelButtonCaption": "Отменить",
-    "saveButtonCaption": "Сохранить",
-    "sendButtonCaption": "Отправить",
-    "enableButtonCaption": "Включить",
-
-    "unknownErrorSelectingDataSourceMessage": "Неизвестная ошибка при выборе источника данных",
-    "unavailableDataSourceErrorMessage": "Источник данных недоступен",
-    "errorEnablingDataSourceMessage": "Ошибка при включении источника данных",
-    "dataSourceConnectionLostMessage": "Соединение с источником данных потеряно",
-    "failedToConnectToDataSourceMessage": "Не удалось установить соединение с источником данных",
-    "demoDataSourceTitle": "Demo",
-    "bluetoothDataSourceTitle": "Bluetooth",
-    "usbDataSourceTitle": "USB",
-    "usbOrBluetoothDataSourceTitle": "USB/Bluetooth",
-
-    "requestsExchangeLogsListTileLabel": "Логи обмена запросов с источником данных",
-    "requestsExchangeLogsScreenTitle": "Логи обмена запросов",
-    "enableDemoDataSourceRandomErrorGenerationListTileLabel": "Включить рандомную генерацию ошибок DemoDataSource",
-    "whichParametersToSubscribeToListTileLabel": "На какие параметры подписаться(или отправлять периодические запросы)",
-    "requestPeriodInMillisListTileLabel": "Период запросов в миллисекундах",
-    "requestPeriodInMillisListTileSubtitle": "Также от этого параметра зависит частота отправки эвентов по подписке в DemoDataSource",
-    "exportLogsListTileLabel": "Экспортировать логи",
-    "directionListTileLabel": "Направление",
-    "incomingListTileLabel": "Входящий",
-    "outgoingListTileLabel": "Исходящий",
-    "timeListTileLabel": "Время",
-    "packageListTileLabel": "Пакет",
-    "indexListTileLabel": "Индекс",
-    "integerListTileLabel": "int",
-    "hexListTileLabel": "hex",
-    "periodicRequestsProtocolVersionLabel": "Периодические заросы",
-    "subscriptionProtocolVersionLabel": "Подписка",
-    "protocolVersionLabel": "Версия протокола",
-    "developerToolsButtonCaption": "Инструменты разработчика",
-    "developerToolsScreenTitle": "Инструменты разработчика",
-    "enterParameterIdTextFieldLabel": "Введите ID параметра",
-    "errorParsingIntegerValueMessage": "Ошибка при парсинге целого числа",
-    "parameterIdLimitsMessage": "Идентификатор параметра должен быть целым числом больше или равным нулю и меньше или равным 65535(0xFFFF)",
-    "addCustomIdButtonCaption": "Добавить кастомный идентификатор",
-    "enableHandshakeResponseListTileLabel": "Включить ответ на хэндшэйк",
-    "sendHandshakeResponseTimeoutListTileLabel": "Через сколько миллисекунд после получения запроса на хэндшэйк отправить ответ",
-
-    "processedRequestsTabTitle": "Обработанные",
-    "rawRequestsTabTitle": "Сырые",
-    "addCustomValueIntegerDialogButtonCaption": "Добавить кастомное значение",
-    "enterValueIntegerDialogTextFieldLabel": "Введите значение",
-    "requestsFilterScreenTitle": "Фильтры запросов",
-    "parameterIdListTileLabel": "ID параметра",
-    "parameterIdFilterDialogTitle": "Фильтр по ID параметра",
-    "requestTypeListTileLabel": "Тип запроса",
-    "requestTypeFilterDialogTitle": "Фильтр по типу запроса",
-    "requestDirectionListTileLabel": "Направление запроса",
-    "requestDirectionFilterDialogTitle": "Фильтр по направлению запросов",
-
-    "packagesExchangeConsoleScreenTitle": "Консоль обмена пакетами",
-    "invalidRequestTypeMessage": "Неправильный тип запроса",
-    "invalidParameterIDMessage": "Неправильный идентификтор параметра",
-    "invalidDataFormatMessage": "Некорректный формат данных",
-    "requestTypeHint": "Тип запроса",
-    "parameterIDHint": "ID параметра",
-    "packageDataHint": "0x01 0xFF...",
-    "packageDataLabel": "Данные запроса",
-
-    "dontTurnOffTheScreenButtonCaption": "Не выключать экран",
-    "errorTogglingDTOMessage": "Ошибка при переключении режима \"Не выключать экран\"",
-
-    "errorLaunchingTheAppMessage": "Неизвестная ошибка при запуске приложения",
-    "errorGettingApplicationsListMessage": "Ошибка при получении списка приложений. Информация передана разработчикам",
-    "noAppNameCaption": "Без имени",
-
-    "searchTextFieldHint": "Поиск",
-
-    "errorPinningApp": "Не удалось закрепить приложение {appName}",
-    "@errorPinningApp": {
-        "placeholders": {
-            "appName": {
-                "type": "String"
-            }
-        }
-    },
-    "errorUnpinningApp": "Не удалось открепить приложение {appName}",
-    "@errorUnpinningApp": {
-        "placeholders": {
-            "appName": {
-                "type": "String"
-            }
-        }
-    },
-
-    "chargingGeneralTabTitle": "Основное",
-    "chargingTemperatureTabTitle": "Температура",
-    "chargingVoltageTabTitle": "Напряжение",
-    
-    "totalVoltageTileTitle": "Общее напряжение",
-    "totalCurrentTileTitle": "Общий ток заряда/разряда",
-    "maximumRegisteredTemperatureTileTitle": "Максимально зафиксированная температура",
-
-    "voltageValue": "{value} В",
-    "@voltageValue": {
-        "placeholders": {
-            "value": {
-                "type": "String"
-            }
-        }
-    },
-    "currentValue": "{value} A",
-    "@currentValue": {
-        "placeholders": {
-            "value": {
-                "type": "String"
-            }
-        }
-    },
-    "celsiusValue": "{value} °C",
-    "@celsiusValue": {
-        "placeholders": {
-            "value": {
-                "type": "int"
-            }
-        }
-    },
-
-    "mosTileTitle": "МОП-транзистор(MOS)",
-    "balancerTileTitle": "Балансировщик",
-    "cellNTileTitle": "Ячейка {number}",
-    "@cellNTileTitle": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-
-    "minCellsVoltageTileTitle": "Минимальное напряжение на ячейках",
-    "maxCellsVoltageTileTitle": "Максимальное напряжение на ячейках",
-    "deltaCellsVoltageTileTitle": "Дельта напряжения на ячейках",
-
-    "parkingLightsButtonCaption": "Габаритные огни",
-    "lowBeamButtonCaption": "Ближний свет",
-    "highBeamButtonCaption": "Дальний свет",
-    "leftBlinkerButtonCaption": "Левый поворотник",
-    "rightBlinkerButtonCaption": "Правый поворотник",
-    "hazardBeamButtonCaption": "Аварийный сигнал",
-
-    "onShortStatusMessage": "Вкл",
-    "offShortStatusMessage": "Выкл",
-    "loadingStatusMessage": "Загрузка",
-
-    "errorSwitchingFeatureMessage": "Не удалось переключить {featureName}. {reason}",
-    "@errorSwitchingFeatureMessage": {
-        "placeholders": {
-            "featureName": {
-                "type": "String"
-            },
-            "reason": {
-                "type": "String"
-            }
-        }
-    },
-    "notAllBlocksReturnedSuccessResponseErrorMessage": "Не от всех блоков пришел положительный ответ",
-    "positiveAnswerDidNotComeErrorMessage": "Положительный ответ не пришел",
-    "errorFromMainECUErrorMessage": "Ошибка от MainECU",
-
-    "motorScreenTitle": "Мотор",
-    "firstTileTitle":  "Первый",
-    "secondTileTitle":  "Второй",
-    "parameterTileTitle": "Параметр",
-    "measurementUnitTileTitle": "Единица измерения",
-    "speedTileTitle": "Скорость",
-    "rpmTileTitle": "Обороты моторов",
-    "rpmMeasurementUnit": "Об/м",
-    "voltageTileTitle": "Напряжение",
-    "wattMeasurementUnit": "Вт",
-    "voltMeasurementUnit": "В",
-    "currentTileTitle": "Ток",
-    "amperMeasurementUnit": "А",
-    "powerTileTitle": "Мощность(потребляемая/отдаваемая)",
-    "motorsTemperatureTileTitle": "Температура моторов",
-    "celsiusMeasurementUnit": "°C",
-    "controllersTemperatureTileTitle": "Температура контроллеров",
-
-    "errorSwitchingFastAccessMessage": "Ошибка при переключении функции \"Быстрый доступ\"",
-    "fastAccessTileTitle": "Быстрый доступ",
-    "fastAccessTileHint": "Открывайте навигатор одним касанием",
-    "firstSelectDefaultNavAppErrorMessage": "Для включения функции \"Быстрый доступ\" сначала выберите приложение навигации по умолчанию",
-    "defaultNavAppTileTitle": "Приложение навигации по умолчанию:",
-    "noNavAppsOnDeviceErrorMessage": "Приложений навигации не найдено на устройстве",
-    "errorSettingDefaultNavAppMessage": "Ошибка при установке приложения навигации по умолчанию",
-    "notSelectedDropdownHint": "Не выбрано",
-    "errorSwitchingStatisticsOverlayMessage": "Ошибка при включении/выключении плавающего окна статистики",
-    "overlayStatisticsAboveAnotherAppsTileTitle": "Окно статистики поверх других приложений",
-    "overlayStatisticsAboveAnotherAppsHint": "Выводить поверх других приложений плавающее окно с показателями автомобиля",
-    "noDisplayOverOtherAppsPermissionErrorMessage": "Разрешение на отображение поверх других приложений не было предоставлено. Предоставьте разрешение в настройках",
-    "openSettingsButtonCaption": "Открыть настройки",
-
-    "enableFastAccessDialogTitle": "Включить \"Быстрый доступ\"?",
-    "enableFastAccessHint": "Эта функция позволит одним нажатием кнопки в нижнем меню открывать приложение навигации, выбранное по умолчанию.",
-    "enableFastAccessWarning": "Внимание! С включенной функцией \"Быстрый доступ\" на эту страницу можно будет попасть длинным нажатием.",
-
-    "motorRollDirectionTileTitle": "Кручение мотора",
-    "motorGearTileTitle": "Передача мотора",
-    "reverseGear": "Задняя",
-    "neutralGear": "Нейтраль",
-    "driveGear":  "Движение",
-    "lowGear":  "Пониженная",
-    "boostGear":  "Повышенная",
-    "unknownGear":  "Неизвестно",
-    "reverseGearShort": "R",
-    "neutralGearShort": "N",
-    "driveGearShort":  "D",
-    "lowGearShort":  "L",
-    "boostGearShort":  "B",
-    "unknownGearShort":  "U",
-    "reverseMotorRollDirection": "Назад",
-    "unknownMotorRollDirection": "Неизвестно",
-    "forwardMotorRollDirection": "Вперед",
-    "stopMotorRollDirection": "Стоп"
+  "@@locale": "ru",
+  "generalTabTitle": "Основное",
+  "carInfoTabTitle": "О машине",
+  "navigatorTabTitle": "Навигатор",
+  "appsTabTitle": "Приложения",
+  "batteryTabTitle": "Батарея",
+  "motorTabTitle": "Мотор",
+  "appVersion": "Pixel App. v{version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "frontButtonCaption": "Обдув лоб. стекла",
+  "airflowButtonCaption": "Поток воздуха",
+  "settingsButtonCaption": "Настройки",
+  "powerOffButtonCaption": "Откл. питание",
+  "leftBeltButtonCaption": "Левый ремень",
+  "rightBeltButtonCaption": "Правый ремень",
+  "frontTrunkInterfaceTitle": "Передний Багажник",
+  "rearTrunkInterfaceTitle": "Задний Багажник",
+  "doorInterfaceTitle": "Дверь",
+  "leftDoorInterfaceTitle": "Левая дверь",
+  "rightDoorInterfaceTitle": "Правая дверь",
+  "trunkInterfaceTitle": "Багажник",
+  "lightsInterfaceTitle": "Фары",
+  "autoModeLightsStatus": "Авто Режим",
+  "lockedInterfaceStatus": "Закрыто",
+  "unlockedInterfaceStatus": "Открыто",
+  "speedInfoPanelTitle": "Скорость",
+  "statisticInfoPanelTitle": "Статистика",
+  "fastActionsInfoPanelTitle": "Быстрые действия",
+  "kmMeasurementUnit": "км",
+  "kmPerHourMeasurenentUnit": "км/ч",
+  "kwPerHourMeasurementUnit": "кВт/ч",
+  "actionSwitchTitle": "Действие #{num}",
+  "@actionSwitchTitle": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "closeButtonCaption": "Закрыть",
+  "dataSourceButtonCaption": "Источник Данных",
+  "fastActionsButtonCaption": "Быстрые Действия",
+  "licencesButtonCaption": "Лицензии",
+  "aboutButtonCaption": "О приложении",
+  "settingScreenTitle": "Настройки",
+  "updateButtonCaption": "Обновить",
+  "dataSourceScreenTitle": "Источник данных",
+  "selectDataSourceScreenTitle": "Выберите источник данных",
+  "selectDeviceDialogTitle": "Выберите устройство",
+  "deviceNameDialogLabel": "Имя устройства",
+  "bondedDialogLabel": "Сопряжено",
+  "noDeviceNameDialogStub": "Нет имени",
+  "errorDiscoveringDevicesMessage": "Ошибка при обнаружении устройств",
+  "errorConnectingToDataSourceMessage": "Ошибка при подключении к источнику данных",
+  "successfullyConnectedToDataSourceMessage": "Успешное подключение к источнику данных",
+  "cancelButtonCaption": "Отменить",
+  "saveButtonCaption": "Сохранить",
+  "sendButtonCaption": "Отправить",
+  "enableButtonCaption": "Включить",
+  "unknownErrorSelectingDataSourceMessage": "Неизвестная ошибка при выборе источника данных",
+  "unavailableDataSourceErrorMessage": "Источник данных недоступен",
+  "errorEnablingDataSourceMessage": "Ошибка при включении источника данных",
+  "dataSourceConnectionLostMessage": "Соединение с источником данных потеряно",
+  "failedToConnectToDataSourceMessage": "Не удалось установить соединение с источником данных",
+  "demoDataSourceTitle": "Demo",
+  "bluetoothDataSourceTitle": "Bluetooth",
+  "usbDataSourceTitle": "USB",
+  "usbOrBluetoothDataSourceTitle": "USB/Bluetooth",
+  "requestsExchangeLogsListTileLabel": "Логи обмена запросов с источником данных",
+  "requestsExchangeLogsScreenTitle": "Логи обмена запросов",
+  "enableDemoDataSourceRandomErrorGenerationListTileLabel": "Включить рандомную генерацию ошибок DemoDataSource",
+  "whichParametersToSubscribeToListTileLabel": "На какие параметры подписаться(или отправлять периодические запросы)",
+  "requestPeriodInMillisListTileLabel": "Период запросов в миллисекундах",
+  "requestPeriodInMillisListTileSubtitle": "Также от этого параметра зависит частота отправки эвентов по подписке в DemoDataSource",
+  "exportLogsListTileLabel": "Экспортировать логи",
+  "directionListTileLabel": "Направление",
+  "incomingListTileLabel": "Входящий",
+  "outgoingListTileLabel": "Исходящий",
+  "timeListTileLabel": "Время",
+  "packageListTileLabel": "Пакет",
+  "indexListTileLabel": "Индекс",
+  "integerListTileLabel": "int",
+  "hexListTileLabel": "hex",
+  "periodicRequestsProtocolVersionLabel": "Периодические заросы",
+  "subscriptionProtocolVersionLabel": "Подписка",
+  "protocolVersionLabel": "Версия протокола",
+  "developerToolsButtonCaption": "Инструменты разработчика",
+  "developerToolsScreenTitle": "Инструменты разработчика",
+  "enterParameterIdTextFieldLabel": "Введите ID параметра",
+  "errorParsingIntegerValueMessage": "Ошибка при парсинге целого числа",
+  "parameterIdLimitsMessage": "Идентификатор параметра должен быть целым числом больше или равным нулю и меньше или равным 65535(0xFFFF)",
+  "addCustomIdButtonCaption": "Добавить кастомный идентификатор",
+  "enableHandshakeResponseListTileLabel": "Включить ответ на хэндшэйк",
+  "sendHandshakeResponseTimeoutListTileLabel": "Через сколько миллисекунд после получения запроса на хэндшэйк отправить ответ",
+  "processedRequestsTabTitle": "Обработанные",
+  "rawRequestsTabTitle": "Сырые",
+  "addCustomValueIntegerDialogButtonCaption": "Добавить кастомное значение",
+  "enterValueIntegerDialogTextFieldLabel": "Введите значение",
+  "requestsFilterScreenTitle": "Фильтры запросов",
+  "parameterIdListTileLabel": "ID параметра",
+  "parameterIdFilterDialogTitle": "Фильтр по ID параметра",
+  "requestTypeListTileLabel": "Тип запроса",
+  "requestTypeFilterDialogTitle": "Фильтр по типу запроса",
+  "requestDirectionListTileLabel": "Направление запроса",
+  "requestDirectionFilterDialogTitle": "Фильтр по направлению запросов",
+  "packagesExchangeConsoleScreenTitle": "Консоль обмена пакетами",
+  "invalidRequestTypeMessage": "Неправильный тип запроса",
+  "invalidParameterIDMessage": "Неправильный идентификтор параметра",
+  "invalidDataFormatMessage": "Некорректный формат данных",
+  "requestTypeHint": "Тип запроса",
+  "parameterIDHint": "ID параметра",
+  "packageDataHint": "0x01 0xFF...",
+  "packageDataLabel": "Данные запроса",
+  "dontTurnOffTheScreenButtonCaption": "Не выключать экран",
+  "errorTogglingDTOMessage": "Ошибка при переключении режима \"Не выключать экран\"",
+  "errorLaunchingTheAppMessage": "Неизвестная ошибка при запуске приложения",
+  "errorGettingApplicationsListMessage": "Ошибка при получении списка приложений. Информация передана разработчикам",
+  "noAppNameCaption": "Без имени",
+  "searchTextFieldHint": "Поиск",
+  "errorPinningApp": "Не удалось закрепить приложение {appName}",
+  "@errorPinningApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUnpinningApp": "Не удалось открепить приложение {appName}",
+  "@errorUnpinningApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "chargingGeneralTabTitle": "Основное",
+  "chargingTemperatureTabTitle": "Температура",
+  "chargingVoltageTabTitle": "Напряжение",
+  "totalVoltageTileTitle": "Общее напряжение",
+  "totalCurrentTileTitle": "Общий ток заряда/разряда",
+  "maximumRegisteredTemperatureTileTitle": "Максимально зафиксированная температура",
+  "voltageValue": "{value} В",
+  "@voltageValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "currentValue": "{value} A",
+  "@currentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "celsiusValue": "{value} °C",
+  "@celsiusValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "mosTileTitle": "МОП-транзистор(MOS)",
+  "balancerTileTitle": "Балансировщик",
+  "cellNTileTitle": "Ячейка {number}",
+  "@cellNTileTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "minCellsVoltageTileTitle": "Минимальное напряжение на ячейках",
+  "maxCellsVoltageTileTitle": "Максимальное напряжение на ячейках",
+  "deltaCellsVoltageTileTitle": "Дельта напряжения на ячейках",
+  "parkingLightsButtonCaption": "Габаритные огни",
+  "lowBeamButtonCaption": "Ближний свет",
+  "highBeamButtonCaption": "Дальний свет",
+  "leftBlinkerButtonCaption": "Левый поворотник",
+  "rightBlinkerButtonCaption": "Правый поворотник",
+  "hazardBeamButtonCaption": "Аварийный сигнал",
+  "onShortStatusMessage": "Вкл",
+  "offShortStatusMessage": "Выкл",
+  "loadingStatusMessage": "Загрузка",
+  "errorSwitchingFeatureMessage": "Не удалось переключить {featureName}. {reason}",
+  "@errorSwitchingFeatureMessage": {
+    "placeholders": {
+      "featureName": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notAllBlocksReturnedSuccessResponseErrorMessage": "Не от всех блоков пришел положительный ответ",
+  "positiveAnswerDidNotComeErrorMessage": "Положительный ответ не пришел",
+  "errorFromMainECUErrorMessage": "Ошибка от MainECU",
+  "motorScreenTitle": "Мотор",
+  "firstTileTitle": "Первый",
+  "secondTileTitle": "Второй",
+  "parameterTileTitle": "Параметр",
+  "measurementUnitTileTitle": "Единица измерения",
+  "speedTileTitle": "Скорость",
+  "rpmTileTitle": "Обороты моторов",
+  "rpmMeasurementUnit": "Об/м",
+  "voltageTileTitle": "Напряжение",
+  "wattMeasurementUnit": "Вт",
+  "voltMeasurementUnit": "В",
+  "currentTileTitle": "Ток",
+  "amperMeasurementUnit": "А",
+  "powerTileTitle": "Мощность(потребляемая/отдаваемая)",
+  "motorsTemperatureTileTitle": "Температура моторов",
+  "celsiusMeasurementUnit": "°C",
+  "controllersTemperatureTileTitle": "Температура контроллеров",
+  "errorSwitchingFastAccessMessage": "Ошибка при переключении функции \"Быстрый доступ\"",
+  "fastAccessTileTitle": "Быстрый доступ",
+  "fastAccessTileHint": "Открывайте навигатор одним касанием",
+  "firstSelectDefaultNavAppErrorMessage": "Для включения функции \"Быстрый доступ\" сначала выберите приложение навигации по умолчанию",
+  "defaultNavAppTileTitle": "Приложение навигации по умолчанию:",
+  "noNavAppsOnDeviceErrorMessage": "Приложений навигации не найдено на устройстве",
+  "errorSettingDefaultNavAppMessage": "Ошибка при установке приложения навигации по умолчанию",
+  "notSelectedDropdownHint": "Не выбрано",
+  "errorSwitchingStatisticsOverlayMessage": "Ошибка при включении/выключении плавающего окна статистики",
+  "overlayStatisticsAboveAnotherAppsTileTitle": "Окно статистики поверх других приложений",
+  "overlayStatisticsAboveAnotherAppsHint": "Выводить поверх других приложений плавающее окно с показателями автомобиля",
+  "noDisplayOverOtherAppsPermissionErrorMessage": "Разрешение на отображение поверх других приложений не было предоставлено. Предоставьте разрешение в настройках",
+  "openSettingsButtonCaption": "Открыть настройки",
+  "enableFastAccessDialogTitle": "Включить \"Быстрый доступ\"?",
+  "enableFastAccessHint": "Эта функция позволит одним нажатием кнопки в нижнем меню открывать приложение навигации, выбранное по умолчанию.",
+  "enableFastAccessWarning": "Внимание! С включенной функцией \"Быстрый доступ\" на эту страницу можно будет попасть длинным нажатием.",
+  "motorRollDirectionTileTitle": "Кручение мотора",
+  "motorGearTileTitle": "Передача мотора",
+  "reverseGear": "Задняя",
+  "neutralGear": "Нейтраль",
+  "driveGear": "Движение",
+  "lowGear": "Пониженная",
+  "boostGear": "Повышенная",
+  "unknownGear": "Неизвестно",
+  "reverseGearShort": "R",
+  "neutralGearShort": "N",
+  "driveGearShort": "D",
+  "lowGearShort": "L",
+  "boostGearShort": "B",
+  "unknownGearShort": "U",
+  "reverseMotorRollDirection": "Назад",
+  "unknownMotorRollDirection": "Неизвестно",
+  "forwardMotorRollDirection": "Вперед",
+  "stopMotorRollDirection": "Стоп",
+  "ledPanelSwitcherDialogTitle": "Запуск конфигураций светодиодной панели",
+  "noLEDConfigurationsMessage": "Пока конфигураций нет",
+  "shutdownConfigByTimerMessage": "По таймеру: {shutdownTimeMillis} мс",
+  "@shutdownConfigByTimerMessage": {
+    "placeholders": {
+      "shutdownTimeMillis": {
+        "type": "int"
+      }
+    }
+  },
+  "manualShutdownMessage": "Ручное",
+  "fileIdMessage": "ID файла: {fileId}",
+  "@fileIdMessage": {
+    "placeholders": {
+      "fileId": {
+        "type": "int"
+      }
+    }
+  },
+  "errorTurningOffConfigurationMessage": "Ошибка при отключении конфигурации \"{configName}\"",
+  "@errorTurningOffConfigurationMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorTurningOnConfigurationMessage": "Ошибка при включении конфигурации \"{configName}\"",
+  "@errorTurningOnConfigurationMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "switchLEDButtonCaption": "LED",
+  "addLedConfigurationDialogTitle": "Добавление конфигурации",
+  "configurationNameInputLabel": "Имя",
+  "configurationShutdownTypeLabel": "Выключение:",
+  "byTimerShutdownType": "По таймеру",
+  "shutdownAfterInputLabel": "Выключить через",
+  "millisecondsShortMeasurementUnit": "мс",
+  "configurationAddedSuccessfullyMessage": "Конфигурация успешно добавлена",
+  "enterMillisecondsErrorMessage": "Введите к-во миллисекунд, по истечению которых изображение должно выключаться",
+  "configurationFileIdInputLabel": "ID файла",
+  "manualShutdownType": "Ручное",
+  "errorAddingConfigurationMessage": "Ошибка при добавлении конфигурации",
+  "emptyConfigurationNameErrorMessage": "Имя конфигурации не может быть пустым",
+  "enterFileIDErrorMessage": "Введите ID файла",
+  "incorrectFileIDErrorMessage": "ID файла должен быть больше 0 и меньше 256",
+  "addButtonCaption": "Добавить",
+  "fileIdTileTitle": "ID файла",
+  "ledPanelScreenTitle": "Конфигурации светодиодной панели",
+  "configurationNameTileTitle": "Имя конфигурации",
+  "shutdownTileTitle": "Выключение",
+  "removeLEDConfigurationDialogTitle": "Удаление конфигурации",
+  "configurationRemovingConfirmationMessage": "Вы уверены что хотите удалить конфигурацию \"{configName}\"(ID файла: {configFileId})?",
+  "@configurationRemovingConfirmationMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      },
+      "configFileId": {
+        "type": "int"
+      }
+    }
+  },
+  "configurationWasRemovedMessage": "Конфигурация \"{configName}\" удалена",
+  "@configurationWasRemovedMessage": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorRemovingConfiguration": "Ошибка при удалении конфигурации \"{configName}\"",
+  "@errorRemovingConfiguration": {
+    "placeholders": {
+      "configName": {
+        "type": "String"
+      }
+    }
+  },
+  "removeButtonCaption": "Удалить",
+  "ledPanelTileTitle": "Светодиодная панель",
+  "errorLoadingConfigurations": "Ошибка при загрузке конфигураций",
+  "tryAgainButtonCaption": "Попробовать еще раз"
 }

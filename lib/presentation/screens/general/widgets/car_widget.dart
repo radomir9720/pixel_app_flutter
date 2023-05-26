@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/relay_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/atoms/car_interface_pointer.dart';
@@ -198,6 +199,12 @@ class _CarWidgetState extends State<CarWidget> {
                   ),
                 ),
               ),
+            ),
+            // LED Switcher button
+            const Positioned(
+              bottom: 0,
+              left: -140,
+              child: LEDSwitcherButton(),
             ),
           ],
         ],

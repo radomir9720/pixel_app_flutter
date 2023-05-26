@@ -105,6 +105,8 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
       TailLeftTurnSignalIncomingDataSourcePackage.new,
       TailRightTurnSignalIncomingDataSourcePackage.new,
       //
+      CustomImageIncomingDataSourcePackage.new,
+      //
       MotorSpeedIncomingDataSourcePackage.new,
       MotorCurrentIncomingDataSourcePackage.new,
       MotorTemperatureIncomingDataSourcePackage.new,

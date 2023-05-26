@@ -5,7 +5,10 @@ mixin RouteNames {
   static const selectDataSourceFlow = 'SelectDataSourceFlow';
   static const developerToolsFlow = 'DeveloperToolsFlow';
   static const appsFlow = 'AppsFlow';
+  static const generalFlow = 'GeneralFlow';
   static const navigatorFlow = 'NavigatorFlow';
+  static const settingsFlow = 'SettingsFlow';
+  static const ledPanelFlow = 'LEDPanelFlow';
   static const requestsExchangeLogsFlow = 'RequestsExchangeLogsFlow';
   static const requestsExchangeLogsFilterFlow =
       'RequestsExchangeLogsFilterFlow';
@@ -25,4 +28,8 @@ mixin RouteNames {
   static const filterRequestTypeDialogRoute = 'FilterRequestTypeDialogRoute';
   static const filterDirectionDialogRoute = 'FilterDirectionDialogRoute';
   static const enableFastAccessDialogRoute = 'EnableFastAccessDialogRoute';
+  static const addConfigurationDialogRoute = 'AddConfigurationDialogRoute';
+  static const ledSwitcherDialogRoute = 'LEDSwitcherDialogRoute';
+  static const removeConfigurationDialogRoute =
+      'RemoveConfigurationDialogRoute';
 }
