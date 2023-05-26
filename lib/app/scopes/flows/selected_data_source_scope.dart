@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
@@ -63,6 +64,9 @@ class SelectedDataSourceScope extends AutoRouter {
 
               // storages
               Provider<NavigatorAppStorage>(create: (context) => GetIt.I()),
+              InheritedProvider<LEDConfigsStorage>(
+                create: (context) => GetIt.I(),
+              ),
 
               // blocs
               BlocProvider(
@@ -154,6 +158,13 @@ class SelectedDataSourceScope extends AutoRouter {
                   storage: context.read(),
                 )..add(const NavigatorFastAccessEvent.load()),
                 lazy: false,
+              ),
+              BlocProvider(
+                create: (context) => LEDConfigsCubit(storage: context.read()),
+              ),
+              BlocProvider(
+                create: (context) => LoadLEDConfigsBloc(storage: context.read())
+                  ..add(const LoadLEDConfigsEvent.load()),
               ),
             ],
             child: BlocConsumer<DataSourceConnectionStatusCubit,

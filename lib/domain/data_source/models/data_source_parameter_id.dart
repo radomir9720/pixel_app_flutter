@@ -74,6 +74,7 @@ abstract class DataSourceParameterId {
       TailRightTurnSignalParameterId;
   const factory DataSourceParameterId.brakeLight() = BrakeLightParameterId;
   const factory DataSourceParameterId.reverseLight() = ReverseLightParameterId;
+  const factory DataSourceParameterId.customImage() = CustomImageParameterId;
   //
   const factory DataSourceParameterId.rpm() = RPMParameterId;
   const factory DataSourceParameterId.motorSpeed() = MotorSpeedParameterId;
@@ -136,6 +137,7 @@ abstract class DataSourceParameterId {
   bool get isTailRightTurnSignal => this is TailRightTurnSignalParameterId;
   bool get isBrakeLight => this is BrakeLightParameterId;
   bool get isReverseLight => this is ReverseLightParameterId;
+  bool get isCustomImage => this is CustomImageParameterId;
   //
   bool get isRPM => this is RPMParameterId;
   bool get isMotorSpeed => this is MotorSpeedParameterId;
@@ -189,6 +191,7 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.tailRightTurnSignal(),
       DataSourceParameterId.brakeLight(),
       DataSourceParameterId.reverseLight(),
+      DataSourceParameterId.customImage(),
       //
       DataSourceParameterId.rpm(),
       DataSourceParameterId.motorSpeed(),
@@ -363,6 +366,10 @@ class BrakeLightParameterId extends DataSourceParameterId {
 
 class ReverseLightParameterId extends DataSourceParameterId {
   const ReverseLightParameterId() : super(0x00E6);
+}
+
+class CustomImageParameterId extends DataSourceParameterId {
+  const CustomImageParameterId() : super(0x00EB);
 }
 
 class RPMParameterId extends DataSourceParameterId {

@@ -64,10 +64,7 @@ class AnimatedBottomSheet extends StatelessWidget {
             controller.animateToNearestEdge();
           },
           onTap: controller.toggle,
-          child: ColoredBox(
-            color: Colors.transparent,
-            child: stickUpWidget,
-          ),
+          child: stickUpWidget,
         ),
       ),
     );

@@ -38,6 +38,9 @@ class MaterialTheme {
       ),
       canvasColor: colors.background,
       dialogBackgroundColor: colors.background,
+      dialogTheme: DialogTheme(
+        shadowColor: colors.primary,
+      ),
       scaffoldBackgroundColor: colors.background,
       disabledColor: colors.disabled,
       appBarTheme: AppBarTheme(

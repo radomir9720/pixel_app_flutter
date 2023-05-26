@@ -300,7 +300,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
         // LowBeam
         ..voidOnModel<SuccessEventUint8Body,
             LowBeamSetIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(highBeam: AsyncData.success(model.value.toBool)));
+          emit(state.copyWith(lowBeam: AsyncData.success(model.value.toBool)));
         })
         // HighBeam
         ..voidOnModel<SuccessEventUint8Body,

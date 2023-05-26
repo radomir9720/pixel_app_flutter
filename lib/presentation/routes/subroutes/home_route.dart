@@ -6,7 +6,20 @@ const _homeRoute = AutoRoute<void>(
   children: [
     AutoRoute<void>(
       path: 'general',
-      page: GeneralScreenWrapper,
+      page: GeneralScope,
+      name: RouteNames.generalFlow,
+      children: [
+        AutoRoute<void>(
+          initial: true,
+          page: GeneralScreen,
+        ),
+        CustomRoute<bool>(
+          path: 'led-switcher-dialog',
+          name: RouteNames.ledSwitcherDialogRoute,
+          page: LEDPanelSwitcherDialog,
+          customRouteBuilder: dialogRouteBuilder,
+        ),
+      ],
     ),
     AutoRoute<void>(
       path: 'car-info',

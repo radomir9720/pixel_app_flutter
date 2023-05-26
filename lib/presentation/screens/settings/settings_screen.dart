@@ -26,21 +26,28 @@ class SettingsScreen extends StatelessWidget {
               context.router.push(const SelectDataSourceFlow());
             },
           ),
+          // SettingsButton(
+          //   icon: PixelIcons.fastActions,
+          //   title: context.l10n.fastActionsButtonCaption,
+          //   onPressed: () {},
+          // ),
           SettingsButton(
             icon: PixelIcons.fastActions,
-            title: context.l10n.fastActionsButtonCaption,
-            onPressed: () {},
+            title: context.l10n.ledPanelTileTitle,
+            onPressed: () {
+              context.router.push(const LEDPanelFlow());
+            },
           ),
-          SettingsButton(
-            icon: PixelIcons.licenses,
-            title: context.l10n.licencesButtonCaption,
-            onPressed: () {},
-          ),
-          SettingsButton(
-            icon: PixelIcons.about,
-            title: context.l10n.aboutButtonCaption,
-            onPressed: () {},
-          ),
+          // SettingsButton(
+          //   icon: PixelIcons.licenses,
+          //   title: context.l10n.licencesButtonCaption,
+          //   onPressed: () {},
+          // ),
+          // SettingsButton(
+          //   icon: PixelIcons.about,
+          //   title: context.l10n.aboutButtonCaption,
+          //   onPressed: () {},
+          // ),
           BlocConsumer<AlwaysOnDisplayToggleBloc, AlwaysOnDisplayToggleState>(
             listenWhen: (previous, current) => current.isFailure,
             listener: (context, state) {

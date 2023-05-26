@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/car_widget.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/gear_widget.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/light_state_error_listener.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/overlay_data_sender.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
-import 'package:pixel_app_flutter/presentation/widgets/common/molecules/fast_actions_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/speed_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/statistic_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/blinker_button.dart';
-import 'package:pixel_app_flutter/presentation/widgets/tablet/organisms/car_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/organisms/tablet_upper_info_panel.dart';
 
 class GeneralScreen extends StatelessWidget {
@@ -99,11 +99,11 @@ class HandsetGeneralScreenBody extends StatelessWidget {
           const SizedBox(height: 32),
           const StatisticWidget(useWrap: true),
           const SizedBox(height: 32),
-          FastActionsWidget.manyRows()
+          const LEDSwitcherButton(),
         ] else ...[
           const GearWidget(),
           const SizedBox(height: 16),
-          FastActionsWidget.oneRow(),
+          const LEDSwitcherButton(),
         ],
       ],
     );
