@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:meta/meta.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/cached_devices_stream_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
@@ -90,8 +91,15 @@ class BluetoothDataSource extends DataSource
       bluetoothSerial.isEnabled.then((value) => value ?? false);
 
   @override
-  Future<bool> get isAvailable =>
-      bluetoothSerial.isAvailable.then((value) => value ?? false);
+  Future<bool> get isAvailable async {
+    final permission = await [
+      Permission.bluetooth,
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+    ].request();
+    if (permission.values.any((element) => !element.isGranted)) return false;
+    return bluetoothSerial.isAvailable.then((value) => value ?? false);
+  }
 
   @override
   Future<Result<ConnectError, void>> connect(String address) async {
