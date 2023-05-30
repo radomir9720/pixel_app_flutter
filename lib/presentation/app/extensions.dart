@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 
@@ -13,4 +14,8 @@ extension PeriodicStatusExtension on BuildContext {
       critical: () => colors.errorPastel,
     );
   }
+}
+
+extension VersionAndBuildNumberExtension on PackageInfo {
+  String get versionAndBuildNumber => '$version+$buildNumber';
 }

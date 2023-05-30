@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
 import 'package:pixel_app_flutter/data/services/data_source/demo_data_source.dart';
@@ -8,6 +9,7 @@ import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart
 import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_android.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
@@ -134,6 +136,12 @@ class DataSourceScreen extends StatelessWidget {
                 );
               },
             ).toList(),
+            bottom: Text(
+              context.l10n.appVersion(
+                context.read<PackageInfo>().versionAndBuildNumber,
+              ),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           );
         },
       ),
