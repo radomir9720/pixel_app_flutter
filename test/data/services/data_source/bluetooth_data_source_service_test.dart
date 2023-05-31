@@ -91,6 +91,7 @@ void main() {
       ds = BluetoothDataSource(
         bluetoothSerial: serial,
         id: 123,
+        permissionRequestCallback: () async => true,
         connectToAddress: (address) async => connection,
       );
 
@@ -771,6 +772,7 @@ void main() {
         final secondInstance = BluetoothDataSource(
           bluetoothSerial: serial,
           id: 321,
+          permissionRequestCallback: () async => true,
           connectToAddress: (address) async => connection,
         );
         expect(secondInstance.key, equals(ds.key));

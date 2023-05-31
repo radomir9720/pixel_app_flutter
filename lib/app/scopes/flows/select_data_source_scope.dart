@@ -78,6 +78,7 @@ class _AutoRouteState extends AutoRouterState {
         BluetoothDataSource(
           bluetoothSerial: GetIt.I(),
           connectToAddress: GetIt.I(),
+          permissionRequestCallback: GetIt.I(),
           id: id,
         ),
       ] else if (!Platform.isIOS)

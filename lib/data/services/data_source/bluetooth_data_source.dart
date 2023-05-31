@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:meta/meta.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/cached_devices_stream_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_source_observer_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
@@ -17,6 +16,8 @@ typedef GetBluetoothConnectionCallback = Future<BluetoothConnection> Function(
   String address,
 );
 
+typedef BluetoothPermissionRequestCallback = Future<bool> Function();
+
 class BluetoothDataSource extends DataSource
     with
         ParseBytesPackageMixin,
@@ -28,6 +29,7 @@ class BluetoothDataSource extends DataSource
     required super.id,
     required this.bluetoothSerial,
     required this.connectToAddress,
+    required this.permissionRequestCallback,
   });
 
   @visibleForTesting
@@ -44,6 +46,9 @@ class BluetoothDataSource extends DataSource
 
   @visibleForTesting
   BluetoothConnection? connection;
+
+  @protected
+  final BluetoothPermissionRequestCallback permissionRequestCallback;
 
   static const kKey = 'bluetooth';
 
@@ -92,12 +97,7 @@ class BluetoothDataSource extends DataSource
 
   @override
   Future<bool> get isAvailable async {
-    final permission = await [
-      Permission.bluetooth,
-      Permission.bluetoothScan,
-      Permission.bluetoothConnect,
-    ].request();
-    if (permission.values.any((element) => !element.isGranted)) return false;
+    if (!await permissionRequestCallback()) return false;
     return bluetoothSerial.isAvailable.then((value) => value ?? false);
   }
 
