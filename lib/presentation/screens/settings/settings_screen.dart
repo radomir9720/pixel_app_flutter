@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/domain/settings/settings.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
@@ -81,7 +82,9 @@ class SettingsScreen extends StatelessWidget {
         ],
         screenTitle: context.l10n.settingScreenTitle,
         bottom: Text(
-          context.l10n.appVersion(context.read<PackageInfo>().version),
+          context.l10n.appVersion(
+            context.read<PackageInfo>().versionAndBuildNumber,
+          ),
           style: Theme.of(context).textTheme.bodySmall,
         ),
       ),

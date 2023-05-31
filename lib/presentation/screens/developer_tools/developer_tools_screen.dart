@@ -82,53 +82,54 @@ class DeveloperToolsScreen extends StatelessWidget {
                     });
                   },
                 ),
-                ListTile(
-                  title: Text(
-                    context.l10n.whichParametersToSubscribeToListTileLabel,
-                  ),
-                  onTap: () {
-                    context.router
-                        .push<List<int>>(
-                      ChangeParametersSubscriptionDialogRoute(
-                        initialChoosedOptions: [
-                          ...context
-                              .read<OutgoingPackagesCubit>()
-                              .state
-                              .subscriptionParameterIds,
-                        ],
-                        title: context
-                            .l10n.whichParametersToSubscribeToListTileLabel,
-                        alwasysVisibleOptions: DataSourceParameterId.all
-                            .map((e) => e.value)
-                            .toList(),
-                        validator: (integer) {
-                          if (integer < 0 || integer > 0xFFFF) {
-                            return context.l10n.parameterIdLimitsMessage;
-                          }
-                          return null;
-                        },
-                      ),
-                    )
-                        .then((value) {
-                      if (value != null) {
-                        context
-                            .read<DeveloperToolsParametersCubit>()
-                            .update(subscriptionParameterIds: value.toSet());
-                      }
-                    });
-                  },
-                  trailing: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 70),
-                    child: BlocSelector<OutgoingPackagesCubit,
-                        DeveloperToolsParameters, Set<int>>(
-                      selector: (state) => state.subscriptionParameterIds,
-                      builder: (context, state) => Text(
-                        state.join(', '),
-                        overflow: TextOverflow.fade,
+                if (context.hasProvider<BlocProvider<OutgoingPackagesCubit>>())
+                  ListTile(
+                    title: Text(
+                      context.l10n.whichParametersToSubscribeToListTileLabel,
+                    ),
+                    onTap: () {
+                      context.router
+                          .push<List<int>>(
+                        ChangeParametersSubscriptionDialogRoute(
+                          initialChoosedOptions: [
+                            ...context
+                                .read<OutgoingPackagesCubit>()
+                                .state
+                                .subscriptionParameterIds,
+                          ],
+                          title: context
+                              .l10n.whichParametersToSubscribeToListTileLabel,
+                          alwasysVisibleOptions: DataSourceParameterId.all
+                              .map((e) => e.value)
+                              .toList(),
+                          validator: (integer) {
+                            if (integer < 0 || integer > 0xFFFF) {
+                              return context.l10n.parameterIdLimitsMessage;
+                            }
+                            return null;
+                          },
+                        ),
+                      )
+                          .then((value) {
+                        if (value != null) {
+                          context
+                              .read<DeveloperToolsParametersCubit>()
+                              .update(subscriptionParameterIds: value.toSet());
+                        }
+                      });
+                    },
+                    trailing: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 70),
+                      child: BlocSelector<OutgoingPackagesCubit,
+                          DeveloperToolsParameters, Set<int>>(
+                        selector: (state) => state.subscriptionParameterIds,
+                        builder: (context, state) => Text(
+                          state.join(', '),
+                          overflow: TextOverflow.fade,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 SwitchListTile(
                   value: state.enableHandshakeResponse,
                   title:
@@ -206,5 +207,11 @@ class DeveloperToolsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+extension on BuildContext {
+  bool hasProvider<T extends Widget>() {
+    return findAncestorWidgetOfExactType<T>() != null;
   }
 }

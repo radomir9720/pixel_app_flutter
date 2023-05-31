@@ -16,6 +16,8 @@ typedef GetBluetoothConnectionCallback = Future<BluetoothConnection> Function(
   String address,
 );
 
+typedef BluetoothPermissionRequestCallback = Future<bool> Function();
+
 class BluetoothDataSource extends DataSource
     with
         ParseBytesPackageMixin,
@@ -27,6 +29,7 @@ class BluetoothDataSource extends DataSource
     required super.id,
     required this.bluetoothSerial,
     required this.connectToAddress,
+    required this.permissionRequestCallback,
   });
 
   @visibleForTesting
@@ -43,6 +46,9 @@ class BluetoothDataSource extends DataSource
 
   @visibleForTesting
   BluetoothConnection? connection;
+
+  @protected
+  final BluetoothPermissionRequestCallback permissionRequestCallback;
 
   static const kKey = 'bluetooth';
 
@@ -90,8 +96,10 @@ class BluetoothDataSource extends DataSource
       bluetoothSerial.isEnabled.then((value) => value ?? false);
 
   @override
-  Future<bool> get isAvailable =>
-      bluetoothSerial.isAvailable.then((value) => value ?? false);
+  Future<bool> get isAvailable async {
+    if (!await permissionRequestCallback()) return false;
+    return bluetoothSerial.isAvailable.then((value) => value ?? false);
+  }
 
   @override
   Future<Result<ConnectError, void>> connect(String address) async {
