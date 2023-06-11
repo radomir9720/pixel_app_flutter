@@ -1,4 +1,16 @@
 enum FunctionId {
+  /// ID of authorization initialization request function
+  authorizationInitializationRequest(authorizationInitializationRequestId),
+
+  /// ID of authorization initialization response function
+  authorizationInitializationResponse(authorizationInitializationResponseId),
+
+  /// ID of authorization request function
+  authorizationRequest(authorizationRequestId),
+
+  /// ID of authorization response function
+  authorizationResponse(authorizationResponseId),
+
   /// ID of function, that requests a value through CAN
   requestValue(0x11),
 
@@ -49,6 +61,11 @@ enum FunctionId {
     return FunctionId.values.firstWhere((element) => element.value == value);
   }
 
+  static const authorizationInitializationRequestId = 0x02;
+  static const authorizationInitializationResponseId = 0x03;
+  static const authorizationRequestId = 0x04;
+  static const authorizationResponseId = 0x05;
+  //
   static const okIncomingPeriodicValueId = 0x61;
   static const warningIncomingPeriodicValueId = 0x62;
   static const criticalIncomingPeriodicValueId = 0x63;

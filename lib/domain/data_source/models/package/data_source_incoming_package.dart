@@ -1,5 +1,6 @@
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/data_source_package_exceptions.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/authorization_response.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/incoming_data_source_packages.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/converter_mixins.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/mixins/function_id_validation_mixins.dart';
@@ -67,6 +68,9 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
   static List<DataSourceIncomingPackage Function(List<int> source)>
       getBuilders<T extends BytesConvertible>() {
     return [
+      AuthorizationResponseIncomingDataSourcePackage.new,
+      AuthorizationInitializationResponseIncomingDataSourcePackage.new,
+      //
       SpeedIncomingDataSourcePackage.new,
       VoltageIncomingDataSourcePackage.new,
       CurrentIncomingDataSourcePackage.new,

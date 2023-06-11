@@ -25,13 +25,12 @@ class LoggerRouteObserver extends RouteObserver<ModalRoute<dynamic>> {
 
   void _logScreen(Route<dynamic> route) {
     final screenName = nameExtractor(route.settings);
-    recordsBuffer.add(
-      LogRecord(
-        Level.INFO,
-        'Navigation to: $screenName',
-        'RouteObserver',
-      ),
+    final record = LogRecord(
+      Level.INFO,
+      'Navigation to: $screenName',
+      'RouteObserver',
     );
+    recordsBuffer.add(record);
   }
 
   @override

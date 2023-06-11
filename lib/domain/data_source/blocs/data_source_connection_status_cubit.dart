@@ -75,6 +75,7 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
           })
           ..voidOnModel<HandshakeID, HandshakePingIncomingDataSourcePackage>(
               (model) {
+            emit(DataSourceConnectionStatus.connected);
             final enableResponse =
                 developerToolsParametersStorage.data.enableHandshakeResponse;
             if (!enableResponse) return;

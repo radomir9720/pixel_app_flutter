@@ -1,7 +1,7 @@
 part of 'main_router.dart';
 
 mixin RouteNames {
-  static const homeFlow = 'HomeFlow';
+  static const selectedDataSourceFlow = 'SelectedDataSourceFlow';
   static const selectDataSourceFlow = 'SelectDataSourceFlow';
   static const developerToolsFlow = 'DeveloperToolsFlow';
   static const appsFlow = 'AppsFlow';

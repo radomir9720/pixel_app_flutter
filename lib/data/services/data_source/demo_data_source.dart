@@ -7,6 +7,7 @@ import 'package:pixel_app_flutter/data/services/data_source/mixins/default_data_
 import 'package:pixel_app_flutter/data/services/data_source/mixins/package_stream_controller_mixin.dart';
 import 'package:pixel_app_flutter/data/services/data_source/mixins/send_packages_mixin.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/authorizartion.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/outgoing_data_source_packages.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -163,37 +164,59 @@ class DemoDataSource extends DataSource
       bufferRequest: () => _updateValue(package),
       event: () => _updateValue(package),
       handshake: () {
+        const secondConfigByte = 0x90; // 10010000(incoming 0x10)
         Future<void>.delayed(const Duration(seconds: 1)).then(
           (value) {
-            final ping = DataSourceIncomingPackage.fromConvertible(
-              secondConfigByte: 0x90, // 10010000(incoming 0x10)
-              parameterId: 0xFFFF,
-              convertible: const HandshakeID(0xFFFF),
-            );
-
-            final package = isInitialHandshake
-                ? DataSourceIncomingPackage.fromConvertible(
-                    secondConfigByte: 0x90, // 10010000(incoming 0x10)
-                    parameterId: 0,
-                    convertible: const EmptyHandshakeBody(),
-                  )
-                : ping;
-
-            if (isInitialHandshake) {
-              Future<void>.delayed(const Duration(seconds: 1)).then(
-                (value) {
-                  observeIncoming(ping);
-
-                  if (!controller.isClosed) controller.add(ping);
-                },
+            DataSourceIncomingPackage responsePackage;
+            if (package is OutgoingAuthorizationInitializationRequestPackage) {
+              responsePackage = DataSourceIncomingPackage.fromConvertible(
+                secondConfigByte: secondConfigByte,
+                parameterId: const DataSourceParameterId.authorization().value,
+                convertible: AuthorizationInitializationResponse(
+                  method: 0x01,
+                  deviceId: List.generate(6, (index) => index),
+                ),
               );
+            } else if (package is OutgoingAuthorizationRequestPackage) {
+              responsePackage = DataSourceIncomingPackage.fromConvertible(
+                secondConfigByte: secondConfigByte,
+                parameterId: const DataSourceParameterId.authorization().value,
+                convertible: AuthorizationResponse(
+                  success: !generateRandomErrors() || Random().nextBool(),
+                  uptime: Duration.zero,
+                ),
+              );
+            } else {
+              final ping = DataSourceIncomingPackage.fromConvertible(
+                secondConfigByte: secondConfigByte,
+                parameterId: 0xFFFF,
+                convertible: const HandshakeID(0xFFFF),
+              );
+
+              responsePackage = isInitialHandshake
+                  ? DataSourceIncomingPackage.fromConvertible(
+                      secondConfigByte: secondConfigByte,
+                      parameterId: 0,
+                      convertible: const EmptyHandshakeBody(),
+                    )
+                  : ping;
+
+              if (isInitialHandshake) {
+                Future<void>.delayed(const Duration(seconds: 1)).then(
+                  (value) {
+                    observeIncoming(ping);
+
+                    if (!controller.isClosed) controller.add(ping);
+                  },
+                );
+              }
+
+              isInitialHandshake = false;
             }
 
-            isInitialHandshake = false;
+            observeIncoming(responsePackage);
 
-            observeIncoming(package);
-
-            if (!controller.isClosed) controller.add(package);
+            if (!controller.isClosed) controller.add(responsePackage);
           },
         );
 

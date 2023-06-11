@@ -9,6 +9,9 @@ const _selectDataSourceRoute = AutoRoute<void>(
       initial: true,
       page: DataSourceScreen,
     ),
+    //
+    _settingsRoute,
+    //
     CustomRoute(
       page: SelectDeviceDialog,
       path: 'select-device',

@@ -27,3 +27,4 @@ export 'implementations/set_uint8_body.dart';
 export 'implementations/voltage.dart';
 export 'implementations/speed.dart';
 export 'implementations/success_event_uint8_body.dart';
+export 'implementations/authorization.dart';

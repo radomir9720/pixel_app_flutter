@@ -11,6 +11,7 @@ import 'package:pixel_app_flutter/presentation/app/theme.dart';
 import 'package:pixel_app_flutter/presentation/app/typography.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
+import 'package:re_widgets/re_widgets.dart';
 
 class App extends StatefulWidget {
   const App({super.key, this.observersBuilder});
@@ -44,7 +45,21 @@ class _AppState extends State<App> {
               _appRouter,
               routes: (_) {
                 if (state.ds.isPresent) {
-                  return const [HomeFlow()];
+                  final authorizationState =
+                      context.watch<DataSourceAuthorizationCubit>().state;
+                  if (authorizationState.isLoading) {
+                    return const [LoadingRoute()];
+                  }
+                  return authorizationState.maybeWhen(
+                    authorized: (id) => const [SelectedDataSourceFlow()],
+                    noSerialNumber: (id) => const [
+                      EnterSerialNumberRoute(),
+                    ],
+                    orElse: () => [
+                      const SelectDataSourceFlow(),
+                      if (state.isInitial) const LoadingRoute(),
+                    ],
+                  );
                 }
 
                 return [
@@ -64,8 +79,25 @@ class _AppState extends State<App> {
                       value: SystemUiOverlayStyle(
                         statusBarBrightness: Theme.of(context).brightness,
                       ),
-                      child: OverlayManager(
-                        child: child ?? const SizedBox.shrink(),
+                      child: BlocListener<DataSourceAuthorizationCubit,
+                          DataSourceAuthorizationState>(
+                        listener: (context, state) {
+                          final error = state.whenOrNull(
+                            failure: (id) =>
+                                context.l10n.authorizationErrorMessage,
+                            authorizationTimeout: (id) =>
+                                context.l10n.authorizationTimeoutErrorMessage,
+                            initializationTimeout: (id) => context.l10n
+                                .auhtorizationInitializationTimeoutErrorMessage,
+                            errorSavingSerialNumber: (id) =>
+                                context.l10n.errorSavingSerialNumberMessage,
+                          );
+
+                          if (error != null) context.showSnackBar(error);
+                        },
+                        child: OverlayManager(
+                          child: child ?? const SizedBox.shrink(),
+                        ),
                       ),
                     ),
                   ),

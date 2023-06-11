@@ -80,11 +80,11 @@ class SelectedDataSourceScope extends AutoRouter {
                                 raw,
                                 direction,
                               );
-                          if (parsed != null) {
-                            context
-                                .read<ProcessedRequestsExchangeLogsCubit>()
-                                .add(parsed, direction);
-                          }
+                        }
+                        if (parsed != null) {
+                          context
+                              .read<ProcessedRequestsExchangeLogsCubit>()
+                              .add(parsed, direction);
                         }
                       },
                     );

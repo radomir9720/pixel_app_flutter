@@ -1,4 +1,6 @@
 // blocs
+export 'blocs/battery_data_cubit.dart';
+export 'blocs/data_source_authorization_cubit.dart';
 export 'blocs/data_source_connect_bloc.dart';
 export 'blocs/data_source_connection_status_cubit.dart';
 export 'blocs/data_source_cubit.dart';
@@ -22,9 +24,11 @@ export 'models/data_source_with_address.dart';
 export 'models/developer_tools_parameters.dart';
 export 'models/package/data_source_package.dart';
 export 'models/package_data/bytes_converter.dart';
+export 'models/serial_number.dart';
 export 'models/usb_port_parameters.dart';
 // services
 export 'services/data_source_service.dart';
 // storages
 export 'storages/data_source_storage.dart';
 export 'storages/developer_tools_parameters_storage.dart';
+export 'storages/serial_number_storage.dart';

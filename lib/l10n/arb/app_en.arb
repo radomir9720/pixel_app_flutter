@@ -343,5 +343,13 @@
   "removeButtonCaption": "Remove",
   "ledPanelTileTitle": "LED panel",
   "errorLoadingConfigurations": "Error while loading configurations",
-  "tryAgainButtonCaption": "Try again"
+  "tryAgainButtonCaption": "Try again",
+  "authorizationErrorMessage": "Authorization error",
+  "authorizationTimeoutErrorMessage": "Authorization timeout",
+  "auhtorizationInitializationTimeoutErrorMessage": "Authorization initialization timeout",
+  "errorSavingSerialNumberMessage": "Error saving serial number",
+  "enterSerialNumberMessage": "Enter data source serial number",
+  "errorFormatingSerialNumberMessage": "Error formating serial number",
+  "setButtonCaption": "Set",
+  "enterSerialNumberHintMessage": "The number can contain only digits and Latin letters: \"A\", \"B\", \"C\", \"D\", \"E\", \"F\""
 }

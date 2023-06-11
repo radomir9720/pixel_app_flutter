@@ -15,6 +15,7 @@ import 'package:pixel_app_flutter/presentation/screens/apps/apps_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/car_info/car_info_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/data_source/data_source_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/data_source/enter_serial_number_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/data_source/select_device_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/developer_tools_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/packages_exchange_console_screen.dart';
@@ -48,7 +49,7 @@ part 'subroutes/select_data_source_route.dart';
       path: '',
       initial: true,
       page: SelectedDataSourceScope,
-      name: RouteNames.homeFlow,
+      name: RouteNames.selectedDataSourceFlow,
       transitionsBuilder: TransitionsBuilders.fadeIn,
       children: [
         _homeRoute,
@@ -62,6 +63,11 @@ part 'subroutes/select_data_source_route.dart';
     ),
     //
     _selectDataSourceRoute,
+    //
+    AutoRoute(
+      path: '/enter-serial-number',
+      page: EnterSerialNumberScreen,
+    ),
     //
     CustomRoute<void>(
       path: 'loading',

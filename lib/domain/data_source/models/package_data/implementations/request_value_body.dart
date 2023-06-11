@@ -18,10 +18,8 @@ class RequestValueConverter extends BytesConverter<RequestValueBody> {
   const RequestValueConverter();
   @override
   RequestValueBody fromBytes(List<int> bytes) {
-    throw const ShouldNotBeCalledDataSourcePackageDataException(
-      'RequestValueConverter.fromBytes()',
-      'RequestValueBody is intended to be used only for outgoing packages, '
-          'therefore only toBytes() method can be used',
+    throw const FromBytesShouldNotBeCalledDataSourcePackageDataException(
+      'RequestValueConverter',
     );
   }
 

@@ -19,6 +19,7 @@ class MainScope extends SingleChildStatelessWidget {
         Provider<Environment>(create: (context) => GetIt.I()),
         Provider<PackageInfo>(create: (context) => GetIt.I()),
         // storages
+        InheritedProvider<SerialNumberStorage>(create: (context) => GetIt.I()),
         InheritedProvider<DataSourceStorage>(create: (context) => GetIt.I()),
         InheritedProvider<DeveloperToolsParametersStorage>(
           create: (context) => GetIt.I(),
@@ -53,6 +54,30 @@ class MainScope extends SingleChildStatelessWidget {
             lazy: false,
           ),
         ],
+        BlocProvider(
+          create: (context) {
+            final cubit = DataSourceAuthorizationCubit(
+              serialNumberStorage: context.read(),
+              dataSourceStorage: context.read(),
+              loggers: [
+                if (context.read<Environment>().isDev)
+                  (outgoing) =>
+                      context.read<ProcessedRequestsExchangeLogsCubit>().add(
+                            outgoing,
+                            DataSourceRequestDirection.outgoing,
+                          )
+              ],
+            );
+            context.read<DataSourceStorage>().data.when(
+                  undefined: () {},
+                  presented: (value) {
+                    cubit.tryAutoAuthorization(value.dataSource);
+                  },
+                );
+
+            return cubit;
+          },
+        ),
       ],
       child: child,
     );
