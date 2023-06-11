@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
 import 'package:pixel_app_flutter/data/services/data_source/demo_data_source.dart';
 import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
@@ -91,28 +90,25 @@ class DataSourceScreen extends StatelessWidget {
 
           final showCloseButton =
               context.router.root.current.name != SelectDataSourceFlow.name;
-          final showDevToolsButton = context.watch<Environment>().isDev;
+
           return SettingsBaseLayout(
             screenTitle: currentDataSource != null
                 ? context.l10n.dataSourceScreenTitle
                 : context.l10n.selectDataSourceScreenTitle,
             bottomLeft: showCloseButton
                 ? null
-                : showDevToolsButton
-                    ? GlueTitle(
-                        alignment: Alignment.centerLeft,
-                        title: context.l10n.developerToolsButtonCaption
-                            .replaceAll(' ', '\n'),
-                        side: GlueTitleSide.bottom,
-                        child: PIconButton(
-                          onPressed: () {
-                            context.router.push(const DeveloperToolsFlow());
-                          },
-                          icon: PixelIcons.settings,
-                          size: PIconButtonSize.normal,
-                        ),
-                      )
-                    : const SizedBox.shrink(),
+                : GlueTitle(
+                    alignment: Alignment.centerLeft,
+                    title: context.l10n.settingsButtonCaption,
+                    side: GlueTitleSide.bottom,
+                    child: PIconButton(
+                      onPressed: () {
+                        context.router.push(const SettingsFlow());
+                      },
+                      icon: PixelIcons.settings,
+                      size: PIconButtonSize.normal,
+                    ),
+                  ),
             buttons: state.payload.all.map(
               (e) {
                 void onPressed() {

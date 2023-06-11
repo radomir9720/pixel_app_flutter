@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:installed_apps/installed_apps.dart';
@@ -167,6 +168,7 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
       () => _bluetoothPermissionRequest,
     )
     ..lazySingleton<LoggerRecordsBuffer>(LoggerRecordsBuffer.new)
+    ..factory<FlutterSecureStorage>(() => const FlutterSecureStorage())
     // Android
     ..factory<ListUsbDevicesCallback>(() => UsbSerial.listDevices)
     // MacOS, Linux, Windows

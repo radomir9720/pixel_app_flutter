@@ -11,6 +11,8 @@ abstract class DataSourceParameterId {
     );
   }
 
+  const factory DataSourceParameterId.authorization() =
+      AuthorizationParameterId;
   const factory DataSourceParameterId.speed() = SpeedParameterId;
   const factory DataSourceParameterId.light() = LightParameterId;
   const factory DataSourceParameterId.voltage() = VoltageParameterId;
@@ -86,6 +88,8 @@ abstract class DataSourceParameterId {
       MotorTemperatureParameterId;
   const factory DataSourceParameterId.odometer() = OdometerParameterId;
 
+  bool get isAuthorization => this is AuthorizationParameterId;
+
   bool get isSpeed => this is SpeedParameterId;
 
   bool get isLight => this is LightParameterId;
@@ -154,6 +158,7 @@ abstract class DataSourceParameterId {
 
   static List<DataSourceParameterId> get all {
     return const [
+      DataSourceParameterId.authorization(),
       DataSourceParameterId.speed(),
       DataSourceParameterId.light(),
       DataSourceParameterId.voltage(),
@@ -217,6 +222,10 @@ abstract class DataSourceParameterId {
 
   @override
   int get hashCode => value.hashCode;
+}
+
+class AuthorizationParameterId extends DataSourceParameterId {
+  const AuthorizationParameterId() : super(0x0001);
 }
 
 class SpeedParameterId extends DataSourceParameterId {

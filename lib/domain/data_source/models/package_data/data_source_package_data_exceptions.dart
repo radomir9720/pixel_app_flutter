@@ -18,6 +18,17 @@ class ShouldNotBeCalledDataSourcePackageDataException
             '${reason == null ? '' : '\nReason: $reason'}');
 }
 
+class FromBytesShouldNotBeCalledDataSourcePackageDataException
+    extends ShouldNotBeCalledDataSourcePackageDataException {
+  const FromBytesShouldNotBeCalledDataSourcePackageDataException(
+    String className,
+  ) : super(
+          '$className.fromBytes()',
+          '$className is intended to be used only for outgoing packages, '
+              'therefore only toBytes() method can be used',
+        );
+}
+
 class UnexpectedFunctionIdDataSourcePackageDataException
     extends DataSourcePackageDataException {
   const UnexpectedFunctionIdDataSourcePackageDataException({

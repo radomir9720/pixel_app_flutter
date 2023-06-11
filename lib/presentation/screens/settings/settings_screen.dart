@@ -20,13 +20,14 @@ class SettingsScreen extends StatelessWidget {
     return GradientScaffold(
       body: SettingsBaseLayout(
         buttons: [
-          SettingsButton(
-            icon: PixelIcons.usb,
-            title: context.l10n.dataSourceButtonCaption,
-            onPressed: () {
-              context.router.push(const SelectDataSourceFlow());
-            },
-          ),
+          if (context.router.root.current.name != SelectDataSourceFlow.name)
+            SettingsButton(
+              icon: PixelIcons.usb,
+              title: context.l10n.dataSourceButtonCaption,
+              onPressed: () {
+                context.router.push(const SelectDataSourceFlow());
+              },
+            ),
           // SettingsButton(
           //   icon: PixelIcons.fastActions,
           //   title: context.l10n.fastActionsButtonCaption,

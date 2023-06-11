@@ -343,5 +343,13 @@
   "removeButtonCaption": "Удалить",
   "ledPanelTileTitle": "Светодиодная панель",
   "errorLoadingConfigurations": "Ошибка при загрузке конфигураций",
-  "tryAgainButtonCaption": "Попробовать еще раз"
+  "tryAgainButtonCaption": "Попробовать еще раз",
+  "authorizationErrorMessage": "Ошибка при авторизации",
+  "authorizationTimeoutErrorMessage": "Таймаут авторизации",
+  "auhtorizationInitializationTimeoutErrorMessage": "Таймаут инициализации авторизации",
+  "errorSavingSerialNumberMessage": "Ошибка при сохранении серийного номера",
+  "enterSerialNumberMessage": "Введите серийный номер источника данных",
+  "errorFormatingSerialNumberMessage": "Ошибка при форматировании серийного номера",
+  "setButtonCaption": "Установить",
+  "enterSerialNumberHintMessage": "Номер может содержать только цифры и латинские буквы: \"A\", \"B\", \"C\", \"D\", \"E\", \"F\""
 }

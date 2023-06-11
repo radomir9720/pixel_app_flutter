@@ -14,10 +14,8 @@ abstract class SetValueConverter<T extends SetValueBody>
 
   @override
   T fromBytes(List<int> bytes) {
-    throw const ShouldNotBeCalledDataSourcePackageDataException(
-      'SetValueConverter.fromBytes()',
-      'SetValueBody is intended to be used only for outgoing packages, '
-          'therefore only toBytes() method can be used',
+    throw const FromBytesShouldNotBeCalledDataSourcePackageDataException(
+      'SetValueConverter',
     );
   }
 
