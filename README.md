@@ -1,8 +1,8 @@
 <h1>Pixel App Flutter</h1>
 
-![coverage][coverage_badge]
+<!-- ![coverage][coverage_badge] -->
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
-[![License: MIT][license_badge]][license_link]
+[![License: GPL 3.0][license_badge]][license_link]
 
 ![](docs/images/pixel-interior.png)
 
@@ -37,13 +37,13 @@ The MainECU is the connecting link between this application and car interfaces.
   
   Below is the table with data source support for each platform at the present moment.
   
-  | DataSource  |Android|iOS|Windows|MacOS|Linux|
-  |-------------|:-----:|:-:|:-----:|:---:|:---:|
-  |**Bluetooth**|✔️     |✖️|✖️     |✔️  |❔   |
-  |**USB**      |✔️     |✖️|✔️     |✔️  |❔   |
-  |**WIFI**     |✖️     |✖️|✖️     |✖️  |✖️  |
-  |**HTTP**     |✖️     |✖️|✖️     |✖️  |✖️  |
-  |**Demo**     |✔️     |✔️|✔️     |✔️  |✔️  |
+  | DataSource  |Android|iOS|Windows|MacOS|Linux|Web|
+  |-------------|:-----:|:-:|:-----:|:---:|:---:|:-:|
+  |**Bluetooth**|✔️      |✖️  |✖️      |✔️    |❔   |✖️  |
+  |**USB**      |✔️      |✖️  |✔️      |✔️    |❔   |✖️  |
+  |**WIFI**     |✖️      |✖️  |✖️      |✖️    |✖️    |✖️  |
+  |**HTTP**     |✖️      |✖️  |✖️      |✖️    |✖️    |✖️  |
+  |**Demo**     |✔️      |✔️  |✔️      |✔️    |✔️    |✔️  |
 
   * __USB Data Source__
     
@@ -109,7 +109,7 @@ If you want to work constantly on this project please [read the general regulati
 ---
 This project currently runs on __Android__, __iOS__, and __MacOS__. For other platforms it may require some setup. Therefore, below will be instructions on how to lauch this project on these platforms.
 
-Of course, you should have installed Dart and Flutter. If you haven't done this yet, please take a look at the [documentation](https://github.com/radomir9720/wordle_4letter#:~:text=online%20documentation).
+Of course, you should have installed Dart and Flutter. If you haven't done this yet, please take a look at the [documentation](https://docs.flutter.dev/).
 
 To launch the project you also should paste required firebase related files(`google-services.json` for android, and `GoogleService-Info.plist` with `firebase_app_id_file.json` for iOS and MacOS).
 
@@ -178,8 +178,8 @@ $ open coverage/index.html
 [coverage_badge]: coverage_badge.svg
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html
 [internationalization_link]: https://flutter.dev/docs/development/accessibility-and-localization/internationalization
-[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[license_link]: https://opensource.org/licenses/MIT
+[license_badge]: https://img.shields.io/badge/license-GPL%203.0-blue
+[license_link]: https://opensource.org/license/gpl-3-0
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
 [very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
 [very_good_cli_link]: https://github.com/VeryGoodOpenSource/very_good_cli
