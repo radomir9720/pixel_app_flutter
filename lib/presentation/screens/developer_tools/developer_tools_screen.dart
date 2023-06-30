@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pixel_app_flutter/app/helpers/logger_records_buffer.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:share_plus/share_plus.dart';

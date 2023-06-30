@@ -11,33 +11,22 @@ mixin DefaultDataSourceObserverMixin on DataSource {
 
   @override
   void observe(
-    List<int>? package,
-    DataSourceIncomingPackage? parsed,
-    DataSourceRequestDirection direction,
+    Observerable<dynamic> observable,
   ) {
     for (final observer in observers) {
-      observer(package, parsed, direction);
+      observer(observable);
     }
   }
 
-  void observeIncoming(List<int> package) {
+  void observeIncoming(DataSourceIncomingPackage package) {
     for (final observer in observers) {
-      observer(package, null, DataSourceRequestDirection.incoming);
+      observer(ParsedIncomingPackageObservable(package));
     }
   }
 
-  void observeOutgoing(List<int> package) {
+  void observeOutgoing(DataSourceOutgoingPackage package) {
     for (final observer in observers) {
-      observer(package, null, DataSourceRequestDirection.outgoing);
-    }
-  }
-
-  void observeAll(
-    List<List<int>> packages,
-    DataSourceRequestDirection direction,
-  ) {
-    for (final package in packages) {
-      observe(package, null, direction);
+      observer(OutgoingPackageObservable(package));
     }
   }
 

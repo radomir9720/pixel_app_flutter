@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
@@ -74,18 +75,41 @@ class SelectedDataSourceScope extends AutoRouter {
                 create: (context) {
                   if (context.read<Environment>().isDev) {
                     context.read<DataSource>().addObserver(
-                      (raw, parsed, direction) {
-                        if (raw != null) {
-                          context.read<RawRequestsExchangeLogsCubit>().add(
-                                raw,
-                                direction,
-                              );
-                        }
-                        if (parsed != null) {
-                          context
-                              .read<ProcessedRequestsExchangeLogsCubit>()
-                              .add(parsed, direction);
-                        }
+                      (observable) {
+                        observable.whenOrNull(
+                          incomingPackage: (package) {
+                            context
+                                .read<ProcessedRequestsExchangeLogsCubit>()
+                                .add(
+                                  package,
+                                  DataSourceRequestDirection.incoming,
+                                );
+                          },
+                          outgoingPackage: (package) {
+                            context
+                                .read<ProcessedRequestsExchangeLogsCubit>()
+                                .add(
+                                  package,
+                                  DataSourceRequestDirection.outgoing,
+                                );
+                            context.read<ExchangeConsoleLogsCubit>().addParsed(
+                                  package,
+                                  DataSourceRequestDirection.outgoing,
+                                );
+                          },
+                          rawIncomingBytes: (bytes) {
+                            context.read<RawRequestsExchangeLogsCubit>().add(
+                                  bytes,
+                                  DataSourceRequestDirection.incoming,
+                                );
+                          },
+                          rawIncomingPackage: (bytes) {
+                            context.read<ExchangeConsoleLogsCubit>().addRaw(
+                                  bytes,
+                                  DataSourceRequestDirection.incoming,
+                                );
+                          },
+                        );
                       },
                     );
                   }
@@ -94,15 +118,6 @@ class SelectedDataSourceScope extends AutoRouter {
                     dataSource: dswa.dataSource,
                     dataSourceStorage: context.read(),
                     developerToolsParametersStorage: context.read(),
-                    loggers: [
-                      if (context.read<Environment>().isDev)
-                        (outgoing) => context
-                            .read<ProcessedRequestsExchangeLogsCubit>()
-                            .add(
-                              outgoing,
-                              DataSourceRequestDirection.outgoing,
-                            )
-                    ],
                   )..initHandshake();
                 },
                 lazy: false,
@@ -111,15 +126,6 @@ class SelectedDataSourceScope extends AutoRouter {
                 create: (context) => OutgoingPackagesCubit(
                   dataSource: context.read(),
                   developerToolsParametersStorage: context.read(),
-                  loggers: [
-                    if (context.read<Environment>().isDev)
-                      (outgoing) => context
-                          .read<ProcessedRequestsExchangeLogsCubit>()
-                          .add(
-                            outgoing,
-                            DataSourceRequestDirection.outgoing,
-                          )
-                  ],
                 ),
               ),
 

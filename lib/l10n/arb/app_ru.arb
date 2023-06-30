@@ -351,5 +351,7 @@
   "enterSerialNumberMessage": "Введите серийный номер источника данных",
   "errorFormatingSerialNumberMessage": "Ошибка при форматировании серийного номера",
   "setButtonCaption": "Установить",
-  "enterSerialNumberHintMessage": "Номер может содержать только цифры и латинские буквы: \"A\", \"B\", \"C\", \"D\", \"E\", \"F\""
+  "enterSerialNumberHintMessage": "Номер может содержать только цифры и латинские буквы: \"A\", \"B\", \"C\", \"D\", \"E\", \"F\"",
+  "exchangeLogsConsoleNoDataSourceMessage": "Для того, чтобы отправлять пакеты, необходимо сначала подключится к источнику данных",
+  "noPackagesMessage": "Нет пакетов"
 }

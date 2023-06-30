@@ -136,6 +136,7 @@ class DataSourceScreen extends StatelessWidget {
               context.l10n.appVersion(
                 context.read<PackageInfo>().versionAndBuildNumber,
               ),
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall,
             ),
           );

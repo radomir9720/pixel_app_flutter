@@ -788,8 +788,11 @@ void main() {
         const incomingPackage = [60, 0, 144, 0, 0, 0, 222, 71, 62];
         // var incomingEventsCounter = 0;
         final events = <List<int>>[];
-        ds.addObserver((raw, parsed, direction) {
-          if (raw != null) events.add(raw);
+        ds.addObserver((observable) {
+          observable.whenOrNull(
+            rawIncomingPackage: events.add,
+            outgoingPackage: events.add,
+          );
         });
 
         // act
@@ -814,7 +817,7 @@ void main() {
       () async {
         // arrange
         await ds.connect(deviceAddress);
-        ds.addObserver((_, __, ___) {});
+        ds.addObserver((_) {});
 
         // act
         ds.debouncer.run(() {});
