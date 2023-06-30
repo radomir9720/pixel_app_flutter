@@ -3,9 +3,7 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
 typedef Observer = void Function(
-  List<int>? raw,
-  DataSourceIncomingPackage? parsed,
-  DataSourceRequestDirection direction,
+  Observerable<dynamic> observable,
 );
 
 abstract class DataSource {
@@ -17,11 +15,7 @@ abstract class DataSource {
 
   void removeObserver(Observer observer);
 
-  void observe(
-    List<int>? raw,
-    DataSourceIncomingPackage? parsed,
-    DataSourceRequestDirection direction,
-  );
+  void observe(Observerable<dynamic> observable);
 
   String get key;
 
@@ -87,4 +81,49 @@ enum EnableError {
         return unsuccessfulEnableAttempt();
     }
   }
+}
+
+@immutable
+sealed class Observerable<T> {
+  const Observerable(this.data);
+
+  final T data;
+
+  R? whenOrNull<R>({
+    R Function(List<int> bytes)? rawIncomingBytes,
+    R Function(List<int> bytes)? rawIncomingPackage,
+    R Function(DataSourceOutgoingPackage package)? outgoingPackage,
+    R Function(DataSourceIncomingPackage<dynamic> package)? incomingPackage,
+  }) {
+    return switch (this) {
+      RawIncomingBytesObservable(data: final List<int> bytes) =>
+        rawIncomingBytes?.call(bytes),
+      RawIncomingPackageObservable(data: final List<int> bytes) =>
+        rawIncomingPackage?.call(bytes),
+      OutgoingPackageObservable(data: final DataSourceOutgoingPackage bytes) =>
+        outgoingPackage?.call(bytes),
+      ParsedIncomingPackageObservable(
+        data: final DataSourceIncomingPackage<dynamic> bytes
+      ) =>
+        incomingPackage?.call(bytes),
+    };
+  }
+}
+
+final class RawIncomingBytesObservable extends Observerable<List<int>> {
+  const RawIncomingBytesObservable(super.data);
+}
+
+final class OutgoingPackageObservable
+    extends Observerable<DataSourceOutgoingPackage> {
+  const OutgoingPackageObservable(super.data);
+}
+
+final class ParsedIncomingPackageObservable
+    extends Observerable<DataSourceIncomingPackage<dynamic>> {
+  const ParsedIncomingPackageObservable(super.data);
+}
+
+final class RawIncomingPackageObservable extends Observerable<List<int>> {
+  const RawIncomingPackageObservable(super.data);
 }

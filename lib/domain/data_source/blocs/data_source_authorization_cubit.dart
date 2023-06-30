@@ -48,18 +48,13 @@ class DataSourceAuthorizationState with _$DataSourceAuthorizationState {
 }
 
 class DataSourceAuthorizationCubit extends Cubit<DataSourceAuthorizationState>
-    with
-        ConsumerBlocMixin,
-        BlocLoggerMixin<DataSourcePackage, DataSourceAuthorizationState> {
+    with ConsumerBlocMixin {
   DataSourceAuthorizationCubit({
     required this.serialNumberStorage,
     required this.dataSourceStorage,
     this.initializationTimeout = kInitializationTimeout,
     this.authorizationTimeout = kAuthorizationTimeout,
-    List<BlocLoggerCallback<DataSourcePackage>> loggers = const [],
   }) : super(const DataSourceAuthorizationState.initial(null)) {
-    addLoggers(loggers);
-
     subscribe<Optional<DataSourceWithAddress>>(dataSourceStorage, (value) {
       incomingPackagesSubscription?.cancel();
       incomingPackagesSubscription = null;
@@ -99,7 +94,6 @@ class DataSourceAuthorizationCubit extends Cubit<DataSourceAuthorizationState>
     emit(DataSourceAuthorizationState.sendingInitializationRequest(state.id));
 
     final package = OutgoingAuthorizationInitializationRequestPackage();
-    log(package);
     ds.sendPackage(package);
     Future<void>.delayed(initializationTimeout).then((value) {
       if (isClosed) return;
@@ -165,7 +159,6 @@ class DataSourceAuthorizationCubit extends Cubit<DataSourceAuthorizationState>
     final package = OutgoingAuthorizationRequestPackage(
       request: AuthorizationRequest(sn: sn),
     );
-    log(package);
     ds.sendPackage(package);
 
     Future<void>.delayed(authorizationTimeout).then((value) {

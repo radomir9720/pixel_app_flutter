@@ -62,7 +62,7 @@ mixin ParseBytesPackageMixin on DataSource {
     required Uint8List rawPackage,
     required OnNewPackageCallback onNewPackageCallback,
   }) {
-    observe(rawPackage, null, DataSourceRequestDirection.incoming);
+    observe(RawIncomingBytesObservable(rawPackage));
 
     buffer.addAll(rawPackage);
 
@@ -142,8 +142,9 @@ mixin ParseBytesPackageMixin on DataSource {
     // from buffer, parsing it, and adding to events stream
     if (potentialEndingByte == endingByte) {
       final package = buffer.popFirst(indexOfPotentialEndingByte + 1);
+      observe(RawIncomingPackageObservable(package));
       final parsedPackage = DataSourceIncomingPackage.parse(package);
-      observe(null, parsedPackage, DataSourceRequestDirection.incoming);
+      observe(ParsedIncomingPackageObservable(parsedPackage));
       onNewPackage(parsedPackage);
     } else {
       // If the ending byte was not found at the index where it should be,

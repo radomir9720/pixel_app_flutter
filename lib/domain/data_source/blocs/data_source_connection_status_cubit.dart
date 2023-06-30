@@ -44,21 +44,16 @@ enum DataSourceConnectionStatus {
 }
 
 class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
-    with
-        ConsumerBlocMixin,
-        BlocLoggerMixin<DataSourcePackage, DataSourceConnectionStatus> {
+    with ConsumerBlocMixin {
   DataSourceConnectionStatusCubit({
     required this.dataSource,
     required this.dataSourceStorage,
     required this.developerToolsParametersStorage,
     this.handshakeTimeout = const Duration(milliseconds: 2000),
-    List<BlocLoggerCallback<DataSourcePackage>> loggers = const [],
     int debounceDurationMillis = 3000,
   })  : debouncer = Debouncer(milliseconds: debounceDurationMillis),
         initDateTime = DateTime.now(),
         super(DataSourceConnectionStatus.waitingForHandshakeResponse) {
-    addLoggers(loggers);
-
     _registerDisconnectStatusWithDebounce(
       status: DataSourceConnectionStatus.notEstablished,
     );
@@ -66,8 +61,6 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
     subscribe<DataSourceIncomingPackage>(
       dataSource.packageStream,
       (event) {
-        log(event);
-
         event
           ..voidOnModel<EmptyHandshakeBody,
               HandshakeInitialIncomingDataSourcePackage>((_) {
@@ -85,7 +78,6 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
               final package = OutgoingPingHandshakePackage(
                 handshakeId: HandshakeID(handshakeId),
               );
-              log(package);
               dataSource.sendPackage(package);
             });
           });
@@ -126,7 +118,6 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
   void initHandshake() {
     final package =
         OutgoingInitialHandshakePackage(handshakeId: HandshakeID(handshakeId));
-    log(package);
     dataSource.sendPackage(package);
   }
 

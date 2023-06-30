@@ -8,13 +8,10 @@ import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/out
 import 'package:re_seedwork/re_seedwork.dart';
 
 class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
-    with
-        BlocLoggerMixin<DataSourcePackage, DeveloperToolsParameters>,
-        ConsumerBlocMixin {
+    with ConsumerBlocMixin {
   OutgoingPackagesCubit({
     required this.dataSource,
     required this.developerToolsParametersStorage,
-    List<BlocLoggerCallback<DataSourcePackage>> loggers = const [],
   })  : subscribeToParameterIdList = developerToolsParametersStorage
             .data.subscriptionParameterIds
             .map(DataSourceParameterId.fromInt)
@@ -25,8 +22,6 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
                 value: (v) => v,
               ),
         ) {
-    addLoggers(loggers);
-
     subscribe<DeveloperToolsParameters>(
       developerToolsParametersStorage,
       _onDeveloperToolsParametersUpdated,
@@ -99,7 +94,6 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
   }
 
   void sendPackage(DataSourceOutgoingPackage package) {
-    log(package);
     dataSource.sendPackage(package);
   }
 

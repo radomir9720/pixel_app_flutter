@@ -1,9 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
-import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
+import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/exchange_log_card.dart';
@@ -22,14 +21,15 @@ class _PackagesExchangeConsoleScreenState
   final typeController = TextEditingController();
   final idController = TextEditingController();
   final dataController = TextEditingController();
-  final sentPackagesNotifier = _SentPackagesNotifier();
+
+  @protected
+  static const kFieldsWidth = 300.0;
 
   @override
   void dispose() {
     typeController.dispose();
     idController.dispose();
     dataController.dispose();
-    sentPackagesNotifier.dispose();
     super.dispose();
   }
 
@@ -62,24 +62,17 @@ class _PackagesExchangeConsoleScreenState
       body: Column(
         children: [
           Expanded(
-            child: BlocBuilder<RawRequestsExchangeLogsCubit,
+            child: BlocBuilder<ExchangeConsoleLogsCubit,
                 List<RawRequestsExchangeLogsState>>(
               buildWhen: (previous, current) {
                 return !context.read<PauseLogsUpdatingCubit>().state;
               },
-              builder: (context, state) {
-                final filter =
-                    context.watch<RequestsExchangeLogsFilterCubit>().state;
-                final items = state
-                    .where(
-                      (element) => element.filter(
-                        parameterId: filter.parameterId,
-                        requestType: filter.requestType,
-                        direction: filter.direction,
-                      ),
-                    )
-                    .toList();
-
+              builder: (context, items) {
+                if (items.isEmpty) {
+                  return Center(
+                    child: Text(context.l10n.noPackagesMessage),
+                  );
+                }
                 return ListView.separated(
                   itemCount: items.length,
                   separatorBuilder: (context, index) =>
@@ -104,63 +97,53 @@ class _PackagesExchangeConsoleScreenState
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  children: [
-                    _PackageTextFiled(
-                      hint: context.l10n.requestTypeHint,
-                      controller: typeController,
-                    ),
-                    _PackageTextFiled(
-                      hint: context.l10n.parameterIDHint,
-                      controller: idController,
-                    ),
-                    _PackageTextFiled(
-                      hint: context.l10n.packageDataHint,
-                      controller: dataController,
-                      label: context.l10n.packageDataLabel,
-                    )
-                  ].map((e) => Expanded(child: e)).toList(),
+                const Divider(),
+                const SizedBox(height: 16),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: kFieldsWidth),
+                  child: Row(
+                    children: [
+                      _PackageTextFiled(
+                        hint: context.l10n.requestTypeHint,
+                        controller: typeController,
+                      ),
+                      _PackageTextFiled(
+                        hint: context.l10n.parameterIDHint,
+                        controller: idController,
+                      ),
+                    ].map((e) => Expanded(child: e)).toList(),
+                  ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 16),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: kFieldsWidth),
+                  child: _PackageTextFiled(
+                    hint: context.l10n.packageDataHint,
+                    controller: dataController,
+                    label: context.l10n.packageDataLabel,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 IntrinsicHeight(
                   child: Row(
                     children: [
-                      ValueListenableBuilder<Set<_PackageTypeIdAndData>>(
-                        valueListenable: sentPackagesNotifier,
-                        builder: (context, value, child) {
-                          return SizedBox(
-                            width: 50,
-                            height: double.infinity,
-                            child: PopupMenuButton<_PackageTypeIdAndData>(
-                              itemBuilder: (context) {
-                                return value
-                                    .map(
-                                      (e) =>
-                                          PopupMenuItem<_PackageTypeIdAndData>(
-                                        value: e,
-                                        child: Text(e.toString()),
-                                      ),
-                                    )
-                                    .toList();
-                              },
-                              onSelected: (value) {
-                                context
-                                    .read<OutgoingPackagesCubit>()
-                                    .sendPackage(
-                                      DataSourceOutgoingPackage.raw(
-                                        requestType:
-                                            DataSourceRequestType.fromInt(
-                                          value.type,
-                                        ),
-                                        parameterId: value.parameterId,
-                                        data: value.data,
-                                      ),
-                                    );
-                              },
-                              child: const Icon(Icons.history),
-                            ),
-                          );
-                        },
+                      SizedBox(
+                        width: 50,
+                        height: double.infinity,
+                        child: IconButton(
+                          icon: const Icon(Icons.cleaning_services),
+                          onPressed: () {
+                            context.read<ExchangeConsoleLogsCubit>().clear();
+                            context
+                                .read<RequestsExchangeLogsFilterCubit>()
+                                .update(
+                                  const RequestsExchangeLogsFilterState(),
+                                );
+                            typeController.clear();
+                            idController.clear();
+                            dataController.clear();
+                          },
+                        ),
                       ),
                       Expanded(
                         child: ElevatedButton.icon(
@@ -204,29 +187,33 @@ class _PackagesExchangeConsoleScreenState
                               return;
                             }
 
-                            context.read<OutgoingPackagesCubit>().sendPackage(
-                                  DataSourceOutgoingPackage.raw(
-                                    requestType: DataSourceRequestType.fromInt(
-                                      requestType,
-                                    ),
-                                    parameterId: parameterId,
-                                    data: data.whereType<int>().toList(),
-                                  ),
+                            context
+                                .read<RequestsExchangeLogsFilterCubit>()
+                                .update(
+                                  context
+                                      .read<RequestsExchangeLogsFilterCubit>()
+                                      .state
+                                      .copyWith(parameterId: [parameterId]),
                                 );
+                            try {
+                              context.read<OutgoingPackagesCubit>().sendPackage(
+                                    DataSourceOutgoingPackage.raw(
+                                      requestType:
+                                          DataSourceRequestType.fromInt(
+                                        requestType,
+                                      ),
+                                      parameterId: parameterId,
+                                      data: data.whereType<int>().toList(),
+                                    ),
+                                  );
+                            } on ProviderNotFoundException catch (_) {
+                              context.showSnackBar(
+                                context.l10n
+                                    .exchangeLogsConsoleNoDataSourceMessage,
+                              );
+                            }
 
                             FocusScope.of(context).unfocus();
-
-                            sentPackagesNotifier.add(
-                              _PackageTypeIdAndData(
-                                requestType,
-                                parameterId,
-                                data.whereType<int>().toList(),
-                              ),
-                            );
-
-                            typeController.clear();
-                            idController.clear();
-                            dataController.clear();
                           },
                         ),
                       ),
@@ -260,47 +247,28 @@ class _PackageTextFiled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      textAlign: TextAlign.center,
-      decoration: InputDecoration(
-        hintText: hint,
-        label: label == null ? null : Text(label ?? ''),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: TextField(
+        controller: controller,
+        textAlign: TextAlign.center,
+        decoration: InputDecoration(
+          hintText: hint,
+          label: label == null ? null : Text(label ?? ''),
+          border: const OutlineInputBorder(),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 8,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Theme.of(context).dividerColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
       ),
     );
-  }
-}
-
-@immutable
-class _PackageTypeIdAndData {
-  const _PackageTypeIdAndData(this.type, this.parameterId, this.data);
-
-  final int type;
-  final int parameterId;
-  final List<int> data;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is _PackageTypeIdAndData &&
-        other.type == type &&
-        other.parameterId == parameterId &&
-        listEquals(other.data, data);
-  }
-
-  @override
-  int get hashCode => type.hashCode ^ parameterId.hashCode ^ data.hashCode;
-
-  @override
-  String toString() => '${type.toBytesUint8}, ${parameterId.toBytesUint16}, '
-      'data: ${data.map((e) => e.toBytesUint8)}';
-}
-
-class _SentPackagesNotifier extends ValueNotifier<Set<_PackageTypeIdAndData>> {
-  _SentPackagesNotifier() : super(const {});
-
-  void add(_PackageTypeIdAndData package) {
-    value = {...value, package};
   }
 }

@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/domain/settings/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -53,20 +54,19 @@ class MainScope extends SingleChildStatelessWidget {
             create: (context) => RawRequestsExchangeLogsCubit(),
             lazy: false,
           ),
+          BlocProvider(
+            create: (context) => RequestsExchangeLogsFilterCubit(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                ExchangeConsoleLogsCubit(filterCubit: context.read()),
+          )
         ],
         BlocProvider(
           create: (context) {
             final cubit = DataSourceAuthorizationCubit(
               serialNumberStorage: context.read(),
               dataSourceStorage: context.read(),
-              loggers: [
-                if (context.read<Environment>().isDev)
-                  (outgoing) =>
-                      context.read<ProcessedRequestsExchangeLogsCubit>().add(
-                            outgoing,
-                            DataSourceRequestDirection.outgoing,
-                          )
-              ],
             );
             context.read<DataSourceStorage>().data.when(
                   undefined: () {},

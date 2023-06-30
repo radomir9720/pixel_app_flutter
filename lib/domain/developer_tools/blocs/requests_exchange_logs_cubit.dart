@@ -42,11 +42,16 @@ class ProcessedRequestsExchangeLogsState
     required List<int> parameterId,
     required List<int> requestType,
     required List<int> direction,
+    bool acceptEmptyParameterId = true,
+    bool acceptEmptyrequestType = true,
+    bool acceptEmptydirection = true,
   }) {
-    return (parameterId.isEmpty ||
+    return ((acceptEmptyParameterId && parameterId.isEmpty) ||
             parameterId.contains(data.parameterId.value)) &&
-        (requestType.isEmpty || requestType.contains(data.requestType.value)) &&
-        (direction.isEmpty || direction.contains(data.directionFlag.value));
+        ((acceptEmptyrequestType && requestType.isEmpty) ||
+            requestType.contains(data.requestType.value)) &&
+        ((acceptEmptydirection && direction.isEmpty) ||
+            direction.contains(this.direction.value));
   }
 }
 
@@ -63,16 +68,22 @@ class RawRequestsExchangeLogsState
     required List<int> parameterId,
     required List<int> requestType,
     required List<int> direction,
+    bool acceptEmptyParameterId = true,
+    bool acceptEmptyrequestType = true,
+    bool acceptEmptydirection = true,
+    bool acceptUnparsed = true,
   }) {
     final package = DataSourceIncomingPackage.instanceOrNUll(data);
-    // if (package == null) return true;
-    return (parameterId.isEmpty ||
-            package == null ||
+    if (!acceptUnparsed && package == null) return false;
+
+    return (package == null ||
+            (acceptEmptyParameterId && parameterId.isEmpty) ||
             parameterId.contains(package.parameterId.value)) &&
-        (requestType.isEmpty ||
+        ((acceptEmptyrequestType && requestType.isEmpty) ||
             package == null ||
             requestType.contains(package.requestType.value)) &&
-        (direction.isEmpty || direction.contains(this.direction.value));
+        ((acceptEmptydirection && direction.isEmpty) ||
+            direction.contains(this.direction.value));
   }
 }
 
