@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pixel_app_flutter/app/helpers/logger_records_buffer.dart';
+import 'package:pixel_app_flutter/domain/app/app.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
@@ -19,9 +19,7 @@ class DeveloperToolsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => context.router.pop(),
-        ),
+        leading: BackButton(onPressed: context.router.pop),
         title: Text(context.l10n.developerToolsScreenTitle),
       ),
       body:
@@ -193,7 +191,7 @@ class DeveloperToolsScreen extends StatelessWidget {
                   title: Text(context.l10n.exportLogsListTileLabel),
                   onTap: () async {
                     final tempDir = await getTemporaryDirectory();
-                    final items = GetIt.I<LoggerRecordsBuffer>().records;
+                    final items = GetIt.I<LoggerStorage>().data;
                     final string = items.map((e) => e.toString()).join('\n');
                     final path = '${tempDir.path}/log_${DateTime.now()}.txt';
                     final f = File(path)..writeAsStringSync(string);

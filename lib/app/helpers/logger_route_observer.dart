@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
-import 'package:pixel_app_flutter/app/helpers/logger_records_buffer.dart';
 
 class LoggerRouteObserver extends RouteObserver<ModalRoute<dynamic>> {
   LoggerRouteObserver({
-    required this.recordsBuffer,
+    this.onNewScreen,
     this.routeFilter = defaultRouteFilter,
     this.nameExtractor = defaultNameExtractor,
   });
 
   @protected
-  final LoggerRecordsBuffer recordsBuffer;
+  final ValueSetter<String?>? onNewScreen;
 
   @protected
   final bool Function(Route<dynamic>? route) routeFilter;
@@ -25,12 +23,7 @@ class LoggerRouteObserver extends RouteObserver<ModalRoute<dynamic>> {
 
   void _logScreen(Route<dynamic> route) {
     final screenName = nameExtractor(route.settings);
-    final record = LogRecord(
-      Level.INFO,
-      'Navigation to: $screenName',
-      'RouteObserver',
-    );
-    recordsBuffer.add(record);
+    onNewScreen?.call(screenName);
   }
 
   @override

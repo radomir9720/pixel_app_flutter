@@ -5,6 +5,7 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/data_source_package_exceptions.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
+import 'package:re_seedwork/re_seedwork.dart';
 
 export 'package:pixel_app_flutter/domain/data_source/models/package/data_source_incoming_package.dart';
 export 'package:pixel_app_flutter/domain/data_source/models/package/data_source_outgoing_package.dart';
@@ -131,6 +132,11 @@ abstract class DataSourcePackage extends UnmodifiableListView<int> {
     required int direction,
   }) {
     return type == requestType.value && directionFlag.value == direction;
+  }
+
+  @override
+  String toString() {
+    return '${directionFlag.name.capitalize}(${super.toString()})';
   }
 }
 

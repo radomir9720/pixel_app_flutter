@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
+import 'package:pixel_app_flutter/domain/app/storages/logger_storage.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
@@ -84,6 +85,10 @@ class SelectedDataSourceScope extends AutoRouter {
                                   package,
                                   DataSourceRequestDirection.incoming,
                                 );
+                            context.read<LoggerStorage>().logInfo(
+                                  package.toString(),
+                                  'IncomingProcessedPackage',
+                                );
                           },
                           outgoingPackage: (package) {
                             context
@@ -96,17 +101,29 @@ class SelectedDataSourceScope extends AutoRouter {
                                   package,
                                   DataSourceRequestDirection.outgoing,
                                 );
+                            context.read<LoggerStorage>().logInfo(
+                                  package.toString(),
+                                  'OutgoingPackage',
+                                );
                           },
                           rawIncomingBytes: (bytes) {
                             context.read<RawRequestsExchangeLogsCubit>().add(
                                   bytes,
                                   DataSourceRequestDirection.incoming,
                                 );
+                            context.read<LoggerStorage>().logInfo(
+                                  bytes.toString(),
+                                  'IncomingRawBytes',
+                                );
                           },
                           rawIncomingPackage: (bytes) {
                             context.read<ExchangeConsoleLogsCubit>().addRaw(
                                   bytes,
                                   DataSourceRequestDirection.incoming,
+                                );
+                            context.read<LoggerStorage>().logInfo(
+                                  bytes.toString(),
+                                  'IncomingRawPackage',
                                 );
                           },
                         );
