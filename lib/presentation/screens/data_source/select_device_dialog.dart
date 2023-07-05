@@ -42,7 +42,7 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
       title: Text(context.l10n.selectDeviceDialogTitle),
       content: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * .6,
+          maxHeight: MediaQuery.sizeOf(context).height * .6,
         ),
         child:
             BlocBuilder<DataSourceDeviceListCubit, DataSourceDeviceListState>(

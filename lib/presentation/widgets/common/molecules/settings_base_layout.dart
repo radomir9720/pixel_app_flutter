@@ -32,10 +32,12 @@ class SettingsBaseLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenData = Screen.of(context);
+    final size = MediaQuery.sizeOf(context);
+    final height = size.height;
     final bodyPadding = screenData.whenType(
       handset: () => const EdgeInsets.symmetric(horizontal: 16),
       orElse: () => EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * .07,
+        horizontal: size.width * .07,
       ),
     );
     final closeButtonPadding = screenData.whenType(
@@ -50,7 +52,6 @@ class SettingsBaseLayout extends StatelessWidget {
       orElse: () => 16.0,
     );
 
-    final height = MediaQuery.of(context).size.height;
     const standardScreenHeight = 700;
 
     final factor = (1 - (height / standardScreenHeight).clamp(1, 1.5)).abs();
@@ -92,7 +93,7 @@ class SettingsBaseLayout extends StatelessWidget {
                           constraints: BoxConstraints(
                             minWidth: 60,
                             maxWidth: math.min(
-                              MediaQuery.of(context).size.width / 2.4,
+                              size.width / 2.4,
                               250,
                             ),
                           ),
