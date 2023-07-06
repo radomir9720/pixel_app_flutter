@@ -111,11 +111,11 @@ class MotorScreen extends StatelessWidget {
                 parameterName: context.l10n.motorsTemperatureTileTitle,
                 builder: () {
                   final state = context.select(
-                    (MotorDataCubit cubit) => cubit.state.temperature,
+                    (MotorDataCubit cubit) => cubit.state.motorTemperature,
                   );
                   return (
-                    '${state.firstMotor}',
-                    '${state.secondMotor}',
+                    '${state.first}',
+                    '${state.second}',
                     context.colorFromStatus(state.status),
                   );
                 },
@@ -125,11 +125,11 @@ class MotorScreen extends StatelessWidget {
                 parameterName: context.l10n.controllersTemperatureTileTitle,
                 builder: () {
                   final state = context.select(
-                    (MotorDataCubit cubit) => cubit.state.temperature,
+                    (MotorDataCubit cubit) => cubit.state.controllerTemperature,
                   );
                   return (
-                    '${state.firstController}',
-                    '${state.secondController}',
+                    '${state.first}',
+                    '${state.second}',
                     context.colorFromStatus(state.status),
                   );
                 },

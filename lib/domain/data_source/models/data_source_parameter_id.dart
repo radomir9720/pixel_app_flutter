@@ -86,6 +86,8 @@ abstract class DataSourceParameterId {
   const factory DataSourceParameterId.gearAndRoll() = GearAndRollParameterId;
   const factory DataSourceParameterId.motorTemperature() =
       MotorTemperatureParameterId;
+  const factory DataSourceParameterId.controllerTemperature() =
+      ControllerTemperatureParameterId;
   const factory DataSourceParameterId.odometer() = OdometerParameterId;
 
   bool get isAuthorization => this is AuthorizationParameterId;
@@ -150,6 +152,7 @@ abstract class DataSourceParameterId {
   bool get isMotorPower => this is MotorPowerParameterId;
   bool get isGearAndRoll => this is GearAndRollParameterId;
   bool get isMotorTemperature => this is MotorTemperatureParameterId;
+  bool get isControllerTemperature => this is ControllerTemperatureParameterId;
   bool get isOdometer => this is OdometerParameterId;
 
   void voidOn<T extends DataSourceParameterId>(void Function() function) {
@@ -205,6 +208,7 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.motorPower(),
       DataSourceParameterId.gearAndRoll(),
       DataSourceParameterId.motorTemperature(),
+      DataSourceParameterId.controllerTemperature(),
       DataSourceParameterId.odometer(),
       DataSourceParameterId.batteryLevel(),
       DataSourceParameterId.batteryPower(),
@@ -409,6 +413,10 @@ class MotorTemperatureParameterId extends DataSourceParameterId {
   const MotorTemperatureParameterId() : super(0x010B);
 }
 
+class ControllerTemperatureParameterId extends DataSourceParameterId {
+  const ControllerTemperatureParameterId() : super(0x010C);
+}
+
 class OdometerParameterId extends DataSourceParameterId {
-  const OdometerParameterId() : super(0x010C);
+  const OdometerParameterId() : super(0x010D);
 }

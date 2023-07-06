@@ -244,6 +244,10 @@ class DemoDataSource extends DataSource
               () => subscriptionCallbacks
                   .remove(_sendNewMotorTemperatureCallback),
             )
+            ..voidOn<ControllerTemperatureParameterId>(
+              () => subscriptionCallbacks
+                  .remove(_sendNewControllerTemperatureCallback),
+            )
             ..voidOn<OdometerParameterId>(
               () => subscriptionCallbacks.remove(_sendNewOdometerCallback),
             )
@@ -287,6 +291,10 @@ class DemoDataSource extends DataSource
           )
           ..voidOn<MotorTemperatureParameterId>(
             () => subscriptionCallbacks.add(_sendNewMotorTemperatureCallback),
+          )
+          ..voidOn<ControllerTemperatureParameterId>(
+            () => subscriptionCallbacks
+                .add(_sendNewControllerTemperatureCallback),
           )
           ..voidOn<OdometerParameterId>(
             () => subscriptionCallbacks.add(_sendNewOdometerCallback),
@@ -399,6 +407,9 @@ class DemoDataSource extends DataSource
       )
       ..voidOn<MotorTemperatureParameterId>(
         () => _sendNewMotorTemperatureCallback(version: v),
+      )
+      ..voidOn<ControllerTemperatureParameterId>(
+        () => _sendNewControllerTemperatureCallback(version: v),
       )
       ..voidOn<RPMParameterId>(() => _sendNewRPMCallback(version: v))
       ..voidOn<LowVoltageMinMaxDeltaParameterId>(_sendNewLowVoltageCallback)
@@ -573,16 +584,18 @@ class DemoDataSource extends DataSource
   void _sendNewMotorTemperatureCallback({
     DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
   }) {
-    _updateValueCallback(
+    _sendTwoInt16Callback(
       const MotorTemperatureParameterId(),
-      MotorTemperature(
-        firstMotor: randomInt8,
-        firstController: randomInt8,
-        secondMotor: randomInt8,
-        secondController: randomInt8,
-        status: _getRandomStatus,
-      ),
-      version,
+      version: version,
+    );
+  }
+
+  void _sendNewControllerTemperatureCallback({
+    DataSourceProtocolVersion version = DataSourceProtocolVersion.subscription,
+  }) {
+    _sendTwoInt16Callback(
+      const ControllerTemperatureParameterId(),
+      version: version,
     );
   }
 
