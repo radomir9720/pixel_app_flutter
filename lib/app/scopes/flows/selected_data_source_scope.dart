@@ -154,7 +154,9 @@ class SelectedDataSourceScope extends AutoRouter {
                   ..subscribeToHazardBeam()
                   ..subscribeToHighBeam()
                   ..subscribeToLowBeam()
-                  ..subscribeToTurnSignals(),
+                  ..subscribeToTurnSignals()
+                  ..subscribeToReverseLight()
+                  ..subscribeToBrakeLight(),
                 lazy: false,
               ),
               BlocProvider(

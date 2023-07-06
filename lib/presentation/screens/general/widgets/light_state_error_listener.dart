@@ -24,9 +24,12 @@ class LightStateErrorListener extends SingleChildStatelessWidget {
               MapEntry(context.l10n.parkingLightsButtonCaption, error),
           lowBeam: (error) =>
               MapEntry(context.l10n.lowBeamButtonCaption, error),
-          highBeam: (error) {
-            return MapEntry(context.l10n.highBeamButtonCaption, error);
-          },
+          highBeam: (error) =>
+              MapEntry(context.l10n.highBeamButtonCaption, error),
+          reverse: (error) =>
+              MapEntry(context.l10n.reverseLightButtonCaption, error),
+          brake: (error) =>
+              MapEntry(context.l10n.brakeLightButtonCaption, error),
         );
 
         if (errors.isEmpty) return false;

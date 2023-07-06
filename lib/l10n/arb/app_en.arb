@@ -353,5 +353,7 @@
   "setButtonCaption": "Set",
   "enterSerialNumberHintMessage": "The number can contain only digits and Latin letters: \"A\", \"B\", \"C\", \"D\", \"E\", \"F\"",
   "exchangeLogsConsoleNoDataSourceMessage": "In order to send packages, you must first connect to the data source",
-  "noPackagesMessage": "No packages"
+  "noPackagesMessage": "No packages",
+  "reverseLightButtonCaption": "Reverse light",
+  "brakeLightButtonCaption": "Brake light"
 }
