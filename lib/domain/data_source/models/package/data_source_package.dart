@@ -85,12 +85,7 @@ abstract class DataSourcePackage extends UnmodifiableListView<int> {
   List<int> get body => sublist(1, length - 3);
 
   static List<int> calculateCheckSum(List<int> body) {
-    final checkSum =
-        Crc16Mcrf4xx().convert(body).toRadixString(16).padLeft(4, '0');
-
-    final firstCheckSumByte = int.parse(checkSum.substring(0, 2), radix: 16);
-    final secondCheckSumByte = int.parse(checkSum.substring(2), radix: 16);
-    return [firstCheckSumByte, secondCheckSumByte];
+    return int.parse(Crc16Mcrf4xx().convert(body).toString()).toBytesUint16;
   }
 
   String get secondConfigByte {
