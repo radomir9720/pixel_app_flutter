@@ -74,8 +74,8 @@ class MotorScreen extends StatelessWidget {
                   final state = context
                       .select((MotorDataCubit cubit) => cubit.state.voltage);
                   return (
-                    '${state.first ~/ 10}',
-                    '${state.second ~/ 10}',
+                    (state.first / 10).toStringAsFixed(1),
+                    (state.second / 10).toStringAsFixed(1),
                     context.colorFromStatus(state.status),
                   );
                 },
@@ -87,8 +87,8 @@ class MotorScreen extends StatelessWidget {
                   final state = context
                       .select((MotorDataCubit cubit) => cubit.state.current);
                   return (
-                    '${state.first ~/ 10}',
-                    '${state.second ~/ 10}',
+                    (state.first / 10).toStringAsFixed(1),
+                    (state.second / 10).toStringAsFixed(1),
                     context.colorFromStatus(state.status),
                   );
                 },
