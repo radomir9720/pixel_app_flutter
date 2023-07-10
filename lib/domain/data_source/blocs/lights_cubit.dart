@@ -9,7 +9,7 @@ import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/out
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-abstract class LightsStateError {
+sealed class LightsStateError {
   const LightsStateError();
 
   const factory LightsStateError.differs({
@@ -28,10 +28,16 @@ abstract class LightsStateError {
     required R Function() differs,
     required R Function() timeout,
     required R Function() mainECUError,
-  });
+  }) {
+    return switch (this) {
+      _StatesDiffersEnablingError() => differs(),
+      _TimeoutEnablingError() => timeout(),
+      _MainECUEnablingError() => mainECUError(),
+    };
+  }
 }
 
-class _StatesDiffersEnablingError extends LightsStateError {
+final class _StatesDiffersEnablingError extends LightsStateError {
   const _StatesDiffersEnablingError({
     required this.first,
     required this.second,
@@ -39,41 +45,14 @@ class _StatesDiffersEnablingError extends LightsStateError {
 
   final bool first;
   final bool second;
-
-  @override
-  R when<R>({
-    required R Function() differs,
-    required R Function() timeout,
-    required R Function() mainECUError,
-  }) {
-    return differs();
-  }
 }
 
-class _TimeoutEnablingError extends LightsStateError {
+final class _TimeoutEnablingError extends LightsStateError {
   const _TimeoutEnablingError();
-
-  @override
-  R when<R>({
-    required R Function() differs,
-    required R Function() timeout,
-    required R Function() mainECUError,
-  }) {
-    return timeout();
-  }
 }
 
-class _MainECUEnablingError extends LightsStateError {
+final class _MainECUEnablingError extends LightsStateError {
   const _MainECUEnablingError();
-
-  @override
-  R when<R>({
-    required R Function() differs,
-    required R Function() timeout,
-    required R Function() mainECUError,
-  }) {
-    return mainECUError();
-  }
 }
 
 typedef LightState<T> = AsyncData<T, LightsStateError>;
@@ -144,9 +123,8 @@ class TwoBoolsState {
       'waitingForSwitch: $waitingForSwitch)';
 }
 
-@sealed
 @immutable
-class LightsState with EquatableMixin {
+final class LightsState with EquatableMixin {
   const LightsState({
     required this.leftTurnSignal,
     required this.rightTurnSignal,
@@ -309,7 +287,11 @@ extension _ErrorExtension<V, E extends Object> on AsyncData<V, E> {
 }
 
 class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
-  LightsCubit({required this.dataSource}) : super(const LightsState.initial()) {
+  LightsCubit({
+    required this.dataSource,
+    this.toggleTimeout = kToggleTimeout,
+    this.subscriptionTimeout = kSubscriptionTimeout,
+  }) : super(const LightsState.initial()) {
     subscribe<DataSourceIncomingPackage>(dataSource.packageStream, (package) {
       package
         // SideBeam
@@ -375,6 +357,21 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
         });
     });
   }
+
+  @protected
+  final DataSource dataSource;
+
+  @protected
+  final Duration toggleTimeout;
+
+  @protected
+  final Duration subscriptionTimeout;
+
+  @visibleForTesting
+  static const kToggleTimeout = Duration(seconds: 1);
+
+  @visibleForTesting
+  static const kSubscriptionTimeout = Duration(seconds: 1);
 
   void _onNewSideBeam({
     bool front = true,
@@ -456,9 +453,6 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
 
     emit(newStateBuilder(newFeatureState));
   }
-
-  @protected
-  final DataSource dataSource;
 
   void _sendSubscriptionPackages(List<DataSourceParameterId> parameterIds) {
     dataSource.sendPackages(
@@ -554,32 +548,35 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     );
   }
 
-  void _subscribeTo<T>(
+  Future<void> _subscribeTo<T>(
     List<DataSourceParameterId> parameterIds, {
     required AsyncData<T, LightsStateError> Function() newFeatureStateBuilder,
     required LightsState Function(
       AsyncData<T, LightsStateError> newState,
     ) newStateBuilder,
     required T loadingState,
-  }) {
+  }) async {
     emit(newStateBuilder(AsyncData.loading(loadingState)));
 
     _sendSubscriptionPackages(parameterIds);
 
-    Future<void>.delayed(const Duration(seconds: 1)).then((value) {
-      if (isClosed) return;
-
-      final newFeature = newFeatureStateBuilder();
-      if (newFeature.isExecuted) return;
-
-      emit(
-        newStateBuilder(
-          newFeature.inFailure(
+    final failure = await stream
+        .where((event) => newFeatureStateBuilder().isExecuted)
+        .map<LightsState?>((event) => null)
+        .first
+        .timeout(
+      subscriptionTimeout,
+      onTimeout: () async {
+        return newStateBuilder(
+          newFeatureStateBuilder().inFailure(
             const LightsStateError.timeout(),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
+
+    if (isClosed) return;
+    if (failure != null) emit(failure);
   }
 
   static const kSideBeamParameterIds = [
@@ -703,53 +700,50 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     );
   }
 
-  void _toggleBool({
+  Future<void> _toggleBool({
     required AsyncData<bool, LightsStateError> Function()
         newFeatureStateBuilder,
     required LightsState Function(
       AsyncData<bool, LightsStateError> newState,
     ) newStateBuilder,
     required List<DataSourceParameterId> parameterIds,
-  }) {
+  }) async {
     final currentState = newFeatureStateBuilder();
     if (!currentState.isExecuted) return;
 
-    emit(newStateBuilder(const AsyncData.loading(false)));
     final setTo = !currentState.payload;
+    emit(newStateBuilder(AsyncData.loading(setTo)));
     _sendSetValuePackages(
       parameterIds,
       setTo.toInt,
     );
 
-    Future<void>.delayed(const Duration(seconds: 1)).then(
-      (value) {
-        if (isClosed) return;
-        final currentState = newFeatureStateBuilder();
-
-        final payload = currentState.payload;
-
-        if (payload != setTo) {
-          emit(
-            newStateBuilder(
-              AsyncData.failure(
-                payload,
-                const LightsStateError.timeout(),
-              ),
-            ),
-          );
-        }
+    final failure = await stream
+        .where((event) => newFeatureStateBuilder().payload == setTo)
+        .map<LightState<bool>?>((event) => null)
+        .first
+        .timeout(
+      toggleTimeout,
+      onTimeout: () async {
+        return AsyncData.failure(
+          newFeatureStateBuilder().payload,
+          const LightsStateError.timeout(),
+        );
       },
     );
+
+    if (isClosed) return;
+    if (failure != null) emit(newStateBuilder(failure));
   }
 
-  void _toggleTwoBools({
+  Future<void> _toggleTwoBools({
     required AsyncData<TwoBoolsState, LightsStateError> Function()
         newFeatureStateBuilder,
     required LightsState Function(
       AsyncData<TwoBoolsState, LightsStateError> newState,
     ) newStateBuilder,
     required List<DataSourceParameterId> parameterIds,
-  }) {
+  }) async {
     final currentState = newFeatureStateBuilder();
     if (!currentState.isExecuted) return;
 
@@ -768,33 +762,41 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
       currentState.payload.oppositeValue,
     );
 
-    Future<void>.delayed(const Duration(seconds: 1)).then((value) {
-      if (isClosed) return;
-      final currentState = newFeatureStateBuilder();
-      final payload = currentState.payload;
+    final failure = await stream
+        .where((event) {
+          final currentState = newFeatureStateBuilder();
+          final payload = currentState.payload;
+          return !payload.differs &&
+              currentState.isSuccess &&
+              payload.waitingForSwitch == null;
+        })
+        .map<LightState<TwoBoolsState>?>((event) => null)
+        .first
+        .timeout(
+          toggleTimeout,
+          onTimeout: () async {
+            final currentState = newFeatureStateBuilder();
+            final payload = currentState.payload;
 
-      if (!currentState.payload.differs &&
-          currentState.isSuccess &&
-          payload.waitingForSwitch == null) return;
+            if (payload.differs || payload.waitingForSwitch != payload.isOn) {
+              final failure = payload.differs
+                  ? LightsStateError.differs(
+                      first: payload.first,
+                      second: payload.second,
+                    )
+                  : const LightsStateError.timeout();
 
-      if (payload.differs || payload.waitingForSwitch != payload.isOn) {
-        final failure = payload.differs
-            ? LightsStateError.differs(
-                first: payload.first,
-                second: payload.second,
-              )
-            : const LightsStateError.timeout();
-
-        emit(
-          newStateBuilder(
-            AsyncData.failure(
-              payload,
-              failure,
-            ),
-          ),
+              return AsyncData.failure(
+                payload,
+                failure,
+              );
+            }
+            return null;
+          },
         );
-      }
-    });
+
+    if (isClosed) return;
+    if (failure != null) emit(newStateBuilder(failure));
   }
 }
 
