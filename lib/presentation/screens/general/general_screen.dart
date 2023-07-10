@@ -39,13 +39,15 @@ class TabletGeneralScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 37),
       child: Stack(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: size.width,
+            height: size.height,
           ),
           const Positioned(
             top: 0,
@@ -56,7 +58,7 @@ class TabletGeneralScreenBody extends StatelessWidget {
           Positioned(
             right: 0,
             left: 0,
-            bottom: MediaQuery.of(context).size.height * .3,
+            bottom: size.height * .3,
             child: const CarWidget(),
           ),
           const Positioned(

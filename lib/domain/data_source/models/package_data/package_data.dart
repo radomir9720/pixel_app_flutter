@@ -20,7 +20,6 @@ export 'implementations/uint8_with_status_body.dart';
 export 'implementations/two_int16_with_status_body.dart';
 export 'implementations/two_uint16_with_status_body.dart';
 export 'implementations/uint32_with_status_body.dart';
-export 'implementations/motor_temperature.dart';
 export 'implementations/motor_gear_and_roll.dart';
 export 'implementations/int16_with_status_body.dart';
 export 'implementations/set_uint8_body.dart';

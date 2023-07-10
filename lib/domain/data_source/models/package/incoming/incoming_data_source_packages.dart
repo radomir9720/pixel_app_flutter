@@ -1,7 +1,10 @@
+export 'authorization_response.dart';
 export 'battery_level.dart';
 export 'battery_low_voltage.dart';
 export 'battery_power.dart';
 export 'battery_temperature.dart';
+export 'brake_light.dart';
+export 'controller_temperature.dart';
 export 'current.dart';
 export 'custom_image.dart';
 export 'error_with_code_and_section.dart';
@@ -20,6 +23,7 @@ export 'motor_speed.dart';
 export 'motor_temperature.dart';
 export 'motor_voltage.dart';
 export 'odometer.dart';
+export 'reverse_light.dart';
 export 'rpm.dart';
 export 'side_beam.dart';
 export 'speed.dart';

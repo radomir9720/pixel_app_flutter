@@ -65,7 +65,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                 icon: PixelIcons.light,
                 onPressed: context.read<LightsCubit>().toggleLowBeam,
               ),
-              _CarInfoTileBlocWrapper(
+              _CarInfoTileBlocWrapper<bool>(
                 selector: (state) => state.highBeam,
                 title: context.l10n.highBeamButtonCaption,
                 icon: PixelIcons.light,
@@ -88,6 +88,18 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                 title: context.l10n.hazardBeamButtonCaption,
                 icon: Icons.warning_amber,
                 onPressed: context.read<LightsCubit>().toggleHazardBeam,
+              ),
+              _CarInfoTileBlocWrapper<bool>(
+                selector: (state) => state.reverse,
+                title: context.l10n.reverseLightButtonCaption,
+                icon: Icons.keyboard_double_arrow_down_sharp,
+                onPressed: context.read<LightsCubit>().toggleReverseLight,
+              ),
+              _CarInfoTileBlocWrapper<bool>(
+                selector: (state) => state.brake,
+                title: context.l10n.brakeLightButtonCaption,
+                icon: Icons.stop_circle_outlined,
+                onPressed: context.read<LightsCubit>().toggleBrakeLight,
               ),
 
               // CarInterfaceListTile(

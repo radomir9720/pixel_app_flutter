@@ -7,9 +7,7 @@ typedef Observer = void Function(
 );
 
 abstract class DataSource {
-  DataSource({required this.id});
-
-  final int id;
+  DataSource({required this.key});
 
   void addObserver(Observer observer);
 
@@ -17,7 +15,7 @@ abstract class DataSource {
 
   void observe(Observerable<dynamic> observable);
 
-  String get key;
+  String key;
 
   Stream<DataSourceIncomingPackage> get packageStream;
 

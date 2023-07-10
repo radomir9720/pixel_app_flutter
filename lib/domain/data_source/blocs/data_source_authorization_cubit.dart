@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
-import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/authorization_response.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/incoming_data_source_packages.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/authorizartion.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
-import 'package:re_seedwork/re_seedwork.dart';
 
 part 'data_source_authorization_cubit.freezed.dart';
 
@@ -14,186 +13,49 @@ part 'data_source_authorization_cubit.freezed.dart';
 class DataSourceAuthorizationState with _$DataSourceAuthorizationState {
   const DataSourceAuthorizationState._();
 
-  const factory DataSourceAuthorizationState.initial(String? id) = _Initial;
-  const factory DataSourceAuthorizationState.failure(String? id) = _Failure;
-  const factory DataSourceAuthorizationState.sendingInitializationRequest(
-    String? id,
-  ) = _SendingInitializationRequest;
-  const factory DataSourceAuthorizationState.initializationTimeout(String? id) =
+  const factory DataSourceAuthorizationState.initial() = _Initial;
+  const factory DataSourceAuthorizationState.noDataSource() = _NoDataSource;
+  const factory DataSourceAuthorizationState.failure() = _Failure;
+  const factory DataSourceAuthorizationState.sendingInitializationRequest() =
+      _SendingInitializationRequest;
+  const factory DataSourceAuthorizationState.initializationTimeout() =
       _InitializationTimeout;
-  const factory DataSourceAuthorizationState.initializationResponseReceived(
-    String? id,
-  ) = _InitializationResponseReceived;
-  const factory DataSourceAuthorizationState.noSerialNumber(
-    String? id,
-  ) = _NoSerialNumber;
-  const factory DataSourceAuthorizationState.sendingAuthorizationRequest(
-    String? id,
-  ) = _SendingAuthorizationRequest;
-  const factory DataSourceAuthorizationState.authorizationTimeout(String? id) =
+  const factory DataSourceAuthorizationState.initializationResponseReceived() =
+      _InitializationResponseReceived;
+  const factory DataSourceAuthorizationState.noSerialNumber({
+    required DataSourceWithAddress dswa,
+    required String deviceId,
+  }) = _NoSerialNumber;
+  const factory DataSourceAuthorizationState.sendingAuthorizationRequest() =
+      _SendingAuthorizationRequest;
+  const factory DataSourceAuthorizationState.authorizationTimeout() =
       _AuthorizationTimeout;
-  const factory DataSourceAuthorizationState.authorized(String? id) =
-      _Authorized;
-  const factory DataSourceAuthorizationState.errorSavingSerialNumber(
-    String? id,
-  ) = _ErrorSavingSerialNumber;
+  const factory DataSourceAuthorizationState.authorized() = _Authorized;
+  const factory DataSourceAuthorizationState.errorSavingSerialNumber() =
+      _ErrorSavingSerialNumber;
 
   bool get isLoading => maybeWhen(
-        sendingAuthorizationRequest: (id) => true,
-        sendingInitializationRequest: (id) => true,
-        initializationResponseReceived: (id) => true,
-        initial: (id) => true,
+        sendingAuthorizationRequest: () => true,
+        sendingInitializationRequest: () => true,
+        initializationResponseReceived: () => true,
+        initial: () => false,
+        orElse: () => false,
+      );
+  bool get isFailure => maybeWhen(
+        failure: () => true,
+        authorizationTimeout: () => true,
+        initializationTimeout: () => true,
         orElse: () => false,
       );
 }
 
-class DataSourceAuthorizationCubit extends Cubit<DataSourceAuthorizationState>
-    with ConsumerBlocMixin {
+class DataSourceAuthorizationCubit extends Cubit<DataSourceAuthorizationState> {
   DataSourceAuthorizationCubit({
-    required this.serialNumberStorage,
     required this.dataSourceStorage,
+    required this.serialNumberStorage,
     this.initializationTimeout = kInitializationTimeout,
     this.authorizationTimeout = kAuthorizationTimeout,
-  }) : super(const DataSourceAuthorizationState.initial(null)) {
-    subscribe<Optional<DataSourceWithAddress>>(dataSourceStorage, (value) {
-      incomingPackagesSubscription?.cancel();
-      incomingPackagesSubscription = null;
-      value.when(
-        undefined: () {},
-        presented: (dswa) {
-          tryAutoAuthorization(dswa.dataSource);
-          incomingPackagesSubscription =
-              dswa.dataSource.packageStream.listen((value) {
-            value
-              ..voidOnModel<AuthorizationInitializationResponse,
-                  AuthorizationInitializationResponseIncomingDataSourcePackage>(
-                (model) => _onAuthorizationInitializationResponse(
-                  model,
-                  dswa.dataSource,
-                ),
-              )
-              ..voidOnModel<AuthorizationResponse,
-                  AuthorizationResponseIncomingDataSourcePackage>((model) {
-                if (model.success) {
-                  emit(DataSourceAuthorizationState.authorized(state.id));
-                  return;
-                }
-                dataSourceStorage.put(const Optional.undefined());
-                emit(DataSourceAuthorizationState.failure(state.id));
-              });
-          });
-        },
-      );
-    });
-  }
-
-  @visibleForTesting
-  StreamSubscription<void>? incomingPackagesSubscription;
-
-  void tryAutoAuthorization(DataSource ds) {
-    emit(DataSourceAuthorizationState.sendingInitializationRequest(state.id));
-
-    final package = OutgoingAuthorizationInitializationRequestPackage();
-    ds.sendPackage(package);
-    Future<void>.delayed(initializationTimeout).then((value) {
-      if (isClosed) return;
-      state.maybeWhen(
-        sendingInitializationRequest: (id) {
-          emit(DataSourceAuthorizationState.initializationTimeout(state.id));
-          dataSourceStorage.put(const Optional.undefined());
-        },
-        orElse: () {},
-      );
-    });
-  }
-
-  Future<void> _onAuthorizationInitializationResponse(
-    AuthorizationInitializationResponse model,
-    DataSource ds,
-  ) async {
-    final id = model.deviceId.join();
-    emit(DataSourceAuthorizationState.initializationResponseReceived(id));
-    if (model.method != 0x01) {
-      await dataSourceStorage.put(const Optional.undefined());
-      emit(DataSourceAuthorizationState.failure(id));
-      throw UnimplementedError('Unknown authorization method: ${model.method}');
-    }
-
-    try {
-      final response = await serialNumberStorage.read(id);
-
-      if (isClosed) return;
-      response.when(
-        error: (e) {
-          emit(DataSourceAuthorizationState.failure(id));
-          dataSourceStorage.put(const Optional.undefined());
-          Future<void>.error(e);
-        },
-        value: (value) {
-          value.when(
-            undefined: () {
-              emit(DataSourceAuthorizationState.noSerialNumber(id));
-            },
-            presented: (chain) => authorize(chain.sn, ds),
-          );
-        },
-      );
-    } catch (e) {
-      await dataSourceStorage.put(const Optional.undefined());
-      emit(DataSourceAuthorizationState.failure(id));
-
-      rethrow;
-    }
-  }
-
-  void authorize(SerialNumber sn, [DataSource? dataSource]) {
-    final ds = dataSource ?? dataSourceStorage.data.toNullable?.dataSource;
-    if (ds == null) {
-      dataSourceStorage.put(const Optional.undefined());
-      emit(DataSourceAuthorizationState.failure(state.id));
-      throw ArgumentError.notNull('DataSource');
-    }
-
-    emit(DataSourceAuthorizationState.sendingAuthorizationRequest(state.id));
-
-    final package = OutgoingAuthorizationRequestPackage(
-      request: AuthorizationRequest(sn: sn),
-    );
-    ds.sendPackage(package);
-
-    Future<void>.delayed(authorizationTimeout).then((value) {
-      if (isClosed) return;
-      state.maybeWhen(
-        sendingAuthorizationRequest: (id) {
-          dataSourceStorage.put(const Optional.undefined());
-          emit(DataSourceAuthorizationState.authorizationTimeout(id));
-        },
-        authorized: (id) async {
-          if (id == null) {
-            return emit(
-              DataSourceAuthorizationState.errorSavingSerialNumber(id),
-            );
-          }
-          final chain = SerialNumberChain.now(
-            id: id,
-            sn: sn,
-          );
-          final result = await serialNumberStorage.write(chain);
-
-          result.when(
-            error: (error) {
-              emit(
-                DataSourceAuthorizationState.errorSavingSerialNumber(id),
-              );
-              Future<void>.error(error);
-            },
-            value: (value) {},
-          );
-        },
-        orElse: () {},
-      );
-    });
-  }
+  }) : super(const DataSourceAuthorizationState.initial());
 
   @visibleForTesting
   static const kInitializationTimeout = Duration(seconds: 2);
@@ -212,4 +74,154 @@ class DataSourceAuthorizationCubit extends Cubit<DataSourceAuthorizationState>
 
   @protected
   final SerialNumberStorage serialNumberStorage;
+
+  @visibleForTesting
+  StreamSubscription<void>? eventsSubscription;
+
+  Future<void> requestAuthorization(DataSourceWithAddress dswa) async {
+    emit(const DataSourceAuthorizationState.sendingInitializationRequest());
+
+    await eventsSubscription?.cancel();
+    eventsSubscription = null;
+    final ds = dswa.dataSource;
+    eventsSubscription = ds.packageStream.listen(
+      (package) => _onNewIncomingDataSourcePackage(package, dswa),
+    );
+    await ds.sendPackage(OutgoingAuthorizationInitializationRequestPackage());
+    await Future<void>.delayed(initializationTimeout).then((value) {
+      if (isClosed) return;
+      state.maybeWhen(
+        sendingInitializationRequest: () {
+          ds.disconnectAndDispose();
+          emit(const DataSourceAuthorizationState.initializationTimeout());
+        },
+        failure: ds.disconnectAndDispose,
+        orElse: () {},
+      );
+    });
+  }
+
+  void _onNewIncomingDataSourcePackage(
+    DataSourceIncomingPackage<BytesConvertible> package,
+    DataSourceWithAddress dswa,
+  ) {
+    package
+      ..voidOnModel<AuthorizationInitializationResponse,
+          AuthorizationInitializationResponseIncomingDataSourcePackage>(
+        (model) => _onAuthorizationInitializationResponse(
+          model,
+          dswa,
+        ),
+      )
+      ..voidOnModel<AuthorizationResponse,
+          AuthorizationResponseIncomingDataSourcePackage>((model) {
+        if (model.success) {
+          emit(const DataSourceAuthorizationState.authorized());
+          return;
+        }
+        emit(const DataSourceAuthorizationState.failure());
+      });
+  }
+
+  Future<void> _onAuthorizationInitializationResponse(
+    AuthorizationInitializationResponse model,
+    DataSourceWithAddress dswa,
+  ) async {
+    final id = model.deviceId.join();
+    emit(const DataSourceAuthorizationState.initializationResponseReceived());
+    if (model.method != 0x01) {
+      emit(const DataSourceAuthorizationState.failure());
+      await dswa.dataSource.disconnectAndDispose();
+      throw UnimplementedError('Unknown authorization method: ${model.method}');
+    }
+
+    try {
+      final response = await serialNumberStorage.read(id);
+
+      if (isClosed) return;
+      response.when(
+        error: (e) {
+          emit(const DataSourceAuthorizationState.failure());
+          dswa.dataSource.disconnectAndDispose();
+          Future<void>.error(e);
+        },
+        value: (value) {
+          value.when(
+            undefined: () {
+              emit(
+                DataSourceAuthorizationState.noSerialNumber(
+                  dswa: dswa,
+                  deviceId: id,
+                ),
+              );
+            },
+            presented: (chain) {
+              authorize(
+                dswa: dswa,
+                chain: chain,
+              );
+            },
+          );
+        },
+      );
+    } catch (e) {
+      emit(const DataSourceAuthorizationState.failure());
+      await dswa.dataSource.disconnectAndDispose();
+
+      rethrow;
+    }
+  }
+
+  Future<void> authorize({
+    required DataSourceWithAddress dswa,
+    required SerialNumberChain chain,
+  }) async {
+    emit(const DataSourceAuthorizationState.sendingAuthorizationRequest());
+
+    final package = OutgoingAuthorizationRequestPackage(
+      request: AuthorizationRequest(sn: chain.sn),
+    );
+    await dswa.dataSource.sendPackage(package);
+
+    final newState = await stream
+        .where((event) => event is _Authorized || event is _Failure)
+        .first
+        .timeout(
+      authorizationTimeout,
+      onTimeout: () {
+        return const DataSourceAuthorizationState.authorizationTimeout();
+      },
+    );
+
+    emit(newState);
+
+    if (newState is _Authorized) {
+      await dataSourceStorage.write(dswa);
+      final result = await serialNumberStorage.write(chain);
+
+      result.when(
+        error: (error) {
+          emit(const DataSourceAuthorizationState.errorSavingSerialNumber());
+          Future<void>.error(error);
+        },
+        value: (value) {},
+      );
+    } else {
+      await dswa.dataSource.disconnectAndDispose();
+    }
+  }
+
+  @override
+  Future<void> close() {
+    eventsSubscription?.cancel();
+    eventsSubscription = null;
+    return super.close();
+  }
+}
+
+extension on DataSource {
+  Future<void> disconnectAndDispose() async {
+    await disconnect();
+    await dispose();
+  }
 }

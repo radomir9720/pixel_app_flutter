@@ -26,11 +26,10 @@ class BluetoothDataSource extends DataSource
         DefaultDataSourceObserverMixin,
         SendPackagesMixin {
   BluetoothDataSource({
-    required super.id,
     required this.bluetoothSerial,
     required this.connectToAddress,
     required this.permissionRequestCallback,
-  });
+  }) : super(key: kKey);
 
   @visibleForTesting
   final GetBluetoothConnectionCallback connectToAddress;
@@ -51,9 +50,6 @@ class BluetoothDataSource extends DataSource
   final BluetoothPermissionRequestCallback permissionRequestCallback;
 
   static const kKey = 'bluetooth';
-
-  @override
-  String get key => kKey;
 
   @override
   Stream<DataSourceIncomingPackage> get packageStream => controller.stream;

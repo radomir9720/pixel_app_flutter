@@ -74,8 +74,8 @@ class MotorScreen extends StatelessWidget {
                   final state = context
                       .select((MotorDataCubit cubit) => cubit.state.voltage);
                   return (
-                    '${state.first ~/ 10}',
-                    '${state.second ~/ 10}',
+                    (state.first / 10).toStringAsFixed(1),
+                    (state.second / 10).toStringAsFixed(1),
                     context.colorFromStatus(state.status),
                   );
                 },
@@ -87,8 +87,8 @@ class MotorScreen extends StatelessWidget {
                   final state = context
                       .select((MotorDataCubit cubit) => cubit.state.current);
                   return (
-                    '${state.first ~/ 10}',
-                    '${state.second ~/ 10}',
+                    (state.first / 10).toStringAsFixed(1),
+                    (state.second / 10).toStringAsFixed(1),
                     context.colorFromStatus(state.status),
                   );
                 },
@@ -111,11 +111,11 @@ class MotorScreen extends StatelessWidget {
                 parameterName: context.l10n.motorsTemperatureTileTitle,
                 builder: () {
                   final state = context.select(
-                    (MotorDataCubit cubit) => cubit.state.temperature,
+                    (MotorDataCubit cubit) => cubit.state.motorTemperature,
                   );
                   return (
-                    '${state.firstMotor}',
-                    '${state.secondMotor}',
+                    '${state.first}',
+                    '${state.second}',
                     context.colorFromStatus(state.status),
                   );
                 },
@@ -125,11 +125,11 @@ class MotorScreen extends StatelessWidget {
                 parameterName: context.l10n.controllersTemperatureTileTitle,
                 builder: () {
                   final state = context.select(
-                    (MotorDataCubit cubit) => cubit.state.temperature,
+                    (MotorDataCubit cubit) => cubit.state.controllerTemperature,
                   );
                   return (
-                    '${state.firstController}',
-                    '${state.secondController}',
+                    '${state.first}',
+                    '${state.second}',
                     context.colorFromStatus(state.status),
                   );
                 },

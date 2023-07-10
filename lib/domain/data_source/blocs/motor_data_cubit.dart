@@ -11,7 +11,8 @@ final class MotorDataState with EquatableMixin {
   const MotorDataState({
     required this.current,
     required this.voltage,
-    required this.temperature,
+    required this.motorTemperature,
+    required this.controllerTemperature,
     required this.gearAndRoll,
     required this.rpm,
     required this.speed,
@@ -21,7 +22,8 @@ final class MotorDataState with EquatableMixin {
   MotorDataState.initial()
       : current = const TwoInt16WithStatusBody.zero(),
         voltage = const TwoUint16WithStatusBody.zero(),
-        temperature = const MotorTemperature.zero(),
+        motorTemperature = const TwoInt16WithStatusBody.zero(),
+        controllerTemperature = const TwoInt16WithStatusBody.zero(),
         gearAndRoll = MotorGearAndRoll.unknown(),
         rpm = const TwoUint16WithStatusBody.zero(),
         speed = const TwoUint16WithStatusBody.zero(),
@@ -29,7 +31,8 @@ final class MotorDataState with EquatableMixin {
 
   final TwoInt16WithStatusBody current;
   final TwoUint16WithStatusBody voltage;
-  final MotorTemperature temperature;
+  final TwoInt16WithStatusBody motorTemperature;
+  final TwoInt16WithStatusBody controllerTemperature;
   final MotorGearAndRoll gearAndRoll;
   final TwoUint16WithStatusBody rpm;
   final TwoUint16WithStatusBody speed;
@@ -38,7 +41,8 @@ final class MotorDataState with EquatableMixin {
   MotorDataState copyWith({
     TwoInt16WithStatusBody? current,
     TwoUint16WithStatusBody? voltage,
-    MotorTemperature? temperature,
+    TwoInt16WithStatusBody? motorTemperature,
+    TwoInt16WithStatusBody? controllerTemperature,
     MotorGearAndRoll? gearAndRoll,
     TwoUint16WithStatusBody? rpm,
     TwoUint16WithStatusBody? speed,
@@ -47,7 +51,9 @@ final class MotorDataState with EquatableMixin {
     return MotorDataState(
       current: current ?? this.current,
       voltage: voltage ?? this.voltage,
-      temperature: temperature ?? this.temperature,
+      motorTemperature: motorTemperature ?? this.motorTemperature,
+      controllerTemperature:
+          controllerTemperature ?? this.controllerTemperature,
       gearAndRoll: gearAndRoll ?? this.gearAndRoll,
       rpm: rpm ?? this.rpm,
       speed: speed ?? this.speed,
@@ -59,7 +65,8 @@ final class MotorDataState with EquatableMixin {
   List<Object?> get props => [
         current,
         voltage,
-        temperature,
+        motorTemperature,
+        controllerTemperature,
         gearAndRoll,
         rpm,
         speed,
@@ -81,9 +88,13 @@ class MotorDataCubit extends Cubit<MotorDataState> with ConsumerBlocMixin {
             MotorCurrentIncomingDataSourcePackage>((model) {
           emit(state.copyWith(current: model));
         })
-        ..voidOnModel<MotorTemperature,
+        ..voidOnModel<TwoInt16WithStatusBody,
             MotorTemperatureIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(temperature: model));
+          emit(state.copyWith(motorTemperature: model));
+        })
+        ..voidOnModel<TwoInt16WithStatusBody,
+            ControllerTemperatureIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(controllerTemperature: model));
         })
         ..voidOnModel<MotorGearAndRoll,
             MotorGearAndRollIncomingDataSourcePackage>((model) {
@@ -112,6 +123,7 @@ class MotorDataCubit extends Cubit<MotorDataState> with ConsumerBlocMixin {
     const DataSourceParameterId.motorSpeed(),
     const DataSourceParameterId.motorPower(),
     const DataSourceParameterId.motorTemperature(),
+    const DataSourceParameterId.controllerTemperature(),
   };
 
   @protected

@@ -48,7 +48,7 @@ class _TabletBodyState extends State<_TabletBody> {
           child: Align(
             alignment: Alignment.centerRight,
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * .7,
+              width: MediaQuery.sizeOf(context).width * .7,
               child: Column(
                 children: [
                   Padding(

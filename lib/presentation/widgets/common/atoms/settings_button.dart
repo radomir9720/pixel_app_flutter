@@ -4,21 +4,21 @@ import 'package:pixel_app_flutter/presentation/app/colors.dart';
 enum SettingsButtonState {
   error,
   enabled,
+  warning,
   selected;
 
   R when<R>({
     required R Function() error,
     required R Function() enabled,
+    required R Function() warning,
     required R Function() selected,
   }) {
-    switch (this) {
-      case SettingsButtonState.error:
-        return error();
-      case SettingsButtonState.enabled:
-        return enabled();
-      case SettingsButtonState.selected:
-        return selected();
-    }
+    return switch (this) {
+      SettingsButtonState.error => error(),
+      SettingsButtonState.enabled => enabled(),
+      SettingsButtonState.warning => warning(),
+      SettingsButtonState.selected => selected(),
+    };
   }
 }
 
@@ -68,15 +68,17 @@ class SettingsButton extends StatelessWidget {
         borderRadius: borderRadius,
         border: Border.all(
           color: state.when(
-            error: () => AppColors.of(context).errorAccent,
-            enabled: () => AppColors.of(context).border,
-            selected: () => AppColors.of(context).primary,
+            error: () => context.colors.errorAccent,
+            enabled: () => context.colors.border,
+            selected: () => context.colors.primary,
+            warning: () => context.colors.warning,
           ),
         ),
         color: state.when(
-          error: () => AppColors.of(context).errorAccent.withOpacity(.15),
+          error: () => context.colors.errorAccent.withOpacity(.15),
           enabled: () => buttonColor,
-          selected: () => AppColors.of(context).primary.withOpacity(.15),
+          warning: () => context.colors.warning.withOpacity(.15),
+          selected: () => context.colors.primary.withOpacity(.15),
         ),
       ),
       child: InkWell(

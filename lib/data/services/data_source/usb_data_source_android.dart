@@ -28,10 +28,9 @@ class USBAndroidDataSource extends DataSource
         DefaultDataSourceObserverMixin,
         SendPackagesMixin {
   USBAndroidDataSource({
-    required super.id,
     required this.listDevices,
     this.portParametersConfig = const UsbPortParametersConfig(),
-  });
+  }) : super(key: kKey);
 
   @protected
   final ListUsbDevicesCallback listDevices;
@@ -136,9 +135,6 @@ class USBAndroidDataSource extends DataSource
 
   @override
   Future<bool> get isEnabled async => true;
-
-  @override
-  String get key => kKey;
 
   @override
   Future<Result<DisconnectError, void>> disconnect() async {

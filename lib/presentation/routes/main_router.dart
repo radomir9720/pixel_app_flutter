@@ -64,11 +64,6 @@ part 'subroutes/select_data_source_route.dart';
     //
     _selectDataSourceRoute,
     //
-    AutoRoute(
-      path: '/enter-serial-number',
-      page: EnterSerialNumberScreen,
-    ),
-    //
     CustomRoute<void>(
       path: 'loading',
       page: LoadingScreen,

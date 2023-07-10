@@ -49,6 +49,7 @@ class _CarWidgetState extends State<CarWidget> {
   @override
   Widget build(BuildContext context) {
     final buttonScaleCoef = (carSize.width / 232).clamp(0.0, .82);
+    final size = MediaQuery.sizeOf(context);
 
     // ignore: avoid_positional_boolean_parameters
     String getStatus(bool opened) => opened
@@ -61,8 +62,8 @@ class _CarWidgetState extends State<CarWidget> {
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * .2,
-              maxHeight: MediaQuery.of(context).size.height * .6,
+              maxWidth: size.width * .2,
+              maxHeight: size.height * .6,
             ),
             child: MeasureSize(
               onChange: (size) {

@@ -77,7 +77,7 @@ class BottomInterfacesMenu extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
+          height: MediaQuery.paddingOf(context).bottom,
         ),
       ],
     );

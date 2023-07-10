@@ -32,7 +32,7 @@ class DataSourceConnectBloc
   final DataSourceStorage dataSourceStorage;
 
   @protected
-  final List<DataSource> availableDataSources;
+  final Map<String, DataSource Function()> availableDataSources;
 
   Future<void> _tryConnectWithStorageData(
     _TryConnectWithStorageData event,
@@ -40,52 +40,49 @@ class DataSourceConnectBloc
   ) async {
     emit(state.inLoading());
 
-    await Future<void>.delayed(Duration.zero);
+    DataSource? dataSource;
 
     try {
       final values = dataSourceStorage.read();
+
       emit(
         await values.when(
           error: state.inFailure,
           value: (value) async {
-            if (value.length != 2) {
-              return state.inFailure();
-            }
+            if (value.length != 2) return state.inFailure();
 
             final key = value.first;
             final address = value.last;
 
-            for (final dataSource in availableDataSources) {
-              if (dataSource.key == key) {
-                final result = await dataSource.connect(address);
+            final entry = availableDataSources.entries
+                .firstWhere((element) => element.key == key);
 
-                return result.when(
-                  error: state.inFailure,
-                  value: (_) {
-                    final dataSourceWithAddress = Optional.presented(
-                      DataSourceWithAddress(
-                        dataSource: dataSource,
-                        address: address,
-                      ),
-                    );
-                    dataSourceStorage.put(dataSourceWithAddress);
-                    return AsyncData.success(dataSourceWithAddress);
-                  },
+            dataSource = entry.value();
+            final result = await dataSource!.connect(address);
+
+            return result.when(
+              error: (e) async {
+                await dataSource?.disconnectAndDispose();
+                return state.inFailure(e);
+              },
+              value: (_) {
+                final dataSourceWithAddress = Optional.presented(
+                  DataSourceWithAddress(
+                    dataSource: dataSource!,
+                    address: address,
+                  ),
                 );
-              }
-            }
 
-            return state.inFailure();
+                return AsyncData.success(dataSourceWithAddress);
+              },
+            );
           },
         ),
       );
     } catch (e) {
+      await dataSource?.disconnectAndDispose();
       emit(state.inFailure());
       rethrow;
-    } finally {
-      if (state.isFailure) {
-        await dataSourceStorage.put(const Optional.undefined());
-      }
     }
   }
 
@@ -95,17 +92,17 @@ class DataSourceConnectBloc
   ) async {
     emit(state.inLoading());
 
-    await Future<void>.delayed(Duration.zero);
-
+    final dswa = event.dataSourceWithAddress;
     try {
-      final dswa = event.dataSourceWithAddress;
       final result = await dswa.dataSource.connect(dswa.address);
 
       emit(
         await result.when(
-          error: (e) async => state.inFailure(),
+          error: (e) async {
+            await dswa.dataSource.disconnectAndDispose();
+            return state.inFailure();
+          },
           value: (_) async {
-            await dataSourceStorage.write(event.dataSourceWithAddress);
             return AsyncData.success(
               Optional.presented(event.dataSourceWithAddress),
             );
@@ -113,8 +110,16 @@ class DataSourceConnectBloc
         ),
       );
     } catch (e) {
+      await dswa.dataSource.disconnectAndDispose();
       emit(state.inFailure());
       rethrow;
     }
+  }
+}
+
+extension on DataSource {
+  Future<void> disconnectAndDispose() async {
+    await disconnect();
+    await dispose();
   }
 }

@@ -353,5 +353,7 @@
   "setButtonCaption": "Установить",
   "enterSerialNumberHintMessage": "Номер может содержать только цифры и латинские буквы: \"A\", \"B\", \"C\", \"D\", \"E\", \"F\"",
   "exchangeLogsConsoleNoDataSourceMessage": "Для того, чтобы отправлять пакеты, необходимо сначала подключится к источнику данных",
-  "noPackagesMessage": "Нет пакетов"
+  "noPackagesMessage": "Нет пакетов",
+  "reverseLightButtonCaption": "Свет заднего хода",
+  "brakeLightButtonCaption": "Свет стопов"
 }

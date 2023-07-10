@@ -30,6 +30,20 @@ class DataSourceCubit extends Cubit<DataSourceState> with ConsumerBlocMixin {
   final DataSourceStorage dataSourceStorage;
 
   @override
+  void onChange(Change<DataSourceState> change) {
+    change.currentState.ds.when(
+      undefined: () {},
+      presented: (ds) {
+        if (change.nextState.ds.toNullable?.address != ds.address) {
+          ds.dataSource.disconnect();
+          ds.dataSource.dispose();
+        }
+      },
+    );
+    super.onChange(change);
+  }
+
+  @override
   Future<void> close() async {
     await state.ds.when(
       undefined: () async {},

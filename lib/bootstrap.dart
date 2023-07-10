@@ -19,12 +19,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:installed_apps/installed_apps.dart';
-import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pixel_app_flutter/app/helpers/app_bloc_observer.dart';
 import 'package:pixel_app_flutter/app/helpers/crashlytics_helper.dart';
-import 'package:pixel_app_flutter/app/helpers/logger_records_buffer.dart';
 import 'package:pixel_app_flutter/app/helpers/logger_route_observer.dart';
 import 'package:pixel_app_flutter/app/overlay.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/main_scope.dart';
@@ -34,6 +32,8 @@ import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_sourc
 import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
 import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_android.dart';
 import 'package:pixel_app_flutter/data/services/installed_apps_mock.dart';
+import 'package:pixel_app_flutter/data/storages/logger_storage.dart';
+import 'package:pixel_app_flutter/domain/app/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usb_serial/usb_serial.dart';
 
@@ -81,13 +81,15 @@ Future<void> bootstrap(
       builder,
   Environment env,
 ) async {
-  late final LoggerRecordsBuffer recordsBuffer;
+  late final LoggerStorage loggerStorage;
 
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
       await configureDependencies(env);
+
+      loggerStorage = GetIt.I<LoggerStorage>();
 
       // SizeProvider.initialize(sizeConverter:
       // const SizeConverter(fo: fo, si: si));
@@ -106,15 +108,33 @@ Future<void> bootstrap(
 
       FlutterError.onError = CrashlyticsHelper.recordFlutterError;
 
-      recordsBuffer = GetIt.I<LoggerRecordsBuffer>();
-
-      Bloc.observer = AppBlocObserver(recordsBuffer: recordsBuffer);
+      Bloc.observer = AppBlocObserver(
+        onStateChange: (change) {
+          loggerStorage.logInfo(
+            '${change.currentState} -> ${change.nextState}',
+            'BlocChangeState',
+          );
+        },
+        onErrorOcurred: (error, stackTrace) {
+          loggerStorage.logSevere(
+            '$error\nStackTrace:\n$stackTrace',
+            'BlocError',
+          );
+        },
+      );
 
       runApp(
         MainScope(
           child: await builder(
             () => [
-              LoggerRouteObserver(recordsBuffer: recordsBuffer),
+              LoggerRouteObserver(
+                onNewScreen: (screenName) {
+                  loggerStorage.logInfo(
+                    'Navigation to: $screenName',
+                    'RouteObserver',
+                  );
+                },
+              ),
               //
               if (initFirebase)
                 FirebaseAnalyticsObserver(
@@ -130,12 +150,9 @@ Future<void> bootstrap(
     },
     (error, stack) {
       CrashlyticsHelper.recordError(error, stack);
-      recordsBuffer.add(
-        LogRecord(
-          Level.SEVERE,
-          '$error\nTrace: $stack',
-          'RunZonedError',
-        ),
+      loggerStorage.logSevere(
+        '$error\nTrace: $stack',
+        'RunZonedError',
       );
     },
   );
@@ -150,7 +167,14 @@ Future<void> configureDependencies(Environment env) async {
 }
 
 Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
-  final gh = GetItHelper(getIt)
+  final gh = GetItHelper(getIt);
+
+  await gh.factoryAsync<SharedPreferences>(
+    SharedPreferences.getInstance,
+    preResolve: true,
+  );
+
+  gh
     ..factory<Environment>(() => env)
     ..factory<FlutterBluetoothSerial>(() => FlutterBluetoothSerial.instance)
     ..factory<GetInstalledAppsCallback>(() {
@@ -167,17 +191,12 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
     ..factory<BluetoothPermissionRequestCallback>(
       () => _bluetoothPermissionRequest,
     )
-    ..lazySingleton<LoggerRecordsBuffer>(LoggerRecordsBuffer.new)
     ..factory<FlutterSecureStorage>(() => const FlutterSecureStorage())
     // Android
     ..factory<ListUsbDevicesCallback>(() => UsbSerial.listDevices)
     // MacOS, Linux, Windows
-    ..factory<ListUsbPortsCallback>(() => () => SerialPort.availablePorts);
-
-  await gh.factoryAsync<SharedPreferences>(
-    SharedPreferences.getInstance,
-    preResolve: true,
-  );
+    ..factory<ListUsbPortsCallback>(() => () => SerialPort.availablePorts)
+    ..singleton<LoggerStorage>(LoggerStorageImpl(prefs: gh.getIt()));
 
   await gh.factoryAsync(
     PackageInfo.fromPlatform,

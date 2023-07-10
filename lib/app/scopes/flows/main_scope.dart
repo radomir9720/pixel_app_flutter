@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
+import 'package:pixel_app_flutter/domain/app/storages/logger_storage.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
+import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:pixel_app_flutter/domain/settings/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -22,9 +24,12 @@ class MainScope extends SingleChildStatelessWidget {
         // storages
         InheritedProvider<SerialNumberStorage>(create: (context) => GetIt.I()),
         InheritedProvider<DataSourceStorage>(create: (context) => GetIt.I()),
+        InheritedProvider<LEDConfigsStorage>(create: (context) => GetIt.I()),
         InheritedProvider<DeveloperToolsParametersStorage>(
           create: (context) => GetIt.I(),
         ),
+        InheritedProvider<LoggerStorage>(create: (context) => GetIt.I()),
+
         // blocs
         BlocProvider(
           create: (context) => DataSourceCubit(
@@ -45,6 +50,14 @@ class MainScope extends SingleChildStatelessWidget {
           lazy: false,
         ),
 
+        BlocProvider(
+          create: (context) => LoadLEDConfigsBloc(storage: context.read())
+            ..add(const LoadLEDConfigsEvent.load()),
+        ),
+        BlocProvider(
+          create: (context) => LEDConfigsCubit(storage: context.read()),
+        ),
+
         if (GetIt.I.get<Environment>().isDev) ...[
           BlocProvider(
             create: (context) => ProcessedRequestsExchangeLogsCubit(),
@@ -62,22 +75,6 @@ class MainScope extends SingleChildStatelessWidget {
                 ExchangeConsoleLogsCubit(filterCubit: context.read()),
           )
         ],
-        BlocProvider(
-          create: (context) {
-            final cubit = DataSourceAuthorizationCubit(
-              serialNumberStorage: context.read(),
-              dataSourceStorage: context.read(),
-            );
-            context.read<DataSourceStorage>().data.when(
-                  undefined: () {},
-                  presented: (value) {
-                    cubit.tryAutoAuthorization(value.dataSource);
-                  },
-                );
-
-            return cubit;
-          },
-        ),
       ],
       child: child,
     );

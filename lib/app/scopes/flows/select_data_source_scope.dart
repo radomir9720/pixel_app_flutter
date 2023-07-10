@@ -1,7 +1,5 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pixel_app_flutter/bootstrap.dart';
@@ -10,119 +8,208 @@ import 'package:pixel_app_flutter/data/services/data_source/demo_data_source.dar
 import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
 import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_android.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/app/icons.dart';
+import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:provider/provider.dart';
+import 'package:re_widgets/re_widgets.dart';
 
-class SelectDataSourceScope extends AutoRouter {
+class SelectDataSourceScope extends StatelessWidget
+    implements AutoRouteWrapper {
   const SelectDataSourceScope({super.key});
 
   @override
-  AutoRouterState createState() => _AutoRouteState();
-
-  @override
-  Widget Function(BuildContext context, Widget content)? get builder {
-    return (context, content) {
-      return MultiProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => SelectDataSourceBloc(
-              dataSources: context.read(),
-            ),
-          ),
-          BlocProvider(
-            create: (context) {
-              final bloc = DataSourceConnectBloc(
-                dataSourceStorage: context.read(),
-                availableDataSources: context.read(),
-              );
-              final isInitial = context.read<DataSourceCubit>().state.isInitial;
-              if (isInitial) {
-                bloc.add(
-                  const DataSourceConnectEvent.tryConnectWithStorageData(),
-                );
-              }
-
-              return bloc;
-            },
-            lazy: false,
-          ),
-        ],
-        child: content,
-      );
-    };
-  }
-}
-
-class _AutoRouteState extends AutoRouterState {
-  @protected
-  late final List<DataSource> dataSources;
-
-  @protected
-  final id = DateTime.now().millisecondsSinceEpoch;
-
-  late final DataSourceCubit dataSourceCubit;
-
-  @override
-  void initState() {
-    super.initState();
-
-    dataSourceCubit = context.read<DataSourceCubit>();
-    final devToolsParamsStorage =
-        context.read<DeveloperToolsParametersStorage>();
-    final env = context.read<Environment>();
-    dataSources = [
-      if (Platform.isAndroid) ...[
-        USBAndroidDataSource(
-          id: id,
-          listDevices: GetIt.I(),
-        ),
-        BluetoothDataSource(
-          bluetoothSerial: GetIt.I(),
-          connectToAddress: GetIt.I(),
-          permissionRequestCallback: GetIt.I(),
-          id: id,
-        ),
-      ] else if (!Platform.isIOS)
-        USBDataSource(
-          id: id,
-          getAvailablePorts: GetIt.I(),
-        ),
-
-      //
-      DemoDataSource(
-        generateRandomErrors: () {
-          return env.isDev &&
-              devToolsParamsStorage
-                  .data.enableRandomErrorGenerationForDemoDataSource;
-        },
-        updatePeriodMillis: () {
-          return devToolsParamsStorage.data.requestsPeriodInMillis;
-        },
-        id: id,
-      ),
-    ];
-  }
-
-  @override
-  void dispose() {
-    final selected = dataSourceCubit.state.ds
-        .when(undefined: () => null, presented: (p) => p.dataSource);
-    final selectedUniqueId = '${selected?.key}_${selected?.id}';
-    for (final ds in dataSources) {
-      final dsUniqueId = '${ds.key}_${ds.id}';
-      if (dsUniqueId != selectedUniqueId) {
-        ds.dispose();
-      }
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Provider<List<DataSource>>.value(
-      value: dataSources,
-      builder: (context, child) {
-        return super.build(context);
+    final isInitial =
+        context.select<DataSourceCubit, bool>((bloc) => bloc.state.isInitial);
+    final authorizationState =
+        context.watch<DataSourceAuthorizationCubit>().state;
+    final connectState = context.watch<DataSourceConnectBloc>().state;
+
+    return AutoRouter.declarative(
+      routes: (handler) {
+        return [
+          const SelectDataSourceGeneralFlow(),
+          if (authorizationState.isFailure)
+            ...[]
+          else if (isInitial ||
+              authorizationState.isLoading ||
+              connectState.isLoading)
+            const NonPopableLoadingRoute()
+          else
+            ...authorizationState.maybeWhen(
+              orElse: () => [],
+              noSerialNumber: (dswa, deviceId) {
+                return [
+                  EnterSerialNumberRoute(
+                    dswa: dswa,
+                    deviceId: deviceId,
+                  )
+                ];
+              },
+            )
+        ];
       },
     );
   }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    final l10n = context.l10n;
+    final platform = context.platform;
+
+    return MultiProvider(
+      providers: [
+        Provider<List<DataSourceEntity>>(
+          create: (context) {
+            final devToolsParamsStorage =
+                context.read<DeveloperToolsParametersStorage>();
+            final env = context.read<Environment>();
+
+            return [
+              if (platform.isAndroid) ...[
+                DataSourceEntity(
+                  key: USBAndroidDataSource.kKey,
+                  title: l10n.usbDataSourceTitle,
+                  icon: PixelIcons.usb,
+                  initializer: () => USBAndroidDataSource(
+                    listDevices: GetIt.I(),
+                  ),
+                ),
+                DataSourceEntity(
+                  key: BluetoothDataSource.kKey,
+                  title: l10n.bluetoothDataSourceTitle,
+                  icon: PixelIcons.bluetooth,
+                  initializer: () => BluetoothDataSource(
+                    bluetoothSerial: GetIt.I(),
+                    connectToAddress: GetIt.I(),
+                    permissionRequestCallback: GetIt.I(),
+                  ),
+                ),
+              ] else if (!platform.isIos)
+                DataSourceEntity(
+                  key: USBDataSource.kKey,
+                  title: platform.isMacOS
+                      ? l10n.usbOrBluetoothDataSourceTitle
+                      : l10n.usbDataSourceTitle,
+                  icon: PixelIcons.usb,
+                  initializer: () => USBDataSource(
+                    getAvailablePorts: GetIt.I(),
+                  ),
+                ),
+
+              //
+              DataSourceEntity(
+                key: DemoDataSource.kKey,
+                title: l10n.demoDataSourceTitle,
+                icon: Icons.bug_report,
+                initializer: () {
+                  return DemoDataSource(
+                    generateRandomErrors: () {
+                      return env.isDev &&
+                          devToolsParamsStorage.data
+                              .enableRandomErrorGenerationForDemoDataSource;
+                    },
+                    updatePeriodMillis: () {
+                      return devToolsParamsStorage.data.requestsPeriodInMillis;
+                    },
+                  );
+                },
+              ),
+            ];
+          },
+        ),
+        BlocProvider(create: (context) => SelectDataSourceBloc()),
+        BlocProvider(
+          create: (context) {
+            final bloc = DataSourceConnectBloc(
+              dataSourceStorage: context.read<DataSourceStorage>(),
+              availableDataSources: {
+                for (final entry in context.read<List<DataSourceEntity>>())
+                  entry.key: entry.initializer,
+              },
+            );
+            final isInitial = context.read<DataSourceCubit>().state.isInitial;
+            if (isInitial) {
+              bloc.add(
+                const DataSourceConnectEvent.tryConnectWithStorageData(),
+              );
+            }
+
+            return bloc;
+          },
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (context) => DataSourceAuthorizationCubit(
+            dataSourceStorage: context.read(),
+            serialNumberStorage: context.read(),
+          ),
+        ),
+      ],
+      child: BlocListener<DataSourceAuthorizationCubit,
+          DataSourceAuthorizationState>(
+        listener: (context, state) {
+          final error = state.whenOrNull(
+            failure: () => l10n.authorizationErrorMessage,
+            authorizationTimeout: () => l10n.authorizationTimeoutErrorMessage,
+            initializationTimeout: () =>
+                l10n.auhtorizationInitializationTimeoutErrorMessage,
+            errorSavingSerialNumber: () => l10n.errorSavingSerialNumberMessage,
+          );
+
+          if (error != null) context.showSnackBar(error);
+        },
+        child: BlocListener<DataSourceConnectBloc, DataSourceConnectState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: (payload) {},
+              failure: (payload, error) {
+                context.showSnackBar(l10n.errorConnectingToDataSourceMessage);
+              },
+              success: (payload) {
+                payload.when(
+                  undefined: () {},
+                  presented: context
+                      .read<DataSourceAuthorizationCubit>()
+                      .requestAuthorization,
+                );
+              },
+            );
+          },
+          child: this,
+        ),
+      ),
+    );
+  }
+}
+
+@immutable
+class DataSourceEntity {
+  const DataSourceEntity({
+    required this.key,
+    required this.icon,
+    required this.title,
+    required this.initializer,
+  });
+
+  final String key;
+  final String title;
+  final IconData icon;
+  final DataSource Function() initializer;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is DataSourceEntity &&
+        other.key == key &&
+        other.title == title &&
+        other.icon == icon &&
+        other.initializer == initializer;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ title.hashCode ^ icon.hashCode ^ initializer.hashCode;
 }
