@@ -2,10 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:pixel_app_flutter/data/services/data_source/bluetooth_data_source.dart';
-import 'package:pixel_app_flutter/data/services/data_source/demo_data_source.dart';
-import 'package:pixel_app_flutter/data/services/data_source/usb_data_source.dart';
-import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_android.dart';
+import 'package:pixel_app_flutter/app/scopes/flows/select_data_source_scope.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
@@ -20,33 +17,6 @@ import 'package:re_widgets/re_widgets.dart';
 
 class DataSourceScreen extends StatelessWidget {
   const DataSourceScreen({super.key});
-
-  static const _dataSourceIconDataMap = {
-    USBDataSource.kKey: PixelIcons.usb,
-    DemoDataSource.kKey: Icons.bug_report,
-    BluetoothDataSource.kKey: PixelIcons.bluetooth,
-    USBAndroidDataSource.kKey: PixelIcons.usb,
-  };
-
-  IconData _getDataSourceIconDataByKey(String key) {
-    return _dataSourceIconDataMap[key] ?? Icons.source_outlined;
-  }
-
-  String? _getDataSourceTitleByKey(String key, BuildContext context) {
-    switch (key) {
-      case USBDataSource.kKey:
-      case USBAndroidDataSource.kKey:
-        if (context.platform.isMacOS) {
-          return context.l10n.usbOrBluetoothDataSourceTitle;
-        }
-        return context.l10n.usbDataSourceTitle;
-      case DemoDataSource.kKey:
-        return context.l10n.demoDataSourceTitle;
-      case BluetoothDataSource.kKey:
-        return context.l10n.bluetoothDataSourceTitle;
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +34,10 @@ class DataSourceScreen extends StatelessWidget {
                         context.l10n.errorEnablingDataSourceMessage,
                   ) ??
                   context.l10n.unknownErrorSelectingDataSourceMessage;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(stringError)),
-              );
+              context.showSnackBar(stringError);
             },
             success: (payload) {
-              payload.selected.when(
+              payload.when(
                 presented: (source) {
                   context.router.push(
                     SelectDeviceDialogRoute(dataSource: source),
@@ -109,24 +77,22 @@ class DataSourceScreen extends StatelessWidget {
                       size: PIconButtonSize.normal,
                     ),
                   ),
-            buttons: state.payload.all.map(
+            buttons: context.read<List<DataSourceEntity>>().map(
               (e) {
                 void onPressed() {
                   context
                       .read<SelectDataSourceBloc>()
-                      .add(SelectDataSourceEvent.select(e));
+                      .add(SelectDataSourceEvent.select(e.initializer));
                 }
 
-                final icon = _getDataSourceIconDataByKey(e.key);
-                final title = _getDataSourceTitleByKey(e.key, context) ??
-                    e.runtimeType.toString();
+                final selected = currentDataSource != null &&
+                    currentDataSource.dataSource.key == e.key;
 
                 return SettingsButton(
-                  icon: icon,
-                  title: title,
+                  icon: e.icon,
+                  title: e.title,
                   onPressed: onPressed,
-                  state: currentDataSource != null &&
-                          currentDataSource.dataSource.key == e.key
+                  state: selected
                       ? SettingsButtonState.selected
                       : SettingsButtonState.enabled,
                 );

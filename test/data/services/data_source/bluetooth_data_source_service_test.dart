@@ -90,7 +90,6 @@ void main() {
       reset(sink);
       ds = BluetoothDataSource(
         bluetoothSerial: serial,
-        id: 123,
         permissionRequestCallback: () async => true,
         connectToAddress: (address) async => connection,
       );
@@ -771,7 +770,6 @@ void main() {
       test('key getter returns always the same string', () {
         final secondInstance = BluetoothDataSource(
           bluetoothSerial: serial,
-          id: 321,
           permissionRequestCallback: () async => true,
           connectToAddress: (address) async => connection,
         );

@@ -20,10 +20,9 @@ class USBDataSource extends DataSource
         DefaultDataSourceObserverMixin,
         SendPackagesMixin {
   USBDataSource({
-    required super.id,
     required this.getAvailablePorts,
     this.portParametersConfig = const UsbPortParametersConfig(),
-  });
+  }) : super(key: kKey);
 
   @protected
   final ListUsbPortsCallback getAvailablePorts;
@@ -42,9 +41,6 @@ class USBDataSource extends DataSource
   StreamSubscription<void>? _readSubscription;
 
   static const kKey = 'usb';
-
-  @override
-  String get key => kKey;
 
   @override
   Future<Result<ConnectError, void>> connect(String address) async {

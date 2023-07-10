@@ -6,23 +6,34 @@ const _selectDataSourceRoute = AutoRoute<void>(
   name: RouteNames.selectDataSourceFlow,
   children: [
     AutoRoute<void>(
-      initial: true,
-      page: DataSourceScreen,
+      path: '',
+      page: EmptyRouterScreen,
+      name: RouteNames.selectDataSourceGeneralFlow,
+      children: [
+        AutoRoute<void>(
+          initial: true,
+          page: DataSourceScreen,
+        ),
+        //
+        _settingsRoute,
+        //
+        CustomRoute(
+          page: SelectDeviceDialog,
+          path: 'select-device',
+          name: RouteNames.selectDeviceDialogRoute,
+          customRouteBuilder: dialogRouteBuilder,
+        ),
+      ],
     ),
-    //
-    _settingsRoute,
-    //
-    CustomRoute(
-      page: SelectDeviceDialog,
-      path: 'select-device',
-      name: RouteNames.selectDeviceDialogRoute,
-      customRouteBuilder: dialogRouteBuilder,
-    ),
-    CustomRoute(
-      page: ConnectToDataSourceLoadingDialog,
+    CustomRoute<void>(
       path: 'loading',
-      name: RouteNames.connectToDataSourceLoadingDialogRoute,
-      customRouteBuilder: dialogRouteBuilder,
+      page: NonPopableLoadingScreen,
+      fullscreenDialog: true,
+      transitionsBuilder: TransitionsBuilders.noTransition,
+    ),
+    AutoRoute(
+      path: 'enter-serial-number',
+      page: EnterSerialNumberScreen,
     ),
     //
     _developerToolsRoute,

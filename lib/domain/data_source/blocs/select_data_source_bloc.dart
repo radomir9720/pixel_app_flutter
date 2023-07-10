@@ -7,27 +7,9 @@ part 'select_data_source_bloc.freezed.dart';
 
 @freezed
 class SelectDataSourceEvent with _$SelectDataSourceEvent {
-  const factory SelectDataSourceEvent.select(DataSource selectedDataSource) =
-      _Select;
-}
-
-@immutable
-class DataSourcePack {
-  const DataSourcePack(this.all, this.selected);
-
-  final List<DataSource> all;
-
-  final Optional<DataSource> selected;
-
-  DataSourcePack copyWith({
-    List<DataSource>? all,
-    Optional<DataSource>? selected,
-  }) {
-    return DataSourcePack(
-      all ?? this.all,
-      selected ?? this.selected,
-    );
-  }
+  const factory SelectDataSourceEvent.select(
+    DataSource Function() initializer,
+  ) = _Select;
 }
 
 enum SelectDataSourceError {
@@ -52,38 +34,26 @@ enum SelectDataSourceError {
 }
 
 typedef SelectDataSourceState
-    = AsyncData<DataSourcePack, SelectDataSourceError>;
+    = AsyncData<Optional<DataSource>, SelectDataSourceError>;
 
 class SelectDataSourceBloc
     extends Bloc<SelectDataSourceEvent, SelectDataSourceState> {
-  SelectDataSourceBloc({required this.dataSources})
-      : super(
-          SelectDataSourceState.initial(
-            DataSourcePack(dataSources, const Optional.undefined()),
-          ),
-        ) {
+  SelectDataSourceBloc()
+      : super(const SelectDataSourceState.initial(Optional.undefined())) {
     on<_Select>(_select);
   }
-
-  @protected
-  final List<DataSource> dataSources;
 
   Future<void> _select(
     _Select event,
     Emitter<SelectDataSourceState> emit,
   ) async {
-    final selectedDataSource = event.selectedDataSource;
-    emit(
-      AsyncData.loading(
-        state.payload.copyWith(
-          selected: Optional.presented(selectedDataSource),
-        ),
-      ),
-    );
+    final selectedDataSource = event.initializer();
+    emit(AsyncData.loading(Optional.presented(selectedDataSource)));
 
     try {
       if (!(await selectedDataSource.isAvailable)) {
         emit(state.inFailure(SelectDataSourceError.isUnavailable));
+        await selectedDataSource.disconnectAndDispose();
         return;
       }
 
@@ -94,7 +64,7 @@ class SelectDataSourceBloc
             final error = e.when(
               unknown: () => SelectDataSourceError.unknown,
               isAlreadyEnabled: () {
-                Future<void>.error(EnableError.isAlreadyEnabled);
+                onError(EnableError.isAlreadyEnabled, StackTrace.current);
               },
               isUnavailable: () => SelectDataSourceError.isUnavailable,
               unsuccessfulEnableAttempt: () =>
@@ -106,14 +76,25 @@ class SelectDataSourceBloc
           },
           value: (_) => true,
         );
-        if (!enabled) return;
+        if (!enabled) {
+          await selectedDataSource.disconnectAndDispose();
+          return;
+        }
       }
 
       emit(state.inSuccess());
     } catch (e) {
       emit(state.inFailure());
+      await selectedDataSource.disconnectAndDispose();
 
       rethrow;
     }
+  }
+}
+
+extension on DataSource {
+  Future<void> disconnectAndDispose() async {
+    await disconnect();
+    await dispose();
   }
 }

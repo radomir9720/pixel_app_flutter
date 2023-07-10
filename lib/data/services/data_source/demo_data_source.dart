@@ -20,9 +20,9 @@ class DemoDataSource extends DataSource
   DemoDataSource({
     required this.generateRandomErrors,
     required this.updatePeriodMillis,
-    required super.id,
   })  : subscriptionCallbacks = {},
-        isInitialHandshake = true;
+        isInitialHandshake = true,
+        super(key: kKey);
 
   @protected
   final int Function() updatePeriodMillis;
@@ -31,9 +31,6 @@ class DemoDataSource extends DataSource
   final bool Function() generateRandomErrors;
 
   static const kKey = 'demo';
-
-  @override
-  String get key => kKey;
 
   @protected
   @visibleForTesting

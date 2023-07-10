@@ -7,7 +7,6 @@ import 'package:pixel_app_flutter/domain/app/storages/logger_storage.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
-import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
@@ -20,32 +19,7 @@ class SelectedDataSourceScope extends AutoRouter {
   @override
   Widget Function(BuildContext context, Widget content)? get builder {
     return (context, content) {
-      return BlocConsumer<DataSourceCubit, DataSourceState>(
-        listenWhen: (previous, current) {
-          final previousNullable = previous.ds.when(
-            undefined: () {},
-            presented: (p) => p,
-          );
-
-          final currentNullable = current.ds.when(
-            undefined: () {},
-            presented: (p) => p,
-          );
-
-          if (currentNullable == null) previousNullable?.dataSource.dispose();
-
-          if (previousNullable != null && currentNullable != null) {
-            if (previousNullable.dataSource.id !=
-                    currentNullable.dataSource.id ||
-                previousNullable.dataSource.key !=
-                    currentNullable.dataSource.key ||
-                previousNullable.address != currentNullable.address) {
-              previousNullable.dataSource.dispose();
-            }
-          }
-          return false;
-        },
-        listener: (context, state) {},
+      return BlocBuilder<DataSourceCubit, DataSourceState>(
         builder: (context, state) {
           final dswa = state.ds.when(
             presented: (d) => d,
@@ -57,22 +31,16 @@ class SelectedDataSourceScope extends AutoRouter {
           }
 
           return MultiProvider(
+            key: ValueKey('${dswa.dataSource.key}_${dswa.address}'),
             providers: [
-              Provider<DataSource>.value(
-                key: ValueKey('ds_${dswa.dataSource.key}_${dswa.address}'),
-                value: dswa.dataSource,
-              ),
+              Provider<DataSource>.value(value: dswa.dataSource),
               Provider<AppsService>(create: (context) => GetIt.I()),
 
               // storages
               Provider<NavigatorAppStorage>(create: (context) => GetIt.I()),
-              InheritedProvider<LEDConfigsStorage>(
-                create: (context) => GetIt.I(),
-              ),
 
               // blocs
-              BlocProvider(
-                key: ValueKey('cs_${dswa.dataSource.key}_${dswa.address}'),
+              BlocProvider<DataSourceConnectionStatusCubit>(
                 create: (context) {
                   if (context.read<Environment>().isDev) {
                     context.read<DataSource>().addObserver(
@@ -183,13 +151,6 @@ class SelectedDataSourceScope extends AutoRouter {
                   storage: context.read(),
                 )..add(const NavigatorFastAccessEvent.load()),
                 lazy: false,
-              ),
-              BlocProvider(
-                create: (context) => LEDConfigsCubit(storage: context.read()),
-              ),
-              BlocProvider(
-                create: (context) => LoadLEDConfigsBloc(storage: context.read())
-                  ..add(const LoadLEDConfigsEvent.load()),
               ),
             ],
             child: BlocConsumer<DataSourceConnectionStatusCubit,

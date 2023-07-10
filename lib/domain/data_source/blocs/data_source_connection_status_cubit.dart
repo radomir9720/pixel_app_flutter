@@ -85,7 +85,6 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
         _registerDisconnectStatusWithDebounce();
       },
     );
-
     Future<void>.delayed(handshakeTimeout).then(
       (value) {
         if (isClosed) return;
@@ -116,9 +115,9 @@ class DataSourceConnectionStatusCubit extends Cubit<DataSourceConnectionStatus>
   }
 
   void initHandshake() {
-    final package =
-        OutgoingInitialHandshakePackage(handshakeId: HandshakeID(handshakeId));
-    dataSource.sendPackage(package);
+    dataSource.sendPackage(
+      OutgoingInitialHandshakePackage(handshakeId: HandshakeID(handshakeId)),
+    );
   }
 
   @visibleForTesting

@@ -12,11 +12,10 @@ mixin RouteNames {
   static const requestsExchangeLogsFlow = 'RequestsExchangeLogsFlow';
   static const requestsExchangeLogsFilterFlow =
       'RequestsExchangeLogsFilterFlow';
+  static const selectDataSourceGeneralFlow = 'SelectDataSourceGeneralFlow';
   //
   static const requestsExchangeLogsRoute = 'RequestsExchangeLogsRoute';
   static const selectDeviceDialogRoute = 'SelectDeviceDialogRoute';
-  static const connectToDataSourceLoadingDialogRoute =
-      'ConnectToDataSourceLoadingDialogRoute';
   static const changeParametersSubscriptionDialogRoute =
       'ChangeParametersSubscriptionDialogRoute';
   static const changeRequestPeriodDialogRoute =

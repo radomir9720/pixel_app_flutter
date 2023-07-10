@@ -10,7 +10,17 @@ import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
 
 class EnterSerialNumberScreen extends StatefulWidget {
-  const EnterSerialNumberScreen({super.key});
+  const EnterSerialNumberScreen({
+    super.key,
+    required this.dswa,
+    required this.deviceId,
+  });
+
+  @protected
+  final DataSourceWithAddress dswa;
+
+  @protected
+  final String deviceId;
 
   @override
   State<EnterSerialNumberScreen> createState() =>
@@ -101,7 +111,13 @@ class _EnterSerialNumberScreenState extends State<EnterSerialNumberScreen> {
 
                             context
                                 .read<DataSourceAuthorizationCubit>()
-                                .authorize(sn);
+                                .authorize(
+                                  dswa: widget.dswa,
+                                  chain: SerialNumberChain.now(
+                                    id: widget.deviceId,
+                                    sn: sn,
+                                  ),
+                                );
                           }
                         : null,
                     child: Text(context.l10n.setButtonCaption),
