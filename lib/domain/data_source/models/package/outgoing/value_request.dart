@@ -5,7 +5,7 @@ class OutgoingValueRequestPackage extends DataSourceOutgoingPackage {
   OutgoingValueRequestPackage({
     required super.parameterId,
   }) : super(
-          requestType: DataSourceRequestType.event,
+          requestType: const DataSourceRequestType.event(),
           bytesConvertible: const RequestValueBody(),
         );
 }

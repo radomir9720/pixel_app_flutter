@@ -5,6 +5,7 @@ import 'package:pixel_app_flutter/domain/data_source/blocs/lights_cubit.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_padding.dart';
 import 'package:pixel_app_flutter/presentation/widgets/phone/atoms/car_interface_list_tile.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
@@ -33,107 +34,109 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.l10n.carInfoTabTitle,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        const SizedBox(height: 20),
-        const Divider(),
-        Expanded(
-          child: ListView(
-            primary: false,
-            children: [
-              // CarInterfaceListTile(
-              //   title: context.l10n.lightsInterfaceTitle,
-              //   status: context.l10n.autoModeLightsStatus,
-              //   icon: PixelIcons.light,
-              //   state: CarInterfaceState.primary,
-              //   onPressed: () {},
-              // ),
-              _CarInfoTileBlocWrapper<TwoBoolsState>(
-                selector: (state) => state.sideBeam,
-                title: context.l10n.parkingLightsButtonCaption,
-                icon: PixelIcons.light,
-                onPressed: context.read<LightsCubit>().toggleSideBeam,
-              ),
-              _CarInfoTileBlocWrapper(
-                selector: (state) => state.lowBeam,
-                title: context.l10n.lowBeamButtonCaption,
-                icon: PixelIcons.light,
-                onPressed: context.read<LightsCubit>().toggleLowBeam,
-              ),
-              _CarInfoTileBlocWrapper<bool>(
-                selector: (state) => state.highBeam,
-                title: context.l10n.highBeamButtonCaption,
-                icon: PixelIcons.light,
-                onPressed: context.read<LightsCubit>().toggleHighBeam,
-              ),
-              _CarInfoTileBlocWrapper<TwoBoolsState>(
-                selector: (state) => state.leftTurnSignal,
-                title: context.l10n.leftBlinkerButtonCaption,
-                icon: Icons.arrow_circle_left,
-                onPressed: context.read<LightsCubit>().toggleLeftTurnSignal,
-              ),
-              _CarInfoTileBlocWrapper<TwoBoolsState>(
-                selector: (state) => state.rightTurnSignal,
-                title: context.l10n.rightBlinkerButtonCaption,
-                icon: Icons.arrow_circle_right,
-                onPressed: context.read<LightsCubit>().toggleRightTurnSignal,
-              ),
-              _CarInfoTileBlocWrapper<TwoBoolsState>(
-                selector: (state) => state.hazardBeam,
-                title: context.l10n.hazardBeamButtonCaption,
-                icon: Icons.warning_amber,
-                onPressed: context.read<LightsCubit>().toggleHazardBeam,
-              ),
-              _CarInfoTileBlocWrapper<bool>(
-                selector: (state) => state.reverse,
-                title: context.l10n.reverseLightButtonCaption,
-                icon: Icons.keyboard_double_arrow_down_sharp,
-                onPressed: context.read<LightsCubit>().toggleReverseLight,
-              ),
-              _CarInfoTileBlocWrapper<bool>(
-                selector: (state) => state.brake,
-                title: context.l10n.brakeLightButtonCaption,
-                icon: Icons.stop_circle_outlined,
-                onPressed: context.read<LightsCubit>().toggleBrakeLight,
-              ),
-
-              // CarInterfaceListTile(
-              //   title: context.l10n.frontTrunkInterfaceTitle,
-              //   status: context.l10n.unlockedInterfaceStatus,
-              //   icon: PixelIcons.unlocked,
-              //   state: CarInterfaceState.success,
-              //   onPressed: () {},
-              // ),
-              // CarInterfaceListTile(
-              //   title: context.l10n.leftDoorInterfaceTitle,
-              //   status: context.l10n.lockedInterfaceStatus,
-              //   icon: PixelIcons.locked,
-              //   state: CarInterfaceState.error,
-              //   onPressed: () {},
-              // ),
-              // CarInterfaceListTile(
-              //   title: context.l10n.rightDoorInterfaceTitle,
-              //   status: context.l10n.unlockedInterfaceStatus,
-              //   icon: PixelIcons.unlocked,
-              //   state: CarInterfaceState.success,
-              //   onPressed: () {},
-              // ),
-              // CarInterfaceListTile(
-              //   title: context.l10n.rearTrunkInterfaceTitle,
-              //   status: context.l10n.lockedInterfaceStatus,
-              //   icon: PixelIcons.locked,
-              //   state: CarInterfaceState.error,
-              //   onPressed: () {},
-              // ),
-            ],
+    return ResponsivePadding(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.l10n.carInfoTabTitle,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-        )
-      ],
+          const SizedBox(height: 20),
+          const Divider(),
+          Expanded(
+            child: ListView(
+              primary: false,
+              children: [
+                // CarInterfaceListTile(
+                //   title: context.l10n.lightsInterfaceTitle,
+                //   status: context.l10n.autoModeLightsStatus,
+                //   icon: PixelIcons.light,
+                //   state: CarInterfaceState.primary,
+                //   onPressed: () {},
+                // ),
+                _CarInfoTileBlocWrapper<TwoBoolsState>(
+                  selector: (state) => state.sideBeam,
+                  title: context.l10n.parkingLightsButtonCaption,
+                  icon: PixelIcons.light,
+                  onPressed: context.read<LightsCubit>().toggleSideBeam,
+                ),
+                _CarInfoTileBlocWrapper(
+                  selector: (state) => state.lowBeam,
+                  title: context.l10n.lowBeamButtonCaption,
+                  icon: PixelIcons.light,
+                  onPressed: context.read<LightsCubit>().toggleLowBeam,
+                ),
+                _CarInfoTileBlocWrapper<bool>(
+                  selector: (state) => state.highBeam,
+                  title: context.l10n.highBeamButtonCaption,
+                  icon: PixelIcons.light,
+                  onPressed: context.read<LightsCubit>().toggleHighBeam,
+                ),
+                _CarInfoTileBlocWrapper<TwoBoolsState>(
+                  selector: (state) => state.leftTurnSignal,
+                  title: context.l10n.leftBlinkerButtonCaption,
+                  icon: Icons.arrow_circle_left,
+                  onPressed: context.read<LightsCubit>().toggleLeftTurnSignal,
+                ),
+                _CarInfoTileBlocWrapper<TwoBoolsState>(
+                  selector: (state) => state.rightTurnSignal,
+                  title: context.l10n.rightBlinkerButtonCaption,
+                  icon: Icons.arrow_circle_right,
+                  onPressed: context.read<LightsCubit>().toggleRightTurnSignal,
+                ),
+                _CarInfoTileBlocWrapper<TwoBoolsState>(
+                  selector: (state) => state.hazardBeam,
+                  title: context.l10n.hazardBeamButtonCaption,
+                  icon: Icons.warning_amber,
+                  onPressed: context.read<LightsCubit>().toggleHazardBeam,
+                ),
+                _CarInfoTileBlocWrapper<bool>(
+                  selector: (state) => state.reverse,
+                  title: context.l10n.reverseLightButtonCaption,
+                  icon: Icons.keyboard_double_arrow_down_sharp,
+                  onPressed: context.read<LightsCubit>().toggleReverseLight,
+                ),
+                _CarInfoTileBlocWrapper<bool>(
+                  selector: (state) => state.brake,
+                  title: context.l10n.brakeLightButtonCaption,
+                  icon: Icons.stop_circle_outlined,
+                  onPressed: context.read<LightsCubit>().toggleBrakeLight,
+                ),
+
+                // CarInterfaceListTile(
+                //   title: context.l10n.frontTrunkInterfaceTitle,
+                //   status: context.l10n.unlockedInterfaceStatus,
+                //   icon: PixelIcons.unlocked,
+                //   state: CarInterfaceState.success,
+                //   onPressed: () {},
+                // ),
+                // CarInterfaceListTile(
+                //   title: context.l10n.leftDoorInterfaceTitle,
+                //   status: context.l10n.lockedInterfaceStatus,
+                //   icon: PixelIcons.locked,
+                //   state: CarInterfaceState.error,
+                //   onPressed: () {},
+                // ),
+                // CarInterfaceListTile(
+                //   title: context.l10n.rightDoorInterfaceTitle,
+                //   status: context.l10n.unlockedInterfaceStatus,
+                //   icon: PixelIcons.unlocked,
+                //   state: CarInterfaceState.success,
+                //   onPressed: () {},
+                // ),
+                // CarInterfaceListTile(
+                //   title: context.l10n.rearTrunkInterfaceTitle,
+                //   status: context.l10n.lockedInterfaceStatus,
+                //   icon: PixelIcons.locked,
+                //   state: CarInterfaceState.error,
+                //   onPressed: () {},
+                // ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -355,5 +355,85 @@
   "exchangeLogsConsoleNoDataSourceMessage": "In order to send packages, you must first connect to the data source",
   "noPackagesMessage": "No packages",
   "reverseLightButtonCaption": "Reverse light",
-  "brakeLightButtonCaption": "Brake light"
+  "brakeLightButtonCaption": "Brake light",
+  "errorRemovingTheButtonMessage": "Error removing the button",
+  "theButtonIsSuccessfullyRemovedMessage": "The button is successfully removed",
+  "userDefinedButtonsScreenTtitle": "User defined buttons",
+  "itIsEmptyHereMessage": "It is empty here",
+  "errorWhenAddingTheButtonMessage": "Error when adding the button",
+  "theButtonIsSuccessfullyAddedMessage": "The button is successfully added",
+  "addUserDefinedButtonScreenTitle": "Add {buttonName}",
+  "@addUserDefinedButtonScreenTitle": {
+    "placeholders": {
+      "buttonName": {
+        "type": "String"
+      }
+    }
+  },
+  "selectButtonTypeScreenTtitle": "Select the button type",
+  "simpleButtonCaption": "Simple button",
+  "indicatorButtonCaption": "Indicator",
+  "yAxisJoystickButtonCaption": "Y-axis joystick",
+  "xAxisJoystickButtonCaption": "X-axis joystick",
+  "incorrectValueHintError": "Incorrect value",
+  "theFieldShouldNotBeEmptyHintError": "The field should not be empty",
+  "notLessThanHintError": "The value should not be less than {minValue}",
+  "@notLessThanHintError": {
+    "placeholders": {
+      "minValue": {
+        "type": "int"
+      }
+    }
+  },
+  "notGreaterThanHintError": "The value should not be greater than {maxValue}",
+  "@notGreaterThanHintError": {
+    "placeholders": {
+      "maxValue": {
+        "type": "int"
+      }
+    }
+  },
+  "updatePeriodInMillisecondsFiledTitle": "Update period in milliseconds",
+  "sentPackagesWhenMovingJoystickFieldTitle": "Sent packages when moving joystick",
+  "sentPackagesWithAOneTimePressFieldTitle": "Sent packages with a one-time press",
+  "theNameOfTheButtonFieldTitle": "The name of the button",
+  "incorrectFormatHintError": "Incorrect format. Enter integers through a comma (format: decimal or HEX)",
+  "theMinimumNumberOfPackagesHintError": "The minimum number of packages: {minPackages}",
+  "@theMinimumNumberOfPackagesHintError": {
+    "placeholders": {
+      "minPackages": {
+        "type": "int"
+      }
+    }
+  },
+  "addAPackageButtonCaption": "Add a package",
+  "theDataIsAutofilledFieldLabel": "The data is autofilled",
+  "packageDataFieldLabel": "Data",
+  "noColorAndStatusIfStatementsHintError": "At least one of the fields \"Color\", \"Status\" should have minimum one \"if\" statement",
+  "colorFieldTitle": "Color",
+  "ifStatement": "if",
+  "dataStatement": "data",
+  "bigEndianStatement": "Big Endian",
+  "littleEndianStatement": "Little Endian",
+  "valueFieldTitle": "Value",
+  "thenStatement": "then",
+  "dataParametersDialogTitle": "Data parameters",
+  "dataRangeCaption": "Data range",
+  "allDataRangeLabel": "All",
+  "manualSelectionDataRangeLabel": "Manual selection",
+  "fromDataRangeLabel": "from",
+  "toDataRangeLabel": "to",
+  "endianCaption": "Endian",
+  "bigEndianShortLabel": "Big",
+  "littleEndianShortLabel": "Little",
+  "signCaption": "Sign",
+  "unsignedByteLabel": "Unsigned",
+  "signedByteLabel": "Signed",
+  "elseStatement": "else",
+  "addIfStatementButtonCaption": "Add \"if\" statement",
+  "inputPackageParametersFieldTitle": "Input package parameters",
+  "functionIdFieldTitle": "Function ID",
+  "unknownMessage": "Unknown",
+  "titleFieldTitle": "Title",
+  "statusFieldTitle": "Status"
 }

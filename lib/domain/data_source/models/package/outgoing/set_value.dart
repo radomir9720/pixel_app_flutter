@@ -6,7 +6,7 @@ class OutgoingSetValuePackage extends DataSourceOutgoingPackage {
     required super.parameterId,
     required SetValueBody setValueBody,
   }) : super(
-          requestType: DataSourceRequestType.event,
+          requestType: const DataSourceRequestType.event(),
           bytesConvertible: setValueBody,
         );
 }

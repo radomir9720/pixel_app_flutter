@@ -16,12 +16,12 @@ class DataSourceOutgoingPackage extends DataSourcePackage {
         ]);
 
   DataSourceOutgoingPackage.raw({
-    required DataSourceRequestType requestType,
+    required int requestType,
     required int parameterId,
     required List<int> data,
   }) : super.fromBody([
           0x00, // First config byte
-          requestType.value, // second config byte. Request type
+          requestType, // second config byte. Request type
           ...parameterId.toBytesUint16,
           data.length,
           ...data,

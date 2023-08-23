@@ -20,7 +20,7 @@ class LoadLEDConfigsBloc extends Bloc<LoadLEDConfigsEvent, LoadLEDConfigsState>
         Result<ReadLEDConfigsStorageError, List<LEDPanelConfig>>>(
       inLoading: () => state.inLoading(),
       inFailure: () => state.inFailure(),
-      action: storage.read,
+      action: (_) => storage.read(),
       onActionResult: (actionResult) async {
         return actionResult.when(
           error: state.inFailure,

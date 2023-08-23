@@ -49,17 +49,7 @@ class HomeScreen extends StatelessWidget {
                     Positioned.fill(
                       child: FadeTransition(
                         opacity: animation,
-                        child: Padding(
-                          padding: screenType.isHandset
-                              ? const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 32,
-                                ).copyWith(
-                                  left: landscape ? 87 : 16,
-                                )
-                              : EdgeInsets.zero,
-                          child: child,
-                        ),
+                        child: child,
                       ),
                     ),
                     if (landscape)

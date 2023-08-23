@@ -5,7 +5,7 @@ class OutgoingSubscribePackage extends DataSourceOutgoingPackage {
   OutgoingSubscribePackage({
     required super.parameterId,
   }) : super(
-          requestType: DataSourceRequestType.subscription,
+          requestType: const DataSourceRequestType.subscription(),
           bytesConvertible: const EmptyBody(),
         );
 }
@@ -14,7 +14,7 @@ class OutgoingUnsubscribePackage extends DataSourceOutgoingPackage {
   OutgoingUnsubscribePackage({
     required DataSourceParameterId parameterId,
   }) : super(
-          requestType: DataSourceRequestType.subscription,
+          requestType: const DataSourceRequestType.subscription(),
           bytesConvertible: const EmptyBody(),
           parameterId: modifyId(parameterId),
         );

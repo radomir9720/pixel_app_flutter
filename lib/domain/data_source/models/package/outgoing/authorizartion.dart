@@ -5,7 +5,7 @@ class OutgoingAuthorizationRequestPackage extends DataSourceOutgoingPackage {
   OutgoingAuthorizationRequestPackage({
     required AuthorizationRequest request,
   }) : super(
-          requestType: DataSourceRequestType.handshake,
+          requestType: const DataSourceRequestType.handshake(),
           parameterId: const DataSourceParameterId.authorization(),
           bytesConvertible: request,
         );
@@ -15,7 +15,7 @@ class OutgoingAuthorizationInitializationRequestPackage
     extends DataSourceOutgoingPackage {
   OutgoingAuthorizationInitializationRequestPackage()
       : super(
-          requestType: DataSourceRequestType.handshake,
+          requestType: const DataSourceRequestType.handshake(),
           parameterId: const DataSourceParameterId.authorization(),
           bytesConvertible: const AuthorizationInitializationRequest(),
         );

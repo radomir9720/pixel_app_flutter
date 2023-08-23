@@ -5,7 +5,7 @@ class OutgoingBufferRequestPackage extends DataSourceOutgoingPackage {
   OutgoingBufferRequestPackage({
     required super.parameterId,
   }) : super(
-          requestType: DataSourceRequestType.bufferRequest,
+          requestType: const DataSourceRequestType.bufferRequest(),
           bytesConvertible: const EmptyBody(),
         );
 }

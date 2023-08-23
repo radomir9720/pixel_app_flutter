@@ -61,6 +61,21 @@ The MainECU is the connecting link between this application and car interfaces.
   
   </br>
 
+* __User defined buttons__
+  
+  User can add his own buttons, which will send to and/or receive from the L2 level certain data.
+
+  For now 4 types of buttons are available:
+  
+  1. **Simple button** - just sends certain data by tapping.
+  2. **Indicator** - subscribes and listens for certain data from the L2, and displays a color and/or a status according to the data. </br>
+  _Example of use: displaying the batery temperature(ok, warning, critical)_
+  3. **Y-axis joystick** - sends drag/pan data to the L2 level in the range from -100 to 100. Also has an optional "on tap" handler, which means that certain data can be sent to the L2 when the joystick is just pressed(no drag/pan). </br>
+  _Example of use: window lifter._
+  4. **X-axis joystick** - sends drag/pan data to the L2 level in the range from -100 to 100. Also has an optional "on tap" handler, which means that certain data can be sent to the L2 when the joystick is just pressed(no drag/pan). </br> _Example of use: seat regulator._
+
+</br>
+
 * __Responsive UI__
   
   ![](docs/images/responsive.gif)

@@ -5,7 +5,9 @@ import 'package:pixel_app_flutter/presentation/screens/general/widgets/gear_widg
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/light_state_error_listener.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/overlay_data_sender.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/user_defined_buttons_end_drawer.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_padding.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/speed_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/statistic_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/blinker_button.dart';
@@ -23,11 +25,26 @@ class GeneralScreen extends StatelessWidget {
         LightStateErrorListener(),
         OverlayDataSender(),
       ],
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: screenData.whenType(
-          orElse: () => const TabletGeneralScreenBody(),
-          handset: () => const HandsetGeneralScreenBody(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        drawerScrimColor: Colors.transparent,
+        endDrawer: const UserDefinedButtonsEndDrawer(),
+        floatingActionButton: Builder(
+          builder: (context) {
+            return FloatingActionButton(
+              onPressed: Scaffold.of(context).openEndDrawer,
+              child: const Icon(Icons.gamepad_rounded),
+            );
+          },
+        ),
+        body: ResponsivePadding(
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: screenData.whenType(
+              orElse: () => const TabletGeneralScreenBody(),
+              handset: () => const HandsetGeneralScreenBody(),
+            ),
+          ),
         ),
       ),
     );

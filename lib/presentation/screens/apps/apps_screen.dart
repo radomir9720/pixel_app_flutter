@@ -11,6 +11,7 @@ import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/widgets/app_title.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/widgets/search_app_text_field.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_padding.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
 
@@ -149,24 +150,26 @@ class _ResponsiveAppsScreenBodyState extends State<_ResponsiveAppsScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    return FormFactorResponsive(
-      orElse: (_) {
-        forceNotify = true;
-        return _TabletBody(
-          itemsNotifier: itemsNotifier,
-          eventController: eventController,
-          searchTextFieldController: searchTextFieldController,
-        );
-      },
-      handset: (screenData) {
-        forceNotify = screenData.orientation == Orientation.landscape;
-        return _HandsetBody(
-          itemsNotifier: itemsNotifier,
-          eventController: eventController,
-          orientation: screenData.orientation,
-          searchTextFieldController: searchTextFieldController,
-        );
-      },
+    return ResponsivePadding(
+      child: FormFactorResponsive(
+        orElse: (_) {
+          forceNotify = true;
+          return _TabletBody(
+            itemsNotifier: itemsNotifier,
+            eventController: eventController,
+            searchTextFieldController: searchTextFieldController,
+          );
+        },
+        handset: (screenData) {
+          forceNotify = screenData.orientation == Orientation.landscape;
+          return _HandsetBody(
+            itemsNotifier: itemsNotifier,
+            eventController: eventController,
+            orientation: screenData.orientation,
+            searchTextFieldController: searchTextFieldController,
+          );
+        },
+      ),
     );
   }
 }

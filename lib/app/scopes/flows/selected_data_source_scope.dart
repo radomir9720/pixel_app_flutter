@@ -7,6 +7,7 @@ import 'package:pixel_app_flutter/domain/app/storages/logger_storage.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
+import 'package:pixel_app_flutter/domain/user_defined_buttons/storages/user_defined_buttons_storage.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
@@ -38,6 +39,9 @@ class SelectedDataSourceScope extends AutoRouter {
 
               // storages
               Provider<NavigatorAppStorage>(create: (context) => GetIt.I()),
+              InheritedProvider<UserDefinedButtonsStorage>(
+                create: (context) => GetIt.I(),
+              ),
 
               // blocs
               BlocProvider<DataSourceConnectionStatusCubit>(
@@ -151,6 +155,11 @@ class SelectedDataSourceScope extends AutoRouter {
                   storage: context.read(),
                 )..add(const NavigatorFastAccessEvent.load()),
                 lazy: false,
+              ),
+              BlocProvider(
+                create: (context) => IncomingPackagesCubit(
+                  context.read(),
+                ),
               ),
             ],
             child: BlocConsumer<DataSourceConnectionStatusCubit,
