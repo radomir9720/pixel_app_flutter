@@ -13,6 +13,7 @@ mixin RouteNames {
   static const requestsExchangeLogsFilterFlow =
       'RequestsExchangeLogsFilterFlow';
   static const selectDataSourceGeneralFlow = 'SelectDataSourceGeneralFlow';
+  static const userDefinedButtonsFlow = 'UserDefinedButtonsFlow';
   //
   static const requestsExchangeLogsRoute = 'RequestsExchangeLogsRoute';
   static const selectDeviceDialogRoute = 'SelectDeviceDialogRoute';

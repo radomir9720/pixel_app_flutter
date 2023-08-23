@@ -124,6 +124,8 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
       MotorPowerIncomingDataSourcePackage.new,
       //
       ErrorWithCodeAndSectionIncomingDataSourcePackage.new,
+      //
+      CustomImageIncomingDataSourcePackage.new,
     ];
   }
 

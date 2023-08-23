@@ -198,10 +198,7 @@ class _PackagesExchangeConsoleScreenState
                             try {
                               context.read<OutgoingPackagesCubit>().sendPackage(
                                     DataSourceOutgoingPackage.raw(
-                                      requestType:
-                                          DataSourceRequestType.fromInt(
-                                        requestType,
-                                      ),
+                                      requestType: requestType,
                                       parameterId: parameterId,
                                       data: data.whereType<int>().toList(),
                                     ),

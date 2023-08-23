@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: animated_scroll_view
-      sha256: "6e1f055cade70322abc1f5569bc02879c2cafa0a3e08f4b5b34343e6901c932f"
+      sha256: "976120b91557a8f46dbbdc2b7d23b033045ca6f8f6223d09302107c8e309250e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1+1"
+    version: "1.0.2"
   app_settings:
     dependency: "direct main"
     description:
@@ -385,6 +385,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flex_color_picker:
+    dependency: "direct main"
+    description:
+      name: flex_color_picker
+      sha256: f37476ab3e80dcaca94e428e159944d465dd16312fda9ff41e07e86f04bfa51c
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.0"
+  flex_seed_scheme:
+    dependency: transitive
+    description:
+      name: flex_seed_scheme
+      sha256: "29c12aba221eb8a368a119685371381f8035011d18de5ba277ad11d7dfb8657f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -907,20 +923,20 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.3.1"
-      resolved-ref: "0310f1b35f31426ade86ce35d0e95f05bf3ee0e8"
+      ref: "1.0.0"
+      resolved-ref: c8b52a84e1c79e7650b565c3c930d5f327ba144c
       url: "https://github.com/radomir9720/re_seedwork.git"
     source: git
-    version: "0.3.1"
+    version: "1.0.0"
   re_widgets:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.2.2"
-      resolved-ref: "5b85fc2fc75cbcdf475c2bc26232724b6b63a1fc"
+      ref: "0.2.3"
+      resolved-ref: e7a69667a80c26238ac6df69c1179ac0cde5ed52
       url: "https://github.com/radomir9720/re_widgets.git"
     source: git
-    version: "0.2.2+8"
+    version: "0.2.3+9"
   recase:
     dependency: transitive
     description:
@@ -1368,4 +1384,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.0.0 <4.0.0"
-  flutter: ">=3.7.0-0"
+  flutter: ">=3.10.0"

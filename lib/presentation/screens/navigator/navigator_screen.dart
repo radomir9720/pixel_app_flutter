@@ -9,6 +9,7 @@ import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/default
 import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/nav_apps_list_tile.dart';
 import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/switch_fast_access_tile.dart';
 import 'package:pixel_app_flutter/presentation/screens/navigator/widgets/switch_overlay_tile.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_padding.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/organisms/title_wrapper.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
@@ -45,50 +46,52 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return TitleWrapper(
-      title: context.l10n.navigatorTabTitle,
-      body: ListView(
-        children: [
-          ValueListenableBuilder<_InstalledMapsState>(
-            valueListenable: mapsNotifier,
-            builder: (context, state, child) {
-              return state.maybeWhen(
-                loading: (payload) {
-                  return const Center(child: CircularProgressIndicator());
-                },
-                orElse: (payload) {
-                  if (payload.isEmpty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          context.l10n.noNavAppsOnDeviceErrorMessage,
-                          style: kNoNavAppsErrorTextStyle.copyWith(
-                            color: context.colors.hintText,
+    return ResponsivePadding(
+      child: TitleWrapper(
+        title: context.l10n.navigatorTabTitle,
+        body: ListView(
+          children: [
+            ValueListenableBuilder<_InstalledMapsState>(
+              valueListenable: mapsNotifier,
+              builder: (context, state, child) {
+                return state.maybeWhen(
+                  loading: (payload) {
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                  orElse: (payload) {
+                    if (payload.isEmpty) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            context.l10n.noNavAppsOnDeviceErrorMessage,
+                            style: kNoNavAppsErrorTextStyle.copyWith(
+                              color: context.colors.hintText,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                      ),
-                    );
-                  }
+                      );
+                    }
 
-                  return Column(
-                    children: [
-                      NavAppsListTile(apps: payload),
-                      DefaultNavAppTile(apps: payload),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          //
-          const Divider(endIndent: 16, indent: 16, height: 32),
-          //
-          const SwitchFastAccessTile(),
-          //
-          if (context.platform.isAndroid) const SwitchOverlayTile(),
-        ],
+                    return Column(
+                      children: [
+                        NavAppsListTile(apps: payload),
+                        DefaultNavAppTile(apps: payload),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+            //
+            const Divider(endIndent: 16, indent: 16, height: 32),
+            //
+            const SwitchFastAccessTile(),
+            //
+            if (context.platform.isAndroid) const SwitchOverlayTile(),
+          ],
+        ),
       ),
     );
   }

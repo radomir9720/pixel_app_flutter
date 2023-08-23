@@ -4,6 +4,7 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_padding.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/organisms/title_wrapper.dart';
 
 class MotorScreen extends StatelessWidget {
@@ -11,175 +12,179 @@ class MotorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TitleWrapper(
-      title: context.l10n.motorScreenTitle,
-      body: ListView(
-        children: [
-          Table(
-            columnWidths: const {
-              0: FlexColumnWidth(4),
-              1: FlexColumnWidth(),
-              2: FlexColumnWidth(),
-              3: FlexColumnWidth(),
-            },
-            border: TableBorder(
-              horizontalInside:
-                  BorderSide(color: Theme.of(context).dividerColor),
-              verticalInside: BorderSide(color: Theme.of(context).dividerColor),
-            ),
-            children: [
-              _TwoValuesTableRow.builder(
-                builder: () => (
-                  context.l10n.firstTileTitle,
-                  context.l10n.secondTileTitle,
-                  null,
+    return ResponsivePadding(
+      child: TitleWrapper(
+        title: context.l10n.motorScreenTitle,
+        body: ListView(
+          children: [
+            Table(
+              columnWidths: const {
+                0: FlexColumnWidth(4),
+                1: FlexColumnWidth(),
+                2: FlexColumnWidth(),
+                3: FlexColumnWidth(),
+              },
+              border: TableBorder(
+                horizontalInside:
+                    BorderSide(color: Theme.of(context).dividerColor),
+                verticalInside:
+                    BorderSide(color: Theme.of(context).dividerColor),
+              ),
+              children: [
+                _TwoValuesTableRow.builder(
+                  builder: () => (
+                    context.l10n.firstTileTitle,
+                    context.l10n.secondTileTitle,
+                    null,
+                  ),
+                  parameterName: context.l10n.parameterTileTitle,
+                  unitOfMeasurement: context.l10n.measurementUnitTileTitle,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontSize: 15),
                 ),
-                parameterName: context.l10n.parameterTileTitle,
-                unitOfMeasurement: context.l10n.measurementUnitTileTitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontSize: 15),
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.speedTileTitle,
-                builder: () {
-                  final state = context
-                      .select((MotorDataCubit cubit) => cubit.state.speed);
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.speedTileTitle,
+                  builder: () {
+                    final state = context
+                        .select((MotorDataCubit cubit) => cubit.state.speed);
 
-                  return (
-                    '${state.first ~/ 10}',
-                    '${state.second ~/ 10}',
-                    context.colorFromStatus(state.status),
-                  );
-                },
-                unitOfMeasurement: context.l10n.kmPerHourMeasurenentUnit,
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.rpmTileTitle,
-                builder: () {
-                  final state =
-                      context.select((MotorDataCubit cubit) => cubit.state.rpm);
-                  return (
-                    '${state.first}',
-                    '${state.second}',
-                    context.colorFromStatus(state.status),
-                  );
-                },
-                unitOfMeasurement: context.l10n.rpmMeasurementUnit,
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.voltageTileTitle,
-                builder: () {
-                  final state = context
-                      .select((MotorDataCubit cubit) => cubit.state.voltage);
-                  return (
-                    (state.first / 10).toStringAsFixed(1),
-                    (state.second / 10).toStringAsFixed(1),
-                    context.colorFromStatus(state.status),
-                  );
-                },
-                unitOfMeasurement: context.l10n.voltMeasurementUnit,
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.currentTileTitle,
-                builder: () {
-                  final state = context
-                      .select((MotorDataCubit cubit) => cubit.state.current);
-                  return (
-                    (state.first / 10).toStringAsFixed(1),
-                    (state.second / 10).toStringAsFixed(1),
-                    context.colorFromStatus(state.status),
-                  );
-                },
-                unitOfMeasurement: context.l10n.amperMeasurementUnit,
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.powerTileTitle,
-                builder: () {
-                  final state = context
-                      .select((MotorDataCubit cubit) => cubit.state.power);
-                  return (
-                    '${state.first}',
-                    '${state.second}',
-                    context.colorFromStatus(state.status),
-                  );
-                },
-                unitOfMeasurement: context.l10n.wattMeasurementUnit,
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.motorsTemperatureTileTitle,
-                builder: () {
-                  final state = context.select(
-                    (MotorDataCubit cubit) => cubit.state.motorTemperature,
-                  );
-                  return (
-                    '${state.first}',
-                    '${state.second}',
-                    context.colorFromStatus(state.status),
-                  );
-                },
-                unitOfMeasurement: context.l10n.celsiusMeasurementUnit,
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.controllersTemperatureTileTitle,
-                builder: () {
-                  final state = context.select(
-                    (MotorDataCubit cubit) => cubit.state.controllerTemperature,
-                  );
-                  return (
-                    '${state.first}',
-                    '${state.second}',
-                    context.colorFromStatus(state.status),
-                  );
-                },
-                unitOfMeasurement: context.l10n.celsiusMeasurementUnit,
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.motorGearTileTitle,
-                builder: () {
-                  final state = context.select(
-                    (MotorDataCubit cubit) {
-                      final gr = cubit.state.gearAndRoll;
-                      return (
-                        gr.firstMotorGear,
-                        gr.secondMotorGear,
-                        gr.status,
-                      );
-                    },
-                  );
-                  return (
-                    state.$1.toLocalizedString(context),
-                    state.$2.toLocalizedString(context),
-                    context.colorFromStatus(state.$3),
-                  );
-                },
-                unitOfMeasurement: '',
-              ),
-              _TwoValuesTableRow.builder(
-                parameterName: context.l10n.motorRollDirectionTileTitle,
-                builder: () {
-                  final state = context.select(
-                    (MotorDataCubit cubit) {
-                      final gr = cubit.state.gearAndRoll;
-                      return (
-                        gr.firstMotorRollDirection,
-                        gr.secondMotorRollDirection,
-                        gr.status,
-                      );
-                    },
-                  );
-                  return (
-                    state.$1.toLocalizedString(context),
-                    state.$2.toLocalizedString(context),
-                    context.colorFromStatus(state.$3),
-                  );
-                },
-                unitOfMeasurement: '',
-              ),
-            ],
-          ),
-        ],
+                    return (
+                      '${state.first ~/ 10}',
+                      '${state.second ~/ 10}',
+                      context.colorFromStatus(state.status),
+                    );
+                  },
+                  unitOfMeasurement: context.l10n.kmPerHourMeasurenentUnit,
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.rpmTileTitle,
+                  builder: () {
+                    final state = context
+                        .select((MotorDataCubit cubit) => cubit.state.rpm);
+                    return (
+                      '${state.first}',
+                      '${state.second}',
+                      context.colorFromStatus(state.status),
+                    );
+                  },
+                  unitOfMeasurement: context.l10n.rpmMeasurementUnit,
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.voltageTileTitle,
+                  builder: () {
+                    final state = context
+                        .select((MotorDataCubit cubit) => cubit.state.voltage);
+                    return (
+                      (state.first / 10).toStringAsFixed(1),
+                      (state.second / 10).toStringAsFixed(1),
+                      context.colorFromStatus(state.status),
+                    );
+                  },
+                  unitOfMeasurement: context.l10n.voltMeasurementUnit,
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.currentTileTitle,
+                  builder: () {
+                    final state = context
+                        .select((MotorDataCubit cubit) => cubit.state.current);
+                    return (
+                      (state.first / 10).toStringAsFixed(1),
+                      (state.second / 10).toStringAsFixed(1),
+                      context.colorFromStatus(state.status),
+                    );
+                  },
+                  unitOfMeasurement: context.l10n.amperMeasurementUnit,
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.powerTileTitle,
+                  builder: () {
+                    final state = context
+                        .select((MotorDataCubit cubit) => cubit.state.power);
+                    return (
+                      '${state.first}',
+                      '${state.second}',
+                      context.colorFromStatus(state.status),
+                    );
+                  },
+                  unitOfMeasurement: context.l10n.wattMeasurementUnit,
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.motorsTemperatureTileTitle,
+                  builder: () {
+                    final state = context.select(
+                      (MotorDataCubit cubit) => cubit.state.motorTemperature,
+                    );
+                    return (
+                      '${state.first}',
+                      '${state.second}',
+                      context.colorFromStatus(state.status),
+                    );
+                  },
+                  unitOfMeasurement: context.l10n.celsiusMeasurementUnit,
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.controllersTemperatureTileTitle,
+                  builder: () {
+                    final state = context.select(
+                      (MotorDataCubit cubit) =>
+                          cubit.state.controllerTemperature,
+                    );
+                    return (
+                      '${state.first}',
+                      '${state.second}',
+                      context.colorFromStatus(state.status),
+                    );
+                  },
+                  unitOfMeasurement: context.l10n.celsiusMeasurementUnit,
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.motorGearTileTitle,
+                  builder: () {
+                    final state = context.select(
+                      (MotorDataCubit cubit) {
+                        final gr = cubit.state.gearAndRoll;
+                        return (
+                          gr.firstMotorGear,
+                          gr.secondMotorGear,
+                          gr.status,
+                        );
+                      },
+                    );
+                    return (
+                      state.$1.toLocalizedString(context),
+                      state.$2.toLocalizedString(context),
+                      context.colorFromStatus(state.$3),
+                    );
+                  },
+                  unitOfMeasurement: '',
+                ),
+                _TwoValuesTableRow.builder(
+                  parameterName: context.l10n.motorRollDirectionTileTitle,
+                  builder: () {
+                    final state = context.select(
+                      (MotorDataCubit cubit) {
+                        final gr = cubit.state.gearAndRoll;
+                        return (
+                          gr.firstMotorRollDirection,
+                          gr.secondMotorRollDirection,
+                          gr.status,
+                        );
+                      },
+                    );
+                    return (
+                      state.$1.toLocalizedString(context),
+                      state.$2.toLocalizedString(context),
+                      context.colorFromStatus(state.$3),
+                    );
+                  },
+                  unitOfMeasurement: '',
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -34,6 +34,7 @@ import 'package:pixel_app_flutter/data/services/data_source/usb_data_source_andr
 import 'package:pixel_app_flutter/data/services/installed_apps_mock.dart';
 import 'package:pixel_app_flutter/data/storages/logger_storage.dart';
 import 'package:pixel_app_flutter/domain/app/app.dart';
+import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usb_serial/usb_serial.dart';
 
@@ -196,7 +197,15 @@ Future<void> _configureManualDeps(GetIt getIt, Environment env) async {
     ..factory<ListUsbDevicesCallback>(() => UsbSerial.listDevices)
     // MacOS, Linux, Windows
     ..factory<ListUsbPortsCallback>(() => () => SerialPort.availablePorts)
-    ..singleton<LoggerStorage>(LoggerStorageImpl(prefs: gh.getIt()));
+    ..singleton<LoggerStorage>(LoggerStorageImpl(prefs: gh.getIt()))
+    ..factory<List<UserDefinedButtonSerializer>>(
+      () => const [
+        IndicatorUserDefinedButtonSerializer(),
+        YAxisJoystickUserDefinedButtonSerializer(),
+        XAxisJoystickUserDefinedButtonSerializer(),
+        SendPackagesUserDefinedButtonSerializer(),
+      ],
+    );
 
   await gh.factoryAsync(
     PackageInfo.fromPlatform,

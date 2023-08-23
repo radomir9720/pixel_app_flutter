@@ -1,6 +1,6 @@
 name: pixel_app_flutter
 description: App, that manages the functions of the StarPixel car. Also considered to be used as an on-board computer.
-version: 0.13.0+26
+version: 0.14.0+27
 publish_to: none
 
 environment:
@@ -29,15 +29,16 @@ dependencies:
   re_seedwork:
     git:
       url: https://github.com/radomir9720/re_seedwork.git
-      ref: "0.3.1"
+      ref: "1.0.0"
 
   # ui
   nested: ^1.0.0
-  animated_scroll_view: ^1.0.1
+  flex_color_picker: ^3.3.0
+  animated_scroll_view: ^1.0.2
   re_widgets:
     git:
       url: https://github.com/radomir9720/re_widgets.git
-      ref: "0.2.2"
+      ref: "0.2.3"
 
   # codegen
   json_annotation: ^4.8.1

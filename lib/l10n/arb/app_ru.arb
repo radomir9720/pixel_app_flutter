@@ -355,5 +355,85 @@
   "exchangeLogsConsoleNoDataSourceMessage": "Для того, чтобы отправлять пакеты, необходимо сначала подключится к источнику данных",
   "noPackagesMessage": "Нет пакетов",
   "reverseLightButtonCaption": "Свет заднего хода",
-  "brakeLightButtonCaption": "Свет стопов"
+  "brakeLightButtonCaption": "Свет стопов",
+  "errorRemovingTheButtonMessage": "Ошибка при удалении кнопки",
+  "theButtonIsSuccessfullyRemovedMessage": "Кнопка успешно удалена",
+  "userDefinedButtonsScreenTtitle": "Пользовательские кнопки",
+  "itIsEmptyHereMessage": "Здесь пока пусто",
+  "errorWhenAddingTheButtonMessage": "Ошибка при добавлении кнопки",
+  "theButtonIsSuccessfullyAddedMessage": "Кнопка успешно добавлена",
+  "addUserDefinedButtonScreenTitle": "Добавить {buttonName}",
+  "@addUserDefinedButtonScreenTitle": {
+    "placeholders": {
+      "buttonName": {
+        "type": "String"
+      }
+    }
+  },
+  "selectButtonTypeScreenTtitle": "Выберите тип кнопки",
+  "simpleButtonCaption": "Обычная кнопка",
+  "indicatorButtonCaption": "Индикатор",
+  "yAxisJoystickButtonCaption": "Y-осевой джойстик",
+  "xAxisJoystickButtonCaption": "X-осевой джойстик",
+  "incorrectValueHintError": "Некорректное значение",
+  "theFieldShouldNotBeEmptyHintError": "Поле не должно быть пустым",
+  "notLessThanHintError": "'Значение не должно быть меньше {minValue}",
+  "@notLessThanHintError": {
+    "placeholders": {
+      "minValue": {
+        "type": "int"
+      }
+    }
+  },
+  "notGreaterThanHintError": "Значение не должно быть больше {maxValue}",
+  "@notGreaterThanHintError": {
+    "placeholders": {
+      "maxValue": {
+        "type": "int"
+      }
+    }
+  },
+  "updatePeriodInMillisecondsFiledTitle": "Период обновления в миллисекундах",
+  "sentPackagesWhenMovingJoystickFieldTitle": "Отправляемые пакеты при движении джойстика",
+  "sentPackagesWithAOneTimePressFieldTitle": "Отправляемые пакеты при единоразовом нажатии",
+  "theNameOfTheButtonFieldTitle": "Название кнопки",
+  "incorrectFormatHintError": "Некорректный формат. Введите целые числа через запятую(формат: десятичный либо HEX)",
+  "theMinimumNumberOfPackagesHintError": "Минимальное к-во пакетов: {minPackages}",
+  "@theMinimumNumberOfPackagesHintError": {
+    "placeholders": {
+      "minPackages": {
+        "type": "int"
+      }
+    }
+  },
+  "addAPackageButtonCaption": "Добавить пакет",
+  "theDataIsAutofilledFieldLabel": "Данные автозаполнены",
+  "packageDataFieldLabel": "Данные",
+  "noColorAndStatusIfStatementsHintError": "Хотя бы одно из полей \"Цвет\", \"Статус\" должно иметь минимум одну конструкцию \"если\"",
+  "colorFieldTitle": "Цвет",
+  "ifStatement": "если",
+  "dataStatement": "данные",
+  "bigEndianStatement": "Big Endian",
+  "littleEndianStatement": "Little Endian",
+  "valueFieldTitle": "Значение",
+  "thenStatement": "то",
+  "dataParametersDialogTitle": "Параметры данных",
+  "dataRangeCaption": "Диапазон данных",
+  "allDataRangeLabel": "Все",
+  "manualSelectionDataRangeLabel": "Ручной выбор",
+  "fromDataRangeLabel": "с",
+  "toDataRangeLabel": "по",
+  "endianCaption": "Порядок байтов",
+  "bigEndianShortLabel": "Big",
+  "littleEndianShortLabel": "Little",
+  "signCaption": "Знак",
+  "unsignedByteLabel": "Без знака",
+  "signedByteLabel": "Со знаком",
+  "elseStatement": "иначе",
+  "addIfStatementButtonCaption": "Добавить конструкцию \"если\"",
+  "inputPackageParametersFieldTitle": "Параметры входящего пакета",
+  "functionIdFieldTitle": "ID Функции",
+  "unknownMessage": "Неизвестно",
+  "titleFieldTitle": "Название",
+  "statusFieldTitle": "Статус"
 }

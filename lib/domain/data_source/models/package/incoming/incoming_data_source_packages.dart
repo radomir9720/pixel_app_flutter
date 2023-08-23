@@ -6,6 +6,7 @@ export 'battery_temperature.dart';
 export 'brake_light.dart';
 export 'controller_temperature.dart';
 export 'current.dart';
+export 'custom.dart';
 export 'custom_image.dart';
 export 'error_with_code_and_section.dart';
 export 'handshake.dart';

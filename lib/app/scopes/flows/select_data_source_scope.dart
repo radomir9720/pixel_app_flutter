@@ -30,7 +30,7 @@ class SelectDataSourceScope extends StatelessWidget
       routes: (handler) {
         return [
           const SelectDataSourceGeneralFlow(),
-          if (authorizationState.isFailure)
+          if (authorizationState.isFailure || connectState.isFailure)
             ...[]
           else if (isInitial ||
               authorizationState.isLoading ||
@@ -146,21 +146,24 @@ class SelectDataSourceScope extends StatelessWidget
             serialNumberStorage: context.read(),
           ),
         ),
-      ],
-      child: BlocListener<DataSourceAuthorizationCubit,
-          DataSourceAuthorizationState>(
-        listener: (context, state) {
-          final error = state.whenOrNull(
-            failure: () => l10n.authorizationErrorMessage,
-            authorizationTimeout: () => l10n.authorizationTimeoutErrorMessage,
-            initializationTimeout: () =>
-                l10n.auhtorizationInitializationTimeoutErrorMessage,
-            errorSavingSerialNumber: () => l10n.errorSavingSerialNumberMessage,
-          );
 
-          if (error != null) context.showSnackBar(error);
-        },
-        child: BlocListener<DataSourceConnectBloc, DataSourceConnectState>(
+        // Listeners
+        BlocListener<DataSourceAuthorizationCubit,
+            DataSourceAuthorizationState>(
+          listener: (context, state) {
+            final error = state.whenOrNull(
+              failure: () => l10n.authorizationErrorMessage,
+              authorizationTimeout: () => l10n.authorizationTimeoutErrorMessage,
+              initializationTimeout: () =>
+                  l10n.auhtorizationInitializationTimeoutErrorMessage,
+              errorSavingSerialNumber: () =>
+                  l10n.errorSavingSerialNumberMessage,
+            );
+
+            if (error != null) context.showSnackBar(error);
+          },
+        ),
+        BlocListener<DataSourceConnectBloc, DataSourceConnectState>(
           listener: (context, state) {
             state.maybeWhen(
               orElse: (payload) {},
@@ -177,9 +180,9 @@ class SelectDataSourceScope extends StatelessWidget
               },
             );
           },
-          child: this,
-        ),
-      ),
+        )
+      ],
+      child: this,
     );
   }
 }

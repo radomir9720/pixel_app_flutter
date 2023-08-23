@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pixel_app_flutter/presentation/app/brightness.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/screen_size_helper.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/data_matchers_input_fileds_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffold.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/nav_bar_colors.dart';
 
@@ -28,6 +29,11 @@ class MaterialTheme {
           divider: const Color(0x1AFAFAFA),
           unselectedText: const Color(0xFFC2C6C8),
           unselectedBackground: const Color(0xFF1A2227),
+        ),
+        const DataMatchersColors(
+          accent: Color(0xFF5898CE),
+          statement: Color(0xFFC679DD),
+          regular: Color(0xFFABB2BF),
         ),
       ],
       brightness: brightness,

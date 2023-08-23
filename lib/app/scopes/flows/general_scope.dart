@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
+import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:provider/provider.dart';
 
 class GeneralScope extends AutoRouter {
@@ -13,6 +14,7 @@ class GeneralScope extends AutoRouter {
     return (context, content) {
       return MultiProvider(
         providers: [
+          // blocs
           BlocProvider(
             create: (context) {
               context
@@ -23,6 +25,16 @@ class GeneralScope extends AutoRouter {
                 dataSource: context.read(),
               );
             },
+          ),
+          BlocProvider(
+            create: (context) => UserDefinedButtonsCubit(
+              storage: context.read(),
+            )..load(),
+          ),
+          BlocProvider(
+            create: (context) => RemoveUserDefinedBurronBloc(
+              storage: context.read(),
+            ),
           ),
         ],
         child: content,

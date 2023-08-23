@@ -11,6 +11,7 @@ import 'package:pixel_app_flutter/app/scopes/screens/charging_screen_wrapper.dar
 import 'package:pixel_app_flutter/app/scopes/screens/motor_screen_wrapper.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
+import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:pixel_app_flutter/presentation/screens/apps/apps_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/car_info/car_info_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/common/loading_screen.dart';
@@ -34,13 +35,17 @@ import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen
 import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen/led_panel_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen/remove_led_configuration_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/settings/settings_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/add_user_defined_button_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_builder.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/select_button_type_screen.dart';
 
 part 'main_router.gr.dart';
 part 'route_names.dart';
 part 'subroutes/developer_tools_route.dart';
-part 'subroutes/settings_route.dart';
 part 'subroutes/home_route.dart';
 part 'subroutes/select_data_source_route.dart';
+part 'subroutes/settings_route.dart';
+part 'subroutes/user_defined_buttons_route.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'ScreenWrapper|Screen|PageWrapper|Page|Scope,Route',
@@ -59,6 +64,8 @@ part 'subroutes/select_data_source_route.dart';
         _developerToolsRoute,
         //
         _selectDataSourceRoute,
+        //
+        _userDefinedButtonsRoute,
       ],
     ),
     //

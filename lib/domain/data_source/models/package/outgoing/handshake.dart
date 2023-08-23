@@ -6,7 +6,7 @@ class OutgoingHandshakePackage extends DataSourceOutgoingPackage {
     required super.parameterId,
     required HandshakeID handshakeId,
   }) : super(
-          requestType: DataSourceRequestType.handshake,
+          requestType: const DataSourceRequestType.handshake(),
           bytesConvertible: handshakeId,
         );
 }

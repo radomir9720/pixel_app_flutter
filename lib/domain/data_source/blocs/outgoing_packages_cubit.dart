@@ -28,8 +28,9 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
     );
   }
 
-  void subscribeTo(Set<DataSourceParameterId> parameterIds) {
+  bool subscribeTo(Set<DataSourceParameterId> parameterIds) {
     final newParameters = parameterIds.difference(subscribeToParameterIdList);
+    if (newParameters.isEmpty) return false;
     subscribeToParameterIdList.addAll(parameterIds);
 
     state.protocolVersion.when(
@@ -46,6 +47,7 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
             subscribeToParameterIdList.map((e) => e.value).toSet(),
       ),
     );
+    return true;
   }
 
   void _subscribeTo(Set<DataSourceParameterId> parameterIds) {
@@ -59,7 +61,7 @@ class OutgoingPackagesCubit extends Cubit<DeveloperToolsParameters>
     subscribeToParameterIdList.removeWhere(parameterIds.contains);
 
     state.protocolVersion.when(
-      subscription: () => _unsubscribeFrom(subscribeToParameterIdList),
+      subscription: () => _unsubscribeFrom(parameterIds),
       periodicRequests: () => _setNewTimer(
         state.requestsPeriodInMillis,
         subscribeToParameterIdList,
