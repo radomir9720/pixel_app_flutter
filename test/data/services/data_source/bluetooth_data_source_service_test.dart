@@ -386,6 +386,29 @@ void main() {
         expect(ds.buffer.length, isZero);
       });
 
+      test('Parsing a package, which is not in the list of defined packages',
+          () async {
+        // arrange
+        await ds.connect(deviceAddress);
+
+        // act
+        addBytesToStream(
+          [
+            60, //
+            0, 149, //
+            255, 255, //
+            8, //
+            97, 41, 5, 110, 254, 48, 0, 0, //
+            129, 127, //
+            62 //
+          ],
+        );
+
+        // assert
+        await assertStreamEventsCount(1);
+        expect(ds.buffer.length, isZero);
+      });
+
       group('skips invalid range of bytes and parses correctly the rest', () {
         test('(no starting byte)', () async {
           // arrange
