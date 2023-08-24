@@ -449,5 +449,6 @@
       }
     }
   },
-  "editButtonCaption": "Редактировать"
+  "editButtonCaption": "Редактировать",
+  "toTheSettingsButtonCaption": "В настройки"
 }

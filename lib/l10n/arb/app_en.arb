@@ -449,5 +449,6 @@
       }
     }
   },
-  "editButtonCaption": "Edit"
+  "editButtonCaption": "Edit",
+  "toTheSettingsButtonCaption": "To the settings"
 }
