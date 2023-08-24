@@ -87,12 +87,14 @@ class _AddUserDefinedButtonScreenState
       ),
       body: Form(
         key: _formKey,
-        child: ListView(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          children: widget.buttonBuilder.fields
-              .map((e) => e.widgetBuilder(context, manager))
-              .divideBy(const SizedBox(height: 16))
-              .toList(),
+          child: Column(
+            children: widget.buttonBuilder.fields
+                .map((e) => e.widgetBuilder(context, manager))
+                .divideBy(const SizedBox(height: 16))
+                .toList(),
+          ),
         ),
       ),
       bottomNavigationBar: FilledButton(
