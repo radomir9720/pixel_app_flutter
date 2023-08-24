@@ -97,6 +97,11 @@ class _ColorSelectorFormFieldState extends State<ColorSelectorFormField> {
             color = c;
           },
           pickersEnabled: const {ColorPickerType.wheel: true},
+          pickerTypeLabels: {
+            ColorPickerType.primary: context.l10n.primaryColorsPickerTypeLabel,
+            ColorPickerType.accent: context.l10n.accentColorsPickerTypeLabel,
+            ColorPickerType.wheel: context.l10n.wheelColorsPickerTypeLabel,
+          },
           color: color,
         ).showPickerDialog(context);
         final _color = color;

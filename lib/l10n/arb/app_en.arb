@@ -435,5 +435,8 @@
   "functionIdFieldTitle": "Function ID",
   "unknownMessage": "Unknown",
   "titleFieldTitle": "Title",
-  "statusFieldTitle": "Status"
+  "statusFieldTitle": "Status",
+  "primaryColorsPickerTypeLabel": "Primary",
+  "accentColorsPickerTypeLabel": "Accent",
+  "wheelColorsPickerTypeLabel": "Wheel"
 }
