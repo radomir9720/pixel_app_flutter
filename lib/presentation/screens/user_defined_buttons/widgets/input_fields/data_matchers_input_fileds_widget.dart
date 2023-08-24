@@ -281,12 +281,17 @@ class _TileState<Y extends PropertiesMap<SerializablePropertiesMap>,
                                       },
                                     )}',
                                     style: kTextStyle.copyWith(
-                                      color: colors.statement,
+                                      color: colors.accent,
                                       height: 1.25,
                                     ),
                                   ),
                                   Text(
-                                    parameters.sign.name,
+                                    parameters.sign.when(
+                                      signed: () =>
+                                          context.l10n.signedByteLabel,
+                                      unsigned: () =>
+                                          context.l10n.unsignedByteLabel,
+                                    ),
                                     style: kDataParamsTextStyle.copyWith(
                                       color: context.colors.hintText,
                                     ),
