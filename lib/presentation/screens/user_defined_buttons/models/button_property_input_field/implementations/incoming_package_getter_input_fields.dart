@@ -6,10 +6,14 @@ import 'package:re_seedwork/re_seedwork.dart';
 
 class IncomingPackageGetterInputFields
     extends ButtonPropertyInputField<IncomingPackageGetterModel> {
-  IncomingPackageGetterInputFields()
-      : super(
+  IncomingPackageGetterInputFields({
+    IncomingPackageGetter? initialValues,
+  }) : super(
           widgetBuilder: (context, manager) {
-            return IncomingPackageGetterInputFieldsWidget(manager: manager);
+            return IncomingPackageGetterInputFieldsWidget(
+              manager: manager,
+              initialValues: initialValues,
+            );
           },
         );
 }

@@ -17,18 +17,22 @@ class YAxisJoystickButton
   const YAxisJoystickButton(super.button, {super.key})
       : super(axis: Axis.vertical);
 
-  static ButtonBuilder<YAxisJoystickUserDefinedButton> builder = ButtonBuilder(
-    fields: OneAxisJoystickButton.fields,
-    builder: (manager) {
-      return YAxisJoystickUserDefinedButton(
-        id: DateTime.now().millisecondsSinceEpoch,
-        title: manager.getTitle,
-        onTap: manager.getOnTap,
-        onAxisMove: manager.getOnAxisMove,
-        axisUpdatePeriodMillis: manager.getAxisUpdatePeriodMillis,
-      );
-    },
-  );
+  static ButtonBuilder<YAxisJoystickUserDefinedButton> builder([
+    YAxisJoystickUserDefinedButton? initialValue,
+  ]) {
+    return ButtonBuilder(
+      fields: OneAxisJoystickButton.fields(initialValue),
+      builder: (manager, id) {
+        return YAxisJoystickUserDefinedButton(
+          id: id,
+          title: manager.getTitle,
+          onTap: manager.getOnTap,
+          onAxisMove: manager.getOnAxisMove,
+          axisUpdatePeriodMillis: manager.getAxisUpdatePeriodMillis,
+        );
+      },
+    );
+  }
 }
 
 class XAxisJoystickButton
@@ -36,18 +40,22 @@ class XAxisJoystickButton
   const XAxisJoystickButton(super.button, {super.key})
       : super(axis: Axis.horizontal);
 
-  static ButtonBuilder<XAxisJoystickUserDefinedButton> builder = ButtonBuilder(
-    fields: OneAxisJoystickButton.fields,
-    builder: (manager) {
-      return XAxisJoystickUserDefinedButton(
-        id: DateTime.now().millisecondsSinceEpoch,
-        title: manager.getTitle,
-        onTap: manager.getOnTap,
-        onAxisMove: manager.getOnAxisMove,
-        axisUpdatePeriodMillis: manager.getAxisUpdatePeriodMillis,
-      );
-    },
-  );
+  static ButtonBuilder<XAxisJoystickUserDefinedButton> builder([
+    XAxisJoystickUserDefinedButton? initialValue,
+  ]) {
+    return ButtonBuilder(
+      fields: OneAxisJoystickButton.fields(initialValue),
+      builder: (manager, id) {
+        return XAxisJoystickUserDefinedButton(
+          id: id,
+          title: manager.getTitle,
+          onTap: manager.getOnTap,
+          onAxisMove: manager.getOnAxisMove,
+          axisUpdatePeriodMillis: manager.getAxisUpdatePeriodMillis,
+        );
+      },
+    );
+  }
 }
 
 class OneAxisJoystickButton<T extends OneAxisJoystickUserDefinedButton>
@@ -61,12 +69,19 @@ class OneAxisJoystickButton<T extends OneAxisJoystickUserDefinedButton>
   final Axis axis;
 
   @protected
-  static List<ButtonPropertyInputField<dynamic>> get fields => [
-        ButtonTitleInputField(),
-        ButtonAxisUpdatePeriodMillisInputField(),
-        AxisUpdateOutgoingPackagesInputFields(),
-        TapOutgoingPackagesInputFields(),
-      ];
+  static List<ButtonPropertyInputField<dynamic>>
+      fields<T extends OneAxisJoystickUserDefinedButton>([T? initialValue]) {
+    return [
+      ButtonTitleInputField(initialValue: initialValue?.title),
+      ButtonAxisUpdatePeriodMillisInputField(
+        initialValue: initialValue?.axisUpdatePeriodMillis,
+      ),
+      AxisUpdateOutgoingPackagesInputFields(
+        initialPackages: initialValue?.onAxisMove,
+      ),
+      TapOutgoingPackagesInputFields(initialPackages: initialValue?.onTap),
+    ];
+  }
 
   @override
   State<OneAxisJoystickButton> createState() => _OneAxisJoystickButtonState();
@@ -129,7 +144,7 @@ class _OneAxisJoystickButtonState extends State<OneAxisJoystickButton>
     final isVertical = axis.isVertical;
 
     return ButtonDecorationWrapper(
-      buttonId: widget.button.id,
+      button: widget.button,
       child: Row(
         children: [
           _ButtonTitle(title: widget.button.title),

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_properties_manager.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/function_id_input_field.dart';
@@ -12,10 +13,14 @@ class IncomingPackageGetterInputFieldsWidget extends StatelessWidget {
   const IncomingPackageGetterInputFieldsWidget({
     super.key,
     required this.manager,
+    this.initialValues,
   });
 
   @protected
   final ButtonPropertiesManager manager;
+
+  @protected
+  final IncomingPackageGetter? initialValues;
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +38,17 @@ class IncomingPackageGetterInputFieldsWidget extends StatelessWidget {
               RequestTypeInputField(
                 title: context.l10n.requestTypeListTileLabel,
                 onChanged: manager.setRequestType,
+                initialValue: initialValues?.requestType.toString(),
               ),
               ParameterIdInputField(
                 title: context.l10n.parameterIdListTileLabel,
                 onChanged: manager.setParameterId,
+                initialValue: initialValues?.parameterId.toString(),
               ),
               FunctionIdInputField(
                 title: context.l10n.functionIdFieldTitle,
                 onChanged: manager.setFunctionId,
+                initialValue: initialValues?.functionId.toString(),
                 isRequired: false,
               ),
             ],

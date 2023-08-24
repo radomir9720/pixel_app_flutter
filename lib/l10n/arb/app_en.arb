@@ -438,5 +438,16 @@
   "statusFieldTitle": "Status",
   "primaryColorsPickerTypeLabel": "Primary",
   "accentColorsPickerTypeLabel": "Accent",
-  "wheelColorsPickerTypeLabel": "Wheel"
+  "wheelColorsPickerTypeLabel": "Wheel",
+  "errorWhileEditingButtonPropertiesMessage": "Error while editing button properties",
+  "theChangesAreSuccessfullySavedMessage": "The changes are successfully saved",
+  "editButtonScreenTitle": "Edit {buttonName}",
+  "@editButtonScreenTitle": {
+    "placeholders": {
+      "buttonName": {
+        "type": "String"
+      }
+    }
+  },
+  "editButtonCaption": "Edit"
 }

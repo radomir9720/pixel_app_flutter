@@ -36,6 +36,7 @@ import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen
 import 'package:pixel_app_flutter/presentation/screens/settings/led_panel_screen/remove_led_configuration_dialog.dart';
 import 'package:pixel_app_flutter/presentation/screens/settings/settings_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/add_user_defined_button_screen.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/edit_user_defined_button_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_builder.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/select_button_type_screen.dart';
 

@@ -8,19 +8,21 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widg
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/data_matchers_input_fileds_widget.dart';
 
 class ColorMatcherInputFieldsWidget extends DataMatchersInputFormFieldsWidget<
-    ColorMatcherProrpertiesMap, ColorMatcherInputField> {
+    Color, ColorMatcherProrpertiesMap, ColorMatcherInputField> {
   ColorMatcherInputFieldsWidget({
     super.key,
     required super.manager,
     required super.validators,
     super.initialMatchersCount = 0,
     required super.title,
+    super.initialIfMatchersValues,
+    super.initialElseValue,
   }) : super(
-          matcherField: (context, id) => IntrinsicWidth(
+          matcherField: (context, id, initialValue) => IntrinsicWidth(
             child: ConstrainedBox(
               constraints: const BoxConstraints(minWidth: 100),
               child: ColorSelectorFormField(
-                initialColor: id == 0 ? Colors.grey : null,
+                initialColor: initialValue ?? (id == 0 ? Colors.grey : null),
                 onColorChanged: (value) {
                   manager.updateValue<ColorMatcherProrpertiesMap,
                       ColorMatcherInputField>((currentValue) {

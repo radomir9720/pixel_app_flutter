@@ -438,5 +438,16 @@
   "statusFieldTitle": "Статус",
   "primaryColorsPickerTypeLabel": "Основные",
   "accentColorsPickerTypeLabel": "Акцентные",
-  "wheelColorsPickerTypeLabel": "Колесо"
+  "wheelColorsPickerTypeLabel": "Колесо",
+  "errorWhileEditingButtonPropertiesMessage": "Ошибка при редактировании параметров кнопки",
+  "theChangesAreSuccessfullySavedMessage": "Изменения успешно сохранены",
+  "editButtonScreenTitle": "Редактировать {buttonName}",
+  "@editButtonScreenTitle": {
+    "placeholders": {
+      "buttonName": {
+        "type": "String"
+      }
+    }
+  },
+  "editButtonCaption": "Редактировать"
 }

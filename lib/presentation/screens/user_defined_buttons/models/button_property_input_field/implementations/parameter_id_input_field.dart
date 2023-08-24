@@ -12,6 +12,7 @@ class ParameterIdInputField extends ButtonInputFieldWidget<int?> {
     super.helperText,
     super.hintText,
     super.isRequired,
+    super.initialValue,
     super.preMapValidators,
     List<ButtonPropertyValidator<int?>> Function(BuildContext)?
         postMapValidators,

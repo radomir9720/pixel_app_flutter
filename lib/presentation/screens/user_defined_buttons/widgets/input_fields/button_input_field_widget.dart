@@ -86,6 +86,9 @@ class _ButtonInputFieldWidgetState<T> extends State<ButtonInputFieldWidget<T>> {
     super.initState();
     controller =
         widget.controller ?? TextEditingController(text: widget.initialValue);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget.onChanged(widget.mapper(widget.initialValue ?? ''));
+    });
   }
 
   @override

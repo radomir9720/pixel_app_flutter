@@ -7,7 +7,7 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widg
 
 class ButtonAxisUpdatePeriodMillisInputField
     extends IntButtonPropertyInputField {
-  ButtonAxisUpdatePeriodMillisInputField()
+  ButtonAxisUpdatePeriodMillisInputField({int? initialValue})
       : super(
           widgetBuilder: (context, manager) {
             return ButtonInputFieldWidget<int?>(
@@ -15,6 +15,7 @@ class ButtonAxisUpdatePeriodMillisInputField
               onChanged: manager
                   .setValue<int?, ButtonAxisUpdatePeriodMillisInputField>,
               mapper: IntParseNullable.tryParseNullable,
+              initialValue: initialValue?.toString(),
               postMapValidators: (context) => [
                 context.notNullValidator(),
                 context.minValueValidator(0),

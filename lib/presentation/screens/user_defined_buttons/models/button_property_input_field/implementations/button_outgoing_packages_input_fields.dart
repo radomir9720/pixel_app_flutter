@@ -7,13 +7,19 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widg
 
 class ButtonOutgoingPackagesInputFields
     extends ButtonPropertyInputField<OutgoingPackagesMap> {
-  ButtonOutgoingPackagesInputFields({required super.widgetBuilder});
+  ButtonOutgoingPackagesInputFields({
+    required super.widgetBuilder,
+    this.initialPackages,
+  });
+
+  final List<OutgoingPackageParameters>? initialPackages;
 }
 
 class AxisUpdateOutgoingPackagesInputFields
     extends ButtonOutgoingPackagesInputFields {
-  AxisUpdateOutgoingPackagesInputFields()
-      : super(
+  AxisUpdateOutgoingPackagesInputFields({
+    super.initialPackages,
+  }) : super(
           widgetBuilder: (context, manager) {
             return ButtonOutgoingPackagesFormInputFieldsWidget<
                 AxisUpdateOutgoingPackagesInputFields>(
@@ -22,6 +28,7 @@ class AxisUpdateOutgoingPackagesInputFields
               title: context.l10n.sentPackagesWhenMovingJoystickFieldTitle,
               initialPackagesCount: 1,
               validators: [context.minPropertyEntriesValidator(1)],
+              initialPackages: initialPackages,
             );
           },
         );
@@ -31,6 +38,7 @@ class TapOutgoingPackagesInputFields extends ButtonOutgoingPackagesInputFields {
   TapOutgoingPackagesInputFields({
     int initialPackagesCount = 0,
     List<ButtonPropertyValidator<OutgoingPackagesMap>> validators = const [],
+    super.initialPackages,
   }) : super(
           widgetBuilder: (context, manager) {
             return ButtonOutgoingPackagesFormInputFieldsWidget<
@@ -39,6 +47,7 @@ class TapOutgoingPackagesInputFields extends ButtonOutgoingPackagesInputFields {
               title: context.l10n.sentPackagesWithAOneTimePressFieldTitle,
               initialPackagesCount: initialPackagesCount,
               validators: validators,
+              initialPackages: initialPackages,
             );
           },
         );

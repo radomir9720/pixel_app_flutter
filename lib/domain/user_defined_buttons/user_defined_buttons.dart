@@ -1,6 +1,7 @@
 // blocs
 export 'blocs/add_user_defined_button_bloc.dart';
 export 'blocs/remove_user_defined_button_bloc.dart';
+export 'blocs/update_user_defined_button_bloc.dart';
 export 'blocs/user_defined_buttons_cubit.dart';
 
 // models

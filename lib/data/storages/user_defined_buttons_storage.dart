@@ -50,7 +50,18 @@ class UserDefinedButtonsStorageImpl
   Future<Result<WriteUserDefinedButtonsStorageError, void>> append(
     UserDefinedButton button,
   ) async {
-    final newData = [...data, button];
+    var replaced = false;
+    final newData = [
+      ...data.map((e) {
+        if (e.id == button.id) {
+          replaced = true;
+          return button;
+        }
+        return e;
+      }),
+      if (!replaced) button,
+    ];
+
     final success =
         await prefs.setString(kButtonsKey, jsonEncode(newData.toMap()));
     if (success) {

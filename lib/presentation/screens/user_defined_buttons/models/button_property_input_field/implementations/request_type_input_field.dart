@@ -13,6 +13,7 @@ class RequestTypeInputField extends ButtonInputFieldWidget<int?> {
     super.hintText,
     super.isRequired,
     super.preMapValidators,
+    super.initialValue,
     List<ButtonPropertyValidator<int?>> Function(BuildContext)?
         postMapValidators,
   }) : super(

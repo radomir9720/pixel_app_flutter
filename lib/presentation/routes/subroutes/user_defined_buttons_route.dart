@@ -13,5 +13,9 @@ const _userDefinedButtonsRoute = AutoRoute<void>(
       path: 'add',
       page: AddUserDefinedButtonScreen,
     ),
+    AutoRoute<void>(
+      path: 'edit',
+      page: EditUserDefinedButtonScreen,
+    ),
   ],
 );

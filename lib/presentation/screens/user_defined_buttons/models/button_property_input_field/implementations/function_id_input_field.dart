@@ -14,6 +14,7 @@ class FunctionIdInputField extends ButtonInputFieldWidget<int?> {
     List<ButtonPropertyValidator<String>> Function(BuildContext)?
         preMapValidators,
     super.postMapValidators,
+    super.initialValue,
   }) : super(
           mapper: int.tryParse,
           preMapValidators: (context) {

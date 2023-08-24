@@ -25,15 +25,15 @@ class SelectButtonTypeScreen extends StatelessWidget {
           ),
           _Tile(
             title: context.l10n.indicatorButtonCaption,
-            buttonBuilder: IndicatorButton.builder,
+            buttonBuilder: IndicatorButton.builder(),
           ),
           _Tile(
             title: context.l10n.yAxisJoystickButtonCaption,
-            buttonBuilder: YAxisJoystickButton.builder,
+            buttonBuilder: YAxisJoystickButton.builder(),
           ),
           _Tile(
             title: context.l10n.xAxisJoystickButtonCaption,
-            buttonBuilder: XAxisJoystickButton.builder,
+            buttonBuilder: XAxisJoystickButton.builder(),
           ),
         ],
       ),

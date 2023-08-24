@@ -13,6 +13,7 @@ class PackageDataInputField extends ButtonInputFieldWidget<List<int>?> {
     super.helperText,
     super.hintText,
     super.isRequired,
+    super.initialValue,
     super.postMapValidators,
     List<ButtonPropertyValidator<String>> Function(BuildContext)?
         preMapValidators,

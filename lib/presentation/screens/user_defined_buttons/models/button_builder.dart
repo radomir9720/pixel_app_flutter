@@ -10,5 +10,5 @@ class ButtonBuilder<T extends UserDefinedButton> {
 
   final List<ButtonPropertyInputField<dynamic>> fields;
 
-  final T Function(ButtonPropertiesManager manager) builder;
+  final T Function(ButtonPropertiesManager manager, int id) builder;
 }
