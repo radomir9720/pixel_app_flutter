@@ -6,34 +6,26 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widg
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/data_matchers_input_fileds_widget.dart';
 
 class StatusMatcherInputFieldsWidget extends DataMatchersInputFormFieldsWidget<
-    StringMatcherProrpertiesMap, StatusMatcherInputField> {
+    String, StringMatcherProrpertiesMap, StatusMatcherInputField> {
   StatusMatcherInputFieldsWidget({
     super.key,
     required super.manager,
     required super.validators,
     required super.title,
     super.initialMatchersCount = 0,
+    super.initialIfMatchersValues,
+    super.initialElseValue,
   }) : super(
-          matcherField: (context, id) {
-            final initialValue = id == 0 ? context.l10n.unknownMessage : '';
-            if (id == 0) {
-              manager.updateValue<StringMatcherProrpertiesMap,
-                  StatusMatcherInputField>((currentValue) {
-                return (currentValue ?? StringMatcherProrpertiesMap({}))
-                    .updateItem(id, (current) {
-                  return (current ?? SerializablePropertiesMap({})).addProperty(
-                    StringPropertyEntry(initialValue),
-                  );
-                });
-              });
-            }
+          matcherField: (context, id, intialValue) {
+            final _initialValue =
+                intialValue ?? (id == 0 ? context.l10n.unknownMessage : '');
 
             return IntrinsicWidth(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
                 child: ButtonInputFieldWidget<String>(
                   title: context.l10n.titleFieldTitle,
-                  initialValue: initialValue,
+                  initialValue: _initialValue,
                   border: const OutlineInputBorder(),
                   isDense: true,
                   contentPadding:

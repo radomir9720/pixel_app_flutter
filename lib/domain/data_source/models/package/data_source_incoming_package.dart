@@ -125,7 +125,7 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
       //
       ErrorWithCodeAndSectionIncomingDataSourcePackage.new,
       //
-      CustomImageIncomingDataSourcePackage.new,
+      CustomIncomingDataSourcePackage.new,
     ];
   }
 

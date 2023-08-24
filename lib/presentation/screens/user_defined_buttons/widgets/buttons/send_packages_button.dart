@@ -16,21 +16,23 @@ class SendPackagesButton extends StatelessWidget {
   final SendPackagesUserDefinedButton button;
 
   static ButtonBuilder<SendPackagesUserDefinedButton> builder(
-    BuildContext context,
-  ) {
+    BuildContext context, [
+    SendPackagesUserDefinedButton? initialValue,
+  ]) {
     return ButtonBuilder(
       fields: [
-        ButtonTitleInputField(),
+        ButtonTitleInputField(initialValue: initialValue?.title),
         TapOutgoingPackagesInputFields(
           initialPackagesCount: 1,
           validators: [
             context.minPropertyEntriesValidator<OutgoingPackagesMap>(1)
           ],
+          initialPackages: initialValue?.onTap,
         ),
       ],
-      builder: (manager) {
+      builder: (manager, id) {
         return SendPackagesUserDefinedButton(
-          id: DateTime.now().millisecondsSinceEpoch,
+          id: id,
           title: manager.getTitle,
           onTap: manager.getOnTap,
         );
@@ -54,7 +56,7 @@ class SendPackagesButton extends StatelessWidget {
         }
       },
       child: ButtonDecorationWrapper(
-        buttonId: button.id,
+        button: button,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Center(

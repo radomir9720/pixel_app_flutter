@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_builder.dart';
-import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/button_property_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/button_title_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/color_and_status_matchers_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/color_matcher_input_field.dart';
@@ -17,24 +16,31 @@ class IndicatorButton extends StatefulWidget {
   @protected
   final IndicatorUserDefinedButton button;
 
-  static ButtonBuilder<IndicatorUserDefinedButton> builder = ButtonBuilder(
-    fields: fields,
-    builder: (manager) {
-      return IndicatorUserDefinedButton(
-        id: DateTime.now().millisecondsSinceEpoch,
-        title: manager.getTitle,
-        incomingPackageGetter: manager.incomingPackageGetter,
-        colorMatcher: manager.colorMatcher,
-        statusMatcher: manager.statusMatcher,
-      );
-    },
-  );
-
-  static List<ButtonPropertyInputField<dynamic>> fields = [
-    ButtonTitleInputField(),
-    IncomingPackageGetterInputFields(),
-    ColorAndStatusMatchersInputFields(),
-  ];
+  static ButtonBuilder<IndicatorUserDefinedButton> builder([
+    IndicatorUserDefinedButton? initialValue,
+  ]) {
+    return ButtonBuilder(
+      fields: [
+        ButtonTitleInputField(initialValue: initialValue?.title),
+        IncomingPackageGetterInputFields(
+          initialValues: initialValue?.incomingPackageGetter,
+        ),
+        ColorAndStatusMatchersInputFields(
+          initialColorMatcher: initialValue?.colorMatcher,
+          initialStatusMatcher: initialValue?.statusMatcher,
+        ),
+      ],
+      builder: (manager, id) {
+        return IndicatorUserDefinedButton(
+          id: id,
+          title: manager.getTitle,
+          incomingPackageGetter: manager.incomingPackageGetter,
+          colorMatcher: manager.colorMatcher,
+          statusMatcher: manager.statusMatcher,
+        );
+      },
+    );
+  }
 
   @override
   State<IndicatorButton> createState() => _IndicatorButtonState();
@@ -54,6 +60,19 @@ class _IndicatorButtonState extends State<IndicatorButton> {
     super.initState();
     cubit = context.read<OutgoingPackagesCubit>();
     subscribed = cubit.subscribeTo(subscriptionParameter);
+  }
+
+  @override
+  void didUpdateWidget(covariant IndicatorButton oldWidget) {
+    final oldParameterId = oldWidget.button.incomingPackageGetter.parameterId;
+    final newParameterId = widget.button.incomingPackageGetter.parameterId;
+    if (newParameterId != oldParameterId) {
+      cubit
+        ..unsubscribeFrom({DataSourceParameterId.custom(oldParameterId)})
+        ..subscribeTo(subscriptionParameter);
+    }
+
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -100,7 +119,7 @@ class _IndicatorButtonState extends State<IndicatorButton> {
         final status = getProperty(data, widget.button.statusMatcher);
 
         return ButtonDecorationWrapper(
-          buttonId: widget.button.id,
+          button: widget.button,
           border: Border.all(
             color: color ?? Colors.transparent,
             width: 2,

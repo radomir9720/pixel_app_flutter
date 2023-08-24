@@ -10,12 +10,13 @@ import 'package:provider/provider.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
 
-class AddUserDefinedButtonScreen extends StatefulWidget
+class EditUserDefinedButtonScreen extends StatefulWidget
     implements AutoRouteWrapper {
-  const AddUserDefinedButtonScreen({
+  const EditUserDefinedButtonScreen({
     super.key,
     required this.buttonBuilder,
     required this.buttonName,
+    required this.id,
   });
 
   @protected
@@ -24,32 +25,36 @@ class AddUserDefinedButtonScreen extends StatefulWidget
   @protected
   final String buttonName;
 
+  @protected
+  final int id;
+
   @override
-  State<AddUserDefinedButtonScreen> createState() =>
-      _AddUserDefinedButtonScreenState();
+  State<EditUserDefinedButtonScreen> createState() =>
+      _EditUserDefinedButtonScreenState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiProvider(
       providers: [
         BlocProvider(
-          create: (context) => AddUserDefinedButtonBloc(
+          create: (context) => UpdateUserDefinedButtonBloc(
             storage: context.read(),
           ),
         ),
-        BlocListener<AddUserDefinedButtonBloc, AddUserDefinedButtonState>(
+        BlocListener<UpdateUserDefinedButtonBloc, UpdateUserDefinedButtonState>(
           listener: (context, state) {
             state.maybeWhen(
               failure: (error) {
-                context
-                    .showSnackBar(context.l10n.errorWhenAddingTheButtonMessage);
+                context.showSnackBar(
+                  context.l10n.errorWhileEditingButtonPropertiesMessage,
+                );
               },
               success: () {
                 context.router
                     .navigate(const SelectedDataSourceFlow())
                     .then((value) {
                   context.showSnackBar(
-                    context.l10n.theButtonIsSuccessfullyAddedMessage,
+                    context.l10n.theChangesAreSuccessfullySavedMessage,
                   );
                 });
               },
@@ -63,8 +68,8 @@ class AddUserDefinedButtonScreen extends StatefulWidget
   }
 }
 
-class _AddUserDefinedButtonScreenState
-    extends State<AddUserDefinedButtonScreen> {
+class _EditUserDefinedButtonScreenState
+    extends State<EditUserDefinedButtonScreen> {
   late final ButtonPropertiesManager manager;
   final _formKey = GlobalKey<FormState>();
 
@@ -80,9 +85,7 @@ class _AddUserDefinedButtonScreenState
       appBar: AppBar(
         leading: BackButton(onPressed: context.router.pop),
         title: Text(
-          context.l10n.addUserDefinedButtonScreenTitle(
-            widget.buttonName.toLowerCase(),
-          ),
+          context.l10n.editButtonScreenTitle(widget.buttonName.toLowerCase()),
         ),
       ),
       body: Form(
@@ -104,13 +107,14 @@ class _AddUserDefinedButtonScreenState
 
           final button = widget.buttonBuilder.builder(
             manager,
-            DateTime.now().millisecondsSinceEpoch,
+            widget.id,
           );
+
           context
-              .read<AddUserDefinedButtonBloc>()
-              .add(AddUserDefinedButtonEvent.add(button));
+              .read<UpdateUserDefinedButtonBloc>()
+              .add(UpdateUserDefinedButtonEvent.update(button));
         },
-        child: Text(context.l10n.addButtonCaption),
+        child: Text(context.l10n.saveButtonCaption),
       ),
     );
   }

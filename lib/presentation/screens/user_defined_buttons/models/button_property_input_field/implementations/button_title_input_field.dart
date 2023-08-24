@@ -4,13 +4,14 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/mode
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/button_input_field_widget.dart';
 
 class ButtonTitleInputField extends StringButtonPropertyInputField {
-  ButtonTitleInputField()
+  ButtonTitleInputField({String? initialValue})
       : super(
           widgetBuilder: (context, manager) {
-            return ButtonInputFieldWidget(
+            return ButtonInputFieldWidget<String>(
               title: context.l10n.theNameOfTheButtonFieldTitle,
               onChanged: manager.setValue<String, ButtonTitleInputField>,
               mapper: (value) => value,
+              initialValue: initialValue,
             );
           },
         );

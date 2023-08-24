@@ -396,7 +396,7 @@
   "updatePeriodInMillisecondsFiledTitle": "Период обновления в миллисекундах",
   "sentPackagesWhenMovingJoystickFieldTitle": "Отправляемые пакеты при движении джойстика",
   "sentPackagesWithAOneTimePressFieldTitle": "Отправляемые пакеты при единоразовом нажатии",
-  "theNameOfTheButtonFieldTitle": "Название кнопки",
+  "theNameOfTheButtonFieldTitle": "Название",
   "incorrectFormatHintError": "Некорректный формат. Введите целые числа через запятую(формат: десятичный либо HEX)",
   "theMinimumNumberOfPackagesHintError": "Минимальное к-во пакетов: {minPackages}",
   "@theMinimumNumberOfPackagesHintError": {
@@ -435,5 +435,20 @@
   "functionIdFieldTitle": "ID Функции",
   "unknownMessage": "Неизвестно",
   "titleFieldTitle": "Название",
-  "statusFieldTitle": "Статус"
+  "statusFieldTitle": "Статус",
+  "primaryColorsPickerTypeLabel": "Основные",
+  "accentColorsPickerTypeLabel": "Акцентные",
+  "wheelColorsPickerTypeLabel": "Колесо",
+  "errorWhileEditingButtonPropertiesMessage": "Ошибка при редактировании параметров кнопки",
+  "theChangesAreSuccessfullySavedMessage": "Изменения успешно сохранены",
+  "editButtonScreenTitle": "Редактировать {buttonName}",
+  "@editButtonScreenTitle": {
+    "placeholders": {
+      "buttonName": {
+        "type": "String"
+      }
+    }
+  },
+  "editButtonCaption": "Редактировать",
+  "toTheSettingsButtonCaption": "В настройки"
 }

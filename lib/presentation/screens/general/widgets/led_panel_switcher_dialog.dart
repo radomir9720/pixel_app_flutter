@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
+import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/countdown_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/error_loading_led_configs.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/mini_progress_indicator.dart';
@@ -127,6 +128,13 @@ class LEDPanelSwitcherDialog extends StatelessWidget {
             },
           ),
           actions: [
+            TextButton(
+              onPressed: () {
+                context.router
+                    .push(const SettingsFlow(children: [LEDPanelFlow()]));
+              },
+              child: Text(context.l10n.toTheSettingsButtonCaption),
+            ),
             TextButton(
               onPressed: context.router.pop,
               child: Text(context.l10n.closeButtonCaption),

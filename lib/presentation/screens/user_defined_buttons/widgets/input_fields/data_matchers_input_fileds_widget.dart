@@ -13,18 +13,25 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widg
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/incoming_package_getter_input_fields_widget.dart';
 import 'package:re_widgets/re_widgets.dart';
 
-typedef MatcherFieldBuilder = Widget Function(BuildContext, int id);
+typedef MatcherFieldBuilder<P> = Widget Function(
+  BuildContext context,
+  int id,
+  P? initialValue,
+);
 
 class DataMatchersInputFormFieldsWidget<
+    P,
     Y extends PropertiesMap<SerializablePropertiesMap>,
     T extends ButtonPropertyInputField<Y>> extends FormField<Y> {
   DataMatchersInputFormFieldsWidget({
     super.key,
     required ButtonPropertiesManager manager,
     required String title,
-    required MatcherFieldBuilder matcherField,
+    required MatcherFieldBuilder<P> matcherField,
     required int initialMatchersCount,
     required List<ButtonPropertyValidator<Y?>> validators,
+    InitialIfMatchersValues<P>? initialIfMatchersValues,
+    P? initialElseValue,
   }) : super(
           validator: (value) {
             for (final validator in validators) {
@@ -37,18 +44,24 @@ class DataMatchersInputFormFieldsWidget<
             manager.addChangeListener<Y, T>(() {
               field.didChange(manager.getOptional<Y, T>());
             });
-            return DataMatchersInputFieldsWidget<Y, T>(
+            return DataMatchersInputFieldsWidget<P, Y, T>(
               manager: manager,
               title: title,
               matcherField: matcherField,
               error: field.errorText,
               initialMatchersCount: initialMatchersCount,
+              initialIfMatchersValues: initialIfMatchersValues,
+              initialElseValue: initialElseValue,
             );
           },
         );
 }
 
+typedef InitialIfMatchersValues<P> = List<
+    (PackageDataParameters?, ComparisonOperation?, PropertyEntry<P>?, String?)>;
+
 class DataMatchersInputFieldsWidget<
+    P,
     Y extends PropertiesMap<SerializablePropertiesMap>,
     T extends ButtonPropertyInputField<Y>> extends StatelessWidget {
   const DataMatchersInputFieldsWidget({
@@ -57,6 +70,8 @@ class DataMatchersInputFieldsWidget<
     required this.matcherField,
     required this.title,
     required this.initialMatchersCount,
+    this.initialIfMatchersValues,
+    this.initialElseValue,
     this.error,
   });
 
@@ -64,7 +79,7 @@ class DataMatchersInputFieldsWidget<
   final ButtonPropertiesManager manager;
 
   @protected
-  final MatcherFieldBuilder matcherField;
+  final MatcherFieldBuilder<P> matcherField;
 
   @protected
   final String title;
@@ -74,6 +89,12 @@ class DataMatchersInputFieldsWidget<
 
   @protected
   final int initialMatchersCount;
+
+  @protected
+  final InitialIfMatchersValues<P>? initialIfMatchersValues;
+
+  @protected
+  final P? initialElseValue;
 
   @protected
   static const kTextStyle = TextStyle(
@@ -94,12 +115,37 @@ class DataMatchersInputFieldsWidget<
       children: [
         TilesManagerWrapper(
           initialCount: initialMatchersCount,
+          initialTilesBuilder: (deleteCallback) {
+            final values = initialIfMatchersValues ?? [];
+            return List.generate(
+              values.length,
+              (index) {
+                final id = DateTime.now().millisecondsSinceEpoch + index;
+                final value = values[index];
+
+                return _Tile<P, Y, T>(
+                  id: id,
+                  deleteCallback: () => deleteCallback(id),
+                  manager: manager,
+                  matcherField: matcherField(
+                    context,
+                    id,
+                    value.$3?.value,
+                  ),
+                  initialDataParameters: value.$1,
+                  initialOperation: value.$2,
+                  initialResultPropertyEntry: value.$3,
+                  initialValue: value.$4,
+                );
+              },
+            );
+          },
           tileBuilder: (index, deleteCallback) {
-            final id = DateTime.now().millisecondsSinceEpoch;
-            return _Tile<Y, T>(
+            final id = DateTime.now().millisecondsSinceEpoch + index;
+            return _Tile<P, Y, T>(
               id: id,
               manager: manager,
-              matcherField: matcherField(context, id),
+              matcherField: matcherField(context, id, null),
               deleteCallback: () => deleteCallback(id),
             );
           },
@@ -118,7 +164,7 @@ class DataMatchersInputFieldsWidget<
                             color: colors.statement,
                           ),
                         ),
-                        matcherField(context, 0),
+                        matcherField(context, 0, initialElseValue),
                       ],
                     ),
                   ),
@@ -143,7 +189,7 @@ class DataMatchersInputFieldsWidget<
   }
 }
 
-class _Tile<Y extends PropertiesMap<SerializablePropertiesMap>,
+class _Tile<P, Y extends PropertiesMap<SerializablePropertiesMap>,
         T extends ButtonPropertyInputField<Y>> extends StatefulWidget
     implements TileWidget {
   const _Tile({
@@ -152,6 +198,10 @@ class _Tile<Y extends PropertiesMap<SerializablePropertiesMap>,
     required this.deleteCallback,
     required this.manager,
     required this.matcherField,
+    this.initialDataParameters,
+    this.initialOperation,
+    this.initialValue,
+    this.initialResultPropertyEntry,
   });
 
   @override
@@ -167,33 +217,62 @@ class _Tile<Y extends PropertiesMap<SerializablePropertiesMap>,
   @protected
   final Widget matcherField;
 
+  @protected
+  final PackageDataParameters? initialDataParameters;
+
+  @protected
+  final ComparisonOperation? initialOperation;
+
+  @protected
+  final String? initialValue;
+
+  @protected
+  final PropertyEntry<P>? initialResultPropertyEntry;
+
   @override
-  State<_Tile<Y, T>> createState() => _TileState<Y, T>();
+  State<_Tile<P, Y, T>> createState() => _TileState<P, Y, T>();
 }
 
-class _TileState<Y extends PropertiesMap<SerializablePropertiesMap>,
-    T extends ButtonPropertyInputField<Y>> extends State<_Tile<Y, T>> {
+class _TileState<P, Y extends PropertiesMap<SerializablePropertiesMap>,
+    T extends ButtonPropertyInputField<Y>> extends State<_Tile<P, Y, T>> {
   late PackageDataParameters parameters;
-  ComparisonOperation operation = ComparisonOperation.equalsTo;
+  late ComparisonOperation operation;
 
   @override
   void initState() {
     super.initState();
-    final lastPackageParameters = widget.manager
-        .getOptional<Y, T>()
-        ?.values
-        .lastOrNull
-        ?.getOptionalValue<PackageDataParameters,
-            PackageDataParametersPropertyEntry>();
-    parameters = lastPackageParameters ?? const PackageDataParameters.initial();
+    final initialParams = widget.initialDataParameters;
+    if (initialParams == null) {
+      final lastPackageParameters = ({...?widget.manager.getOptional<Y, T>()}
+            ..remove(0))
+          .values
+          .lastOrNull
+          ?.getOptionalValue<PackageDataParameters,
+              PackageDataParametersPropertyEntry>();
+
+      parameters =
+          lastPackageParameters ?? const PackageDataParameters.initial();
+    } else {
+      parameters = initialParams;
+    }
+    operation = widget.initialOperation ?? ComparisonOperation.equalsTo;
+    final initialValue = int.tryParse(widget.initialValue ?? '');
+    final initialResult = widget.initialResultPropertyEntry;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.manager.updateValue<Y, T>((currentValue) {
         return currentValue?.updateItem(
           widget.id,
-          (current) => SerializablePropertiesMap({})
-              .addProperty(PackageDataParametersPropertyEntry(parameters))
-              .addProperty(ComparisonOperationPropertyEntry(operation)),
+          (current) {
+            final newMap = SerializablePropertiesMap({})
+                .addProperty(PackageDataParametersPropertyEntry(parameters))
+                .addProperty(ComparisonOperationPropertyEntry(operation))
+                .addProperty(OptionalIntPropertyEntry(initialValue));
+
+            if (initialResult != null) newMap.addProperty(initialResult);
+
+            return newMap;
+          },
         );
       });
     });
@@ -213,14 +292,6 @@ class _TileState<Y extends PropertiesMap<SerializablePropertiesMap>,
   static const kTextStyle = TextStyle(
     height: 2,
     fontSize: 20,
-    fontStyle: FontStyle.normal,
-    fontWeight: FontWeight.w400,
-  );
-
-  @protected
-  static const kDataParamsTextStyle = TextStyle(
-    height: 1.2,
-    fontSize: 10,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w400,
   );
@@ -245,71 +316,24 @@ class _TileState<Y extends PropertiesMap<SerializablePropertiesMap>,
                   ),
                   WidgetSpan(
                     alignment: PlaceholderAlignment.top,
-                    child: Column(
-                      children: [
-                        Column(
-                          children: [
-                            InkWell(
-                              onTap: () async {
-                                final newParams =
-                                    await showDialog<PackageDataParameters>(
-                                  context: context,
-                                  builder: (context) {
-                                    return _SelectDataParametersDialog(
-                                      initialValue: parameters,
-                                    );
-                                  },
-                                );
-                                if (newParams == null) return;
-                                appendEntry(
-                                  PackageDataParametersPropertyEntry(newParams),
-                                );
-                                setState(() => parameters = newParams);
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${context.l10n.dataStatement}'
-                                    '${parameters.range.when(
-                                      all: (_) => '',
-                                      manual: (range) {
-                                        if (range.end - range.start == 1) {
-                                          return '[${range.start}]';
-                                        }
-                                        return '[${range.start}-${range.end}]';
-                                      },
-                                    )}',
-                                    style: kTextStyle.copyWith(
-                                      color: colors.statement,
-                                      height: 1.25,
-                                    ),
-                                  ),
-                                  Text(
-                                    parameters.sign.name,
-                                    style: kDataParamsTextStyle.copyWith(
-                                      color: context.colors.hintText,
-                                    ),
-                                  ),
-                                  Text(
-                                    !parameters.range.endianMatters
-                                        ? ''
-                                        : parameters.endian.when(
-                                            big: () =>
-                                                context.l10n.bigEndianStatement,
-                                            little: () => context
-                                                .l10n.littleEndianStatement,
-                                          ),
-                                    style: kDataParamsTextStyle.copyWith(
-                                      color: context.colors.hintText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    child: _DataStatementWidget(
+                      parameters: parameters,
+                      onPressed: () async {
+                        final newParams =
+                            await showDialog<PackageDataParameters>(
+                          context: context,
+                          builder: (context) {
+                            return _SelectDataParametersDialog(
+                              initialValue: parameters,
+                            );
+                          },
+                        );
+                        if (newParams == null) return;
+                        appendEntry(
+                          PackageDataParametersPropertyEntry(newParams),
+                        );
+                        setState(() => parameters = newParams);
+                      },
                     ),
                   ),
                   const TextSpan(text: ' '),
@@ -337,6 +361,7 @@ class _TileState<Y extends PropertiesMap<SerializablePropertiesMap>,
                           title: context.l10n.valueFieldTitle,
                           mapper: IntParseNullable.tryParseNullable,
                           border: const OutlineInputBorder(),
+                          initialValue: widget.initialValue,
                           isDense: true,
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 10,
@@ -400,6 +425,86 @@ class PackageDataParametersPropertyEntry
 class ComparisonOperationPropertyEntry
     extends PropertyEntry<ComparisonOperation> {
   const ComparisonOperationPropertyEntry(super.value);
+}
+
+class _DataStatementWidget extends StatelessWidget {
+  const _DataStatementWidget({
+    required this.parameters,
+    required this.onPressed,
+  });
+
+  @protected
+  final PackageDataParameters parameters;
+
+  @protected
+  final VoidCallback onPressed;
+
+  @protected
+  static const kDataParamsTextStyle = TextStyle(
+    height: 1.2,
+    fontSize: 10,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w400,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final colors =
+        context.extensionColors<DataMatchersColors>('DataMatchersColors');
+
+    return Column(
+      children: [
+        Column(
+          children: [
+            InkWell(
+              onTap: onPressed,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${context.l10n.dataStatement}'
+                    '${parameters.range.when(
+                      all: (_) => '',
+                      manual: (range) {
+                        if (range.end - range.start == 1) {
+                          return '[${range.start}]';
+                        }
+                        return '[${range.start}-${range.end}]';
+                      },
+                    )}',
+                    style: _TileState.kTextStyle.copyWith(
+                      color: colors.accent,
+                      height: 1.25,
+                    ),
+                  ),
+                  Text(
+                    parameters.sign.when(
+                      signed: () => context.l10n.signedByteLabel,
+                      unsigned: () => context.l10n.unsignedByteLabel,
+                    ),
+                    style: kDataParamsTextStyle.copyWith(
+                      color: context.colors.hintText,
+                    ),
+                  ),
+                  Text(
+                    !parameters.range.endianMatters
+                        ? ''
+                        : parameters.endian.when(
+                            big: () => context.l10n.bigEndianStatement,
+                            little: () => context.l10n.littleEndianStatement,
+                          ),
+                    style: kDataParamsTextStyle.copyWith(
+                      color: context.colors.hintText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 class _SelectDataParametersDialog extends StatefulWidget {

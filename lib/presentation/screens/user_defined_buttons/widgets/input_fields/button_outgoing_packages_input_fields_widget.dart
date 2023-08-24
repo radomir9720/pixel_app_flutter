@@ -23,6 +23,7 @@ class ButtonOutgoingPackagesFormInputFieldsWidget<
     required String title,
     int initialPackagesCount = 0,
     required List<ButtonPropertyValidator<OutgoingPackagesMap>> validators,
+    List<OutgoingPackageParameters>? initialPackages,
   }) : super(
           validator: (data) {
             for (final validator in validators) {
@@ -44,6 +45,7 @@ class ButtonOutgoingPackagesFormInputFieldsWidget<
               dataIsAutofilled: dataIsAutofilled,
               error: field.errorText,
               initialCount: initialPackagesCount,
+              initialPackages: initialPackages,
             );
           },
         );
@@ -58,6 +60,7 @@ class ButtonOutgoingPackagesInputFieldsWidget<
     required this.title,
     required this.error,
     this.initialCount = 0,
+    this.initialPackages,
   });
 
   @protected
@@ -75,6 +78,16 @@ class ButtonOutgoingPackagesInputFieldsWidget<
   @protected
   final int initialCount;
 
+  @protected
+  final List<OutgoingPackageParameters>? initialPackages;
+
+  void deleteCallback(void Function(int id) deleteCallback, int id) {
+    manager.updateValue<OutgoingPackagesMap, T>((currentValue) {
+      return currentValue?.removeEntry(id) ?? OutgoingPackagesMap({});
+    });
+    deleteCallback(id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FieldGroupWrapper(
@@ -82,19 +95,32 @@ class ButtonOutgoingPackagesInputFieldsWidget<
       error: error,
       children: [
         TilesManagerWrapper(
+          initialTilesBuilder: (deleteCallback) {
+            return List.generate(
+              initialPackages?.length ?? 0,
+              (index) {
+                final item = (initialPackages ?? [])[index];
+                final id = DateTime.now().millisecondsSinceEpoch + index;
+                return _Tile<T>(
+                  dataIsAutofilled: dataIsAutofilled,
+                  manager: manager,
+                  deleteCallback: () => this.deleteCallback(deleteCallback, id),
+                  id: id,
+                  dataInitialValue:
+                      item.data.map((e) => e.toString()).join(','),
+                  parameterIdInitialValue: item.parameterId.toString(),
+                  requestTypeInitialValue: item.requestType.toString(),
+                );
+              },
+            );
+          },
           tileBuilder: (i, deleteCallback) {
             final id = DateTime.now().millisecondsSinceEpoch + i;
 
             return _Tile<T>(
               dataIsAutofilled: dataIsAutofilled,
               manager: manager,
-              deleteCallback: () {
-                manager.updateValue<OutgoingPackagesMap, T>((currentValue) {
-                  return currentValue?.removeEntry(id) ??
-                      OutgoingPackagesMap({});
-                });
-                deleteCallback(id);
-              },
+              deleteCallback: () => this.deleteCallback(deleteCallback, id),
               id: id,
             );
           },
@@ -126,6 +152,9 @@ class _Tile<T extends ButtonOutgoingPackagesInputFields> extends StatelessWidget
     required this.manager,
     required this.deleteCallback,
     required this.id,
+    this.dataInitialValue,
+    this.parameterIdInitialValue,
+    this.requestTypeInitialValue,
   });
 
   @override
@@ -139,6 +168,15 @@ class _Tile<T extends ButtonOutgoingPackagesInputFields> extends StatelessWidget
 
   @protected
   final VoidCallback deleteCallback;
+
+  @protected
+  final String? requestTypeInitialValue;
+
+  @protected
+  final String? parameterIdInitialValue;
+
+  @protected
+  final String? dataInitialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +194,7 @@ class _Tile<T extends ButtonOutgoingPackagesInputFields> extends StatelessWidget
               children: <Widget>[
                 RequestTypeInputField(
                   title: context.l10n.requestTypeListTileLabel,
+                  initialValue: requestTypeInitialValue,
                   onChanged: (value) {
                     manager.updateValue<OutgoingPackagesMap, T>(
                       (currentValue) {
@@ -170,6 +209,7 @@ class _Tile<T extends ButtonOutgoingPackagesInputFields> extends StatelessWidget
                 ),
                 ParameterIdInputField(
                   title: context.l10n.parameterIdListTileLabel,
+                  initialValue: parameterIdInitialValue,
                   onChanged: (value) {
                     manager.updateValue<OutgoingPackagesMap, T>(
                       (currentValue) {
@@ -189,6 +229,7 @@ class _Tile<T extends ButtonOutgoingPackagesInputFields> extends StatelessWidget
                   isRequired: false,
                   hintText: context.l10n.packageDataHint,
                   enabled: !dataIsAutofilled,
+                  initialValue: dataInitialValue,
                   onChanged: (value) {
                     manager.updateValue<OutgoingPackagesMap, T>(
                       (currentValue) {
