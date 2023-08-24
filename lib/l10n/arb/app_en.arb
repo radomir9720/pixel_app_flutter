@@ -396,7 +396,7 @@
   "updatePeriodInMillisecondsFiledTitle": "Update period in milliseconds",
   "sentPackagesWhenMovingJoystickFieldTitle": "Sent packages when moving joystick",
   "sentPackagesWithAOneTimePressFieldTitle": "Sent packages with a one-time press",
-  "theNameOfTheButtonFieldTitle": "The name of the button",
+  "theNameOfTheButtonFieldTitle": "The name",
   "incorrectFormatHintError": "Incorrect format. Enter integers through a comma (format: decimal or HEX)",
   "theMinimumNumberOfPackagesHintError": "The minimum number of packages: {minPackages}",
   "@theMinimumNumberOfPackagesHintError": {
