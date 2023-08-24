@@ -12,12 +12,13 @@ Two positional parameters are required:
 exit 1
 fi
 
-if [ "$1" != "apk" ] && [ "$1" != "appbundle" ] && [ "$1" != "ios" ]
+if [ "$1" != "apk" ] && [ "$1" != "appbundle" ] && [ "$1" != "ios" ] && [ "$1" != "windows" ]
 then echo "Wrong \"build type\" parameter
 Available build types:
 1. \"apk\"
 2. \"appbundle\"
-3. \"ios\""
+3. \"ios\"
+4. \"windows\""
 exit 2
 fi
 
@@ -39,4 +40,7 @@ building: $buildType
 flavor: $flavor
 path: $mainPath
 "
-flutter build $buildType --flavor $flavor -t $mainPath
+if [ $buildType == "windows" ]
+then flutter build $buildType -t $mainPath
+else flutter build $buildType --flavor $flavor -t $mainPath
+fi
