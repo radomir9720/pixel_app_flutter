@@ -48,7 +48,7 @@ class IncomingPackageGetterInputFieldsWidget extends StatelessWidget {
               FunctionIdInputField(
                 title: context.l10n.functionIdFieldTitle,
                 onChanged: manager.setFunctionId,
-                initialValue: initialValues?.functionId.toString(),
+                initialValue: initialValues?.functionId?.toString(),
                 isRequired: false,
               ),
             ],
