@@ -111,10 +111,10 @@ Future<void> bootstrap(
 
       Bloc.observer = AppBlocObserver(
         onStateChange: (change) {
-          loggerStorage.logInfo(
-            '${change.currentState} -> ${change.nextState}',
-            'BlocChangeState',
-          );
+          // loggerStorage.logInfo(
+          //   '${change.currentState} -> ${change.nextState}',
+          //   'BlocChangeState',
+          // );
         },
         onErrorOcurred: (error, stackTrace) {
           loggerStorage.logSevere(
