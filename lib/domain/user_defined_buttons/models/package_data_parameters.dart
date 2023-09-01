@@ -1,4 +1,6 @@
 import 'dart:typed_data' as td show Endian;
+import 'dart:typed_data';
+
 import 'package:re_seedwork/re_seedwork.dart';
 
 sealed class DataBytesRange {
@@ -50,24 +52,33 @@ final class AllDataBytesRange extends DataBytesRange {
 
   @override
   String get stringify => kKey;
+
+  @override
+  String toString() => 'AllDataBytesRange()';
 }
 
 final class ManualDataBytesRange extends DataBytesRange {
   const ManualDataBytesRange({
     required this.start,
     required this.end,
+    this.maxRange = kMaxRange,
   })  : assert(end > start, '"end" index should be bigger than "start" index'),
         super(kKey);
 
-  const ManualDataBytesRange.first()
+  const ManualDataBytesRange.first({this.maxRange = kMaxRange})
       : start = 0,
         end = 1,
         super(kKey);
 
   static const kKey = 'manual';
 
+  static const kMaxRange = 8;
+
   final int start;
   final int end;
+  final int maxRange;
+
+  int get length => end - start;
 
   ManualDataBytesRange get incrementStart {
     if (start + 1 >= end) return this;
@@ -75,11 +86,13 @@ final class ManualDataBytesRange extends DataBytesRange {
   }
 
   ManualDataBytesRange get incrementEnd {
+    if (end - start + 1 > maxRange) return this;
     return ManualDataBytesRange(start: start, end: end + 1);
   }
 
   ManualDataBytesRange get decrementStart {
     if (start - 1 < 0) return this;
+    if (end - start + 1 > maxRange) return this;
     return ManualDataBytesRange(start: start - 1, end: end);
   }
 
@@ -89,13 +102,21 @@ final class ManualDataBytesRange extends DataBytesRange {
   }
 
   @override
-  List<int> getRange(List<int> data) => data.sublist(start, end);
+  List<int> getRange(List<int> data) {
+    if (data.isEmpty) return [];
+    if (start > data.length - 1) return [];
+    if (end > data.length) return [];
+    return data.sublist(start, end);
+  }
 
   @override
   bool get endianMatters => end - start > 1;
 
   @override
   String get stringify => '${kKey}_$start-$end';
+
+  @override
+  String toString() => 'ManualDataBytesRange(start: $start, end: $end)';
 }
 
 enum Endian {
@@ -169,6 +190,45 @@ class PackageDataParameters {
 
   final Sign sign;
 
+  int? getInt(List<int> data) {
+    try {
+      final bytes = range.getRange(data)..toEvenBytes(endian, sign);
+
+      if (bytes.isEmpty) return null;
+      final tdEndian = endian.toTypedData;
+
+      final bytesCount = bytes.length.clamp(1, 8);
+
+      return sign.when(
+        signed: () {
+          final byteData = Int8List.fromList(bytes).buffer.asByteData();
+
+          return switch (bytesCount) {
+            1 => byteData.getInt8(0),
+            2 => byteData.getInt16(0, tdEndian),
+            4 => byteData.getInt32(0, tdEndian),
+            8 => byteData.getInt64(0, tdEndian),
+            _ => null,
+          };
+        },
+        unsigned: () {
+          final byteData = Uint8List.fromList(bytes).buffer.asByteData();
+
+          return switch (bytesCount) {
+            1 => byteData.getUint8(0),
+            2 => byteData.getUint16(0, tdEndian),
+            4 => byteData.getUint32(0, tdEndian),
+            8 => byteData.getUint64(0, tdEndian),
+            _ => null,
+          };
+        },
+      );
+    } catch (e, s) {
+      Future<void>.error(e, s);
+      return null;
+    }
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'endian': endian.name,
@@ -187,5 +247,37 @@ class PackageDataParameters {
       range: range ?? this.range,
       endian: endian ?? this.endian,
     );
+  }
+}
+
+extension on List<int> {
+  void toEvenBytes(Endian endian, Sign sign) {
+    final lastBytePlaceholder = sign.when<int>(
+      signed: () {
+        final mostSignificant = endian.when(
+          big: () => first,
+          little: () => last,
+        );
+        final isNegative = (mostSignificant.toSigned(8) >> 7 & 1) == 1;
+        return isNegative ? 0xFF : 0;
+      },
+      unsigned: () => 0,
+    );
+
+    switch (length) {
+      case 3:
+        endian.when(
+          big: () => insert(0, lastBytePlaceholder),
+          little: () => add(lastBytePlaceholder),
+        );
+        break;
+      case > 4 && < 8:
+        final bytes = List.generate(8 - length, (index) => lastBytePlaceholder);
+        endian.when(
+          big: () => insertAll(0, bytes),
+          little: () => addAll(bytes),
+        );
+        break;
+    }
   }
 }

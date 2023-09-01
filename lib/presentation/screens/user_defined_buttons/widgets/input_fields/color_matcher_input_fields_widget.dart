@@ -17,6 +17,8 @@ class ColorMatcherInputFieldsWidget extends DataMatchersInputFormFieldsWidget<
     required super.title,
     super.initialIfMatchersValues,
     super.initialElseValue,
+    super.bottom,
+    super.tilesManagerNotifier,
   }) : super(
           matcherField: (context, id, initialValue) => IntrinsicWidth(
             child: ConstrainedBox(

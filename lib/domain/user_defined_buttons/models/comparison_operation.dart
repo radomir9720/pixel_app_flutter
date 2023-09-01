@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:equatable/equatable.dart';
 import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -99,38 +97,7 @@ class ComparisonOperationMatcher<T> with EquatableMixin {
     };
   }
 
-  bool satisfies(List<int> data) {
-    final bytes = parameters.range.getRange(data);
-
-    if (bytes.isEmpty) return false;
-    final endian = parameters.endian.toTypedData;
-
-    final bytesCount = bytes.length.clamp(1, 4);
-    final integer = parameters.sign.when(
-      signed: () {
-        final byteData = Int8List.fromList(bytes).buffer.asByteData();
-
-        return switch (bytesCount) {
-          1 => byteData.getInt8(0),
-          2 => byteData.getInt16(0, endian),
-          3 => byteData.getInt32(0, endian),
-          4 => byteData.getInt64(0, endian),
-          _ => throw Exception('should not reach')
-        };
-      },
-      unsigned: () {
-        final byteData = Uint8List.fromList(bytes).buffer.asByteData();
-
-        return switch (bytesCount) {
-          1 => byteData.getUint8(0),
-          2 => byteData.getUint16(0, endian),
-          3 => byteData.getUint32(0, endian),
-          4 => byteData.getUint64(0, endian),
-          _ => throw Exception('should not reach')
-        };
-      },
-    );
-
+  bool satisfies(int integer) {
     return operation.when(
       equalsTo: () => integer == value,
       lessThan: () => integer < value,

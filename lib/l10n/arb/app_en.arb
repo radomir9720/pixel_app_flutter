@@ -409,7 +409,7 @@
   "addAPackageButtonCaption": "Add a package",
   "theDataIsAutofilledFieldLabel": "The data is autofilled",
   "packageDataFieldLabel": "Data",
-  "noColorAndStatusIfStatementsHintError": "At least one of the fields \"Color\", \"Status\" should have minimum one \"if\" statement",
+  "emptyColorStatusAndNumValueFieldsHintError": "At least one of the fields \"Color\", \"Status\", \"Value\" should be filled",
   "colorFieldTitle": "Color",
   "ifStatement": "if",
   "dataStatement": "data",
@@ -450,5 +450,20 @@
     }
   },
   "editButtonCaption": "Edit",
-  "toTheSettingsButtonCaption": "To the settings"
+  "toTheSettingsButtonCaption": "To the settings",
+  "setTheTheDefaultStatusColorsButtonCaption": "Set the the default status colors",
+  "suffixFieldTitle": "Suffix",
+  "multiplierFieldTitle": "Multiplier",
+  "fractionDigitsFieldTitle": "Fraction digits",
+  "selectedBytesTileLabel": "Selected bytes",
+  "bytesQuantityTileLabel": "Bytes quantity: {rangeLength}",
+  "@bytesQuantityTileLabel": {
+    "placeholders": {
+      "rangeLength": {
+        "type": "int"
+      }
+    }
+  },
+  "displaySwitcherButtonCaption": "Display",
+  "dontDisplaySwitcherButtonCaption": "Don't display"
 }

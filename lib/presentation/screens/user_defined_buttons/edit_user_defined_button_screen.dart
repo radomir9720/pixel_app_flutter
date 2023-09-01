@@ -105,14 +105,20 @@ class _EditUserDefinedButtonScreenState
           final valid = _formKey.currentState?.validate() ?? false;
           if (!valid) return;
 
-          final button = widget.buttonBuilder.builder(
-            manager,
-            widget.id,
-          );
-
-          context
-              .read<UpdateUserDefinedButtonBloc>()
-              .add(UpdateUserDefinedButtonEvent.update(button));
+          try {
+            final button = widget.buttonBuilder.builder(
+              manager,
+              widget.id,
+            );
+            context
+                .read<UpdateUserDefinedButtonBloc>()
+                .add(UpdateUserDefinedButtonEvent.update(button));
+          } catch (e, s) {
+            context.showSnackBar(
+              context.l10n.errorWhileEditingButtonPropertiesMessage,
+            );
+            Future<void>.error(e, s);
+          }
         },
         child: Text(context.l10n.saveButtonCaption),
       ),
