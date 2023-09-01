@@ -33,3 +33,16 @@ final class IntOrNullStringButtonPropertyValidator
     return hintCallback(data);
   }
 }
+
+final class DoubleOrNullStringButtonPropertyValidator
+    extends StringButtonPropertyValidator {
+  const DoubleOrNullStringButtonPropertyValidator(super.hintCallback);
+
+  @override
+  String? validate(String? data) {
+    if (data == null) return null;
+    if (data.isEmpty) return null;
+    if (double.tryParse(data) != null) return null;
+    return hintCallback(data);
+  }
+}

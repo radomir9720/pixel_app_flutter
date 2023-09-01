@@ -409,7 +409,7 @@
   "addAPackageButtonCaption": "Добавить пакет",
   "theDataIsAutofilledFieldLabel": "Данные автозаполнены",
   "packageDataFieldLabel": "Данные",
-  "noColorAndStatusIfStatementsHintError": "Хотя бы одно из полей \"Цвет\", \"Статус\" должно иметь минимум одну конструкцию \"если\"",
+  "emptyColorStatusAndNumValueFieldsHintError": "Хотя бы одно из полей \"Значение\", \"Цвет\", \"Статус\" должно быть заполнено",
   "colorFieldTitle": "Цвет",
   "ifStatement": "если",
   "dataStatement": "данные",
@@ -450,5 +450,20 @@
     }
   },
   "editButtonCaption": "Редактировать",
-  "toTheSettingsButtonCaption": "В настройки"
+  "toTheSettingsButtonCaption": "В настройки",
+  "setTheTheDefaultStatusColorsButtonCaption": "Установить цвета статуса по умолчанию",
+  "suffixFieldTitle": "Суффикс",
+  "multiplierFieldTitle": "Множитель",
+  "fractionDigitsFieldTitle": "Цифры после запятой",
+  "selectedBytesTileLabel": "Выбранные байты",
+  "bytesQuantityTileLabel": "К-во байт: {rangeLength}",
+  "@bytesQuantityTileLabel": {
+    "placeholders": {
+      "rangeLength": {
+        "type": "int"
+      }
+    }
+  },
+  "displaySwitcherButtonCaption": "Отображать",
+  "dontDisplaySwitcherButtonCaption": "Не отображать"
 }

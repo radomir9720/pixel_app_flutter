@@ -59,6 +59,14 @@ abstract class ButtonPropertyValidators {
     );
   }
 
+  static ButtonPropertyValidator<String> doubleOrNullValidator(
+    BuildContext context,
+  ) {
+    return DoubleOrNullStringButtonPropertyValidator(
+      (data) => context.l10n.incorrectValueHintError,
+    );
+  }
+
   static ButtonPropertyValidator<String> notEmptyValidator(
     BuildContext context,
   ) {
@@ -110,6 +118,10 @@ extension ButtonPropertyValidatorExtension on BuildContext {
 
   ButtonPropertyValidator<String> intOrNullStringValidator() {
     return ButtonPropertyValidators.intOrNullValidator(this);
+  }
+
+  ButtonPropertyValidator<String> doubleOrNullStringValidator() {
+    return ButtonPropertyValidators.doubleOrNullValidator(this);
   }
 
   ButtonPropertyValidator<T> notNullValidator<T>() {

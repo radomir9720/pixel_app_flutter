@@ -102,13 +102,20 @@ class _AddUserDefinedButtonScreenState
           final valid = _formKey.currentState?.validate() ?? false;
           if (!valid) return;
 
-          final button = widget.buttonBuilder.builder(
-            manager,
-            DateTime.now().millisecondsSinceEpoch,
-          );
-          context
-              .read<AddUserDefinedButtonBloc>()
-              .add(AddUserDefinedButtonEvent.add(button));
+          try {
+            final button = widget.buttonBuilder.builder(
+              manager,
+              DateTime.now().millisecondsSinceEpoch,
+            );
+            context
+                .read<AddUserDefinedButtonBloc>()
+                .add(AddUserDefinedButtonEvent.add(button));
+          } catch (e, s) {
+            context.showSnackBar(
+              context.l10n.errorWhenAddingTheButtonMessage,
+            );
+            Future<void>.error(e, s);
+          }
         },
         child: Text(context.l10n.addButtonCaption),
       ),

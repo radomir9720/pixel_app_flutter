@@ -4,9 +4,10 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_builder.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/button_title_input_field.dart';
-import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/color_and_status_matchers_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/color_matcher_input_field.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/color_status_and_num_value_field_group.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/incoming_package_getter_input_fields.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/num_value_getter_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/status_matcher_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/button_decoration_wrapper.dart';
 
@@ -25,9 +26,11 @@ class IndicatorButton extends StatefulWidget {
         IncomingPackageGetterInputFields(
           initialValues: initialValue?.incomingPackageGetter,
         ),
-        ColorAndStatusMatchersInputFields(
+        ColorStatusAndNumValueFieldGroup(
           initialColorMatcher: initialValue?.colorMatcher,
           initialStatusMatcher: initialValue?.statusMatcher,
+          initialNumValueGetterParameters:
+              initialValue?.numValueGetterParameters,
         ),
       ],
       builder: (manager, id) {
@@ -35,6 +38,7 @@ class IndicatorButton extends StatefulWidget {
           id: id,
           title: manager.getTitle,
           incomingPackageGetter: manager.incomingPackageGetter,
+          numValueGetterParameters: manager.numValueGetterParameters,
           colorMatcher: manager.colorMatcher,
           statusMatcher: manager.statusMatcher,
         );
@@ -90,7 +94,9 @@ class _IndicatorButtonState extends State<IndicatorButton> {
 
     try {
       for (final m in matcher.ifMatchers) {
-        if (m.satisfies(data)) return m.result;
+        final integer = m.parameters.getInt(data);
+        if (integer == null) return null;
+        if (m.satisfies(integer)) return m.result;
       }
 
       return matcher.elseResult;
@@ -117,6 +123,9 @@ class _IndicatorButtonState extends State<IndicatorButton> {
         final data = snapshot.data?.data;
         final color = getProperty(data, widget.button.colorMatcher);
         final status = getProperty(data, widget.button.statusMatcher);
+        final number =
+            widget.button.numValueGetterParameters?.getNum(data ?? []);
+        final suffix = widget.button.numValueGetterParameters?.suffix;
 
         return ButtonDecorationWrapper(
           button: widget.button,
@@ -128,7 +137,9 @@ class _IndicatorButtonState extends State<IndicatorButton> {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                widget.button.title + (status == null ? '' : ': $status'),
+                '${widget.button.title}${number != null ? '\n$number' : ''}'
+                '${suffix != null ? ' $suffix' : ''}'
+                '${status == null ? '' : '\n$status'}',
                 textAlign: TextAlign.center,
               ),
             ),

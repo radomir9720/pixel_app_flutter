@@ -268,7 +268,12 @@ class DemoDataSource extends DataSource
             )
             ..voidOn<BatteryPowerParameterId>(
               () => subscriptionCallbacks.remove(_sendNewBatteryPowerCallback),
-            );
+            )
+            ..voidOn<CustomParameterId>(() {
+              if (parameterId.value == 0x00E0) {
+                subscriptionCallbacks.remove(_sendBackLightsBlocInfoCallback);
+              }
+            });
 
           return const Result.value(null);
         }
@@ -366,7 +371,13 @@ class DemoDataSource extends DataSource
             _sendSetUint8ResultCallback(
               const CustomImageParameterId(),
             );
+          })
+          ..voidOn<CustomParameterId>(() {
+            if (parameterId.value == 0x00E0) {
+              subscriptionCallbacks.add(_sendBackLightsBlocInfoCallback);
+            }
           });
+
         timer ??= Timer.periodic(
           Duration(milliseconds: updatePeriodMillis()),
           (timer) {
@@ -948,6 +959,25 @@ class DemoDataSource extends DataSource
           twentySecond: randomDoubleUint16,
           twentyThird: randomDoubleUint16,
           twentyFourth: randomDoubleUint16,
+        ),
+      ),
+    );
+  }
+
+  void _sendBackLightsBlocInfoCallback() {
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: 0x00E0,
+        convertible: PlainBytesConvertible(
+          [
+            [
+              FunctionId.okIncomingPeriodicValueId,
+              FunctionId.warningIncomingPeriodicValueId,
+              FunctionId.criticalIncomingPeriodicValueId,
+            ][Random().nextInt(3)],
+            ...List.generate(7, (index) => randomUint8),
+          ],
         ),
       ),
     );

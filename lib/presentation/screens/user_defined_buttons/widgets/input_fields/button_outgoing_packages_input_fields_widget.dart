@@ -8,8 +8,8 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/mode
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/parameter_id_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/request_type_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/properties_map.dart';
-import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/field_group_wrapper.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/tile_manager_wrapper.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/field_group_wrapper.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/molecules/responsive_grid_view.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
@@ -49,6 +49,19 @@ class ButtonOutgoingPackagesFormInputFieldsWidget<
             );
           },
         );
+}
+
+class _DataOutgoingPackagesModel extends TileModel {
+  const _DataOutgoingPackagesModel(
+    super.id, {
+    this.data = const [],
+    this.parameterId,
+    this.requestType,
+  });
+
+  final List<int> data;
+  final int? parameterId;
+  final int? requestType;
 }
 
 class ButtonOutgoingPackagesInputFieldsWidget<
@@ -94,35 +107,34 @@ class ButtonOutgoingPackagesInputFieldsWidget<
       title: title,
       error: error,
       children: [
-        TilesManagerWrapper(
-          initialTilesBuilder: (deleteCallback) {
-            return List.generate(
-              initialPackages?.length ?? 0,
-              (index) {
-                final item = (initialPackages ?? [])[index];
-                final id = DateTime.now().millisecondsSinceEpoch + index;
-                return _Tile<T>(
-                  dataIsAutofilled: dataIsAutofilled,
-                  manager: manager,
-                  deleteCallback: () => this.deleteCallback(deleteCallback, id),
-                  id: id,
-                  dataInitialValue:
-                      item.data.map((e) => e.toString()).join(','),
-                  parameterIdInitialValue: item.parameterId.toString(),
-                  requestTypeInitialValue: item.requestType.toString(),
-                );
-              },
+        TilesManagerWrapper<_DataOutgoingPackagesModel>(
+          initialTiles: List.generate(
+            initialPackages?.length ?? 0,
+            (index) {
+              final millis = DateTime.now().millisecondsSinceEpoch + index;
+              final e = (initialPackages ?? [])[index];
+              return _DataOutgoingPackagesModel(
+                millis,
+                data: e.data,
+                parameterId: e.parameterId,
+                requestType: e.requestType,
+              );
+            },
+          ),
+          widgetMapper: (index, object, deleteCallback) {
+            return _Tile<T>(
+              id: object.id,
+              manager: manager,
+              deleteCallback: deleteCallback,
+              dataIsAutofilled: dataIsAutofilled,
+              dataInitialValue: object.data.map((e) => e.toString()).join(','),
+              parameterIdInitialValue: object.parameterId.toString(),
+              requestTypeInitialValue: object.requestType.toString(),
             );
           },
-          tileBuilder: (i, deleteCallback) {
-            final id = DateTime.now().millisecondsSinceEpoch + i;
-
-            return _Tile<T>(
-              dataIsAutofilled: dataIsAutofilled,
-              manager: manager,
-              deleteCallback: () => this.deleteCallback(deleteCallback, id),
-              id: id,
-            );
+          tileModelBuilder: (index) {
+            final id = DateTime.now().millisecondsSinceEpoch + index;
+            return _DataOutgoingPackagesModel(id);
           },
           initialCount: initialCount,
           bottom: (generateNewTile, itemsCount) {
@@ -144,8 +156,8 @@ class ButtonOutgoingPackagesInputFieldsWidget<
   }
 }
 
-class _Tile<T extends ButtonOutgoingPackagesInputFields> extends StatelessWidget
-    implements TileWidget {
+class _Tile<T extends ButtonOutgoingPackagesInputFields>
+    extends StatelessWidget {
   const _Tile({
     super.key,
     required this.dataIsAutofilled,
@@ -157,7 +169,7 @@ class _Tile<T extends ButtonOutgoingPackagesInputFields> extends StatelessWidget
     this.requestTypeInitialValue,
   });
 
-  @override
+  @protected
   final int id;
 
   @protected

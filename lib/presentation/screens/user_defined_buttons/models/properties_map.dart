@@ -48,6 +48,11 @@ class StringPropertyEntry extends PropertyEntry<String> {
   const StringPropertyEntry(super.value);
 }
 
+class BoolPropertyEntry extends PropertyEntry<bool> {
+  // ignore: avoid_positional_boolean_parameters
+  const BoolPropertyEntry(super.value);
+}
+
 class OptionalStringPropertyEntry extends PropertyEntry<String?> {
   const OptionalStringPropertyEntry(super.value);
 }

@@ -1,18 +1,25 @@
 part of '../user_defined_button.dart';
 
+@immutable
 class IndicatorUserDefinedButton extends IncomingDirectionUserDefinedButton {
-  IndicatorUserDefinedButton({
+  const IndicatorUserDefinedButton({
     required super.id,
     required super.title,
     required this.incomingPackageGetter,
     this.colorMatcher,
     this.statusMatcher,
+    this.numValueGetterParameters,
   }) : assert(
-          colorMatcher != null || statusMatcher != null,
-          'Either "colorMatcher" or "statusMatcher" should be specified',
+          colorMatcher != null ||
+              statusMatcher != null ||
+              numValueGetterParameters != null,
+          'Either "colorMatcher", "statusMatcher" or '
+          '"numValueGetterParameters" should be specified',
         );
 
   final IncomingPackageGetter incomingPackageGetter;
+
+  final NumValueGetterParameters? numValueGetterParameters;
 
   final ColorMatcher? colorMatcher;
 
@@ -26,8 +33,61 @@ class IndicatorUserDefinedButton extends IncomingDirectionUserDefinedButton {
   List<Object?> get props => [
         ...super.props,
         incomingPackageGetter,
+        numValueGetterParameters,
         colorMatcher,
         statusMatcher,
+      ];
+}
+
+@immutable
+class NumValueGetterParameters with EquatableMixin {
+  const NumValueGetterParameters({
+    required this.parameters,
+    this.multiplier,
+    this.fractionDigits,
+    this.suffix,
+  });
+
+  factory NumValueGetterParameters.fromMap(Map<String, dynamic> map) {
+    return NumValueGetterParameters(
+      multiplier: map.tryParse('multiplier'),
+      fractionDigits: map.tryParse('fractionDigits'),
+      parameters: map.parseAndMap('parameters', PackageDataParameters.fromMap),
+      suffix: map.tryParse('suffix'),
+    );
+  }
+
+  final double? multiplier;
+  final int? fractionDigits;
+  final PackageDataParameters parameters;
+  final String? suffix;
+
+  String? getNum(List<int> data) {
+    final value = parameters.getInt(data);
+    if (value == null) return null;
+    final _multiplier = multiplier;
+    if (_multiplier == null) return value.toString();
+    final multiplied = value * _multiplier;
+    final _fractionDigits = fractionDigits;
+    if (_fractionDigits == null) return multiplied.toString();
+    return multiplied.toStringAsFixed(_fractionDigits);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'multiplier': multiplier,
+      'fractionDigits': fractionDigits,
+      'parameters': parameters.toMap(),
+      'suffix': suffix,
+    };
+  }
+
+  @override
+  List<Object?> get props => [
+        multiplier,
+        fractionDigits,
+        parameters,
+        suffix,
       ];
 }
 
@@ -46,6 +106,10 @@ class IndicatorUserDefinedButtonSerializer
         'incomingPackageGetter',
         IncomingPackageGetter.fromMap,
       ),
+      numValueGetterParameters: map.tryParseAndMap(
+        'numValueGetterParameters',
+        NumValueGetterParameters.fromMap,
+      ),
       colorMatcher: map.tryParseAndMap(
         'colorMatcher',
         ColorMatcher.fromMap,
@@ -62,6 +126,7 @@ class IndicatorUserDefinedButtonSerializer
     return {
       'title': object.title,
       'incomingPackageGetter': object.incomingPackageGetter.toMap(),
+      'numValueGetterParameters': object.numValueGetterParameters?.toMap(),
       'colorMatcher': object.colorMatcher?.toMap(),
       'statusMatcher': object.statusMatcher?.toMap(),
     };

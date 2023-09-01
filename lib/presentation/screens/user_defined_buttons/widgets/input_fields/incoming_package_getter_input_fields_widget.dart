@@ -6,7 +6,7 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/mode
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/incoming_package_getter_input_fields.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/parameter_id_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/implementations/request_type_input_field.dart';
-import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/field_group_wrapper.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/field_group_wrapper.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/molecules/responsive_grid_view.dart';
 
 class IncomingPackageGetterInputFieldsWidget extends StatelessWidget {
@@ -48,7 +48,7 @@ class IncomingPackageGetterInputFieldsWidget extends StatelessWidget {
               FunctionIdInputField(
                 title: context.l10n.functionIdFieldTitle,
                 onChanged: manager.setFunctionId,
-                initialValue: initialValues?.functionId.toString(),
+                initialValue: initialValues?.functionId?.toString(),
                 isRequired: false,
               ),
             ],

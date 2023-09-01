@@ -7,9 +7,9 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/mode
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_check/button_property_validators.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_input_field/button_property_input_field.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/properties_map.dart';
-import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/field_group_wrapper.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/tile_manager_wrapper.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/button_input_field_widget.dart';
+import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/field_group_wrapper.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/incoming_package_getter_input_fields_widget.dart';
 import 'package:re_widgets/re_widgets.dart';
 
@@ -30,8 +30,10 @@ class DataMatchersInputFormFieldsWidget<
     required MatcherFieldBuilder<P> matcherField,
     required int initialMatchersCount,
     required List<ButtonPropertyValidator<Y?>> validators,
-    InitialIfMatchersValues<P>? initialIfMatchersValues,
+    List<DataMatchersModel<P>>? initialIfMatchersValues,
     P? initialElseValue,
+    List<Widget>? bottom,
+    ValueNotifier<List<DataMatchersModel<P>>>? tilesManagerNotifier,
   }) : super(
           validator: (value) {
             for (final validator in validators) {
@@ -52,13 +54,27 @@ class DataMatchersInputFormFieldsWidget<
               initialMatchersCount: initialMatchersCount,
               initialIfMatchersValues: initialIfMatchersValues,
               initialElseValue: initialElseValue,
+              bottom: bottom,
+              tilesManagerNotifier: tilesManagerNotifier,
             );
           },
         );
 }
 
-typedef InitialIfMatchersValues<P> = List<
-    (PackageDataParameters?, ComparisonOperation?, PropertyEntry<P>?, String?)>;
+final class DataMatchersModel<P> extends TileModel {
+  const DataMatchersModel(
+    super.id, {
+    this.packageDataParameters,
+    this.comparisonOperation,
+    this.propertyEntry,
+    this.value,
+  });
+
+  final PackageDataParameters? packageDataParameters;
+  final ComparisonOperation? comparisonOperation;
+  final PropertyEntry<P>? propertyEntry;
+  final String? value;
+}
 
 class DataMatchersInputFieldsWidget<
     P,
@@ -70,9 +86,11 @@ class DataMatchersInputFieldsWidget<
     required this.matcherField,
     required this.title,
     required this.initialMatchersCount,
+    this.tilesManagerNotifier,
     this.initialIfMatchersValues,
     this.initialElseValue,
     this.error,
+    this.bottom,
   });
 
   @protected
@@ -91,7 +109,13 @@ class DataMatchersInputFieldsWidget<
   final int initialMatchersCount;
 
   @protected
-  final InitialIfMatchersValues<P>? initialIfMatchersValues;
+  final List<Widget>? bottom;
+
+  @protected
+  final List<DataMatchersModel<P>>? initialIfMatchersValues;
+
+  @protected
+  final ValueNotifier<List<DataMatchersModel<P>>>? tilesManagerNotifier;
 
   @protected
   final P? initialElseValue;
@@ -113,41 +137,29 @@ class DataMatchersInputFieldsWidget<
       title: title,
       error: error,
       children: [
-        TilesManagerWrapper(
+        TilesManagerWrapper<DataMatchersModel<P>>(
           initialCount: initialMatchersCount,
-          initialTilesBuilder: (deleteCallback) {
-            final values = initialIfMatchersValues ?? [];
-            return List.generate(
-              values.length,
-              (index) {
-                final id = DateTime.now().millisecondsSinceEpoch + index;
-                final value = values[index];
-
-                return _Tile<P, Y, T>(
-                  id: id,
-                  deleteCallback: () => deleteCallback(id),
-                  manager: manager,
-                  matcherField: matcherField(
-                    context,
-                    id,
-                    value.$3?.value,
-                  ),
-                  initialDataParameters: value.$1,
-                  initialOperation: value.$2,
-                  initialResultPropertyEntry: value.$3,
-                  initialValue: value.$4,
-                );
-              },
+          notifier: tilesManagerNotifier,
+          widgetMapper: (index, object, deleteCallback) {
+            return _Tile<P, Y, T>(
+              id: object.id,
+              deleteCallback: deleteCallback,
+              manager: manager,
+              matcherField: matcherField(
+                context,
+                object.id,
+                object.propertyEntry?.value,
+              ),
+              initialDataParameters: object.packageDataParameters,
+              initialOperation: object.comparisonOperation,
+              initialResultPropertyEntry: object.propertyEntry,
+              initialValue: object.value,
             );
           },
-          tileBuilder: (index, deleteCallback) {
+          initialTiles: initialIfMatchersValues ?? [],
+          tileModelBuilder: (index) {
             final id = DateTime.now().millisecondsSinceEpoch + index;
-            return _Tile<P, Y, T>(
-              id: id,
-              manager: manager,
-              matcherField: matcherField(context, id, null),
-              deleteCallback: () => deleteCallback(id),
-            );
+            return DataMatchersModel(id);
           },
           bottom: (generateNewTile, itemsCount) {
             return Column(
@@ -176,10 +188,14 @@ class DataMatchersInputFieldsWidget<
                     child: FilledButton.icon(
                       onPressed: generateNewTile,
                       icon: const Icon(Icons.add),
-                      label: Text(context.l10n.addIfStatementButtonCaption),
+                      label: Text(
+                        context.l10n.addIfStatementButtonCaption,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
+                ...?bottom,
               ],
             );
           },
@@ -190,8 +206,7 @@ class DataMatchersInputFieldsWidget<
 }
 
 class _Tile<P, Y extends PropertiesMap<SerializablePropertiesMap>,
-        T extends ButtonPropertyInputField<Y>> extends StatefulWidget
-    implements TileWidget {
+    T extends ButtonPropertyInputField<Y>> extends StatefulWidget {
   const _Tile({
     super.key,
     required this.id,
@@ -204,7 +219,6 @@ class _Tile<P, Y extends PropertiesMap<SerializablePropertiesMap>,
     this.initialResultPropertyEntry,
   });
 
-  @override
   @protected
   final int id;
 
@@ -316,14 +330,14 @@ class _TileState<P, Y extends PropertiesMap<SerializablePropertiesMap>,
                   ),
                   WidgetSpan(
                     alignment: PlaceholderAlignment.top,
-                    child: _DataStatementWidget(
+                    child: _DataGetterParametersWidget(
                       parameters: parameters,
                       onPressed: () async {
                         final newParams =
                             await showDialog<PackageDataParameters>(
                           context: context,
                           builder: (context) {
-                            return _SelectDataParametersDialog(
+                            return SelectDataParametersDialog(
                               initialValue: parameters,
                             );
                           },
@@ -427,8 +441,8 @@ class ComparisonOperationPropertyEntry
   const ComparisonOperationPropertyEntry(super.value);
 }
 
-class _DataStatementWidget extends StatelessWidget {
-  const _DataStatementWidget({
+class _DataGetterParametersWidget extends StatelessWidget {
+  const _DataGetterParametersWidget({
     required this.parameters,
     required this.onPressed,
   });
@@ -507,8 +521,9 @@ class _DataStatementWidget extends StatelessWidget {
   }
 }
 
-class _SelectDataParametersDialog extends StatefulWidget {
-  const _SelectDataParametersDialog({
+class SelectDataParametersDialog extends StatefulWidget {
+  const SelectDataParametersDialog({
+    super.key,
     this.initialValue = const PackageDataParameters.initial(),
   });
 
@@ -516,12 +531,12 @@ class _SelectDataParametersDialog extends StatefulWidget {
   final PackageDataParameters initialValue;
 
   @override
-  State<_SelectDataParametersDialog> createState() =>
+  State<SelectDataParametersDialog> createState() =>
       _SelectDataParametersDialogState();
 }
 
 class _SelectDataParametersDialogState
-    extends State<_SelectDataParametersDialog> {
+    extends State<SelectDataParametersDialog> {
   late PackageDataParameters parameters;
 
   @override
@@ -545,6 +560,20 @@ class _SelectDataParametersDialogState
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w400,
   );
+
+  @protected
+  static const kByteRangeMetaTextStyle = TextStyle(
+    height: 1.2,
+    fontSize: 12,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w400,
+  );
+
+  String getBytesRangeStringRepresentation(ManualDataBytesRange range) {
+    final length = range.length;
+    final bytes = List.generate(length, (index) => range.start + index);
+    return bytes.join(', ');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -593,37 +622,65 @@ class _SelectDataParametersDialogState
               child: parameters.range.when(
                 all: (_) => const SizedBox.shrink(),
                 manual: (r) {
-                  return RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(text: '${context.l10n.fromDataRangeLabel} '),
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: _ByteIndexButton(
-                            value: r.start,
-                            onDecrement: () {
-                              updateRange(r.decrementStart);
-                            },
-                            onIncrement: () {
-                              updateRange(r.incrementStart);
-                            },
-                          ),
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${context.l10n.fromDataRangeLabel} ',
+                            ),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: _ByteIndexButton(
+                                value: r.start,
+                                onDecrement: () {
+                                  updateRange(r.decrementStart);
+                                },
+                                onIncrement: () {
+                                  updateRange(r.incrementStart);
+                                },
+                              ),
+                            ),
+                            TextSpan(text: '${context.l10n.toDataRangeLabel} '),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: _ByteIndexButton(
+                                value: r.end,
+                                onDecrement: () {
+                                  updateRange(r.decrementEnd);
+                                },
+                                onIncrement: () {
+                                  updateRange(r.incrementEnd);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        TextSpan(text: '${context.l10n.toDataRangeLabel} '),
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: _ByteIndexButton(
-                            value: r.end,
-                            onDecrement: () {
-                              updateRange(r.decrementEnd);
-                            },
-                            onIncrement: () {
-                              updateRange(r.incrementEnd);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      ...parameters.range.when(
+                        all: (range) => [],
+                        manual: (range) {
+                          return [
+                            Text(
+                              context.l10n.bytesQuantityTileLabel(range.length),
+                              style: kByteRangeMetaTextStyle.copyWith(
+                                color: context.colors.hintText,
+                              ),
+                            ),
+                            Text(
+                              '${context.l10n.selectedBytesTileLabel}: '
+                              '[${getBytesRangeStringRepresentation(range)}]',
+                              style: kByteRangeMetaTextStyle.copyWith(
+                                color: context.colors.hintText,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                          ];
+                        },
+                      ),
+                    ],
                   );
                 },
               ),

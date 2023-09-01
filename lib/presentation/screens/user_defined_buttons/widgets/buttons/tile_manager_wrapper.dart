@@ -2,39 +2,42 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-abstract class TileWidget extends Widget {
-  const TileWidget(this.id, {super.key});
+abstract class TileModel {
+  const TileModel(this.id);
 
   final int id;
 }
 
-typedef TileWidgetBuilder = TileWidget Function(
-  int index,
-  void Function(int id) deleteCallback,
-);
-
-typedef InitialTilesWidgetBuilder = List<TileWidget> Function(
-  void Function(int id) deleteCallback,
-);
-
-class TilesManagerWrapper extends StatefulWidget {
+class TilesManagerWrapper<T extends TileModel> extends StatefulWidget {
   const TilesManagerWrapper({
     super.key,
     this.initialCount = 0,
-    required this.tileBuilder,
+    required this.tileModelBuilder,
+    required this.widgetMapper,
     this.customViewBuilder,
     this.bottom,
-    this.initialTilesBuilder,
+    this.initialTiles = const [],
+    this.notifier,
   });
 
   @protected
   final int initialCount;
 
   @protected
-  final InitialTilesWidgetBuilder? initialTilesBuilder;
+  final Widget Function(
+    int index,
+    T object,
+    void Function() deleteCallback,
+  ) widgetMapper;
 
   @protected
-  final TileWidgetBuilder tileBuilder;
+  final List<T> initialTiles;
+
+  @protected
+  final ValueNotifier<List<T>>? notifier;
+
+  @protected
+  final T Function(int index) tileModelBuilder;
 
   @protected
   final Widget Function(VoidCallback generateNewTile, int itemsCount)? bottom;
@@ -43,37 +46,33 @@ class TilesManagerWrapper extends StatefulWidget {
   final ValueWidgetBuilder<List<Widget>>? customViewBuilder;
 
   @override
-  State<TilesManagerWrapper> createState() => _TilesManagerWrapperState();
+  State<TilesManagerWrapper<T>> createState() => _TilesManagerWrapperState<T>();
 }
 
-class _TilesManagerWrapperState extends State<TilesManagerWrapper> {
-  late final ValueNotifier<List<TileWidget>> valueNotifier;
+class _TilesManagerWrapperState<T extends TileModel>
+    extends State<TilesManagerWrapper<T>> {
+  late final ValueNotifier<List<T>> valueNotifier;
 
   @override
   void initState() {
-    final initialTiles = widget.initialTilesBuilder?.call(deleteCallback) ?? [];
-    valueNotifier = ValueNotifier(initialTiles);
+    valueNotifier = widget.notifier ?? ValueNotifier([]);
+    valueNotifier.value = widget.initialTiles;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      addNewTiles(widget.initialCount - initialTiles.length);
+      addNewTiles(widget.initialCount - widget.initialTiles.length);
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    valueNotifier.dispose();
+    if (widget.notifier == null) valueNotifier.dispose();
     super.dispose();
   }
 
   void addNewTiles([int count = 1]) {
-    final tiles = <TileWidget>[];
+    final tiles = <T>[];
     for (var i = 0; i < count; i++) {
-      tiles.add(
-        widget.tileBuilder(
-          i,
-          deleteCallback,
-        ),
-      );
+      tiles.add(widget.tileModelBuilder(i));
     }
 
     valueNotifier.value = [
@@ -89,14 +88,16 @@ class _TilesManagerWrapperState extends State<TilesManagerWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List<Widget>>(
+    return ValueListenableBuilder<List<T>>(
       valueListenable: valueNotifier,
       builder: (context, value, child) {
         return Column(
           children: [
             ...List<Widget>.generate(
               value.length,
-              (index) => value[index],
+              (index) => widget.widgetMapper(index, value[index], () {
+                deleteCallback(value[index].id);
+              }),
             ).divideBy(const Divider()),
             widget.bottom?.call(addNewTiles, value.length) ??
                 const SizedBox.shrink(),
