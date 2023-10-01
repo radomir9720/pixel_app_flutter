@@ -25,7 +25,7 @@ class TitleWrapper extends StatelessWidget {
     final bodyPadding = screenData.whenType(
       orElse: () => EdgeInsets.only(
         left: !screenData.type.isHandset && screenData.size.width > 700
-            ? 190
+            ? 200
             : 100,
         right: 32,
         bottom: 16,

@@ -10,16 +10,12 @@ class TabletUpperInfoPanel extends StatelessWidget {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 6,
+        SizedBox(
+          width: 300,
           child: SpeedWidget(),
         ),
-        Expanded(
-          flex: 4,
-          child: Align(
-            child: StatisticWidget(),
-          ),
-        ),
+        SizedBox(width: 16),
+        Flexible(child: StatisticWidget(useWrap: true)),
         // Expanded(
         //   flex: 8,
         //   child: Align(

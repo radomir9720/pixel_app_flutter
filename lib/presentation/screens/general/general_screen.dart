@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
+import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/car_widget.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/gear_widget.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
@@ -57,6 +58,7 @@ class TabletGeneralScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final height = size.height;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 37),
@@ -64,7 +66,7 @@ class TabletGeneralScreenBody extends StatelessWidget {
         children: [
           SizedBox(
             width: size.width,
-            height: size.height,
+            height: height,
           ),
           const Positioned(
             top: 0,
@@ -75,13 +77,16 @@ class TabletGeneralScreenBody extends StatelessWidget {
           Positioned(
             right: 0,
             left: 0,
-            bottom: size.height * .3,
+            bottom: height * .3,
             child: const CarWidget(),
           ),
-          const Positioned(
-            left: 7,
-            bottom: 420,
-            child: GearWidget(),
+          Positioned(
+            left: 10,
+            bottom: height.flexSize(
+              screenFlexRange: (600, 700),
+              valueClampRange: (420, 460),
+            ),
+            child: GearWidget(screenSize: size),
           ),
           const Positioned(
             right: 0,
@@ -99,7 +104,9 @@ class HandsetGeneralScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final landscape = Screen.of(context).isLandscape;
+    final screen = Screen.of(context);
+    final size = screen.size;
+    final landscape = screen.isLandscape;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +117,10 @@ class HandsetGeneralScreenBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SpeedWidget(),
-              if (landscape) const StatisticWidget() else const GearWidget(),
+              if (landscape)
+                const StatisticWidget()
+              else
+                GearWidget(screenSize: size),
             ],
           ),
         ),
@@ -120,7 +130,7 @@ class HandsetGeneralScreenBody extends StatelessWidget {
           const SizedBox(height: 32),
           const LEDSwitcherButton(),
         ] else ...[
-          const GearWidget(),
+          GearWidget(screenSize: size),
           const SizedBox(height: 16),
           const LEDSwitcherButton(),
         ],

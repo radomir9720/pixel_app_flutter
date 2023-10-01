@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.dart';
@@ -50,20 +51,26 @@ class _CarWidgetState extends State<CarWidget> {
   Widget build(BuildContext context) {
     final buttonScaleCoef = (carSize.width / 232).clamp(0.0, .82);
     final size = MediaQuery.sizeOf(context);
+    final height = size.height;
+    final width = size.width;
 
     // ignore: avoid_positional_boolean_parameters
     String getStatus(bool opened) => opened
         ? context.l10n.unlockedInterfaceStatus
         : context.l10n.lockedInterfaceStatus;
 
-    return Center(
+    return Align(
+      alignment: const Alignment(.4, 0),
       child: UnboundedHitTestStack(
         clipBehavior: Clip.none,
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: size.width * .2,
-              maxHeight: size.height * .6,
+              maxWidth: width * .26,
+              maxHeight: width.flexSize(
+                screenFlexRange: (700, 1100),
+                valueClampRange: (height * .48, height * .58),
+              ),
             ),
             child: MeasureSize(
               onChange: (size) {
