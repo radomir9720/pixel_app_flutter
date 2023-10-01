@@ -145,7 +145,7 @@
   "chargingVoltageTabTitle": "Напряжение",
   "totalVoltageTileTitle": "Общее напряжение",
   "totalCurrentTileTitle": "Общий ток разряда/заряда",
-  "maximumRegisteredTemperatureTileTitle": "Максимально зафиксированная температура",
+  "maximumRegisteredTemperatureTileTitle": "Максимальная температура",
   "voltageValue": "{value} В",
   "@voltageValue": {
     "placeholders": {
