@@ -260,7 +260,7 @@
   "driveGearShort": "D",
   "lowGearShort": "L",
   "boostGearShort": "B",
-  "unknownGearShort": "U",
+  "unknownGearShort": "",
   "reverseMotorRollDirection": "Назад",
   "unknownMotorRollDirection": "Неизвестно",
   "forwardMotorRollDirection": "Вперед",
