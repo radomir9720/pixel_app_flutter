@@ -18,7 +18,7 @@ class GeneralInfoTab extends StatelessWidget {
             return ChargingScreenListTile(
               title: context.l10n.totalVoltageTileTitle,
               trailing: context.l10n.voltageValue(
-                (highVoltage.value ~/ 10).toStringAsFixed(2),
+                (highVoltage.value / 10).toStringAsFixed(2),
               ),
               status: highVoltage.status,
             );
@@ -30,7 +30,7 @@ class GeneralInfoTab extends StatelessWidget {
             return ChargingScreenListTile(
               title: context.l10n.totalCurrentTileTitle,
               trailing: context.l10n.currentValue(
-                (highCurrent.value ~/ 10).toStringAsFixed(2),
+                (highCurrent.value / 10).toStringAsFixed(2),
               ),
               status: highCurrent.status,
             );
