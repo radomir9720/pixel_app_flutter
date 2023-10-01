@@ -111,7 +111,8 @@ class BatteryLowVoltageTwentyFiveToTwentySevenIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageTwentyFiveToTwentySeven>
     with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageTwentyFiveToTwentySevenIncomingDataSourcePackage(
-      super.source);
+    super.source,
+  );
 
   @override
   BytesConverter<BatteryLowVoltageTwentyFiveToTwentySeven> get bytesConverter =>
@@ -138,7 +139,8 @@ class BatteryLowVoltageThirtyOneToThirtyThreeIncomingDataSourcePackage
     extends DataSourceIncomingPackage<BatteryLowVoltageThirtyOneToThirtyThree>
     with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
   BatteryLowVoltageThirtyOneToThirtyThreeIncomingDataSourcePackage(
-      super.source);
+    super.source,
+  );
 
   @override
   BytesConverter<BatteryLowVoltageThirtyOneToThirtyThree> get bytesConverter =>
