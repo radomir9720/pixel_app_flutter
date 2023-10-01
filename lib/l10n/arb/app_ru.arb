@@ -180,6 +180,14 @@
       }
     }
   },
+  "sensorNTileTitle": "Датчик {number}",
+  "@sensorNTileTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "minCellsVoltageTileTitle": "Минимальное напряжение на ячейках",
   "maxCellsVoltageTileTitle": "Максимальное напряжение на ячейках",
   "deltaCellsVoltageTileTitle": "Дельта напряжения на ячейках",

@@ -180,6 +180,14 @@
       }
     }
   },
+  "sensorNTileTitle": "Sensor {number}",
+  "@sensorNTileTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "minCellsVoltageTileTitle": "Minimum cells voltage",
   "maxCellsVoltageTileTitle": "Maximum cells voltage",
   "deltaCellsVoltageTileTitle": "Delta cells voltage",
