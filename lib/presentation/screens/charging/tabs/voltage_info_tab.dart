@@ -24,6 +24,9 @@ class VoltageInfoTab extends StatelessWidget {
           DataSourceParameterId.lowVoltageSixteenToEighteen(),
           DataSourceParameterId.lowVoltageNineteenToTwentyOne(),
           DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour(),
+          DataSourceParameterId.lowVoltageTwentyFiveToTwentySeven(),
+          DataSourceParameterId.lowVoltageTwentyEightToThirty(),
+          DataSourceParameterId.lowVoltageThirtyOneToThirtyThree(),
         ],
       ),
       body: CustomScrollView(
@@ -299,6 +302,96 @@ class VoltageInfoTab extends StatelessWidget {
                       title: context.l10n.cellNTileTitle(24),
                       trailing: context.l10n
                           .voltageValue(state.twentyFourth.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          BlocSelector<BatteryDataCubit, BatteryDataState,
+              BatteryLowVoltageTwentyFiveToTwentySeven>(
+            selector: (state) => state.lowVoltageTwentyFiveToTwentySeven,
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildListDelegate.fixed(
+                  [
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(25),
+                      trailing: context.l10n
+                          .voltageValue(state.twentyFifth.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(26),
+                      trailing: context.l10n
+                          .voltageValue(state.twentySixth.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(27),
+                      trailing: context.l10n
+                          .voltageValue(state.twentySeventh.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          BlocSelector<BatteryDataCubit, BatteryDataState,
+              BatteryLowVoltageTwentyEightToThirty>(
+            selector: (state) => state.lowVoltageTwentyEightToThirty,
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildListDelegate.fixed(
+                  [
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(28),
+                      trailing: context.l10n
+                          .voltageValue(state.twentyEighth.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(29),
+                      trailing: context.l10n
+                          .voltageValue(state.twentyNinth.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(30),
+                      trailing: context.l10n
+                          .voltageValue(state.thirtieth.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          BlocSelector<BatteryDataCubit, BatteryDataState,
+              BatteryLowVoltageThirtyOneToThirtyThree>(
+            selector: (state) => state.lowVoltageThirtyOneToThirtyThree,
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildListDelegate.fixed(
+                  [
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(31),
+                      trailing: context.l10n
+                          .voltageValue(state.thirtyFirst.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(32),
+                      trailing: context.l10n
+                          .voltageValue(state.thirtySecond.toStringAsFixed(3)),
+                      status: PeriodicValueStatus.normal,
+                    ),
+                    ChargingScreenListTile(
+                      title: context.l10n.cellNTileTitle(33),
+                      trailing: context.l10n
+                          .voltageValue(state.thirtyThird.toStringAsFixed(3)),
                       status: PeriodicValueStatus.normal,
                     ),
                   ],

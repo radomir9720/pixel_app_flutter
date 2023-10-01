@@ -25,6 +25,9 @@ class BatteryDataState with EquatableMixin {
     required this.lowVoltageSixteenToEighteen,
     required this.lowVoltageNineteenToTwentyOne,
     required this.lowVoltageTwentyTwoToTwentyFour,
+    required this.lowVoltageTwentyFiveToTwentySeven,
+    required this.lowVoltageTwentyEightToThirty,
+    required this.lowVoltageThirtyOneToThirtyThree,
   });
   const BatteryDataState.initial()
       : maxTemperature = const MaxTemperature.zero(),
@@ -45,7 +48,13 @@ class BatteryDataState with EquatableMixin {
         lowVoltageNineteenToTwentyOne =
             const BatteryLowVoltageNineteenToTwentyOne.zero(),
         lowVoltageTwentyTwoToTwentyFour =
-            const BatteryLowVoltageTwentyTwoToTwentyFour.zero();
+            const BatteryLowVoltageTwentyTwoToTwentyFour.zero(),
+        lowVoltageTwentyFiveToTwentySeven =
+            const BatteryLowVoltageTwentyFiveToTwentySeven.zero(),
+        lowVoltageTwentyEightToThirty =
+            const BatteryLowVoltageTwentyEightToThirty.zero(),
+        lowVoltageThirtyOneToThirtyThree =
+            const BatteryLowVoltageThirtyOneToThirtyThree.zero();
 
   final MaxTemperature maxTemperature;
   final HighCurrent highCurrent;
@@ -64,6 +73,11 @@ class BatteryDataState with EquatableMixin {
   final BatteryLowVoltageSixteenToEighteen lowVoltageSixteenToEighteen;
   final BatteryLowVoltageNineteenToTwentyOne lowVoltageNineteenToTwentyOne;
   final BatteryLowVoltageTwentyTwoToTwentyFour lowVoltageTwentyTwoToTwentyFour;
+  final BatteryLowVoltageTwentyFiveToTwentySeven
+      lowVoltageTwentyFiveToTwentySeven;
+  final BatteryLowVoltageTwentyEightToThirty lowVoltageTwentyEightToThirty;
+  final BatteryLowVoltageThirtyOneToThirtyThree
+      lowVoltageThirtyOneToThirtyThree;
 
   BatteryDataState copyWith({
     MaxTemperature? maxTemperature,
@@ -81,6 +95,9 @@ class BatteryDataState with EquatableMixin {
     BatteryLowVoltageSixteenToEighteen? lowVoltageSixteenToEighteen,
     BatteryLowVoltageNineteenToTwentyOne? lowVoltageNineteenToTwentyOne,
     BatteryLowVoltageTwentyTwoToTwentyFour? lowVoltageTwentyTwoToTwentyFour,
+    BatteryLowVoltageTwentyFiveToTwentySeven? lowVoltageTwentyFiveToTwentySeven,
+    BatteryLowVoltageTwentyEightToThirty? lowVoltageTwentyEightToThirty,
+    BatteryLowVoltageThirtyOneToThirtyThree? lowVoltageThirtyOneToThirtyThree,
   }) {
     return BatteryDataState(
       maxTemperature: maxTemperature ?? this.maxTemperature,
@@ -108,6 +125,12 @@ class BatteryDataState with EquatableMixin {
           lowVoltageNineteenToTwentyOne ?? this.lowVoltageNineteenToTwentyOne,
       lowVoltageTwentyTwoToTwentyFour: lowVoltageTwentyTwoToTwentyFour ??
           this.lowVoltageTwentyTwoToTwentyFour,
+      lowVoltageTwentyFiveToTwentySeven: lowVoltageTwentyFiveToTwentySeven ??
+          this.lowVoltageTwentyFiveToTwentySeven,
+      lowVoltageTwentyEightToThirty:
+          lowVoltageTwentyEightToThirty ?? this.lowVoltageTwentyEightToThirty,
+      lowVoltageThirtyOneToThirtyThree: lowVoltageThirtyOneToThirtyThree ??
+          this.lowVoltageThirtyOneToThirtyThree,
     );
   }
 
@@ -128,6 +151,9 @@ class BatteryDataState with EquatableMixin {
         lowVoltageSixteenToEighteen,
         lowVoltageNineteenToTwentyOne,
         lowVoltageTwentyTwoToTwentyFour,
+        lowVoltageTwentyFiveToTwentySeven,
+        lowVoltageTwentyEightToThirty,
+        lowVoltageThirtyOneToThirtyThree,
       ];
 }
 
@@ -219,6 +245,24 @@ class BatteryDataCubit extends Cubit<BatteryDataState>
             BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage>(
           (model) => emit(
             state.copyWith(lowVoltageTwentyTwoToTwentyFour: model),
+          ),
+        )
+        ..voidOnModel<BatteryLowVoltageTwentyFiveToTwentySeven,
+            BatteryLowVoltageTwentyFiveToTwentySevenIncomingDataSourcePackage>(
+          (model) => emit(
+            state.copyWith(lowVoltageTwentyFiveToTwentySeven: model),
+          ),
+        )
+        ..voidOnModel<BatteryLowVoltageTwentyEightToThirty,
+            BatteryLowVoltageTwentyEightToThirtyIncomingDataSourcePackage>(
+          (model) => emit(
+            state.copyWith(lowVoltageTwentyEightToThirty: model),
+          ),
+        )
+        ..voidOnModel<BatteryLowVoltageThirtyOneToThirtyThree,
+            BatteryLowVoltageThirtyOneToThirtyThreeIncomingDataSourcePackage>(
+          (model) => emit(
+            state.copyWith(lowVoltageThirtyOneToThirtyThree: model),
           ),
         );
     });

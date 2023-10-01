@@ -91,6 +91,10 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
       BatteryLowVoltageSixteenToEighteenIncomingDataSourcePackage.new,
       BatteryLowVoltageNineteenToTwentyOneIncomingDataSourcePackage.new,
       BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage.new,
+      BatteryLowVoltageTwentyFiveToTwentySevenIncomingDataSourcePackage.new,
+      BatteryLowVoltageTwentyEightToThirtyIncomingDataSourcePackage.new,
+      BatteryLowVoltageThirtyOneToThirtyThreeIncomingDataSourcePackage.new,
+
       BatteryLevelIncomingDataSourcePackage.new,
       BatteryPowerIncomingDataSourcePackage.new,
       //
