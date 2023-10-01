@@ -219,7 +219,7 @@ class _AppListTile extends StatelessWidget {
                 size: 15,
                 color: app.pinned ? null : AppColors.of(context).borderAccent,
               ),
-            )
+            ),
           ],
         ),
       ),

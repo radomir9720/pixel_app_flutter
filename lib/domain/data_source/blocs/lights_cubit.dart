@@ -581,7 +581,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
 
   static const kSideBeamParameterIds = [
     DataSourceParameterId.frontSideBeam(),
-    DataSourceParameterId.tailSideBeam()
+    DataSourceParameterId.tailSideBeam(),
   ];
 
   static const kLeftTurnSignalParameterIds = [

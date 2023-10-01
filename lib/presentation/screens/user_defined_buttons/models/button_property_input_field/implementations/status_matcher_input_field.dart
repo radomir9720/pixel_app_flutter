@@ -33,7 +33,7 @@ class StatusMatcherInputField
 extension GetStatusMatcher on ButtonPropertiesManager {
   StringMatcher? get statusMatcher {
     final map = {
-      ...?getOptional<StringMatcherProrpertiesMap, StatusMatcherInputField>()
+      ...?getOptional<StringMatcherProrpertiesMap, StatusMatcherInputField>(),
     };
     final elseResult = map.remove(0);
     if (map.isEmpty) return null;

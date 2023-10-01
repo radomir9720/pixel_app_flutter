@@ -81,7 +81,7 @@ class UserDefinedButtonsEndDrawer extends StatelessWidget {
                                     yAxisJoystick: YAxisJoystickButton.new,
                                     xAxisJoystick: XAxisJoystickButton.new,
                                     sendPackagesButton: SendPackagesButton.new,
-                                  )
+                                  ),
                               ],
                             ),
                           ),

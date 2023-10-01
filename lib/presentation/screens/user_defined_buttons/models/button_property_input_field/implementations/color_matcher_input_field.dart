@@ -34,7 +34,7 @@ class ColorMatcherInputField
 extension GetColorMatcherExtension on ButtonPropertiesManager {
   ColorMatcher? get colorMatcher {
     final map = {
-      ...?getOptional<ColorMatcherProrpertiesMap, ColorMatcherInputField>()
+      ...?getOptional<ColorMatcherProrpertiesMap, ColorMatcherInputField>(),
     };
     final elseResult = map.remove(0);
     if (map.isEmpty) return null;

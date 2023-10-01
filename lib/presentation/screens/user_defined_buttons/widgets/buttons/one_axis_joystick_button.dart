@@ -116,7 +116,7 @@ class _OneAxisJoystickButtonState extends State<OneAxisJoystickButton>
               requestType: package.requestType,
               parameterId: package.parameterId,
               data: [(value * 100).toInt()],
-            )
+            ),
         ]);
       },
     );

@@ -134,7 +134,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                 // ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

@@ -44,10 +44,10 @@ class SelectDataSourceScope extends StatelessWidget
                   EnterSerialNumberRoute(
                     dswa: dswa,
                     deviceId: deviceId,
-                  )
+                  ),
                 ];
               },
-            )
+            ),
         ];
       },
     );
@@ -180,7 +180,7 @@ class SelectDataSourceScope extends StatelessWidget
               },
             );
           },
-        )
+        ),
       ],
       child: this,
     );

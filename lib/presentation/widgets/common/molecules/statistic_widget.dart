@@ -28,7 +28,7 @@ class StatisticWidget extends StatelessWidget {
       BlocSelector<GeneralDataCubit, GeneralDataState, IntWithStatus>(
         selector: (state) => state.power,
         builder: (context, state) => PowerStatisticItem(item: state),
-      )
+      ),
     ];
 
     return Padding(

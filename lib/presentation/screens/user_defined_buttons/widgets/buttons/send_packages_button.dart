@@ -25,7 +25,7 @@ class SendPackagesButton extends StatelessWidget {
         TapOutgoingPackagesInputFields(
           initialPackagesCount: 1,
           validators: [
-            context.minPropertyEntriesValidator<OutgoingPackagesMap>(1)
+            context.minPropertyEntriesValidator<OutgoingPackagesMap>(1),
           ],
           initialPackages: initialValue?.onTap,
         ),

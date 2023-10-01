@@ -165,7 +165,7 @@ class _PackagesExchangeConsoleScreenState
                                 ...dataController.text
                                     .replaceAll(',', ' ')
                                     .split(' ')
-                                    .map((e) => int.tryParse(e.trim()))
+                                    .map((e) => int.tryParse(e.trim())),
                             ];
                             if (requestType == null ||
                                 !DataSourceRequestType.isValid(requestType)) {
@@ -219,7 +219,7 @@ class _PackagesExchangeConsoleScreenState
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

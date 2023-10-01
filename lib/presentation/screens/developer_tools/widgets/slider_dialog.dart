@@ -62,7 +62,7 @@ class _SliderDialogState extends State<SliderDialog> {
             Navigator.of(context).pop<int>(newValue.toInt());
           },
           child: Text(context.l10n.saveButtonCaption),
-        )
+        ),
       ],
     );
   }

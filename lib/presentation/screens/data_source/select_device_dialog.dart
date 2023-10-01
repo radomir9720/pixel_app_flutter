@@ -122,7 +122,7 @@ class _SelectDeviceDialogState extends State<SelectDeviceDialog> {
                               },
                             ).divideBy(
                               const SizedBox(height: 16),
-                            )
+                            ),
                           ],
                         ),
                       ),

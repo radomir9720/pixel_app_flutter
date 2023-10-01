@@ -108,7 +108,7 @@ class ProcessedRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
 
     emit([
       ...state.reversed.take(maxItems - 1).toList().reversed,
-      ProcessedRequestsExchangeLogsState(data, DateTime.now(), direction)
+      ProcessedRequestsExchangeLogsState(data, DateTime.now(), direction),
     ]);
   }
 }
@@ -124,7 +124,7 @@ class RawRequestsExchangeLogsCubit extends RequestsExchangeLogsCubitBase<
 
     emit([
       ...state.reversed.take(maxItems - 1).toList().reversed,
-      RawRequestsExchangeLogsState(data, DateTime.now(), direction)
+      RawRequestsExchangeLogsState(data, DateTime.now(), direction),
     ]);
   }
 }

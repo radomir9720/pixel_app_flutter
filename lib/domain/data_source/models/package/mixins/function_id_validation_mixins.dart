@@ -28,7 +28,7 @@ mixin IsSetResponseFunctionIdMixin<T extends BytesConvertible>
     on DataSourceIncomingPackage<T> {
   static const kSetResponseFunctionIds = [
     FunctionId.successSetValueWithParamId,
-    FunctionId.errorSettingValueWithParamId
+    FunctionId.errorSettingValueWithParamId,
   ];
 
   @override
