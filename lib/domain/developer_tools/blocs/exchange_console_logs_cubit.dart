@@ -56,7 +56,7 @@ class ExchangeConsoleLogsCubit
 
     emit([
       ...state.reversed.take(maxItems - 1).toList().reversed,
-      RawRequestsExchangeLogsState(data, log.dateTime, direction)
+      RawRequestsExchangeLogsState(data, log.dateTime, direction),
     ]);
   }
 

@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
+import 'package:pixel_app_flutter/presentation/app/extensions.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 
 class StatisticItem extends StatelessWidget {
   const StatisticItem({
@@ -44,13 +46,17 @@ class StatisticItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = customColor ?? AppColors.of(context).textAccent;
+    final width = Screen.of(context).size.width;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           icon,
-          size: 20,
+          size: width.flexSize(
+            screenFlexRange: (800, 1000),
+            valueClampRange: (20, 25),
+          ),
           color: color,
         ),
         const SizedBox(
@@ -61,12 +67,24 @@ class StatisticItem extends StatelessWidget {
             children: [
               TextSpan(
                 text: '$value ',
-                style: valueTextStyle.copyWith(color: color),
+                style: valueTextStyle.copyWith(
+                  color: color,
+                  fontSize: width.flexSize(
+                    screenFlexRange: (800, 1000),
+                    valueClampRange: (14, 16),
+                  ),
+                ),
               ),
               if (measurementUnit != null)
                 TextSpan(
                   text: measurementUnit,
-                  style: measurementUnitTextStyle.copyWith(color: color),
+                  style: measurementUnitTextStyle.copyWith(
+                    color: color,
+                    fontSize: width.flexSize(
+                      screenFlexRange: (800, 1000),
+                      valueClampRange: (12, 14),
+                    ),
+                  ),
                 ),
             ],
           ),

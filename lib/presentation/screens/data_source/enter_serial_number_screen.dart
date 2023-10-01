@@ -238,7 +238,7 @@ class _EnterSerialNumberFieldsState extends State<_EnterSerialNumberFields> {
                       node.nextFocus();
                     },
                     onOverfill: (value) {},
-                  )
+                  ),
                 ],
               ),
             ),

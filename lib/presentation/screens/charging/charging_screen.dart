@@ -33,7 +33,7 @@ class ChargingScreen extends StatelessWidget {
                     VoltageInfoTab(),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

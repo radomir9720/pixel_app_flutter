@@ -184,7 +184,7 @@ class _NumValueGetterInputFieldWidgetState
                                           ?.toString(),
                                       preMapValidators: (context) {
                                         return [
-                                          context.intOrNullStringValidator()
+                                          context.intOrNullStringValidator(),
                                         ];
                                       },
                                       keyboardType: TextInputType.number,

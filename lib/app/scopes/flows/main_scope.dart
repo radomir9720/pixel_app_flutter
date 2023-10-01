@@ -73,7 +73,7 @@ class MainScope extends SingleChildStatelessWidget {
           BlocProvider(
             create: (context) =>
                 ExchangeConsoleLogsCubit(filterCubit: context.read()),
-          )
+          ),
         ],
       ],
       child: child,

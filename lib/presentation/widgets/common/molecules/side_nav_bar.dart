@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pixel_app_flutter/presentation/app/extensions.dart';
+import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/nav_bar_colors.dart';
 
 class SideNavBar extends StatelessWidget {
@@ -30,6 +32,9 @@ class SideNavBar extends StatelessWidget {
   static const circularRadius = Radius.circular(100);
 
   @protected
+  static const (double, double) kScreenFlexRange = (600, 700);
+
+  @protected
   static const textStyle = TextStyle(
     fontSize: 11,
     height: 1.21,
@@ -56,16 +61,28 @@ class SideNavBar extends StatelessWidget {
           top: isFirst ? circularRadius : Radius.zero,
           bottom: isLast ? circularRadius : Radius.zero,
         );
+        final height = Screen.of(context).size.height;
 
-        return Row(
-          children: [
-            SizedBox(
-              width: 38,
-              height: 42,
-              child: InkWell(
-                onTap: () => onTap(item.pageIndex),
-                onLongPress: () => onLongTap?.call(item.pageIndex),
-                borderRadius: borderRadius,
+        return InkWell(
+          onTap: () => onTap(item.pageIndex),
+          onLongPress: () => onLongTap?.call(item.pageIndex),
+          borderRadius: !showTitle
+              ? borderRadius
+              : borderRadius.copyWith(
+                  topRight: circularRadius,
+                  bottomRight: circularRadius,
+                ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: height.flexSize(
+                  screenFlexRange: kScreenFlexRange,
+                  valueClampRange: (38, 45),
+                ),
+                height: height.flexSize(
+                  screenFlexRange: kScreenFlexRange,
+                  valueClampRange: (42, 50),
+                ),
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     borderRadius: borderRadius,
@@ -75,21 +92,37 @@ class SideNavBar extends StatelessWidget {
                   ),
                   child: Icon(
                     item.icon,
-                    size: 15,
+                    size: height.flexSize(
+                      screenFlexRange: kScreenFlexRange,
+                      valueClampRange: (15, 20),
+                    ),
                     color: colors.icon,
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 17),
-            if (showTitle)
-              Text(
-                item.title,
-                style: textStyle.copyWith(
-                  color: selected ? colors.selectedText : colors.unselectedText,
+              if (showTitle) ...[
+                const SizedBox(width: 17),
+                SizedBox(
+                  width: 88,
+                  child: Text(
+                    item.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: textStyle.copyWith(
+                      fontSize: height.flexSize(
+                        screenFlexRange: kScreenFlexRange,
+                        valueClampRange: (11, 13),
+                      ),
+                      color: selected
+                          ? colors.selectedText
+                          : colors.unselectedText,
+                    ),
+                  ),
                 ),
-              ),
-          ],
+                const SizedBox(width: 17),
+              ],
+            ],
+          ),
         );
       }),
     );

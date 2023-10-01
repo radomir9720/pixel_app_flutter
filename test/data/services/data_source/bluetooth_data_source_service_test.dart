@@ -279,7 +279,7 @@ void main() {
             'when in the buffer remained more than or equal '
             'to minimum package length', () async {
           // arrange
-          const validPackage = [60, 0, 149, 84, 0, 3, 97, 124, 6, 56, 169, 62];
+          const validPackage = [60, 0, 149, 87, 0, 3, 97, 124, 6, 69, 165, 62];
           ds.buffer.addAll([
             1, 2, 3, 4, 5, 6, //
             ...validPackage,
@@ -330,7 +330,7 @@ void main() {
           // Instead of 43 should be 62(ending byte)
           const endingByteInWrongPlace = [
             60, 0, 144, 0, 0, 0, 222, 71, 43, //
-            62 // This is a wrong place
+            62, // This is a wrong place
           ];
           ds.buffer.addAll(endingByteInWrongPlace);
 
@@ -353,7 +353,7 @@ void main() {
           // Instead of 43 should be 62(ending byte)
           const endingByteInWrongPlace = [
             60, 0, 144, 0, 0, 0, 222, 71, 43, //
-            62, 43, 60
+            62, 43, 60,
           ];
           ds.buffer.addAll(endingByteInWrongPlace);
 
@@ -400,7 +400,7 @@ void main() {
             8, //
             97, 41, 5, 110, 254, 48, 0, 0, //
             129, 127, //
-            62 //
+            62, //
           ],
         );
 
@@ -927,7 +927,7 @@ const _noEndingByte = [
   60, 0, 144, 255, 255, 4, 29, 109, 37, 0, 138, 111, 62, //
   60, 0, 149, 6, 1, 5, 97, 137, 0, 137, 0, 17, 102, 62, //
   60, 0, 149, 6, 1, 5, 97, 138, 0, 138, 0, 180, 105, 62, //
-  60, 0, 149, 6, 1, 5, 97, 139, 0, 139, 0, 215, 108 //
+  60, 0, 149, 6, 1, 5, 97, 139, 0, 139, 0, 215, 108, //
 ];
 
 const _correctBytesOrder = [

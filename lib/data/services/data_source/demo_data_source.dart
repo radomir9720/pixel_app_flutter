@@ -469,6 +469,15 @@ class DemoDataSource extends DataSource
       ..voidOn<LowVoltageTwentyTwoToTwentyFourParameterId>(
         _sendLowVoltageTwentyTwoToTwentyFourCallback,
       )
+      ..voidOn<LowVoltageTwentyFiveToTwentySevenParameterId>(
+        _sendLowVoltageTwentyFiveToTwentySevenCallback,
+      )
+      ..voidOn<LowVoltageTwentyEightToThirtyParameterId>(
+        _sendLowVoltageTwentyEightToThirtyCallback,
+      )
+      ..voidOn<LowVoltageThirtyOneToThirtyThreeParameterId>(
+        _sendLowVoltageThirtyOneToThirtyThreeCallback,
+      )
       // Lights
       ..voidOn<FrontSideBeamParameterId>(() {
         _sendSetBoolUint8ResultCallback(
@@ -959,6 +968,53 @@ class DemoDataSource extends DataSource
           twentySecond: randomDoubleUint16,
           twentyThird: randomDoubleUint16,
           twentyFourth: randomDoubleUint16,
+        ),
+      ),
+    );
+  }
+
+  void _sendLowVoltageTwentyFiveToTwentySevenCallback() {
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId:
+            const DataSourceParameterId.lowVoltageTwentyFiveToTwentySeven()
+                .value,
+        convertible: BatteryLowVoltageTwentyFiveToTwentySeven(
+          twentyFifth: randomDoubleUint16,
+          twentySixth: randomDoubleUint16,
+          twentySeventh: randomDoubleUint16,
+        ),
+      ),
+    );
+  }
+
+  void _sendLowVoltageTwentyEightToThirtyCallback() {
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId:
+            const DataSourceParameterId.lowVoltageTwentyEightToThirty().value,
+        convertible: BatteryLowVoltageTwentyEightToThirty(
+          twentyEighth: randomDoubleUint16,
+          twentyNinth: randomDoubleUint16,
+          thirtieth: randomDoubleUint16,
+        ),
+      ),
+    );
+  }
+
+  void _sendLowVoltageThirtyOneToThirtyThreeCallback() {
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId:
+            const DataSourceParameterId.lowVoltageThirtyOneToThirtyThree()
+                .value,
+        convertible: BatteryLowVoltageThirtyOneToThirtyThree(
+          thirtyFirst: randomDoubleUint16,
+          thirtySecond: randomDoubleUint16,
+          thirtyThird: randomDoubleUint16,
         ),
       ),
     );

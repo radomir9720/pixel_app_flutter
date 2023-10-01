@@ -25,7 +25,7 @@ class BottomInterfacesMenu extends StatelessWidget {
       children: [
         if (screenType.isHandset && isPortrait) ...[
           const MainInterfacesWidget(),
-          const SizedBox(height: 18)
+          const SizedBox(height: 18),
         ],
         Row(
           crossAxisAlignment:

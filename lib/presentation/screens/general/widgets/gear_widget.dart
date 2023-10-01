@@ -1,11 +1,21 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/app/colors.dart';
+import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 
 class GearWidget extends StatelessWidget {
-  const GearWidget({super.key});
+  const GearWidget({
+    super.key,
+    required this.screenSize,
+  });
+
+  @protected
+  final Size screenSize;
 
   @protected
   static const kTextStyle = TextStyle(
@@ -13,6 +23,7 @@ class GearWidget extends StatelessWidget {
     fontSize: 50,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w700,
+    fontFeatures: [FontFeature.tabularFigures()],
   );
 
   @override
@@ -30,7 +41,13 @@ class GearWidget extends StatelessWidget {
         );
         return Text(
           gear,
-          style: kTextStyle,
+          style: kTextStyle.copyWith(
+            color: context.colors.text,
+            fontSize: screenSize.height.flexSize(
+              screenFlexRange: (600, 700),
+              valueClampRange: (50, 60),
+            ),
+          ),
         );
       },
     );

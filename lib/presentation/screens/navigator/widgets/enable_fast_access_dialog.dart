@@ -59,7 +59,7 @@ class EnableFastAccessDialog extends StatelessWidget {
             style: kContentWarningTextStyle.copyWith(
               color: context.colors.text,
             ),
-          )
+          ),
         ],
       ),
       actions: [

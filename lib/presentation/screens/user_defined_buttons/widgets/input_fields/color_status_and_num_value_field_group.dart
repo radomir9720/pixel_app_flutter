@@ -53,13 +53,13 @@ class _ColorStatusAndNumValueFieldGroupWidgetState
   ]) {
     final _colorMatcher = {
       ...?colorMatcher ??
-          widget.manager
-              .getOptional<ColorMatcherProrpertiesMap, ColorMatcherInputField>()
+          widget.manager.getOptional<ColorMatcherProrpertiesMap,
+              ColorMatcherInputField>(),
     }..remove(0);
     final _titleMatcher = {
       ...?titleMatcher ??
           widget.manager.getOptional<StringMatcherProrpertiesMap,
-              StatusMatcherInputField>()
+              StatusMatcherInputField>(),
     }..remove(0);
     var numValueGetterParametersEnabled = numValueGetterParameters != null;
 
@@ -167,7 +167,7 @@ class _ColorStatusAndNumValueFieldGroupWidgetState
                             e.id: generateDefaultColorIfStatement(
                               int.parse(e.value ?? ''),
                               e.propertyEntry!,
-                            )
+                            ),
                         });
                       },
                     );

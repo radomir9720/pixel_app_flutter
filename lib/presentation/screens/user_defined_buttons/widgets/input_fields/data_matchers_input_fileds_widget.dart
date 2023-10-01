@@ -774,7 +774,7 @@ class _SelectDataParametersDialogState
                   },
                   child: Text(context.l10n.signedByteLabel),
                 ),
-              )
+              ),
             ],
           ),
         ],

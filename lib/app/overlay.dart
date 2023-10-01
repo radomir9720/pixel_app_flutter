@@ -133,7 +133,7 @@ class _OverlayGeneralStatisticsState extends State<OverlayGeneralStatistics> {
                                                 color:
                                                     context.colors.textAccent,
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),

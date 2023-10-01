@@ -28,7 +28,7 @@ class StatisticWidget extends StatelessWidget {
       BlocSelector<GeneralDataCubit, GeneralDataState, IntWithStatus>(
         selector: (state) => state.power,
         builder: (context, state) => PowerStatisticItem(item: state),
-      )
+      ),
     ];
 
     return Padding(
@@ -44,17 +44,24 @@ class StatisticWidget extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           if (useWrap)
-            Wrap(
-              runSpacing: 16,
-              spacing: 85,
-              children: items
-                  .map(
-                    (child) => SizedBox(
-                      width: 150,
-                      child: child,
-                    ),
-                  )
-                  .toList(),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: Wrap(
+                runSpacing: 16,
+                spacing: 85,
+                children: items
+                    .map(
+                      (child) => SizedBox(
+                        width: 150,
+                        child: FittedBox(
+                          alignment: Alignment.centerLeft,
+                          fit: BoxFit.scaleDown,
+                          child: child,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
             )
           else
             FittedBox(

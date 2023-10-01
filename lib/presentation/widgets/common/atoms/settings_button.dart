@@ -107,7 +107,7 @@ class SettingsButton extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox.shrink()
+              const SizedBox.shrink(),
             ],
           ),
         ),

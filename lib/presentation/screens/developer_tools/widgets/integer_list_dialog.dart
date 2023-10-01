@@ -152,7 +152,7 @@ class _IntegerListDialogState extends State<IntegerListDialog> {
             Navigator.of(context).pop<List<int>>(newValue.toList());
           },
           child: Text(context.l10n.saveButtonCaption),
-        )
+        ),
       ],
     );
   }

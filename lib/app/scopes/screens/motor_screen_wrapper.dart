@@ -26,7 +26,7 @@ class MotorScreenWrapper extends StatelessWidget with AutoRouteWrapper {
               dataSource: context.read(),
             );
           },
-        )
+        ),
       ],
       child: this,
     );

@@ -40,27 +40,27 @@ class TemperatureInfoTab extends StatelessWidget {
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(1),
+                      title: context.l10n.sensorNTileTitle(1),
                       trailing: context.l10n.celsiusValue(state.first),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(2),
+                      title: context.l10n.sensorNTileTitle(2),
                       trailing: context.l10n.celsiusValue(state.second),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(3),
+                      title: context.l10n.sensorNTileTitle(3),
                       trailing: context.l10n.celsiusValue(state.third),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(4),
+                      title: context.l10n.sensorNTileTitle(4),
                       trailing: context.l10n.celsiusValue(state.fourth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(5),
+                      title: context.l10n.sensorNTileTitle(5),
                       trailing: context.l10n.celsiusValue(state.fifth),
                       status: PeriodicValueStatus.normal,
                     ),
@@ -78,37 +78,37 @@ class TemperatureInfoTab extends StatelessWidget {
                 delegate: SliverChildListDelegate.fixed(
                   [
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(6),
+                      title: context.l10n.sensorNTileTitle(6),
                       trailing: context.l10n.celsiusValue(state.sixth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(7),
+                      title: context.l10n.sensorNTileTitle(7),
                       trailing: context.l10n.celsiusValue(state.seventh),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(8),
+                      title: context.l10n.sensorNTileTitle(8),
                       trailing: context.l10n.celsiusValue(state.eighth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(9),
+                      title: context.l10n.sensorNTileTitle(9),
                       trailing: context.l10n.celsiusValue(state.ninth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(10),
+                      title: context.l10n.sensorNTileTitle(10),
                       trailing: context.l10n.celsiusValue(state.tenth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(11),
+                      title: context.l10n.sensorNTileTitle(11),
                       trailing: context.l10n.celsiusValue(state.eleventh),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(12),
+                      title: context.l10n.sensorNTileTitle(12),
                       trailing: context.l10n.celsiusValue(state.twelfth),
                       status: PeriodicValueStatus.normal,
                     ),
@@ -126,37 +126,37 @@ class TemperatureInfoTab extends StatelessWidget {
                 delegate: SliverChildListDelegate.fixed(
                   [
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(13),
+                      title: context.l10n.sensorNTileTitle(13),
                       trailing: context.l10n.celsiusValue(state.thirteenth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(14),
+                      title: context.l10n.sensorNTileTitle(14),
                       trailing: context.l10n.celsiusValue(state.fourteenth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(15),
+                      title: context.l10n.sensorNTileTitle(15),
                       trailing: context.l10n.celsiusValue(state.fifteenth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(16),
+                      title: context.l10n.sensorNTileTitle(16),
                       trailing: context.l10n.celsiusValue(state.sixteenth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(17),
+                      title: context.l10n.sensorNTileTitle(17),
                       trailing: context.l10n.celsiusValue(state.seventeenth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(18),
+                      title: context.l10n.sensorNTileTitle(18),
                       trailing: context.l10n.celsiusValue(state.eighteenth),
                       status: PeriodicValueStatus.normal,
                     ),
                     ChargingScreenListTile(
-                      title: context.l10n.cellNTileTitle(19),
+                      title: context.l10n.sensorNTileTitle(19),
                       trailing: context.l10n.celsiusValue(state.nineteenth),
                       status: PeriodicValueStatus.normal,
                     ),

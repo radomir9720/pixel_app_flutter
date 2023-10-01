@@ -25,7 +25,7 @@ final class LEDConfigsStorageImpl
     final result = [
       ...?value?.map(
         (e) => LEDPanelConfig.fromJson(jsonDecode(e) as Map<String, dynamic>),
-      )
+      ),
     ];
     await put(result);
     return Result.value(result);

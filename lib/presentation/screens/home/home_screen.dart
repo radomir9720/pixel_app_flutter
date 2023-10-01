@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                         tabsRouter: tabsRouter,
                         isHandset: screenType.isHandset,
                         showTitle: showSideNavBarTitle,
-                      )
+                      ),
                   ],
                 ),
               ),

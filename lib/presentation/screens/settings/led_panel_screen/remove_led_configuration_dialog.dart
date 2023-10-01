@@ -55,7 +55,7 @@ class RemoveLEDConfigurationDialog extends StatelessWidget {
               );
             },
           ),
-        )
+        ),
       ],
     );
   }

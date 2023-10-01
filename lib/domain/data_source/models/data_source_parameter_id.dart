@@ -49,6 +49,12 @@ abstract class DataSourceParameterId {
       LowVoltageNineteenToTwentyOneParameterId;
   const factory DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour() =
       LowVoltageTwentyTwoToTwentyFourParameterId;
+  const factory DataSourceParameterId.lowVoltageTwentyFiveToTwentySeven() =
+      LowVoltageTwentyFiveToTwentySevenParameterId;
+  const factory DataSourceParameterId.lowVoltageTwentyEightToThirty() =
+      LowVoltageTwentyEightToThirtyParameterId;
+  const factory DataSourceParameterId.lowVoltageThirtyOneToThirtyThree() =
+      LowVoltageThirtyOneToThirtyThreeParameterId;
   const factory DataSourceParameterId.batteryLevel() = BatteryLevelParameterId;
   const factory DataSourceParameterId.batteryPower() = BatteryPowerParameterId;
 
@@ -126,6 +132,12 @@ abstract class DataSourceParameterId {
       this is LowVoltageNineteenToTwentyOneParameterId;
   bool get isLowVoltageTwentyTwoToTwentyFour =>
       this is LowVoltageTwentyTwoToTwentyFourParameterId;
+  bool get isLowVoltageTwentyFiveToTwentySeven =>
+      this is LowVoltageTwentyFiveToTwentySevenParameterId;
+  bool get isLowVoltageTwentyEightToThirty =>
+      this is LowVoltageTwentyEightToThirtyParameterId;
+  bool get isLowVoltageThirtyOneToThirtyThree =>
+      this is LowVoltageThirtyOneToThirtyThreeParameterId;
   bool get isBatteryLevel => this is BatteryLevelParameterId;
   bool get isBatteryPower => this is BatteryPowerParameterId;
 
@@ -184,6 +196,9 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.lowVoltageSixteenToEighteen(),
       DataSourceParameterId.lowVoltageNineteenToTwentyOne(),
       DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour(),
+      DataSourceParameterId.lowVoltageTwentyFiveToTwentySeven(),
+      DataSourceParameterId.lowVoltageTwentyEightToThirty(),
+      DataSourceParameterId.lowVoltageThirtyOneToThirtyThree(),
       //
       DataSourceParameterId.frontSideBeam(),
       DataSourceParameterId.tailSideBeam(),
@@ -312,12 +327,26 @@ class LowVoltageTwentyTwoToTwentyFourParameterId extends DataSourceParameterId {
   const LowVoltageTwentyTwoToTwentyFourParameterId() : super(0x0052);
 }
 
+class LowVoltageTwentyFiveToTwentySevenParameterId
+    extends DataSourceParameterId {
+  const LowVoltageTwentyFiveToTwentySevenParameterId() : super(0x0053);
+}
+
+class LowVoltageTwentyEightToThirtyParameterId extends DataSourceParameterId {
+  const LowVoltageTwentyEightToThirtyParameterId() : super(0x0054);
+}
+
+class LowVoltageThirtyOneToThirtyThreeParameterId
+    extends DataSourceParameterId {
+  const LowVoltageThirtyOneToThirtyThreeParameterId() : super(0x0055);
+}
+
 class BatteryLevelParameterId extends DataSourceParameterId {
-  const BatteryLevelParameterId() : super(0x0053);
+  const BatteryLevelParameterId() : super(0x0056);
 }
 
 class BatteryPowerParameterId extends DataSourceParameterId {
-  const BatteryPowerParameterId() : super(0x0054);
+  const BatteryPowerParameterId() : super(0x0057);
 }
 
 // Lights

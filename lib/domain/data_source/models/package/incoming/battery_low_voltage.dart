@@ -106,3 +106,46 @@ class BatteryLowVoltageTwentyTwoToTwentyFourIncomingDataSourcePackage
   @override
   bool get validParameterId => parameterId.isLowVoltageTwentyTwoToTwentyFour;
 }
+
+class BatteryLowVoltageTwentyFiveToTwentySevenIncomingDataSourcePackage
+    extends DataSourceIncomingPackage<BatteryLowVoltageTwentyFiveToTwentySeven>
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
+  BatteryLowVoltageTwentyFiveToTwentySevenIncomingDataSourcePackage(
+    super.source,
+  );
+
+  @override
+  BytesConverter<BatteryLowVoltageTwentyFiveToTwentySeven> get bytesConverter =>
+      BatteryLowVoltageTwentyFiveToTwentySevenConverter();
+
+  @override
+  bool get validParameterId => parameterId.isLowVoltageTwentyFiveToTwentySeven;
+}
+
+class BatteryLowVoltageTwentyEightToThirtyIncomingDataSourcePackage
+    extends DataSourceIncomingPackage<BatteryLowVoltageTwentyEightToThirty>
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
+  BatteryLowVoltageTwentyEightToThirtyIncomingDataSourcePackage(super.source);
+
+  @override
+  BytesConverter<BatteryLowVoltageTwentyEightToThirty> get bytesConverter =>
+      BatteryLowVoltageTwentyEightToThirtyConverter();
+
+  @override
+  bool get validParameterId => parameterId.isLowVoltageTwentyEightToThirty;
+}
+
+class BatteryLowVoltageThirtyOneToThirtyThreeIncomingDataSourcePackage
+    extends DataSourceIncomingPackage<BatteryLowVoltageThirtyOneToThirtyThree>
+    with IsEventOrBufferRequestRequestTypeMixin, IsSuccessEventFunctionIdMixin {
+  BatteryLowVoltageThirtyOneToThirtyThreeIncomingDataSourcePackage(
+    super.source,
+  );
+
+  @override
+  BytesConverter<BatteryLowVoltageThirtyOneToThirtyThree> get bytesConverter =>
+      BatteryLowVoltageThirtyOneToThirtyThreeConverter();
+
+  @override
+  bool get validParameterId => parameterId.isLowVoltageThirtyOneToThirtyThree;
+}

@@ -143,7 +143,7 @@ class ExchangeLogCard extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 TableRow(
@@ -161,7 +161,7 @@ class ExchangeLogCard extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
