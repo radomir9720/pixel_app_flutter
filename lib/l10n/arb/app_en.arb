@@ -144,7 +144,7 @@
   "chargingTemperatureTabTitle": "Temperature",
   "chargingVoltageTabTitle": "Voltage",
   "totalVoltageTileTitle": "Total voltage",
-  "totalCurrentTileTitle": "Total charge/discharge current",
+  "totalCurrentTileTitle": "Total discharge/charge current",
   "maximumRegisteredTemperatureTileTitle": "Maximum registered temperature",
   "voltageValue": "{value} V",
   "@voltageValue": {
