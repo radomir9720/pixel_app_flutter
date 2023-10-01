@@ -313,11 +313,11 @@ class LowVoltageTwentyTwoToTwentyFourParameterId extends DataSourceParameterId {
 }
 
 class BatteryLevelParameterId extends DataSourceParameterId {
-  const BatteryLevelParameterId() : super(0x0053);
+  const BatteryLevelParameterId() : super(0x0056);
 }
 
 class BatteryPowerParameterId extends DataSourceParameterId {
-  const BatteryPowerParameterId() : super(0x0054);
+  const BatteryPowerParameterId() : super(0x0057);
 }
 
 // Lights
