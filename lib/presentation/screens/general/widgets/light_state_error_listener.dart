@@ -30,6 +30,8 @@ class LightStateErrorListener extends SingleChildStatelessWidget {
               MapEntry(context.l10n.reverseLightButtonCaption, error),
           brake: (error) =>
               MapEntry(context.l10n.brakeLightButtonCaption, error),
+          cabin: (error) =>
+              MapEntry(context.l10n.cabinLightButtonCaption, error),
         );
 
         if (errors.isEmpty) return false;

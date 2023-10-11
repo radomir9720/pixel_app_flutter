@@ -473,5 +473,6 @@
     }
   },
   "displaySwitcherButtonCaption": "Display",
-  "dontDisplaySwitcherButtonCaption": "Don't display"
+  "dontDisplaySwitcherButtonCaption": "Don't display",
+  "cabinLightButtonCaption": "Cabin light"
 }

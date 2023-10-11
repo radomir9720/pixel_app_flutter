@@ -11,6 +11,7 @@ import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/relay_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/atoms/car_interface_pointer.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/car_interface_switcher.dart';
+import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
 
 class CarWidget extends StatefulWidget {
@@ -104,6 +105,38 @@ class _CarWidgetState extends State<CarWidget> {
             ),
           ),
           if (carSize != Size.zero) ...[
+            // Cabin light
+            Positioned.fill(
+              child: BlocSelector<LightsCubit, LightsState,
+                  AsyncData<bool, LightsStateError>>(
+                selector: (state) => state.cabin,
+                builder: (context, state) {
+                  final buttonState = state.maybeWhen(
+                    orElse: (payload) => PIconButtonState.enabled,
+                    success: (payload) {
+                      return payload
+                          ? PIconButtonState.success
+                          : PIconButtonState.error;
+                    },
+                  );
+                  return Center(
+                    child: Transform.scale(
+                      scale: buttonScaleCoef,
+                      child: CarInterfaceSwitcher(
+                        icon: PixelIcons.light,
+                        state: buttonState,
+                        onPressed: context.read<LightsCubit>().toggleCabinLight,
+                        title: context.l10n.cabinLightButtonCaption,
+                        status: state.payload
+                            ? context.l10n.onShortStatusMessage
+                            : context.l10n.offShortStatusMessage,
+                        titleSide: CarInterfaceSwitcherTitleSide.bottom,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
             // Left door
             Positioned(
               top: 0,

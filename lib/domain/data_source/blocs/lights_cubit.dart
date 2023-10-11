@@ -134,6 +134,7 @@ final class LightsState with EquatableMixin {
     required this.highBeam,
     required this.reverse,
     required this.brake,
+    required this.cabin,
   });
 
   const LightsState.initial({
@@ -145,6 +146,7 @@ final class LightsState with EquatableMixin {
     this.highBeam = const AsyncData.loading(false),
     this.reverse = const AsyncData.loading(false),
     this.brake = const AsyncData.loading(false),
+    this.cabin = const AsyncData.loading(false),
   });
 
   final LightState<TwoBoolsState> leftTurnSignal;
@@ -155,6 +157,7 @@ final class LightsState with EquatableMixin {
   final LightState<bool> highBeam;
   final LightState<bool> reverse;
   final LightState<bool> brake;
+  final LightState<bool> cabin;
 
   bool get hasFailureState => [
         leftTurnSignal,
@@ -165,6 +168,7 @@ final class LightsState with EquatableMixin {
         highBeam,
         reverse,
         brake,
+        cabin,
       ].any((element) => element.isFailure);
 
   List<R> whenFailure<R>(
@@ -177,6 +181,7 @@ final class LightsState with EquatableMixin {
     required R Function(LightsStateError error) highBeam,
     required R Function(LightsStateError error) reverse,
     required R Function(LightsStateError error) brake,
+    required R Function(LightsStateError error) cabin,
   }) {
     final leftTurnSignalError = this.leftTurnSignal.error;
     final rightTurnSignalError = this.rightTurnSignal.error;
@@ -186,6 +191,7 @@ final class LightsState with EquatableMixin {
     final sideBeamError = this.sideBeam.error;
     final reverseError = this.reverse.error;
     final brakeError = this.brake.error;
+    final cabinError = this.cabin.error;
 
     final errors = [
       _filterError(
@@ -228,6 +234,11 @@ final class LightsState with EquatableMixin {
         prevState.brake.error,
         brake,
       ),
+      _filterError(
+        cabinError,
+        prevState.cabin.error,
+        cabin,
+      ),
     ].whereType<R>().toList();
 
     return errors;
@@ -254,6 +265,7 @@ final class LightsState with EquatableMixin {
         highBeam,
         reverse,
         brake,
+        cabin,
       ];
 
   LightsState copyWith({
@@ -265,6 +277,7 @@ final class LightsState with EquatableMixin {
     LightState<bool>? highBeam,
     LightState<bool>? reverse,
     LightState<bool>? brake,
+    LightState<bool>? cabin,
   }) {
     return LightsState(
       leftTurnSignal: leftTurnSignal ?? this.leftTurnSignal,
@@ -275,6 +288,7 @@ final class LightsState with EquatableMixin {
       highBeam: highBeam ?? this.highBeam,
       reverse: reverse ?? this.reverse,
       brake: brake ?? this.brake,
+      cabin: cabin ?? this.cabin,
     );
   }
 }
@@ -354,6 +368,10 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
         ..voidOnModel<SuccessEventUint8Body,
             BrakeLightIncomingDataSourcePackage>((model) {
           emit(state.copyWith(brake: AsyncData.success(model.value.toBool)));
+        })
+        ..voidOnModel<SuccessEventUint8Body,
+            CabinLightIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(cabin: AsyncData.success(model.value.toBool)));
         });
     });
   }
@@ -548,6 +566,15 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     );
   }
 
+  void subscribeToCabinLight() {
+    _subscribeTo<bool>(
+      kCabinLightParameterIds,
+      newFeatureStateBuilder: () => state.cabin,
+      newStateBuilder: (newState) => state.copyWith(cabin: newState),
+      loadingState: false,
+    );
+  }
+
   Future<void> _subscribeTo<T>(
     List<DataSourceParameterId> parameterIds, {
     required AsyncData<T, LightsStateError> Function() newFeatureStateBuilder,
@@ -613,6 +640,10 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
 
   static const kBrakeLightParameterIds = [
     DataSourceParameterId.brakeLight(),
+  ];
+
+  static const kCabinLightParameterIds = [
+    DataSourceParameterId.cabinLight(),
   ];
 
   void toggleSideBeam() {
@@ -700,6 +731,14 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
     );
   }
 
+  void toggleCabinLight() {
+    _toggleBool(
+      newFeatureStateBuilder: () => state.cabin,
+      newStateBuilder: (newState) => state.copyWith(cabin: newState),
+      parameterIds: kCabinLightParameterIds,
+    );
+  }
+
   Future<void> _toggleBool({
     required AsyncData<bool, LightsStateError> Function()
         newFeatureStateBuilder,
@@ -726,7 +765,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
       toggleTimeout,
       onTimeout: () async {
         return AsyncData.failure(
-          newFeatureStateBuilder().payload,
+          currentState.payload,
           const LightsStateError.timeout(),
         );
       },

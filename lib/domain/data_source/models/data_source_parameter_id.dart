@@ -96,6 +96,12 @@ abstract class DataSourceParameterId {
       ControllerTemperatureParameterId;
   const factory DataSourceParameterId.odometer() = OdometerParameterId;
 
+  const factory DataSourceParameterId.trunk() = TrunkParameterId;
+  const factory DataSourceParameterId.hood() = HoodParameterId;
+  const factory DataSourceParameterId.leftDoor() = LeftDoorParameterId;
+  const factory DataSourceParameterId.rightDoor() = RightDoorParameterId;
+  const factory DataSourceParameterId.cabinLight() = CabinLightParameterId;
+
   bool get isAuthorization => this is AuthorizationParameterId;
 
   bool get isSpeed => this is SpeedParameterId;
@@ -167,6 +173,12 @@ abstract class DataSourceParameterId {
   bool get isControllerTemperature => this is ControllerTemperatureParameterId;
   bool get isOdometer => this is OdometerParameterId;
 
+  bool get isTrunk => this is TrunkParameterId;
+  bool get isHood => this is HoodParameterId;
+  bool get isLeftDoor => this is LeftDoorParameterId;
+  bool get isRightDoor => this is RightDoorParameterId;
+  bool get isCabinLight => this is CabinLightParameterId;
+
   void voidOn<T extends DataSourceParameterId>(void Function() function) {
     if (this is T) function();
   }
@@ -227,6 +239,12 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.odometer(),
       DataSourceParameterId.batteryLevel(),
       DataSourceParameterId.batteryPower(),
+      //
+      DataSourceParameterId.trunk(),
+      DataSourceParameterId.hood(),
+      DataSourceParameterId.leftDoor(),
+      DataSourceParameterId.rightDoor(),
+      DataSourceParameterId.cabinLight(),
     ];
   }
 
@@ -448,4 +466,24 @@ class ControllerTemperatureParameterId extends DataSourceParameterId {
 
 class OdometerParameterId extends DataSourceParameterId {
   const OdometerParameterId() : super(0x010D);
+}
+
+class TrunkParameterId extends DataSourceParameterId {
+  const TrunkParameterId() : super(0x0184);
+}
+
+class HoodParameterId extends DataSourceParameterId {
+  const HoodParameterId() : super(0x0185);
+}
+
+class LeftDoorParameterId extends DataSourceParameterId {
+  const LeftDoorParameterId() : super(0x0187);
+}
+
+class RightDoorParameterId extends DataSourceParameterId {
+  const RightDoorParameterId() : super(0x0188);
+}
+
+class CabinLightParameterId extends DataSourceParameterId {
+  const CabinLightParameterId() : super(0x0189);
 }

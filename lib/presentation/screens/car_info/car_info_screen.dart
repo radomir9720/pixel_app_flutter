@@ -103,6 +103,12 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                   icon: Icons.stop_circle_outlined,
                   onPressed: context.read<LightsCubit>().toggleBrakeLight,
                 ),
+                _CarInfoTileBlocWrapper<bool>(
+                  selector: (state) => state.cabin,
+                  title: context.l10n.cabinLightButtonCaption,
+                  icon: PixelIcons.light,
+                  onPressed: context.read<LightsCubit>().toggleCabinLight,
+                ),
 
                 // CarInterfaceListTile(
                 //   title: context.l10n.frontTrunkInterfaceTitle,

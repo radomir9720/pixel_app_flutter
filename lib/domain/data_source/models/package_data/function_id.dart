@@ -5,6 +5,14 @@ enum FunctionId {
   /// ID of function, that sets a value(ex: lights brightness).
   setValueWithParam(0x01),
 
+  /// ID of function, that toggles the state of a device
+  toggle(0x02),
+
+  /// ID of function, that sends a signal.
+  ///
+  /// Pakcages with this function id should be sent with no data.
+  action(0x03),
+
   /// ID, saying that value was set successfuly.
   /// This id comes as result of [setValueWithParam]
   successSetValueWithParam(successSetValueWithParamId),

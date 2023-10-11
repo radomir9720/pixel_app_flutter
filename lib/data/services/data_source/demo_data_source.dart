@@ -338,6 +338,9 @@ class DemoDataSource extends DataSource
           ..voidOn<BrakeLightParameterId>(() {
             _sendSetBoolUint8ResultCallback(const BrakeLightParameterId());
           })
+          ..voidOn<CabinLightParameterId>(() {
+            _sendSetBoolUint8ResultCallback(const CabinLightParameterId());
+          })
           ..voidOn<HighBeamParameterId>(() {
             _sendSetBoolUint8ResultCallback(const HighBeamParameterId());
           })
@@ -506,6 +509,12 @@ class DemoDataSource extends DataSource
       ..voidOn<BrakeLightParameterId>(() {
         _sendSetBoolUint8ResultCallback(
           const BrakeLightParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<CabinLightParameterId>(() {
+        _sendSetBoolUint8ResultCallback(
+          const CabinLightParameterId(),
           package.boolData,
         );
       })

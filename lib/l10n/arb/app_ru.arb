@@ -473,5 +473,6 @@
     }
   },
   "displaySwitcherButtonCaption": "Отображать",
-  "dontDisplaySwitcherButtonCaption": "Не отображать"
+  "dontDisplaySwitcherButtonCaption": "Не отображать",
+  "cabinLightButtonCaption": "Свет в салоне"
 }
