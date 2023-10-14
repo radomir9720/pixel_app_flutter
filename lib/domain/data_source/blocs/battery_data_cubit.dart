@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package/incoming/incoming_data_source_packages.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/outgoing_data_source_packages.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
@@ -163,6 +166,10 @@ class BatteryDataCubit extends Cubit<BatteryDataState>
         BlocLoggerMixin<DataSourcePackage, BatteryDataState> {
   BatteryDataCubit({
     required this.dataSource,
+    this.temperatureUpdateDuration = kDefaultTemperatureUpdateDuration,
+    this.voltageUpdateDuration = kDefaultVoltageUpdateDuration,
+    this.temperatureParametersId = kDefaultTemperatureParameterIds,
+    this.voltageParametersId = kDefaultVoltageParameterIds,
   }) : super(const BatteryDataState.initial()) {
     subscribe<DataSourceIncomingPackage>(dataSource.packageStream, (value) {
       value
@@ -274,6 +281,89 @@ class BatteryDataCubit extends Cubit<BatteryDataState>
     const DataSourceParameterId.maxTemperature(),
   };
 
+  static const kDefaultTemperatureUpdateDuration = Duration(seconds: 3);
+  static const kDefaultVoltageUpdateDuration = Duration(seconds: 3);
+
   @protected
   final DataSource dataSource;
+
+  @protected
+  final Duration temperatureUpdateDuration;
+
+  @protected
+  final Duration voltageUpdateDuration;
+
+  @protected
+  final List<DataSourceParameterId> temperatureParametersId;
+
+  @protected
+  final List<DataSourceParameterId> voltageParametersId;
+
+  @visibleForTesting
+  static const kDefaultVoltageParameterIds = [
+    DataSourceParameterId.lowVoltageMinMaxDelta(),
+    DataSourceParameterId.lowVoltageOneToThree(),
+    DataSourceParameterId.lowVoltageFourToSix(),
+    DataSourceParameterId.lowVoltageSevenToNine(),
+    DataSourceParameterId.lowVoltageTenToTwelve(),
+    DataSourceParameterId.lowVoltageThirteenToFifteen(),
+    DataSourceParameterId.lowVoltageSixteenToEighteen(),
+    DataSourceParameterId.lowVoltageNineteenToTwentyOne(),
+    DataSourceParameterId.lowVoltageTwentyTwoToTwentyFour(),
+    DataSourceParameterId.lowVoltageTwentyFiveToTwentySeven(),
+    DataSourceParameterId.lowVoltageTwentyEightToThirty(),
+    DataSourceParameterId.lowVoltageThirtyOneToThirtyThree(),
+  ];
+
+  @visibleForTesting
+  static const kDefaultTemperatureParameterIds = [
+    DataSourceParameterId.temperatureFirstBatch(),
+    DataSourceParameterId.temperatureSecondBatch(),
+    DataSourceParameterId.temperatureThirdBatch(),
+  ];
+
+  @visibleForTesting
+  Timer? temperatureTimer;
+
+  @visibleForTesting
+  Timer? voltageTimer;
+
+  void startUpdatingTemperature() {
+    cancelUpdatingTemperature();
+    _sendValueRequestPackages(temperatureParametersId);
+    temperatureTimer = Timer.periodic(temperatureUpdateDuration, (timer) {
+      _sendValueRequestPackages(temperatureParametersId);
+    });
+  }
+
+  void startUpdatingVoltage() {
+    cancelUpdatingVoltage();
+    _sendValueRequestPackages(voltageParametersId);
+    voltageTimer = Timer.periodic(voltageUpdateDuration, (timer) {
+      _sendValueRequestPackages(voltageParametersId);
+    });
+  }
+
+  void cancelUpdatingTemperature() {
+    temperatureTimer?.cancel();
+    temperatureTimer = null;
+  }
+
+  void cancelUpdatingVoltage() {
+    voltageTimer?.cancel();
+    voltageTimer = null;
+  }
+
+  void _sendValueRequestPackages(List<DataSourceParameterId> ids) {
+    for (final id in ids) {
+      final package = OutgoingValueRequestPackage(parameterId: id);
+      dataSource.sendPackage(package);
+    }
+  }
+
+  @override
+  Future<void> close() {
+    cancelUpdatingTemperature();
+    return super.close();
+  }
 }

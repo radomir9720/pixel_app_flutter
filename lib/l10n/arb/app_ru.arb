@@ -474,5 +474,7 @@
   },
   "displaySwitcherButtonCaption": "Отображать",
   "dontDisplaySwitcherButtonCaption": "Не отображать",
-  "cabinLightButtonCaption": "Свет в салоне"
+  "cabinLightButtonCaption": "Свет в салоне",
+  "cellsSectionSubtitle": "Ячейки",
+  "sensorsSectionSubtitle": "Датчики"
 }

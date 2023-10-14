@@ -474,5 +474,7 @@
   },
   "displaySwitcherButtonCaption": "Display",
   "dontDisplaySwitcherButtonCaption": "Don't display",
-  "cabinLightButtonCaption": "Cabin light"
+  "cabinLightButtonCaption": "Cabin light",
+  "cellsSectionSubtitle": "Cells",
+  "sensorsSectionSubtitle": "Sensors"
 }

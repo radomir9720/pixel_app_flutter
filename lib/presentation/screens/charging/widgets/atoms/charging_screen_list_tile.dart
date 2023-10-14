@@ -21,19 +21,14 @@ class ChargingScreenListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(title),
-          trailing: Text(
-            trailing,
-            style: TextStyle(
-              color: context.colorFromStatus(status),
-            ),
-          ),
+    return ListTile(
+      title: Text(title),
+      trailing: Text(
+        trailing,
+        style: TextStyle(
+          color: context.colorFromStatus(status),
         ),
-        const Divider(),
-      ],
+      ),
     );
   }
 }
