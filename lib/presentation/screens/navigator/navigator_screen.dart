@@ -225,6 +225,12 @@ final class _InstalledMapsNotifier extends ValueNotifier<_InstalledMapsState> {
       name: '2ГИС',
     ),
     NavApp(
+      androidPackage: 'com.dss.doublegis',
+      iosPackage: null,
+      asset: MapIcons.doubleGis,
+      name: 'Дубль Гис',
+    ),
+    NavApp(
       androidPackage: 'com.tencent.map',
       iosPackage: null,
       asset: MapIcons.tencent,
