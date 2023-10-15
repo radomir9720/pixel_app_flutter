@@ -98,7 +98,7 @@ class _ButtonInputFieldWidgetState<T> extends State<ButtonInputFieldWidget<T>> {
         initialValue = int.tryParse(initialValue)
             ?.toBytesUint8
             .map((e) => '0x${e.toRadixString(16)}')
-            .join(', ');
+            .join(',');
       } else if (T == getType<List<int>?>()) {
         final parsed = initialValue.parseListOfInts();
         if ((parsed?.isNotEmpty ?? false) &&
@@ -107,7 +107,7 @@ class _ButtonInputFieldWidgetState<T> extends State<ButtonInputFieldWidget<T>> {
               ?.map((e) => e.toBytesUint8)
               .expand((element) => element)
               .map((e) => '0x${e.toRadixString(16)}')
-              .join(', ');
+              .join(',');
         }
       }
     }
