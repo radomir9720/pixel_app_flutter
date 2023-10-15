@@ -164,7 +164,7 @@ class _OneAxisJoystickButtonState extends State<OneAxisJoystickButton>
                     final xAlignment = isVertical ? 0.0 : factor;
                     final yAlignment = isVertical ? factor : 0.0;
                     return Stack(
-                      alignment: Alignment(xAlignment, yAlignment),
+                      alignment: Alignment(xAlignment, -yAlignment),
                       children: [
                         Positioned.fill(
                           top: isVertical ? kArrowIconPadding : 0,
@@ -206,7 +206,7 @@ class _OneAxisJoystickButtonState extends State<OneAxisJoystickButton>
                         ? null
                         : (details) {
                             oneAxisNotifier
-                                .updateCurrentPosition(details.delta.dy);
+                                .updateCurrentPosition(-details.delta.dy);
                           },
                     onVerticalDragEnd: !isVertical
                         ? null
