@@ -94,7 +94,8 @@ extension FromMilliExtension on int {
 
 extension ParseListOfIntsExtension on String {
   List<int>? parseListOfInts() {
-    return replaceAll(',', ' ')
+    return replaceAll(' ', '')
+        .replaceAll(',', ' ')
         .split(' ')
         .map((e) => int.tryParse(e.trim()))
         .whereNotNull()
@@ -102,7 +103,8 @@ extension ParseListOfIntsExtension on String {
   }
 
   bool get hasUnparsedSegments {
-    return replaceAll(',', ' ')
+    return replaceAll(' ', '')
+        .replaceAll(',', ' ')
         .split(' ')
         .map((e) => int.tryParse(e.trim()))
         .where((element) => element == null)

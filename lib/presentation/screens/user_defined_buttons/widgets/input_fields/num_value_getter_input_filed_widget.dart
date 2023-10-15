@@ -173,7 +173,7 @@ class _NumValueGetterInputFieldWidgetState
                                       title:
                                           context.l10n.fractionDigitsFieldTitle,
                                       isRequired: false,
-                                      formatIntToUint8: false,
+                                      formatIntToHex: false,
                                       onChanged: (value) {
                                         addProperty(
                                           FractionsDigitsPropertyEntry(value),

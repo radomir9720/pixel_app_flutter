@@ -9,7 +9,7 @@ class ButtonInputFieldWidget<T> extends StatefulWidget {
     required this.title,
     required this.onChanged,
     required this.mapper,
-    this.formatIntToUint8 = true,
+    this.formatIntToHex = true,
     this.isRequired = true,
     this.postMapValidators,
     this.preMapValidators,
@@ -76,7 +76,7 @@ class ButtonInputFieldWidget<T> extends StatefulWidget {
   final String? initialValue;
 
   @protected
-  final bool formatIntToUint8;
+  final bool formatIntToHex;
 
   @override
   State<ButtonInputFieldWidget<T>> createState() =>
@@ -93,21 +93,16 @@ class _ButtonInputFieldWidgetState<T> extends State<ButtonInputFieldWidget<T>> {
     super.initState();
     String? initialValue = widget.initialValue ?? '';
 
-    if (initialValue.isNotEmpty && widget.formatIntToUint8) {
+    if (initialValue.isNotEmpty && widget.formatIntToHex) {
       if (T == getType<int?>()) {
-        initialValue = int.tryParse(initialValue)
-            ?.toBytesUint8
-            .map((e) => '0x${e.toRadixString(16)}')
-            .join(',');
+        final integer = int.tryParse(initialValue);
+        if (integer != null) initialValue = '0x${integer.toRadixString(16)}';
       } else if (T == getType<List<int>?>()) {
         final parsed = initialValue.parseListOfInts();
         if ((parsed?.isNotEmpty ?? false) &&
             !initialValue.hasUnparsedSegments) {
-          initialValue = parsed
-              ?.map((e) => e.toBytesUint8)
-              .expand((element) => element)
-              .map((e) => '0x${e.toRadixString(16)}')
-              .join(',');
+          initialValue =
+              parsed?.map((e) => '0x${e.toRadixString(16)}').join(', ');
         }
       }
     }
