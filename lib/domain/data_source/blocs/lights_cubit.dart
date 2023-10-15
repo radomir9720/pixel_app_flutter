@@ -9,53 +9,7 @@ import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/out
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-sealed class LightsStateError {
-  const LightsStateError();
-
-  const factory LightsStateError.differs({
-    required bool first,
-    required bool second,
-  }) = _StatesDiffersEnablingError;
-
-  const factory LightsStateError.timeout() = _TimeoutEnablingError;
-  const factory LightsStateError.mainECUError() = _MainECUEnablingError;
-
-  bool get isTimeout => this is _TimeoutEnablingError;
-  bool get differs => this is _StatesDiffersEnablingError;
-  bool get mainECUError => this is _MainECUEnablingError;
-
-  R when<R>({
-    required R Function() differs,
-    required R Function() timeout,
-    required R Function() mainECUError,
-  }) {
-    return switch (this) {
-      _StatesDiffersEnablingError() => differs(),
-      _TimeoutEnablingError() => timeout(),
-      _MainECUEnablingError() => mainECUError(),
-    };
-  }
-}
-
-final class _StatesDiffersEnablingError extends LightsStateError {
-  const _StatesDiffersEnablingError({
-    required this.first,
-    required this.second,
-  });
-
-  final bool first;
-  final bool second;
-}
-
-final class _TimeoutEnablingError extends LightsStateError {
-  const _TimeoutEnablingError();
-}
-
-final class _MainECUEnablingError extends LightsStateError {
-  const _MainECUEnablingError();
-}
-
-typedef LightState<T> = AsyncData<T, LightsStateError>;
+typedef LightState<T> = AsyncData<T, ToggleStateError>;
 
 @sealed
 @immutable
@@ -173,15 +127,15 @@ final class LightsState with EquatableMixin {
 
   List<R> whenFailure<R>(
     LightsState prevState, {
-    required R Function(LightsStateError error) leftTurnSignal,
-    required R Function(LightsStateError error) rightTurnSignal,
-    required R Function(LightsStateError error) hazardBeam,
-    required R Function(LightsStateError error) sideBeam,
-    required R Function(LightsStateError error) lowBeam,
-    required R Function(LightsStateError error) highBeam,
-    required R Function(LightsStateError error) reverse,
-    required R Function(LightsStateError error) brake,
-    required R Function(LightsStateError error) cabin,
+    required R Function(ToggleStateError error) leftTurnSignal,
+    required R Function(ToggleStateError error) rightTurnSignal,
+    required R Function(ToggleStateError error) hazardBeam,
+    required R Function(ToggleStateError error) sideBeam,
+    required R Function(ToggleStateError error) lowBeam,
+    required R Function(ToggleStateError error) highBeam,
+    required R Function(ToggleStateError error) reverse,
+    required R Function(ToggleStateError error) brake,
+    required R Function(ToggleStateError error) cabin,
   }) {
     final leftTurnSignalError = this.leftTurnSignal.error;
     final rightTurnSignalError = this.rightTurnSignal.error;
@@ -245,9 +199,9 @@ final class LightsState with EquatableMixin {
   }
 
   R? _filterError<R>(
-    LightsStateError? current,
-    LightsStateError? prev,
-    R Function(LightsStateError) callback,
+    ToggleStateError? current,
+    ToggleStateError? prev,
+    R Function(ToggleStateError) callback,
   ) {
     if (current == null) return null;
     if (current.isTimeout && prev != null && !prev.isTimeout) return null;
@@ -447,9 +401,9 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
   }
 
   void _onNewTwoBoolsState({
-    required AsyncData<TwoBoolsState, LightsStateError> newFeatureState,
+    required AsyncData<TwoBoolsState, ToggleStateError> newFeatureState,
     required LightsState Function(
-      AsyncData<TwoBoolsState, LightsStateError> newState,
+      AsyncData<TwoBoolsState, ToggleStateError> newState,
     ) newStateBuilder,
   }) {
     final newFeaturePayload = newFeatureState.payload;
@@ -577,9 +531,9 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
 
   Future<void> _subscribeTo<T>(
     List<DataSourceParameterId> parameterIds, {
-    required AsyncData<T, LightsStateError> Function() newFeatureStateBuilder,
+    required AsyncData<T, ToggleStateError> Function() newFeatureStateBuilder,
     required LightsState Function(
-      AsyncData<T, LightsStateError> newState,
+      AsyncData<T, ToggleStateError> newState,
     ) newStateBuilder,
     required T loadingState,
   }) async {
@@ -596,7 +550,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
       onTimeout: () async {
         return newStateBuilder(
           newFeatureStateBuilder().inFailure(
-            const LightsStateError.timeout(),
+            const ToggleStateError.timeout(),
           ),
         );
       },
@@ -740,10 +694,10 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
   }
 
   Future<void> _toggleBool({
-    required AsyncData<bool, LightsStateError> Function()
+    required AsyncData<bool, ToggleStateError> Function()
         newFeatureStateBuilder,
     required LightsState Function(
-      AsyncData<bool, LightsStateError> newState,
+      AsyncData<bool, ToggleStateError> newState,
     ) newStateBuilder,
     required List<DataSourceParameterId> parameterIds,
   }) async {
@@ -766,7 +720,7 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
       onTimeout: () async {
         return AsyncData.failure(
           currentState.payload,
-          const LightsStateError.timeout(),
+          const ToggleStateError.timeout(),
         );
       },
     );
@@ -776,10 +730,10 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
   }
 
   Future<void> _toggleTwoBools({
-    required AsyncData<TwoBoolsState, LightsStateError> Function()
+    required AsyncData<TwoBoolsState, ToggleStateError> Function()
         newFeatureStateBuilder,
     required LightsState Function(
-      AsyncData<TwoBoolsState, LightsStateError> newState,
+      AsyncData<TwoBoolsState, ToggleStateError> newState,
     ) newStateBuilder,
     required List<DataSourceParameterId> parameterIds,
   }) async {
@@ -819,11 +773,11 @@ class LightsCubit extends Cubit<LightsState> with ConsumerBlocMixin {
 
             if (payload.differs || payload.waitingForSwitch != payload.isOn) {
               final failure = payload.differs
-                  ? LightsStateError.differs(
+                  ? ToggleStateError.differs(
                       first: payload.first,
                       second: payload.second,
                     )
-                  : const LightsStateError.timeout();
+                  : const ToggleStateError.timeout();
 
               return AsyncData.failure(
                 payload,

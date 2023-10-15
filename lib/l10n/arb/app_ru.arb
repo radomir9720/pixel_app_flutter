@@ -476,5 +476,8 @@
   "dontDisplaySwitcherButtonCaption": "Не отображать",
   "cabinLightButtonCaption": "Свет в салоне",
   "cellsSectionSubtitle": "Ячейки",
-  "sensorsSectionSubtitle": "Датчики"
+  "sensorsSectionSubtitle": "Датчики",
+  "waitingInterfaceStatus": "Ожидание",
+  "closedShortStatusMessage": "Закр",
+  "openedShortStatusMessage": "Откр"
 }

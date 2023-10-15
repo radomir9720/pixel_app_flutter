@@ -476,5 +476,8 @@
   "dontDisplaySwitcherButtonCaption": "Don't display",
   "cabinLightButtonCaption": "Cabin light",
   "cellsSectionSubtitle": "Cells",
-  "sensorsSectionSubtitle": "Sensors"
+  "sensorsSectionSubtitle": "Sensors",
+  "waitingInterfaceStatus": "Waiting",
+  "closedShortStatusMessage": "Closed",
+  "openedShortStatusMessage": "Closed"
 }

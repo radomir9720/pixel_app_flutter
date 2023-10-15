@@ -1,11 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixel_app_flutter/domain/data_source/blocs/lights_cubit.dart';
+import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
+import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_padding.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/molecules/trunk_joystick.dart';
 import 'package:pixel_app_flutter/presentation/widgets/phone/atoms/car_interface_list_tile.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
@@ -48,96 +50,72 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
             child: ListView(
               primary: false,
               children: [
-                // CarInterfaceListTile(
-                //   title: context.l10n.lightsInterfaceTitle,
-                //   status: context.l10n.autoModeLightsStatus,
-                //   icon: PixelIcons.light,
-                //   state: CarInterfaceState.primary,
-                //   onPressed: () {},
-                // ),
-                _CarInfoTileBlocWrapper<TwoBoolsState>(
-                  selector: (state) => state.sideBeam,
-                  title: context.l10n.parkingLightsButtonCaption,
-                  icon: PixelIcons.light,
-                  onPressed: context.read<LightsCubit>().toggleSideBeam,
+                BlocSelector<DoorsCubit, DoorsState,
+                    AsyncData<bool, ToggleStateError>>(
+                  selector: (state) => state.left,
+                  builder: (context, state) {
+                    return CarInterfaceListTile(
+                      title: context.l10n.leftDoorInterfaceTitle,
+                      status: context.doorStatus(state),
+                      icon: state.payload
+                          ? PixelIcons.unlocked
+                          : PixelIcons.locked,
+                      state: state.tileState,
+                      onPressed: context.read<DoorsCubit>().toggleLeftDoor,
+                    );
+                  },
                 ),
-                _CarInfoTileBlocWrapper(
-                  selector: (state) => state.lowBeam,
-                  title: context.l10n.lowBeamButtonCaption,
-                  icon: PixelIcons.light,
-                  onPressed: context.read<LightsCubit>().toggleLowBeam,
+                BlocSelector<DoorsCubit, DoorsState,
+                    AsyncData<bool, ToggleStateError>>(
+                  selector: (state) => state.right,
+                  builder: (context, state) {
+                    return CarInterfaceListTile(
+                      title: context.l10n.rightDoorInterfaceTitle,
+                      status: context.doorStatus(state),
+                      icon: state.payload
+                          ? PixelIcons.unlocked
+                          : PixelIcons.locked,
+                      state: state.tileState,
+                      onPressed: context.read<DoorsCubit>().toggleRightDoor,
+                    );
+                  },
                 ),
-                _CarInfoTileBlocWrapper<bool>(
-                  selector: (state) => state.highBeam,
-                  title: context.l10n.highBeamButtonCaption,
-                  icon: PixelIcons.light,
-                  onPressed: context.read<LightsCubit>().toggleHighBeam,
-                ),
-                _CarInfoTileBlocWrapper<TwoBoolsState>(
-                  selector: (state) => state.leftTurnSignal,
-                  title: context.l10n.leftBlinkerButtonCaption,
-                  icon: Icons.arrow_circle_left,
-                  onPressed: context.read<LightsCubit>().toggleLeftTurnSignal,
-                ),
-                _CarInfoTileBlocWrapper<TwoBoolsState>(
-                  selector: (state) => state.rightTurnSignal,
-                  title: context.l10n.rightBlinkerButtonCaption,
-                  icon: Icons.arrow_circle_right,
-                  onPressed: context.read<LightsCubit>().toggleRightTurnSignal,
-                ),
-                _CarInfoTileBlocWrapper<TwoBoolsState>(
+                _CarInfoLightTileBlocWrapper<TwoBoolsState>(
                   selector: (state) => state.hazardBeam,
                   title: context.l10n.hazardBeamButtonCaption,
                   icon: Icons.warning_amber,
                   onPressed: context.read<LightsCubit>().toggleHazardBeam,
                 ),
-                _CarInfoTileBlocWrapper<bool>(
+                _CarInfoLightTileBlocWrapper<bool>(
                   selector: (state) => state.reverse,
                   title: context.l10n.reverseLightButtonCaption,
                   icon: Icons.keyboard_double_arrow_down_sharp,
                   onPressed: context.read<LightsCubit>().toggleReverseLight,
                 ),
-                _CarInfoTileBlocWrapper<bool>(
+                _CarInfoLightTileBlocWrapper<bool>(
                   selector: (state) => state.brake,
                   title: context.l10n.brakeLightButtonCaption,
                   icon: Icons.stop_circle_outlined,
                   onPressed: context.read<LightsCubit>().toggleBrakeLight,
                 ),
-                _CarInfoTileBlocWrapper<bool>(
+                _CarInfoLightTileBlocWrapper<bool>(
                   selector: (state) => state.cabin,
                   title: context.l10n.cabinLightButtonCaption,
                   icon: PixelIcons.light,
                   onPressed: context.read<LightsCubit>().toggleCabinLight,
                 ),
-
-                // CarInterfaceListTile(
-                //   title: context.l10n.frontTrunkInterfaceTitle,
-                //   status: context.l10n.unlockedInterfaceStatus,
-                //   icon: PixelIcons.unlocked,
-                //   state: CarInterfaceState.success,
-                //   onPressed: () {},
-                // ),
-                // CarInterfaceListTile(
-                //   title: context.l10n.leftDoorInterfaceTitle,
-                //   status: context.l10n.lockedInterfaceStatus,
-                //   icon: PixelIcons.locked,
-                //   state: CarInterfaceState.error,
-                //   onPressed: () {},
-                // ),
-                // CarInterfaceListTile(
-                //   title: context.l10n.rightDoorInterfaceTitle,
-                //   status: context.l10n.unlockedInterfaceStatus,
-                //   icon: PixelIcons.unlocked,
-                //   state: CarInterfaceState.success,
-                //   onPressed: () {},
-                // ),
-                // CarInterfaceListTile(
-                //   title: context.l10n.rearTrunkInterfaceTitle,
-                //   status: context.l10n.lockedInterfaceStatus,
-                //   icon: PixelIcons.locked,
-                //   state: CarInterfaceState.error,
-                //   onPressed: () {},
-                // ),
+                _CarInfoScreenListTile(
+                  title: context.l10n.frontTrunkInterfaceTitle,
+                  trailing: const TrunkJoystick(
+                    parameterId: DataSourceParameterId.hood(),
+                  ),
+                ),
+                _CarInfoScreenListTile(
+                  title: context.l10n.rearTrunkInterfaceTitle,
+                  trailing: const TrunkJoystick(
+                    parameterId: DataSourceParameterId.trunk(),
+                  ),
+                ),
               ],
             ),
           ),
@@ -147,8 +125,56 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
   }
 }
 
-class _CarInfoTileBlocWrapper<T> extends StatelessWidget {
-  const _CarInfoTileBlocWrapper({
+class _CarInfoScreenListTile extends StatelessWidget {
+  const _CarInfoScreenListTile({
+    required this.title,
+    this.trailing,
+  });
+
+  @protected
+  final String title;
+
+  @protected
+  final Widget? trailing;
+
+  @protected
+  static const kTitleTextStyle = TextStyle(
+    fontSize: 15,
+    height: 1.21,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 4,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: kTitleTextStyle.copyWith(color: context.colors.text),
+                ),
+              ),
+              const SizedBox(width: 16),
+              trailing ?? const SizedBox.shrink(),
+            ],
+          ),
+        ),
+        const Divider(height: 1, thickness: 1),
+      ],
+    );
+  }
+}
+
+class _CarInfoLightTileBlocWrapper<T> extends StatelessWidget {
+  const _CarInfoLightTileBlocWrapper({
     super.key,
     required this.selector,
     required this.title,
@@ -157,7 +183,7 @@ class _CarInfoTileBlocWrapper<T> extends StatelessWidget {
   });
 
   @protected
-  final AsyncData<T, LightsStateError> Function(LightsState) selector;
+  final AsyncData<T, ToggleStateError> Function(LightsState) selector;
 
   @protected
   final String title;
@@ -197,6 +223,28 @@ class _CarInfoTileBlocWrapper<T> extends StatelessWidget {
           onPressed: onPressed,
         );
       },
+    );
+  }
+}
+
+extension on BuildContext {
+  String doorStatus(AsyncData<bool, ToggleStateError> state) {
+    return state.maybeWhen(
+      loading: (payload) => l10n.waitingInterfaceStatus,
+      orElse: (payload) => payload
+          ? l10n.openedShortStatusMessage
+          : l10n.closedShortStatusMessage,
+    );
+  }
+}
+
+extension on AsyncData<bool, ToggleStateError> {
+  CarInterfaceState get tileState {
+    return maybeWhen(
+      orElse: (payload) {
+        return payload ? CarInterfaceState.success : CarInterfaceState.error;
+      },
+      loading: (_) => CarInterfaceState.primary,
     );
   }
 }

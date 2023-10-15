@@ -9,6 +9,7 @@ import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/relay_widget.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/molecules/trunk_joystick.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/atoms/car_interface_pointer.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/car_interface_switcher.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -36,9 +37,6 @@ class _CarWidgetState extends State<CarWidget> {
   IconData _getIcon(bool opened) =>
       opened ? PixelIcons.unlocked : PixelIcons.locked;
 
-  PIconButtonState _getState(bool opened) =>
-      opened ? PIconButtonState.success : PIconButtonState.error;
-
   @protected
   static const carAssetPath = 'assets/svg/car.svg';
 
@@ -50,15 +48,10 @@ class _CarWidgetState extends State<CarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final buttonScaleCoef = (carSize.width / 232).clamp(0.0, .82);
+    final buttonScaleCoef = (carSize.width / 232).clamp(0.0, 1.0);
     final size = MediaQuery.sizeOf(context);
     final height = size.height;
     final width = size.width;
-
-    // ignore: avoid_positional_boolean_parameters
-    String getStatus(bool opened) => opened
-        ? context.l10n.unlockedInterfaceStatus
-        : context.l10n.lockedInterfaceStatus;
 
     return Align(
       alignment: const Alignment(.4, 0),
@@ -108,7 +101,7 @@ class _CarWidgetState extends State<CarWidget> {
             // Cabin light
             Positioned.fill(
               child: BlocSelector<LightsCubit, LightsState,
-                  AsyncData<bool, LightsStateError>>(
+                  AsyncData<bool, ToggleStateError>>(
                 selector: (state) => state.cabin,
                 builder: (context, state) {
                   final buttonState = state.maybeWhen(
@@ -145,16 +138,20 @@ class _CarWidgetState extends State<CarWidget> {
               child: Transform.scale(
                 scale: buttonScaleCoef,
                 alignment: Alignment.centerRight,
-                child: CarInterfaceSwitcher(
-                  icon: _getIcon(leftDoorOpened),
-                  state: _getState(leftDoorOpened),
-                  onPressed: () => setState(() {
-                    leftDoorOpened = !leftDoorOpened;
-                  }),
-                  title: context.l10n.doorInterfaceTitle,
-                  status: getStatus(leftDoorOpened),
-                  pointerSide: CarInterfacePointerSide.right,
-                  titleSide: CarInterfaceSwitcherTitleSide.left,
+                child: BlocSelector<DoorsCubit, DoorsState,
+                    AsyncData<bool, ToggleStateError>>(
+                  selector: (state) => state.left,
+                  builder: (context, state) {
+                    return CarInterfaceSwitcher(
+                      icon: _getIcon(state.payload),
+                      state: state.buttonState,
+                      onPressed: context.read<DoorsCubit>().toggleLeftDoor,
+                      title: context.l10n.doorInterfaceTitle,
+                      status: context.getStatus(state),
+                      pointerSide: CarInterfacePointerSide.right,
+                      titleSide: CarInterfaceSwitcherTitleSide.left,
+                    );
+                  },
                 ),
               ),
             ),
@@ -166,77 +163,49 @@ class _CarWidgetState extends State<CarWidget> {
               child: Transform.scale(
                 scale: buttonScaleCoef,
                 alignment: Alignment.centerLeft,
-                child: CarInterfaceSwitcher(
-                  icon: _getIcon(rightDoorOpened),
-                  state: _getState(rightDoorOpened),
-                  onPressed: () => setState(() {
-                    rightDoorOpened = !rightDoorOpened;
-                  }),
-                  title: context.l10n.doorInterfaceTitle,
-                  status: getStatus(rightDoorOpened),
-                  pointerSide: CarInterfacePointerSide.left,
-                  titleSide: CarInterfaceSwitcherTitleSide.right,
+                child: BlocSelector<DoorsCubit, DoorsState,
+                    AsyncData<bool, ToggleStateError>>(
+                  selector: (state) => state.right,
+                  builder: (context, state) {
+                    return CarInterfaceSwitcher(
+                      icon: _getIcon(state.payload),
+                      state: state.buttonState,
+                      onPressed: context.read<DoorsCubit>().toggleRightDoor,
+                      title: context.l10n.doorInterfaceTitle,
+                      status: context.getStatus(state),
+                      pointerSide: CarInterfacePointerSide.left,
+                      titleSide: CarInterfaceSwitcherTitleSide.right,
+                    );
+                  },
                 ),
               ),
             ),
-            // Lights
-            // Positioned(
-            //   top: carSize.height * .02,
-            //   right: carSize.width * .88,
-            //   child: Transform.scale(
-            //     scale: buttonScaleCoef,
-            //     alignment: Alignment.centerRight,
-            //     child: CarInterfaceSwitcher(
-            //       pointerLength: 64,
-            //       icon: PixelIcons.light,
-            //       state: PIconButtonState.primary,
-            //       title: context.l10n.lightsInterfaceTitle,
-            //       status: context.l10n.autoModeLightsStatus,
-            //       onPressed: () {},
-            //       pointerSide: CarInterfacePointerSide.right,
-            //       titleSide: CarInterfaceSwitcherTitleSide.left,
-            //     ),
-            //   ),
-            // ),
-            // Front Trunk
+            // Hood
             Positioned(
-              top: carSize.height * .07,
+              top: carSize.height * .04,
               right: 0,
               left: 0,
               child: Transform.scale(
                 scale: buttonScaleCoef,
                 alignment: Alignment.topCenter,
-                child: Center(
-                  child: CarInterfaceSwitcher(
-                    icon: _getIcon(frontTrunkOpened),
-                    state: _getState(frontTrunkOpened),
-                    onPressed: () => setState(() {
-                      frontTrunkOpened = !frontTrunkOpened;
-                    }),
-                    title: context.l10n.trunkInterfaceTitle,
-                    status: getStatus(frontTrunkOpened),
+                child: const Center(
+                  child: TrunkJoystick.big(
+                    parameterId: DataSourceParameterId.hood(),
                   ),
                 ),
               ),
             ),
             // Trunk
             Positioned(
-              bottom: carSize.height * .07,
-              left: 0,
+              bottom: carSize.height * .04,
               right: 0,
+              left: 0,
               child: Transform.scale(
                 scale: buttonScaleCoef,
                 alignment: Alignment.bottomCenter,
-                child: Center(
-                  child: CarInterfaceSwitcher(
-                    icon: _getIcon(trunkOpened),
-                    state: _getState(trunkOpened),
-                    onPressed: () => setState(() {
-                      trunkOpened = !trunkOpened;
-                    }),
-                    title: context.l10n.trunkInterfaceTitle,
-                    status: getStatus(trunkOpened),
-                    titleSide: CarInterfaceSwitcherTitleSide.bottom,
+                child: const Center(
+                  child: TrunkJoystick.big(
+                    parameterId: DataSourceParameterId.trunk(),
                   ),
                 ),
               ),
@@ -250,6 +219,30 @@ class _CarWidgetState extends State<CarWidget> {
           ],
         ],
       ),
+    );
+  }
+}
+
+extension on BuildContext {
+  String getStatus(AsyncData<bool, ToggleStateError> state) {
+    return state.maybeWhen(
+      orElse: (payload) {
+        return payload
+            ? l10n.unlockedInterfaceStatus
+            : l10n.lockedInterfaceStatus;
+      },
+      loading: (payload) => l10n.waitingInterfaceStatus,
+    );
+  }
+}
+
+extension on AsyncData<bool, ToggleStateError> {
+  PIconButtonState get buttonState {
+    return maybeWhen(
+      orElse: (payload) {
+        return payload ? PIconButtonState.success : PIconButtonState.error;
+      },
+      loading: (_) => PIconButtonState.enabled,
     );
   }
 }

@@ -91,3 +91,15 @@ enum AuthorizationFunctionId {
   static const requestId = 0x04;
   static const responseId = 0x05;
 }
+
+enum ButtonFunctionId {
+  leftDoor(leftDoorId),
+  rightDoor(rightDoorId);
+
+  const ButtonFunctionId(this.value);
+
+  final int value;
+
+  static const leftDoorId = 0x0130;
+  static const rightDoorId = 0x0131;
+}
