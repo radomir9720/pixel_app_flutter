@@ -24,7 +24,6 @@ class AxisUpdateOutgoingPackagesInputFields
             return ButtonOutgoingPackagesFormInputFieldsWidget<
                 AxisUpdateOutgoingPackagesInputFields>(
               manager: manager,
-              dataIsAutofilled: true,
               title: context.l10n.sentPackagesWhenMovingJoystickFieldTitle,
               initialPackagesCount: 1,
               validators: [context.minPropertyEntriesValidator(1)],

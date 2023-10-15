@@ -115,7 +115,10 @@ class _OneAxisJoystickButtonState extends State<OneAxisJoystickButton>
             DataSourceOutgoingPackage.raw(
               requestType: package.requestType,
               parameterId: package.parameterId,
-              data: [(value * 100).toInt()],
+              data: [
+                ...package.data,
+                (value * 100).toInt(),
+              ],
             ),
         ]);
       },
@@ -262,7 +265,6 @@ class _OneAxisJoystickButtonState extends State<OneAxisJoystickButton>
               },
             ),
           ),
-          // VerticalDivider(width: 6),
           const SizedBox(width: 16),
         ],
       ),
