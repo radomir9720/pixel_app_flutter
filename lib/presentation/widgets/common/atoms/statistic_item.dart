@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
-import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 
 class StatisticItem extends StatelessWidget {
   const StatisticItem({
@@ -46,7 +45,7 @@ class StatisticItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = customColor ?? AppColors.of(context).textAccent;
-    final width = Screen.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

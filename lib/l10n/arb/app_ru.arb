@@ -473,5 +473,11 @@
     }
   },
   "displaySwitcherButtonCaption": "Отображать",
-  "dontDisplaySwitcherButtonCaption": "Не отображать"
+  "dontDisplaySwitcherButtonCaption": "Не отображать",
+  "cabinLightButtonCaption": "Свет в салоне",
+  "cellsSectionSubtitle": "Ячейки",
+  "sensorsSectionSubtitle": "Датчики",
+  "waitingInterfaceStatus": "Ожидание",
+  "closedShortStatusMessage": "Закр",
+  "openedShortStatusMessage": "Откр"
 }

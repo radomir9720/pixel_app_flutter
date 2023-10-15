@@ -338,6 +338,9 @@ class DemoDataSource extends DataSource
           ..voidOn<BrakeLightParameterId>(() {
             _sendSetBoolUint8ResultCallback(const BrakeLightParameterId());
           })
+          ..voidOn<CabinLightParameterId>(() {
+            _sendSetBoolUint8ResultCallback(const CabinLightParameterId());
+          })
           ..voidOn<HighBeamParameterId>(() {
             _sendSetBoolUint8ResultCallback(const HighBeamParameterId());
           })
@@ -373,8 +376,16 @@ class DemoDataSource extends DataSource
             );
           })
           ..voidOn<CustomParameterId>(() {
-            if (parameterId.value == 0x00E0) {
-              subscriptionCallbacks.add(_sendBackLightsBlocInfoCallback);
+            switch (parameterId.value) {
+              case 0x00E0:
+                subscriptionCallbacks.add(_sendBackLightsBlocInfoCallback);
+                break;
+              case ButtonFunctionId.leftDoorId:
+                _sendDoorToggleResultCallback(ButtonFunctionId.leftDoor);
+                break;
+              case ButtonFunctionId.rightDoorId:
+                _sendDoorToggleResultCallback(ButtonFunctionId.rightDoor);
+                break;
             }
           });
 
@@ -509,6 +520,12 @@ class DemoDataSource extends DataSource
           package.boolData,
         );
       })
+      ..voidOn<CabinLightParameterId>(() {
+        _sendSetBoolUint8ResultCallback(
+          const CabinLightParameterId(),
+          package.boolData,
+        );
+      })
       ..voidOn<HighBeamParameterId>(() {
         _sendSetBoolUint8ResultCallback(
           const HighBeamParameterId(),
@@ -556,6 +573,13 @@ class DemoDataSource extends DataSource
           const CustomImageParameterId(),
           package.data[1],
         );
+      })
+      // Doors
+      ..voidOn<LeftDoorParameterId>(() {
+        _sendDoorToggleResultCallback(ButtonFunctionId.leftDoor);
+      })
+      ..voidOn<RightDoorParameterId>(() {
+        _sendDoorToggleResultCallback(ButtonFunctionId.rightDoor);
       });
 
     return const Result.value(null);
@@ -1055,6 +1079,25 @@ class DemoDataSource extends DataSource
                   ? _requiredResult
                   : !_requiredResult)
               .toInt,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _sendDoorToggleResultCallback(
+    ButtonFunctionId functionId, [
+    bool? requiredResult,
+  ]) async {
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    final rand = randomBool;
+    final _requiredResult = requiredResult ?? rand;
+
+    _sendPackage(
+      DataSourceIncomingPackage.fromConvertible(
+        secondConfigByte: 0x95, // 10010101(incoming 0x15)
+        parameterId: functionId.value,
+        convertible: DoorBody(
+          isOpen: generateRandomErrors() ? randomBool : _requiredResult,
         ),
       ),
     );

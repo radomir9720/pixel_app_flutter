@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/car_widget.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/doors_state_error_listener.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/gear_widget.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/light_state_error_listener.dart';
@@ -24,6 +25,7 @@ class GeneralScreen extends StatelessWidget {
     return Nested(
       children: const [
         LightStateErrorListener(),
+        DoorsStateErrorListener(),
         OverlayDataSender(),
       ],
       child: Scaffold(

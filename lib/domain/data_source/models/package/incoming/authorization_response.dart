@@ -11,7 +11,7 @@ class AuthorizationInitializationResponseIncomingDataSourcePackage
 
   @override
   bool get validFunctionId =>
-      data[0] == FunctionId.authorizationInitializationResponseId;
+      data[0] == AuthorizationFunctionId.initializationResponseId;
 
   @override
   bool get validParameterId => parameterId.isAuthorization;
@@ -29,7 +29,7 @@ class AuthorizationResponseIncomingDataSourcePackage
       const AuthorizationResponseConverter();
 
   @override
-  bool get validFunctionId => data[0] == FunctionId.authorizationResponseId;
+  bool get validFunctionId => data[0] == AuthorizationFunctionId.responseId;
 
   @override
   bool get validParameterId => parameterId.isAuthorization;

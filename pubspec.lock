@@ -932,11 +932,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.2.3"
-      resolved-ref: e7a69667a80c26238ac6df69c1179ac0cde5ed52
+      ref: "0.3.0"
+      resolved-ref: "6c0e1506ca2ff4a3e9de6c018869d5b8a4336903"
       url: "https://github.com/radomir9720/re_widgets.git"
     source: git
-    version: "0.2.3+9"
+    version: "0.3.0+10"
   recase:
     dependency: transitive
     description:

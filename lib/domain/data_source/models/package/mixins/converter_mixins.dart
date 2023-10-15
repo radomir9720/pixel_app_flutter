@@ -1,5 +1,12 @@
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
+import 'package:pixel_app_flutter/domain/data_source/models/package_data/wrappers/empty_body.dart';
+
+mixin DefaultEmptyBodyConverterMixin on DataSourceIncomingPackage<EmptyBody> {
+  @override
+  BytesConverter<EmptyBody> get bytesConverter =>
+      const DefaultEmptyBodyConverter();
+}
 
 mixin SetUint8ResultBodyBytesConverterMixin
     on DataSourceIncomingPackage<SetUint8ResultBody> {

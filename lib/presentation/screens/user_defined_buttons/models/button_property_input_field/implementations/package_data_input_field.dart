@@ -1,5 +1,5 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_check/button_property_validators.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/input_fields/button_input_field_widget.dart';
@@ -36,22 +36,4 @@ class PackageDataInputField extends ButtonInputFieldWidget<List<int>?> {
             ];
           },
         );
-}
-
-extension on String {
-  List<int>? parseListOfInts() {
-    return replaceAll(',', ' ')
-        .split(' ')
-        .map((e) => int.tryParse(e.trim()))
-        .whereNotNull()
-        .toList();
-  }
-
-  bool get hasUnparsedSegments {
-    return replaceAll(',', ' ')
-        .split(' ')
-        .map((e) => int.tryParse(e.trim()))
-        .where((element) => element == null)
-        .isNotEmpty;
-  }
 }

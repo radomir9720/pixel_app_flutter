@@ -127,6 +127,10 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
       MotorGearAndRollIncomingDataSourcePackage.new,
       MotorPowerIncomingDataSourcePackage.new,
       //
+      LeftDoorIncomingDataSourcePackage.new,
+      RightDoorIncomingDataSourcePackage.new,
+      CabinLightIncomingDataSourcePackage.new,
+      //
       ErrorWithCodeAndSectionIncomingDataSourcePackage.new,
       //
       CustomIncomingDataSourcePackage.new,

@@ -128,8 +128,16 @@ class SelectedDataSourceScope extends AutoRouter {
                   ..subscribeToLowBeam()
                   ..subscribeToTurnSignals()
                   ..subscribeToReverseLight()
-                  ..subscribeToBrakeLight(),
+                  ..subscribeToBrakeLight()
+                  ..subscribeToCabinLight(),
                 lazy: false,
+              ),
+              BlocProvider(
+                create: (context) => DoorsCubit(
+                  dataSource: context.read(),
+                )
+                  ..subscribeToLeftDoor()
+                  ..subscribeToRightDoor(),
               ),
               BlocProvider(
                 create: (context) {

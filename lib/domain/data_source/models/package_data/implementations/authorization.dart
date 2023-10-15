@@ -33,7 +33,7 @@ class AuthorizationInitializationRequestConverter
 
   @override
   List<int> toBytes(AuthorizationInitializationRequest model) {
-    return [FunctionId.authorizationInitializationRequestId];
+    return [AuthorizationFunctionId.initializationRequestId];
   }
 }
 
@@ -72,7 +72,7 @@ class AuthorizationInitializationResponseConverter
   @override
   List<int> toBytes(AuthorizationInitializationResponse model) {
     return [
-      FunctionId.authorizationInitializationResponseId,
+      AuthorizationFunctionId.initializationResponseId,
       model.method,
       ...model.deviceId,
     ];
@@ -112,7 +112,7 @@ class AuthorizationRequestConverter
     final key = List.generate(16, (index) => Random().nextInt(0x100));
     final hash = sha1.convert([...model.sn, ...key]);
     return [
-      FunctionId.authorizationRequestId,
+      AuthorizationFunctionId.requestId,
       // Authorization method
       0x01,
       // key
@@ -157,7 +157,7 @@ class AuthorizationResponseConverter
   @override
   List<int> toBytes(AuthorizationResponse model) {
     return [
-      FunctionId.authorizationResponseId,
+      AuthorizationFunctionId.responseId,
       if (model.success) 1 else 0,
       ...model.uptime.inMilliseconds.toBytesUint32,
     ];

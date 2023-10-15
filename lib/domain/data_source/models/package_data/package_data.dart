@@ -6,6 +6,9 @@ export 'function_id.dart';
 export 'periodic_value_status.dart';
 
 // implementations
+export 'implementations/action_body.dart';
+export 'implementations/doors.dart';
+export 'implementations/int8_toggle_body.dart';
 export 'implementations/battery_low_voltage.dart';
 export 'implementations/battery_temperature.dart';
 export 'implementations/handshake.dart';

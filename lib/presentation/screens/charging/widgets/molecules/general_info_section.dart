@@ -1,16 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixel_app_flutter/domain/data_source/blocs/battery_data_cubit.dart';
+import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
-import 'package:pixel_app_flutter/presentation/screens/charging/widgets/charging_screen_list_tile.dart';
+import 'package:pixel_app_flutter/presentation/screens/charging/widgets/atoms/charging_screen_list_tile.dart';
 
-class GeneralInfoTab extends StatelessWidget {
-  const GeneralInfoTab({super.key});
+class GeneralInfoSection extends StatelessWidget {
+  const GeneralInfoSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SliverList.list(
       children: [
         BlocSelector<BatteryDataCubit, BatteryDataState, HighVoltage>(
           selector: (state) => state.highVoltage,

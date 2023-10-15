@@ -5,33 +5,18 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:re_widgets/re_widgets.dart';
 
-class LightStateErrorListener extends SingleChildStatelessWidget {
-  const LightStateErrorListener({super.key, super.child});
+class DoorsStateErrorListener extends SingleChildStatelessWidget {
+  const DoorsStateErrorListener({super.key, super.child});
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    return BlocListener<LightsCubit, LightsState>(
+    return BlocListener<DoorsCubit, DoorsState>(
       listenWhen: (previous, current) {
         final errors = current.whenFailure<MapEntry<String, ToggleStateError>>(
           previous,
-          leftTurnSignal: (error) =>
-              MapEntry(context.l10n.leftBlinkerButtonCaption, error),
-          rightTurnSignal: (error) =>
-              MapEntry(context.l10n.rightBlinkerButtonCaption, error),
-          hazardBeam: (error) =>
-              MapEntry(context.l10n.hazardBeamButtonCaption, error),
-          sideBeam: (error) =>
-              MapEntry(context.l10n.parkingLightsButtonCaption, error),
-          lowBeam: (error) =>
-              MapEntry(context.l10n.lowBeamButtonCaption, error),
-          highBeam: (error) =>
-              MapEntry(context.l10n.highBeamButtonCaption, error),
-          reverse: (error) =>
-              MapEntry(context.l10n.reverseLightButtonCaption, error),
-          brake: (error) =>
-              MapEntry(context.l10n.brakeLightButtonCaption, error),
-          cabin: (error) =>
-              MapEntry(context.l10n.cabinLightButtonCaption, error),
+          left: (error) => MapEntry(context.l10n.leftDoorInterfaceTitle, error),
+          right: (error) =>
+              MapEntry(context.l10n.rightDoorInterfaceTitle, error),
         );
 
         if (errors.isEmpty) return false;
