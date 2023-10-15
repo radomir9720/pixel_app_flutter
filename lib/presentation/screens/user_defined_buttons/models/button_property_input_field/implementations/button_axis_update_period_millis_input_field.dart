@@ -16,6 +16,7 @@ class ButtonAxisUpdatePeriodMillisInputField
                   .setValue<int?, ButtonAxisUpdatePeriodMillisInputField>,
               mapper: IntParseNullable.tryParseNullable,
               initialValue: initialValue?.toString(),
+              formatIntToUint8: false,
               postMapValidators: (context) => [
                 context.notNullValidator(),
                 context.minValueValidator(0),

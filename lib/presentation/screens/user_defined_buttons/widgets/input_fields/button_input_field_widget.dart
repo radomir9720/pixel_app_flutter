@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_property_check/button_property_validators.dart';
 
@@ -8,6 +9,7 @@ class ButtonInputFieldWidget<T> extends StatefulWidget {
     required this.title,
     required this.onChanged,
     required this.mapper,
+    this.formatIntToUint8 = true,
     this.isRequired = true,
     this.postMapValidators,
     this.preMapValidators,
@@ -73,6 +75,9 @@ class ButtonInputFieldWidget<T> extends StatefulWidget {
   @protected
   final String? initialValue;
 
+  @protected
+  final bool formatIntToUint8;
+
   @override
   State<ButtonInputFieldWidget<T>> createState() =>
       _ButtonInputFieldWidgetState<T>();
@@ -81,11 +86,33 @@ class ButtonInputFieldWidget<T> extends StatefulWidget {
 class _ButtonInputFieldWidgetState<T> extends State<ButtonInputFieldWidget<T>> {
   late final TextEditingController controller;
 
+  Type getType<R>() => R;
+
   @override
   void initState() {
     super.initState();
-    controller =
-        widget.controller ?? TextEditingController(text: widget.initialValue);
+    String? initialValue = widget.initialValue ?? '';
+
+    if (initialValue.isNotEmpty && widget.formatIntToUint8) {
+      if (T == getType<int?>()) {
+        initialValue = int.tryParse(initialValue)
+            ?.toBytesUint8
+            .map((e) => '0x${e.toRadixString(16)}')
+            .join(', ');
+      } else if (T == getType<List<int>?>()) {
+        final parsed = initialValue.parseListOfInts();
+        if ((parsed?.isNotEmpty ?? false) &&
+            !initialValue.hasUnparsedSegments) {
+          initialValue = parsed
+              ?.map((e) => e.toBytesUint8)
+              .expand((element) => element)
+              .map((e) => '0x${e.toRadixString(16)}')
+              .join(', ');
+        }
+      }
+    }
+
+    controller = widget.controller ?? TextEditingController(text: initialValue);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.onChanged(widget.mapper(widget.initialValue ?? ''));
     });

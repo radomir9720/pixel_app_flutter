@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
+
 // import 'package:byte_extensions/byte_extensions.dart';
 
 extension ToBytesExtension on int {
@@ -88,4 +90,22 @@ extension AsIntBytesExtension on List<int> {
 
 extension FromMilliExtension on int {
   double get fromMilli => this / 1000;
+}
+
+extension ParseListOfIntsExtension on String {
+  List<int>? parseListOfInts() {
+    return replaceAll(',', ' ')
+        .split(' ')
+        .map((e) => int.tryParse(e.trim()))
+        .whereNotNull()
+        .toList();
+  }
+
+  bool get hasUnparsedSegments {
+    return replaceAll(',', ' ')
+        .split(' ')
+        .map((e) => int.tryParse(e.trim()))
+        .where((element) => element == null)
+        .isNotEmpty;
+  }
 }
