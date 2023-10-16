@@ -15,16 +15,18 @@ class TrunkJoystick extends StatefulWidget {
     this.arrowIconPadding = 10,
     this.thumbSize = 30,
     this.iconSize = 24,
+    this.sizeFactor = 1,
   });
 
   const TrunkJoystick.big({
     super.key,
     required this.parameterId,
-    this.mainAxisSize = 150,
-    this.crossAxisSize = 45,
-    this.thumbSize = 45,
+    this.mainAxisSize = 170,
+    this.crossAxisSize = 60,
+    this.thumbSize = 60,
     this.iconSize = 36,
     this.arrowIconPadding = 10,
+    this.sizeFactor = 1,
   });
 
   @protected
@@ -45,6 +47,9 @@ class TrunkJoystick extends StatefulWidget {
   @protected
   final double iconSize;
 
+  @protected
+  final double sizeFactor;
+
   @override
   State<TrunkJoystick> createState() => _TrunkJoystickState();
 }
@@ -60,8 +65,8 @@ class _TrunkJoystickState extends State<TrunkJoystick>
     controller = PackageSenderOneAxisJoystickController(
       onTapSend: [
         OutgoingToggleRequestPackage(
-          bytesConvertible: const Int8ToggleBody(value: 0),
           parameterId: widget.parameterId,
+          bytesConvertible: const SetInt8Body(value: 0),
         ),
       ],
       sendCallback: (packages) {
@@ -76,9 +81,9 @@ class _TrunkJoystickState extends State<TrunkJoystick>
       onPan: (value) {
         controller.setPackages(
           [
-            OutgoingToggleRequestPackage(
-              bytesConvertible: Int8ToggleBody(value: (value * 100).toInt()),
+            OutgoingSetValuePackage(
               parameterId: widget.parameterId,
+              setValueBody: SetInt8Body(value: (value * 100).toInt()),
             ),
           ],
         );
@@ -99,11 +104,11 @@ class _TrunkJoystickState extends State<TrunkJoystick>
       axis: Axis.vertical,
       controller: controller,
       notifier: notifier,
-      mainAxisSize: widget.mainAxisSize,
-      crossAxisSize: widget.crossAxisSize,
-      thumbSize: widget.thumbSize,
-      iconSize: widget.iconSize,
-      arrowIconPadding: widget.arrowIconPadding,
+      mainAxisSize: widget.mainAxisSize * widget.sizeFactor,
+      crossAxisSize: widget.crossAxisSize * widget.sizeFactor,
+      thumbSize: widget.thumbSize * widget.sizeFactor,
+      iconSize: widget.iconSize * widget.sizeFactor,
+      arrowIconPadding: widget.arrowIconPadding * widget.sizeFactor,
     );
   }
 }

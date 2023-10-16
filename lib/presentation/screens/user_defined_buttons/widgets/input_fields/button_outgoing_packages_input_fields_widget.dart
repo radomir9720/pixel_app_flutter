@@ -128,8 +128,8 @@ class ButtonOutgoingPackagesInputFieldsWidget<
               deleteCallback: deleteCallback,
               dataIsAutofilled: dataIsAutofilled,
               dataInitialValue: object.data.map((e) => e.toString()).join(','),
-              parameterIdInitialValue: object.parameterId.toString(),
-              requestTypeInitialValue: object.requestType.toString(),
+              parameterIdInitialValue: object.parameterId?.toString(),
+              requestTypeInitialValue: object.requestType?.toString(),
             );
           },
           tileModelBuilder: (index) {
