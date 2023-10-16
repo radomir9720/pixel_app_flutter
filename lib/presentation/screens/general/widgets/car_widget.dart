@@ -160,13 +160,10 @@ class _CarWidgetState extends State<CarWidget> {
               top: carSize.height * .02,
               right: 0,
               left: 0,
-              child: Transform.scale(
-                scale: buttonScaleCoef,
-                alignment: Alignment.topCenter,
-                child: const Center(
-                  child: TrunkJoystick.big(
-                    parameterId: DataSourceParameterId.hood(),
-                  ),
+              child: Center(
+                child: TrunkJoystick.big(
+                  parameterId: const DataSourceParameterId.hood(),
+                  sizeFactor: buttonScaleCoef,
                 ),
               ),
             ),
@@ -175,13 +172,10 @@ class _CarWidgetState extends State<CarWidget> {
               bottom: carSize.height * .02,
               right: 0,
               left: 0,
-              child: Transform.scale(
-                scale: buttonScaleCoef,
-                alignment: Alignment.bottomCenter,
-                child: const Center(
-                  child: TrunkJoystick.big(
-                    parameterId: DataSourceParameterId.trunk(),
-                  ),
+              child: Center(
+                child: TrunkJoystick.big(
+                  parameterId: const DataSourceParameterId.trunk(),
+                  sizeFactor: buttonScaleCoef,
                 ),
               ),
             ),
