@@ -27,13 +27,6 @@ class _CarWidgetState extends State<CarWidget> {
 
   Size carSize = Size.zero;
 
-  bool leftDoorOpened = true;
-  bool rightDoorOpened = false;
-  bool trunkOpened = false;
-  bool frontTrunkOpened = true;
-
-  AxisDirection? horizontalDragDirection;
-
   IconData _getIcon(bool opened) =>
       opened ? PixelIcons.unlocked : PixelIcons.locked;
 
@@ -73,27 +66,9 @@ class _CarWidgetState extends State<CarWidget> {
                   if (mounted) setState(() {});
                 }
               },
-              child: GestureDetector(
-                behavior: HitTestBehavior.deferToChild,
-                onHorizontalDragUpdate: (details) {
-                  if (details.delta.dx == 0) return;
-
-                  horizontalDragDirection = details.delta.dx > 0
-                      ? AxisDirection.right
-                      : AxisDirection.left;
-                },
-                onHorizontalDragEnd: (details) {
-                  if (horizontalDragDirection == AxisDirection.right) {
-                    context.read<LightsCubit>().toggleRightTurnSignal();
-                  } else if (horizontalDragDirection == AxisDirection.left) {
-                    context.read<LightsCubit>().toggleLeftTurnSignal();
-                  }
-                  horizontalDragDirection = null;
-                },
-                child: AspectRatio(
-                  aspectRatio: .3972,
-                  child: SvgPicture.asset(carAssetPath),
-                ),
+              child: AspectRatio(
+                aspectRatio: .3972,
+                child: SvgPicture.asset(carAssetPath),
               ),
             ),
           ),
@@ -182,7 +157,7 @@ class _CarWidgetState extends State<CarWidget> {
             ),
             // Hood
             Positioned(
-              top: carSize.height * .04,
+              top: carSize.height * .02,
               right: 0,
               left: 0,
               child: Transform.scale(
@@ -197,7 +172,7 @@ class _CarWidgetState extends State<CarWidget> {
             ),
             // Trunk
             Positioned(
-              bottom: carSize.height * .04,
+              bottom: carSize.height * .02,
               right: 0,
               left: 0,
               child: Transform.scale(

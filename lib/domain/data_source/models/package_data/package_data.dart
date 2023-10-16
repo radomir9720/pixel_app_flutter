@@ -25,6 +25,7 @@ export 'implementations/two_uint16_with_status_body.dart';
 export 'implementations/uint32_with_status_body.dart';
 export 'implementations/motor_gear_and_roll.dart';
 export 'implementations/int16_with_status_body.dart';
+export 'implementations/set_int8_body.dart';
 export 'implementations/set_uint8_body.dart';
 export 'implementations/voltage.dart';
 export 'implementations/speed.dart';
