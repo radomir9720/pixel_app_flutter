@@ -21,13 +21,18 @@ class SwitchOverlayTile extends StatelessWidget {
       builder: (context, state) {
         return SwitchListTile(
           value: state.payload,
-          onChanged: (v) async {
+          onChanged: (enable) async {
+            if (!enable) {
+              context
+                  .read<OverlayBloc>()
+                  .add(OverlayEvent.set(enabled: enable));
+              return;
+            }
+
             bool? granted;
-            if (v) {
-              granted = await FlutterOverlayWindow.isPermissionGranted();
-              if (!granted) {
-                granted = await FlutterOverlayWindow.requestPermission();
-              }
+            granted = await FlutterOverlayWindow.isPermissionGranted();
+            if (!granted) {
+              granted = await FlutterOverlayWindow.requestPermission();
             }
             if (context.mounted) {
               if (!(granted ?? false)) {
@@ -41,7 +46,9 @@ class SwitchOverlayTile extends StatelessWidget {
                 return;
               }
 
-              context.read<OverlayBloc>().add(OverlayEvent.set(enabled: v));
+              context
+                  .read<OverlayBloc>()
+                  .add(OverlayEvent.set(enabled: enable));
             }
           },
           title: Text(context.l10n.overlayStatisticsAboveAnotherAppsTileTitle),
