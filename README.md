@@ -52,12 +52,12 @@ The MainECU is the connecting link between this application and car interfaces.
 
   * __Bluetooth Data Source__
     
-    *For now, bluetooth connection with an esp32 device works only on   `Android` and `MacOS`. On `iOS` connection via `Bluetooth` is not availalbe because we use esp32 devices with Bluetooth Classic(under v4.0). Apple does not allow to use Bluetooth Classic if the device is not registered with the [MFI Program](https://mfi.apple.com/). There is also esp32 devices with BLE(bluetooth version >=4.0), so if we will decide to replace Bluetooth Classic esp32 devices with Low Energy ones, we will have the oportunity to implement bluetooth connection also on iOS*
+    *For now, bluetooth connection with an esp32 device works only on   `Android` and `MacOS`. On `iOS` connection via `Bluetooth` is not availalbe because we use esp32 devices with Bluetooth Classic(under v4.0). Apple does not allow to use Bluetooth Classic if the device is not registered with the [MFI Program](https://mfi.apple.com/). There are also esp32 devices with BLE(bluetooth version >=4.0), so if we will decide to replace Bluetooth Classic esp32 devices with Low Energy ones, we will have the oportunity to implement bluetooth connection also on iOS*
 
 
   * __Demo Data Source__
 
-    *The purpose is to connect to a mocked service like to a real one. It generates random values(like speed and voltage). This way you can work on UI, for example, without the need to connect to a real device(maybe you din't have it at all).*
+    *The purpose is to connect to a mocked service like to a real one. It generates random values(like speed and voltage). This way you can, for example, work on UI, or just have a look at all the app's functions, without the need to connect to a real device(maybe you don't have it at all).*
   
   </br>
 
