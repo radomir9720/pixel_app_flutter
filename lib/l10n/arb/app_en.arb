@@ -479,5 +479,6 @@
   "sensorsSectionSubtitle": "Sensors",
   "waitingInterfaceStatus": "Waiting",
   "closedShortStatusMessage": "Closed",
-  "openedShortStatusMessage": "Closed"
+  "openedShortStatusMessage": "Closed",
+  "decimalShortListTileLabel": "dec"
 }
