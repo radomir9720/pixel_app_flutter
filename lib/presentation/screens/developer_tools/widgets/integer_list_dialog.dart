@@ -73,7 +73,11 @@ class _IntegerListDialogState extends State<IntegerListDialog> {
                     ...newValue,
                   }.map((current) {
                     return FilterChip(
-                      label: Text('$current'),
+                      label: Text(
+                        '0x${current.toRadixString(16).toUpperCase()} '
+                        ' | '
+                        '$current',
+                      ),
                       showCheckmark: false,
                       selected: newValue.contains(current),
                       onSelected: (selected) {
