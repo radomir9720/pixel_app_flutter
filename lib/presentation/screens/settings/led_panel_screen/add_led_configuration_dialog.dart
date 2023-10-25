@@ -7,6 +7,7 @@ import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/i
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/mini_progress_indicator.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage(name: 'AddConfigurationDialogRoute')
 class AddLEDConfigurationDialog extends StatefulWidget {
   const AddLEDConfigurationDialog({
     super.key,

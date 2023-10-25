@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffo
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage()
 class EnterSerialNumberScreen extends StatefulWidget {
   const EnterSerialNumberScreen({
     super.key,

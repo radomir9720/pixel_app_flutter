@@ -479,5 +479,6 @@
   "sensorsSectionSubtitle": "Датчики",
   "waitingInterfaceStatus": "Ожидание",
   "closedShortStatusMessage": "Закр",
-  "openedShortStatusMessage": "Откр"
+  "openedShortStatusMessage": "Откр",
+  "decimalShortListTileLabel": "dec"
 }

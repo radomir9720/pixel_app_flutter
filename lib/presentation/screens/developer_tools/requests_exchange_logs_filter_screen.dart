@@ -6,6 +6,7 @@ import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 
+@RoutePage()
 class RequestsExchangeLogsFilterScreen extends StatelessWidget {
   const RequestsExchangeLogsFilterScreen({super.key});
 

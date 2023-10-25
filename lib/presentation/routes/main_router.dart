@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
-import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/apps_scope.dart';
 import 'package:pixel_app_flutter/app/scopes/flows/developer_tools_scope.dart';
@@ -41,51 +42,59 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/mode
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/select_button_type_screen.dart';
 
 part 'main_router.gr.dart';
-part 'route_names.dart';
 part 'subroutes/developer_tools_route.dart';
 part 'subroutes/home_route.dart';
 part 'subroutes/select_data_source_route.dart';
 part 'subroutes/settings_route.dart';
 part 'subroutes/user_defined_buttons_route.dart';
+part 'guards/selected_data_source_guard.dart';
 
-@MaterialAutoRouter(
+@AutoRouterConfig(
   replaceInRouteName: 'ScreenWrapper|Screen|PageWrapper|Page|Scope,Route',
-  routes: <AutoRoute>[
-    CustomRoute<void>(
-      path: '',
-      initial: true,
-      page: SelectedDataSourceScope,
-      name: RouteNames.selectedDataSourceFlow,
-      transitionsBuilder: TransitionsBuilders.fadeIn,
-      children: [
-        _homeRoute,
+)
+class MainRouter extends _$MainRouter {
+  MainRouter({
+    required this.selectedDataSourceGuard,
+  });
+
+  @protected
+  final SelectedDataSourceGuard selectedDataSourceGuard;
+
+  @override
+  List<AutoRoute> get routes => <AutoRoute>[
+        CustomRoute(
+          path: '/',
+          page: SelectedDataSourceFlow.page,
+          guards: [selectedDataSourceGuard],
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+          children: [
+            _homeRoute,
+            //
+            _settingsRoute,
+            //
+            _selectDataSourceRoute(root: false),
+            //
+            _userDefinedButtonsRoute,
+          ],
+        ),
         //
-        _settingsRoute,
+        _selectDataSourceRoute(),
         //
         _developerToolsRoute,
         //
-        _selectDataSourceRoute,
-        //
-        _userDefinedButtonsRoute,
-      ],
-    ),
-    //
-    _selectDataSourceRoute,
-    //
-    CustomRoute<void>(
-      path: 'loading',
-      page: LoadingScreen,
-      fullscreenDialog: true,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-  ],
-)
-class MainRouter extends _$MainRouter {}
+        CustomRoute(
+          path: '/loading',
+          page: LoadingRoute.page,
+          fullscreenDialog: true,
+          transitionsBuilder: TransitionsBuilders.noTransition,
+        ),
+      ];
+}
 
 Route<T> dialogRouteBuilder<T>(
   BuildContext context,
   Widget child,
-  CustomPage<T> page, {
+  AutoRoutePage<T> page, {
   Color? barrierColor,
 }) {
   return DialogRoute(

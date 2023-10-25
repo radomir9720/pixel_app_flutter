@@ -8,6 +8,7 @@ import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/exchange_log_card.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage()
 class PackagesExchangeConsoleScreen extends StatefulWidget {
   const PackagesExchangeConsoleScreen({super.key});
 

@@ -50,6 +50,7 @@ class OneAxisJoystick extends StatefulWidget {
 
 class _OneAxisJoystickState extends State<OneAxisJoystick> {
   final thumbKey = GlobalKey();
+  bool pointerDown = false;
 
   void onPanUpdate(DragUpdateDetails details) {
     final delta = widget.axis.isVertical ? -details.delta.dy : details.delta.dx;
@@ -73,129 +74,133 @@ class _OneAxisJoystickState extends State<OneAxisJoystick> {
     final axis = widget.axis;
     final isVertical = axis.isVertical;
 
-    return GestureDetector(
-      onPanDown: (details) {
-        final tapOffset = details.globalPosition;
-        final renderBox =
-            thumbKey.currentContext?.findRenderObject() as RenderBox?;
+    return Listener(
+      onPointerUp: (_) => widget.controller.onPointerUp(),
+      onPointerDown: (_) => widget.controller.onPointerDown(),
+      child: GestureDetector(
+        onPanDown: (details) {
+          final tapOffset = details.globalPosition;
+          final renderBox =
+              thumbKey.currentContext?.findRenderObject() as RenderBox?;
 
-        if (renderBox == null) return;
-        final size = renderBox.size;
+          if (renderBox == null) return;
+          final size = renderBox.size;
 
-        final buttonTopRightOffset = renderBox.localToGlobal(Offset.zero);
-        final buttonCenter =
-            buttonTopRightOffset + Offset(size.width / 2, size.height / 2);
+          final buttonTopRightOffset = renderBox.localToGlobal(Offset.zero);
+          final buttonCenter =
+              buttonTopRightOffset + Offset(size.width / 2, size.height / 2);
 
-        final buttonRect = Rect.fromCenter(
-          center: buttonCenter,
-          width: widget.thumbSize,
-          height: widget.thumbSize,
-        );
+          final buttonRect = Rect.fromCenter(
+            center: buttonCenter,
+            width: widget.thumbSize,
+            height: widget.thumbSize,
+          );
 
-        final isTapOnButton = buttonRect.contains(tapOffset);
+          final isTapOnButton = buttonRect.contains(tapOffset);
 
-        if (isTapOnButton) return;
-        final offsetDelta = tapOffset - buttonCenter;
-        final delta = isVertical ? -offsetDelta.dy : offsetDelta.dx;
-        widget.notifier.updateCurrentPosition(delta);
-      },
-      onTapUp: (_) => onCancel(),
-      onPanStart: (_) => onStart(),
-      onPanUpdate: onPanUpdate,
-      onLongPressStart: (_) => onStart(),
-      onLongPressMoveUpdate: (details) {
-        final currentPosition = widget.axis.isVertical
-            ? widget.mainAxisSize - widget.notifier.value.currentPosition
-            : widget.notifier.value.currentPosition;
-        final delta = widget.axis.isVertical
-            ? currentPosition - details.localPosition.dy
-            : details.localPosition.dx - currentPosition;
-        widget.controller.onDragUpdate(delta);
-        widget.notifier.updateCurrentPosition(delta);
-      },
-      onPanEnd: (_) => onCancel(),
-      onLongPressEnd: (_) => onCancel(),
-      child: ColoredBox(
-        color: Colors.transparent,
-        child: SizedBox(
-          height: isVertical ? widget.mainAxisSize : null,
-          width: isVertical ? widget.crossAxisSize : widget.mainAxisSize,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              widget.notifier.setMaxDistance(widget.mainAxisSize);
-              return ValueListenableBuilder<OneAxisValue>(
-                valueListenable: widget.notifier,
-                builder: (context, value, child) {
-                  final factor = value.factor;
-                  final xAlignment = isVertical ? 0.0 : factor;
-                  final yAlignment = isVertical ? factor : 0.0;
-                  return Stack(
-                    alignment: Alignment(xAlignment, -yAlignment),
-                    children: [
-                      Positioned.fill(
-                        top: isVertical ? widget.arrowIconPadding : 0,
-                        right: isVertical ? 0 : null,
-                        bottom: isVertical ? null : 0,
-                        child: Center(
-                          child: Icon(
-                            isVertical
-                                ? Icons.keyboard_arrow_up_rounded
-                                : Icons.keyboard_arrow_left_rounded,
-                            size: widget.iconSize,
-                            color: context.colors.disabled,
-                          ),
-                        ),
-                      ),
-                      Positioned.fill(
-                        bottom: isVertical ? widget.arrowIconPadding : 0,
-                        left: isVertical ? 0 : null,
-                        top: isVertical ? null : 0,
-                        child: Center(
-                          child: Icon(
-                            isVertical
-                                ? Icons.keyboard_arrow_down_rounded
-                                : Icons.keyboard_arrow_right_rounded,
-                            size: widget.iconSize,
-                            color: context.colors.disabled,
-                          ),
-                        ),
-                      ),
-                      child ?? const SizedBox.shrink(),
-                    ],
-                  );
-                },
-                child: GestureDetector(
-                  key: thumbKey,
-                  onVerticalDragStart: (_) => onStart(Axis.vertical),
-                  onVerticalDragUpdate: onPanUpdate,
-                  onVerticalDragEnd: (_) => onCancel(Axis.vertical),
-                  onHorizontalDragStart: (_) => onStart(Axis.horizontal),
-                  onHorizontalDragUpdate: onPanUpdate,
-                  onHorizontalDragEnd: (_) => onCancel(Axis.horizontal),
-                  onTap: widget.controller.onTap,
-                  child: SizedBox.square(
-                    dimension: widget.thumbSize,
-                    child: ColoredBox(
-                      color: Colors.transparent,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.colors.disabled,
-                          border: Border.all(color: Colors.black26),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 3,
-                              spreadRadius: 3,
+          if (isTapOnButton) return;
+          final offsetDelta = tapOffset - buttonCenter;
+          final delta = isVertical ? -offsetDelta.dy : offsetDelta.dx;
+          widget.notifier.updateCurrentPosition(delta);
+        },
+        onTapUp: (_) => onCancel(),
+        onPanStart: (_) => onStart(),
+        onPanUpdate: onPanUpdate,
+        onLongPressStart: (_) => onStart(),
+        onLongPressMoveUpdate: (details) {
+          final currentPosition = widget.axis.isVertical
+              ? widget.mainAxisSize - widget.notifier.value.currentPosition
+              : widget.notifier.value.currentPosition;
+          final delta = widget.axis.isVertical
+              ? currentPosition - details.localPosition.dy
+              : details.localPosition.dx - currentPosition;
+          widget.controller.onDragUpdate(delta);
+          widget.notifier.updateCurrentPosition(delta);
+        },
+        onPanEnd: (_) => onCancel(),
+        onLongPressEnd: (_) => onCancel(),
+        child: ColoredBox(
+          color: Colors.transparent,
+          child: SizedBox(
+            height: isVertical ? widget.mainAxisSize : null,
+            width: isVertical ? widget.crossAxisSize : widget.mainAxisSize,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                widget.notifier.setMaxDistance(widget.mainAxisSize);
+                return ValueListenableBuilder<OneAxisValue>(
+                  valueListenable: widget.notifier,
+                  builder: (context, value, child) {
+                    final factor = value.factor;
+                    final xAlignment = isVertical ? 0.0 : factor;
+                    final yAlignment = isVertical ? factor : 0.0;
+                    return Stack(
+                      alignment: Alignment(xAlignment, -yAlignment),
+                      children: [
+                        Positioned.fill(
+                          top: isVertical ? widget.arrowIconPadding : 0,
+                          right: isVertical ? 0 : null,
+                          bottom: isVertical ? null : 0,
+                          child: Center(
+                            child: Icon(
+                              isVertical
+                                  ? Icons.keyboard_arrow_up_rounded
+                                  : Icons.keyboard_arrow_left_rounded,
+                              size: widget.iconSize,
+                              color: context.colors.disabled,
                             ),
-                          ],
+                          ),
+                        ),
+                        Positioned.fill(
+                          bottom: isVertical ? widget.arrowIconPadding : 0,
+                          left: isVertical ? 0 : null,
+                          top: isVertical ? null : 0,
+                          child: Center(
+                            child: Icon(
+                              isVertical
+                                  ? Icons.keyboard_arrow_down_rounded
+                                  : Icons.keyboard_arrow_right_rounded,
+                              size: widget.iconSize,
+                              color: context.colors.disabled,
+                            ),
+                          ),
+                        ),
+                        child ?? const SizedBox.shrink(),
+                      ],
+                    );
+                  },
+                  child: GestureDetector(
+                    key: thumbKey,
+                    onVerticalDragStart: (_) => onStart(Axis.vertical),
+                    onVerticalDragUpdate: onPanUpdate,
+                    onVerticalDragEnd: (_) => onCancel(Axis.vertical),
+                    onHorizontalDragStart: (_) => onStart(Axis.horizontal),
+                    onHorizontalDragUpdate: onPanUpdate,
+                    onHorizontalDragEnd: (_) => onCancel(Axis.horizontal),
+                    onTap: widget.controller.onTap,
+                    child: SizedBox.square(
+                      dimension: widget.thumbSize,
+                      child: ColoredBox(
+                        color: Colors.transparent,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: context.colors.disabled,
+                            border: Border.all(color: Colors.black26),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 3,
+                                spreadRadius: 3,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -207,6 +212,10 @@ abstract class OneAxisJoystickController {
   const OneAxisJoystickController();
 
   void onDragEnd();
+
+  void onPointerDown();
+
+  void onPointerUp();
 
   void onDragUpdate(double delta);
 
@@ -222,6 +231,8 @@ final class OneAxisJoystickControllerWrapper
     required this.onDragStartCallback,
     required this.onDragUpdateCallback,
     required this.onTapCallback,
+    required this.onPointerDownCallback,
+    required this.onPointerUpCallback,
   });
 
   @protected
@@ -236,6 +247,12 @@ final class OneAxisJoystickControllerWrapper
   @protected
   final void Function() onTapCallback;
 
+  @protected
+  final void Function() onPointerDownCallback;
+
+  @protected
+  final void Function() onPointerUpCallback;
+
   @override
   void onDragEnd() => onDragEndCallback();
 
@@ -247,6 +264,12 @@ final class OneAxisJoystickControllerWrapper
 
   @override
   void onTap() => onTapCallback();
+
+  @override
+  void onPointerDown() => onPointerDownCallback();
+
+  @override
+  void onPointerUp() => onPointerUpCallback();
 }
 
 class OneAxisJoystickNotifier extends ValueNotifier<OneAxisValue> {

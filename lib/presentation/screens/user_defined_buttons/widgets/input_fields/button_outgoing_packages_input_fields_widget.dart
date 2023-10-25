@@ -94,13 +94,6 @@ class ButtonOutgoingPackagesInputFieldsWidget<
   @protected
   final List<OutgoingPackageParameters>? initialPackages;
 
-  void deleteCallback(void Function(int id) deleteCallback, int id) {
-    manager.updateValue<OutgoingPackagesMap, T>((currentValue) {
-      return currentValue?.removeEntry(id) ?? OutgoingPackagesMap({});
-    });
-    deleteCallback(id);
-  }
-
   @override
   Widget build(BuildContext context) {
     return FieldGroupWrapper(
@@ -125,7 +118,13 @@ class ButtonOutgoingPackagesInputFieldsWidget<
             return _Tile<T>(
               id: object.id,
               manager: manager,
-              deleteCallback: deleteCallback,
+              deleteCallback: () {
+                manager.updateValue<OutgoingPackagesMap, T>((currentValue) {
+                  return currentValue?.removeEntry(object.id) ??
+                      OutgoingPackagesMap({});
+                });
+                deleteCallback();
+              },
               dataIsAutofilled: dataIsAutofilled,
               dataInitialValue: object.data.map((e) => e.toString()).join(','),
               parameterIdInitialValue: object.parameterId?.toString(),

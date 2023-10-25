@@ -12,6 +12,7 @@ import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffo
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/settings_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/settings_base_layout.dart';
 
+@RoutePage()
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 

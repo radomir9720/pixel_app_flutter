@@ -5,41 +5,18 @@ import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 
-class RequestsExchangeLogsScreen extends StatefulWidget {
+@RoutePage()
+class RequestsExchangeLogsScreen extends StatelessWidget {
   const RequestsExchangeLogsScreen({super.key});
 
   @override
-  State<RequestsExchangeLogsScreen> createState() =>
-      _RequestsExchangeLogsScreenState();
-}
-
-class _RequestsExchangeLogsScreenState extends State<RequestsExchangeLogsScreen>
-    with SingleTickerProviderStateMixin {
-  late final TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AutoTabsRouter(
-      homeIndex: tabController.index,
+    return AutoTabsRouter.tabBar(
       routes: const [
         ProcessedExchangeLogsRoute(),
         RawExchangeLogsRoute(),
       ],
-      builder: (context, child, animation) {
-        final tabsRouter = AutoTabsRouter.of(context);
-
+      builder: (context, child, tabController) {
         return Scaffold(
           appBar: AppBar(
             leading: BackButton(
@@ -68,20 +45,13 @@ class _RequestsExchangeLogsScreenState extends State<RequestsExchangeLogsScreen>
             ],
             bottom: TabBar(
               controller: tabController,
-              onTap: (value) {
-                tabsRouter.setActiveIndex(value);
-                tabController.index = value;
-              },
               tabs: [
                 Tab(text: context.l10n.processedRequestsTabTitle),
                 Tab(text: context.l10n.rawRequestsTabTitle),
               ],
             ),
           ),
-          body: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
+          body: child,
         );
       },
     );

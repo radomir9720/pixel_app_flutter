@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/annotations.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
@@ -14,6 +15,7 @@ import 'package:pixel_app_flutter/presentation/widgets/common/organisms/title_wr
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage()
 class NavigatorScreen extends StatefulWidget {
   const NavigatorScreen({super.key});
 

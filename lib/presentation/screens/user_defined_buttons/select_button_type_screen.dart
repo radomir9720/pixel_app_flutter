@@ -7,6 +7,7 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widg
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/one_axis_joystick_button.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/widgets/buttons/send_packages_button.dart';
 
+@RoutePage()
 class SelectButtonTypeScreen extends StatelessWidget {
   const SelectButtonTypeScreen({super.key});
 

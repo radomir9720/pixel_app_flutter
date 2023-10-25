@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pixel_app_flutter/app/overlay.dart';
-import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/storages/data_source_storage.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:pixel_app_flutter/presentation/app/theme.dart';
@@ -23,7 +23,17 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final _appRouter = MainRouter();
+  late final MainRouter _appRouter;
+
+  @override
+  void initState() {
+    super.initState();
+    _appRouter = MainRouter(
+      selectedDataSourceGuard: SelectedDataSourceGuard(
+        dataSourceStorage: context.read(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,25 +45,18 @@ class _AppState extends State<App> {
             theme: MaterialTheme.from(AppColors.of(context)),
             localizationsDelegates: const [
               AppLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             routeInformationParser: _appRouter.defaultRouteParser(),
-            routerDelegate: AutoRouterDelegate.declarative(
-              _appRouter,
-              routes: (_) {
-                final state = context.watch<DataSourceCubit>().state;
-
-                return [
-                  if (state.ds.isPresent)
-                    const SelectedDataSourceFlow()
-                  else
-                    const SelectDataSourceFlow(),
-                ];
-              },
+            routerDelegate: _appRouter.delegate(
               navigatorObservers: widget.observersBuilder ??
                   AutoRouterDelegate.defaultNavigatorObserversBuilder,
+              reevaluateListenable: ReevaluateListenable.stream(
+                context.read<DataSourceStorage>(),
+              ),
             ),
             builder: (context, child) {
               return MediaQuery(

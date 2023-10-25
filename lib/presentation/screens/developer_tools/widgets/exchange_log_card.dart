@@ -133,7 +133,7 @@ class ExchangeLogCard extends StatelessWidget {
                     Container(
                       color: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.all(4),
-                      child: Text(context.l10n.integerListTileLabel),
+                      child: Text(context.l10n.decimalShortListTileLabel),
                     ),
                     ..._bytes.map(
                       (e) => Padding(

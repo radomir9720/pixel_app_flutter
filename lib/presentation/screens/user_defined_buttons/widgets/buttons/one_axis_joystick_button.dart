@@ -184,7 +184,8 @@ class PackageSenderOneAxisJoystickController
     required this.sendCallback,
     required this.sendPeriod,
     this.onTapSend = const [],
-  }) : packages = [];
+  })  : packages = [],
+        isPointerDown = false;
 
   @protected
   final void Function(List<DataSourceOutgoingPackage> packages) sendCallback;
@@ -200,6 +201,9 @@ class PackageSenderOneAxisJoystickController
 
   @visibleForTesting
   Timer? timer;
+
+  @visibleForTesting
+  bool isPointerDown;
 
   void setPackages(List<DataSourceOutgoingPackage> packages) {
     this.packages
@@ -219,7 +223,10 @@ class PackageSenderOneAxisJoystickController
       sendCallback(packages);
       timer = Timer.periodic(
         sendPeriod,
-        (timer) => sendCallback(packages),
+        (timer) {
+          if (!isPointerDown) return _cancel();
+          sendCallback(packages);
+        },
       );
     });
   }
@@ -232,6 +239,12 @@ class PackageSenderOneAxisJoystickController
     if (onTapSend.isEmpty) return;
     sendCallback(onTapSend);
   }
+
+  @override
+  void onPointerDown() => isPointerDown = true;
+
+  @override
+  void onPointerUp() => isPointerDown = false;
 
   @override
   void onDragEnd() {

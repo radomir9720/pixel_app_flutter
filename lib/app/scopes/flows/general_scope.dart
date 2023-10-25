@@ -6,6 +6,7 @@ import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:pixel_app_flutter/domain/user_defined_buttons/user_defined_buttons.dart';
 import 'package:provider/provider.dart';
 
+@RoutePage(name: 'GeneralFlow')
 class GeneralScope extends AutoRouter {
   const GeneralScope({super.key});
 

@@ -1,86 +1,150 @@
 part of '../main_router.dart';
 
-const _developerToolsRoute = AutoRoute<void>(
-  path: 'developer-tools',
-  name: RouteNames.developerToolsFlow,
-  page: DeveloperToolsScope,
+final _developerToolsRoute = AutoRoute(
+  path: '/developer-tools',
+  page: DeveloperToolsFlow.page,
   children: [
-    AutoRoute<void>(
+    AutoRoute(
       path: '',
-      page: DeveloperToolsScreen,
+      page: DeveloperToolsRoute.page,
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'packages-exchange-console',
-      page: PackagesExchangeConsoleScreen,
+      page: PackagesExchangeConsoleRoute.page,
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'exchange-logs',
-      page: EmptyRouterScreen,
-      name: RouteNames.requestsExchangeLogsFlow,
+      page: RequestsExchangeLogsFlow.page,
       children: [
         AutoRoute(
-          page: RequestsExchangeLogsScreen,
+          page: RequestsExchangeLogsRoute.page,
           initial: true,
-          name: RouteNames.requestsExchangeLogsRoute,
           children: [
-            AutoRoute<void>(
+            AutoRoute(
               path: 'processed',
-              page: ProcessedExchangeLogsScreen,
+              page: ProcessedExchangeLogsRoute.page,
             ),
-            AutoRoute<void>(
+            AutoRoute(
               path: 'raw',
-              page: RawExchangeLogsScreen,
+              page: RawExchangeLogsRoute.page,
             ),
           ],
         ),
       ],
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'filter',
-      page: EmptyRouterScreen,
-      name: RouteNames.requestsExchangeLogsFilterFlow,
+      page: RequestsExchangeLogsFilterFlow.page,
       children: [
         AutoRoute(
           initial: true,
-          page: RequestsExchangeLogsFilterScreen,
+          page: RequestsExchangeLogsFilterRoute.page,
         ),
-        CustomRoute<List<int>>(
-          page: IntegerListDialog,
+        CustomRoute(
+          page: FilterParameterIdDialogRoute.page,
           path: 'parameter-id',
-          name: RouteNames.filterParameterIdDialogRoute,
           customRouteBuilder: dialogRouteBuilder,
         ),
-        CustomRoute<List<int>>(
-          page: IntegerListDialog,
+        CustomRoute(
+          page: FilterRequestTypeDialogRoute.page,
           path: 'request-type',
-          name: RouteNames.filterRequestTypeDialogRoute,
           customRouteBuilder: dialogRouteBuilder,
         ),
-        CustomRoute<List<int>>(
-          page: IntegerListDialog,
+        CustomRoute(
+          page: FilterDirectionDialogRoute.page,
           path: 'direction',
-          name: RouteNames.filterDirectionDialogRoute,
           customRouteBuilder: dialogRouteBuilder,
         ),
       ],
     ),
-    CustomRoute<List<int>>(
-      page: IntegerListDialog,
+    CustomRoute(
+      page: ChangeParametersSubscriptionDialogRoute.page,
       path: 'change-parameters-subscription',
-      name: RouteNames.changeParametersSubscriptionDialogRoute,
       customRouteBuilder: dialogRouteBuilder,
     ),
-    CustomRoute<int>(
-      page: SliderDialog,
+    CustomRoute(
+      page: ChangeRequestPeriodDialogRoute.page,
       path: 'change-request-period',
-      name: RouteNames.changeRequestPeriodDialogRoute,
       customRouteBuilder: dialogRouteBuilder,
     ),
-    CustomRoute<int>(
-      page: SliderDialog,
+    CustomRoute(
+      page: ChangeHandshakeResponseTimeoutDialogRoute.page,
       path: 'change-handshake-response-timeout',
-      name: RouteNames.changeHandshakeResponseTimeoutDialogRoute,
       customRouteBuilder: dialogRouteBuilder,
     ),
   ],
 );
+
+@RoutePage(name: 'RequestsExchangeLogsFlow')
+class RequestsExchangeLogsScope extends AutoRouter {
+  const RequestsExchangeLogsScope({super.key});
+}
+
+@RoutePage(name: 'RequestsExchangeLogsFilterFlow')
+class RequestsExchangeLogsFilterScope extends AutoRouter {
+  const RequestsExchangeLogsFilterScope({super.key});
+}
+
+@RoutePage(name: 'FilterParameterIdDialogRoute')
+class FilterParameterIdDialog extends IntegerListDialog {
+  const FilterParameterIdDialog({
+    super.key,
+    required super.title,
+    required super.alwasysVisibleOptions,
+    required super.initialChoosedOptions,
+    super.validator,
+  });
+}
+
+@RoutePage(name: 'FilterRequestTypeDialogRoute')
+class FilterRequestTypeDialog extends IntegerListDialog {
+  const FilterRequestTypeDialog({
+    super.key,
+    required super.title,
+    required super.alwasysVisibleOptions,
+    required super.initialChoosedOptions,
+    super.validator,
+  });
+}
+
+@RoutePage(name: 'FilterDirectionDialogRoute')
+class FilterDirectionDialog extends IntegerListDialog {
+  const FilterDirectionDialog({
+    super.key,
+    required super.title,
+    required super.alwasysVisibleOptions,
+    required super.initialChoosedOptions,
+    super.validator,
+  });
+}
+
+@RoutePage(name: 'ChangeParametersSubscriptionDialogRoute')
+class ChangeParametersSubscriptionDialog extends IntegerListDialog {
+  const ChangeParametersSubscriptionDialog({
+    super.key,
+    required super.title,
+    required super.alwasysVisibleOptions,
+    required super.initialChoosedOptions,
+    super.validator,
+  });
+}
+
+@RoutePage(name: 'ChangeRequestPeriodDialogRoute')
+class ChangeRequestPeriodDialog extends SliderDialog {
+  const ChangeRequestPeriodDialog({
+    super.key,
+    required super.initialValue,
+    required super.title,
+    super.maxValueInMillis,
+  });
+}
+
+@RoutePage(name: 'ChangeHandshakeResponseTimeoutDialogRoute')
+class ChangeHandshakeResponseTimeoutDialog extends SliderDialog {
+  const ChangeHandshakeResponseTimeoutDialog({
+    super.key,
+    required super.initialValue,
+    required super.title,
+    super.maxValueInMillis,
+  });
+}

@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
@@ -15,6 +16,7 @@ import 'package:pixel_app_flutter/presentation/widgets/common/molecules/statisti
 import 'package:pixel_app_flutter/presentation/widgets/tablet/molecules/blinker_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/tablet/organisms/tablet_upper_info_panel.dart';
 
+@RoutePage()
 class GeneralScreen extends StatelessWidget {
   const GeneralScreen({super.key});
 

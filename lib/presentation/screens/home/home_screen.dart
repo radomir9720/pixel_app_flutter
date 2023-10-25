@@ -14,6 +14,7 @@ import 'package:pixel_app_flutter/presentation/widgets/phone/molecules/bottom_na
 import 'package:pixel_app_flutter/presentation/widgets/phone/organisms/bottom_sheet_interfaces_builder.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage()
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -28,7 +29,13 @@ class HomeScreen extends StatelessWidget {
         ChargingRoute(),
         MotorRoute(),
       ],
-      builder: (context, child, animation) {
+      transitionBuilder: (context, child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+      builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         final screenData = Screen.of(context);
         final screenType = screenData.type;
@@ -46,12 +53,8 @@ class HomeScreen extends StatelessWidget {
               body: SafeArea(
                 child: Stack(
                   children: [
-                    Positioned.fill(
-                      child: FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      ),
-                    ),
+                    Positioned.fill(child: child),
+                    //
                     if (landscape)
                       _SideNavBar(
                         tabsRouter: tabsRouter,

@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:provider/provider.dart';
 
+@RoutePage(name: 'AppsFlow')
 class AppsScope extends AutoRouter {
   const AppsScope({super.key});
 

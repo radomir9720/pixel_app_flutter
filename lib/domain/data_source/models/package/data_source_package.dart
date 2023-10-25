@@ -131,7 +131,8 @@ abstract class DataSourcePackage extends UnmodifiableListView<int> {
 
   @override
   String toString() {
-    return '${directionFlag.name.capitalize}(${super.toString()})';
+    return '${directionFlag.name.capitalize}'
+        '(${map((e) => e.toRadixString(16).toUpperCase())})';
   }
 }
 

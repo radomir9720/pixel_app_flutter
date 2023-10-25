@@ -5,7 +5,8 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/presentation/screens/motor/motor_screen.dart';
 import 'package:provider/provider.dart';
 
-class MotorScreenWrapper extends StatelessWidget with AutoRouteWrapper {
+@RoutePage()
+class MotorScreenWrapper extends StatelessWidget implements AutoRouteWrapper {
   const MotorScreenWrapper({super.key});
 
   @override
