@@ -6,6 +6,7 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/mini_progress_indicator.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage(name: 'RemoveConfigurationDialogRoute')
 class RemoveLEDConfigurationDialog extends StatelessWidget {
   const RemoveLEDConfigurationDialog({super.key, required this.config});
 

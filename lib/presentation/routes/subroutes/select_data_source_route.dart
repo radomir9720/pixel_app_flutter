@@ -1,41 +1,43 @@
 part of '../main_router.dart';
 
-const _selectDataSourceRoute = AutoRoute<void>(
-  page: SelectDataSourceScope,
-  path: 'select-data-source',
-  name: RouteNames.selectDataSourceFlow,
-  children: [
-    AutoRoute<void>(
-      path: '',
-      page: EmptyRouterScreen,
-      name: RouteNames.selectDataSourceGeneralFlow,
+AutoRoute _selectDataSourceRoute({bool root = true}) => AutoRoute(
+      page: SelectDataSourceFlow.page,
+      path: '${root ? '/' : ''}select-data-source',
       children: [
-        AutoRoute<void>(
-          initial: true,
-          page: DataSourceScreen,
+        AutoRoute(
+          path: '',
+          page: SelectDataSourceGeneralFlow.page,
+          children: [
+            AutoRoute(
+              path: '',
+              page: DataSourceRoute.page,
+            ),
+            //
+            _settingsRoute,
+            //
+            CustomRoute(
+              page: SelectDeviceDialogRoute.page,
+              path: 'select-device',
+              customRouteBuilder: dialogRouteBuilder,
+            ),
+          ],
         ),
-        //
-        _settingsRoute,
-        //
         CustomRoute(
-          page: SelectDeviceDialog,
-          path: 'select-device',
-          name: RouteNames.selectDeviceDialogRoute,
-          customRouteBuilder: dialogRouteBuilder,
+          path: 'loading',
+          page: NonPopableLoadingRoute.page,
+          fullscreenDialog: true,
+          transitionsBuilder: TransitionsBuilders.noTransition,
         ),
+        AutoRoute(
+          path: 'enter-serial-number',
+          page: EnterSerialNumberRoute.page,
+        ),
+        //
+        _developerToolsRoute,
       ],
-    ),
-    CustomRoute<void>(
-      path: 'loading',
-      page: NonPopableLoadingScreen,
-      fullscreenDialog: true,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-    AutoRoute(
-      path: 'enter-serial-number',
-      page: EnterSerialNumberScreen,
-    ),
-    //
-    _developerToolsRoute,
-  ],
-);
+    );
+
+@RoutePage(name: 'SelectDataSourceGeneralFlow')
+class SelectDataSourceGeneralScope extends AutoRouter {
+  const SelectDataSourceGeneralScope({super.key});
+}

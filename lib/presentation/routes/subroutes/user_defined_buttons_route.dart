@@ -1,21 +1,25 @@
 part of '../main_router.dart';
 
-const _userDefinedButtonsRoute = AutoRoute<void>(
-  page: EmptyRouterScreen,
+final _userDefinedButtonsRoute = AutoRoute(
+  page: UserDefinedButtonsFlow.page,
   path: 'user-defined-buttons',
-  name: RouteNames.userDefinedButtonsFlow,
   children: [
-    AutoRoute<void>(
+    AutoRoute(
       path: '',
-      page: SelectButtonTypeScreen,
+      page: SelectButtonTypeRoute.page,
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'add',
-      page: AddUserDefinedButtonScreen,
+      page: AddUserDefinedButtonRoute.page,
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'edit',
-      page: EditUserDefinedButtonScreen,
+      page: EditUserDefinedButtonRoute.page,
     ),
   ],
 );
+
+@RoutePage(name: 'UserDefinedButtonsFlow')
+class UserDefinedButtonsScope extends AutoRouter {
+  const UserDefinedButtonsScope({super.key});
+}

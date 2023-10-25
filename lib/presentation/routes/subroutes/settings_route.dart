@@ -1,36 +1,37 @@
 part of '../main_router.dart';
 
-const _settingsRoute = AutoRoute<void>(
-  page: EmptyRouterScreen,
+final _settingsRoute = AutoRoute(
+  page: SettingsFlow.page,
   path: 'settings',
-  name: RouteNames.settingsFlow,
   children: [
-    AutoRoute<void>(
+    AutoRoute(
       initial: true,
-      page: SettingsScreen,
+      page: SettingsRoute.page,
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'led-panel',
-      page: LEDPanelScope,
-      name: RouteNames.ledPanelFlow,
+      page: LEDPanelFlow.page,
       children: [
-        AutoRoute<void>(
+        AutoRoute(
           initial: true,
-          page: LEDPanelScreen,
+          page: LEDPanelRoute.page,
         ),
         CustomRoute(
-          page: AddLEDConfigurationDialog,
+          page: AddConfigurationDialogRoute.page,
           path: 'add-configuration',
-          name: RouteNames.addConfigurationDialogRoute,
           customRouteBuilder: dialogRouteBuilder,
         ),
         CustomRoute(
-          page: RemoveLEDConfigurationDialog,
+          page: RemoveConfigurationDialogRoute.page,
           path: 'remove-configuration',
-          name: RouteNames.removeConfigurationDialogRoute,
           customRouteBuilder: dialogRouteBuilder,
         ),
       ],
     ),
   ],
 );
+
+@RoutePage(name: 'SettingsFlow')
+class SettingsScope extends AutoRouter {
+  const SettingsScope({super.key});
+}

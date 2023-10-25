@@ -12,6 +12,7 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:share_plus/share_plus.dart';
 
+@RoutePage()
 class DeveloperToolsScreen extends StatelessWidget {
   const DeveloperToolsScreen({super.key});
 

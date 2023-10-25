@@ -6,6 +6,7 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/error_loading_led_configs.dart';
 
+@RoutePage()
 class LEDPanelScreen extends StatelessWidget {
   const LEDPanelScreen({super.key});
 

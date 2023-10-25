@@ -9,6 +9,7 @@ import 'package:pixel_app_flutter/presentation/screens/general/widgets/countdown
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/error_loading_led_configs.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/mini_progress_indicator.dart';
 
+@RoutePage(name: 'LEDSwitcherDialogRoute')
 class LEDPanelSwitcherDialog extends StatelessWidget {
   const LEDPanelSwitcherDialog({super.key});
 

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 
+@RoutePage(name: 'DeveloperToolsFlow')
 class DeveloperToolsScope extends AutoRouter {
   const DeveloperToolsScope({super.key});
 

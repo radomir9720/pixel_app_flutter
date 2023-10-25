@@ -15,6 +15,7 @@ import 'package:pixel_app_flutter/presentation/widgets/common/atoms/settings_but
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/settings_base_layout.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage()
 class DataSourceScreen extends StatelessWidget {
   const DataSourceScreen({super.key});
 
@@ -50,11 +51,8 @@ class DataSourceScreen extends StatelessWidget {
           );
         },
         builder: (context, state) {
-          final currentDataSource = context
-              .watch<DataSourceCubit>()
-              .state
-              .ds
-              .when(undefined: () => null, presented: (v) => v);
+          final currentDataSource =
+              context.watch<DataSourceCubit>().state.ds.toNullable;
 
           final showCloseButton =
               context.router.root.current.name != SelectDataSourceFlow.name;

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/led_panel/led_panel.dart';
 import 'package:provider/provider.dart';
 
+@RoutePage(name: 'LEDPanelFlow')
 class LEDPanelScope extends AutoRouter {
   const LEDPanelScope({super.key});
 

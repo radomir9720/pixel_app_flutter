@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animated_scroll_view/animated_scroll_view.dart';
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_pixels/image_pixels.dart';
@@ -19,6 +20,7 @@ part './body/handset_apps_screen_body.dart';
 part './body/tablet_apps_screen_body.dart';
 part './widgets/error_getting_applications_list.dart';
 
+@RoutePage()
 class AppsScreen extends StatefulWidget {
   const AppsScreen({super.key});
 

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage()
 class AddUserDefinedButtonScreen extends StatefulWidget
     implements AutoRouteWrapper {
   const AddUserDefinedButtonScreen({

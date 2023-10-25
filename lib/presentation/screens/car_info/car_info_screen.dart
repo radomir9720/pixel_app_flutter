@@ -11,6 +11,7 @@ import 'package:pixel_app_flutter/presentation/widgets/common/molecules/trunk_jo
 import 'package:pixel_app_flutter/presentation/widgets/phone/atoms/car_interface_list_tile.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
+@RoutePage()
 class CarInfoScreen extends StatefulWidget {
   const CarInfoScreen({super.key});
 

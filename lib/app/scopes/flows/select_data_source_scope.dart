@@ -14,6 +14,7 @@ import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:provider/provider.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage(name: 'SelectDataSourceFlow')
 class SelectDataSourceScope extends StatelessWidget
     implements AutoRouteWrapper {
   const SelectDataSourceScope({super.key});

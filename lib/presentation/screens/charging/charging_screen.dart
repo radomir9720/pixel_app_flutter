@@ -15,6 +15,7 @@ import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_p
 import 'package:pixel_app_flutter/presentation/widgets/common/organisms/title_wrapper.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage()
 class ChargingScreen extends StatefulWidget {
   const ChargingScreen({super.key});
 

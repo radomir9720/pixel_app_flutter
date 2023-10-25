@@ -5,7 +5,9 @@ import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/presentation/screens/charging/charging_screen.dart';
 import 'package:provider/provider.dart';
 
-class ChargingScreenWrapper extends StatelessWidget with AutoRouteWrapper {
+@RoutePage()
+class ChargingScreenWrapper extends StatelessWidget
+    implements AutoRouteWrapper {
   const ChargingScreenWrapper({super.key});
 
   @override

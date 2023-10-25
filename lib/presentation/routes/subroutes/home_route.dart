@@ -1,65 +1,60 @@
 part of '../main_router.dart';
 
-const _homeRoute = AutoRoute<void>(
-  initial: true,
-  page: HomeScreen,
+final _homeRoute = AutoRoute(
+  path: '',
+  page: HomeRoute.page,
   children: [
-    AutoRoute<void>(
+    AutoRoute(
       path: 'general',
-      page: GeneralScope,
-      name: RouteNames.generalFlow,
+      page: GeneralFlow.page,
       children: [
-        AutoRoute<void>(
-          initial: true,
-          page: GeneralScreen,
+        AutoRoute(
+          path: '',
+          page: GeneralRoute.page,
         ),
-        CustomRoute<bool>(
+        CustomRoute(
           path: 'led-switcher-dialog',
-          name: RouteNames.ledSwitcherDialogRoute,
-          page: LEDPanelSwitcherDialog,
+          page: LEDSwitcherDialogRoute.page,
           customRouteBuilder: dialogRouteBuilder,
         ),
       ],
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'car-info',
-      page: CarInfoScreen,
+      page: CarInfoRoute.page,
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'navigator',
-      page: EmptyRouterScreen,
-      name: RouteNames.navigatorFlow,
+      page: NavigatorFlow.page,
       children: [
-        AutoRoute<void>(
-          initial: true,
-          page: NavigatorScreen,
+        AutoRoute(
+          path: '',
+          page: NavigatorRoute.page,
         ),
-        CustomRoute<bool>(
+        CustomRoute(
           path: 'enable-fast-access',
-          name: RouteNames.enableFastAccessDialogRoute,
-          page: EnableFastAccessDialog,
+          page: EnableFastAccessDialogRoute.page,
           customRouteBuilder: enableFastAccessDialofRouteBuilder,
         ),
       ],
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'apps',
-      page: AppsScope,
-      name: RouteNames.appsFlow,
+      page: AppsFlow.page,
       children: [
-        AutoRoute<void>(
+        AutoRoute(
           path: '',
-          page: AppsScreen,
+          page: AppsRoute.page,
         ),
       ],
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'charging',
-      page: ChargingScreenWrapper,
+      page: ChargingRoute.page,
     ),
-    AutoRoute<void>(
+    AutoRoute(
       path: 'motor',
-      page: MotorScreenWrapper,
+      page: MotorRoute.page,
     ),
   ],
 );
@@ -67,7 +62,7 @@ const _homeRoute = AutoRoute<void>(
 Route<T> enableFastAccessDialofRouteBuilder<T>(
   BuildContext context,
   Widget child,
-  CustomPage<T> page,
+  AutoRoutePage<T> page,
 ) {
   return dialogRouteBuilder<T>(
     context,
@@ -75,4 +70,9 @@ Route<T> enableFastAccessDialofRouteBuilder<T>(
     page,
     barrierColor: Colors.transparent,
   );
+}
+
+@RoutePage(name: 'NavigatorFlow')
+class NavigatorScope extends AutoRouter {
+  const NavigatorScope({super.key});
 }

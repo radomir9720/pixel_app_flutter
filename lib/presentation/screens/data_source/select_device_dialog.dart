@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
@@ -5,6 +6,7 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
+@RoutePage(name: 'SelectDeviceDialogRoute')
 class SelectDeviceDialog extends StatefulWidget {
   const SelectDeviceDialog({super.key, required this.dataSource});
 

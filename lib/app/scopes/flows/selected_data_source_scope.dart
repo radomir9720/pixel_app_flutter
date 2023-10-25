@@ -14,6 +14,7 @@ import 'package:pixel_app_flutter/presentation/widgets/app/atoms/gradient_scaffo
 import 'package:provider/provider.dart';
 import 'package:re_widgets/re_widgets.dart';
 
+@RoutePage(name: 'SelectedDataSourceFlow')
 class SelectedDataSourceScope extends AutoRouter {
   const SelectedDataSourceScope({super.key});
 
