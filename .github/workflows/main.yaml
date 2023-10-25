@@ -6,7 +6,7 @@ on: [push]
 
 jobs:
   build:
-    uses: radomir9720/workflows/.github/workflows/flutter_package.yml@main
+    uses: radomir9720/workflows/.github/workflows/flutter_package.yml@v1.2.1
     with:
       min_coverage: 0
       flutter_channel: stable
