@@ -33,7 +33,6 @@ AutoRoute _selectDataSourceRoute({bool root = true}) => AutoRoute(
           page: EnterSerialNumberRoute.page,
         ),
         //
-        _developerToolsRoute,
       ],
     );
 

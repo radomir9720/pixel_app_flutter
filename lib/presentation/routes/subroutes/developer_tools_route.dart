@@ -1,7 +1,7 @@
 part of '../main_router.dart';
 
 final _developerToolsRoute = AutoRoute(
-  path: 'developer-tools',
+  path: '/developer-tools',
   page: DeveloperToolsFlow.page,
   children: [
     AutoRoute(

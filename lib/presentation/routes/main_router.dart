@@ -72,8 +72,6 @@ class MainRouter extends _$MainRouter {
             //
             _settingsRoute,
             //
-            _developerToolsRoute,
-            //
             _selectDataSourceRoute(root: false),
             //
             _userDefinedButtonsRoute,
@@ -81,6 +79,8 @@ class MainRouter extends _$MainRouter {
         ),
         //
         _selectDataSourceRoute(),
+        //
+        _developerToolsRoute,
         //
         CustomRoute(
           path: '/loading',
