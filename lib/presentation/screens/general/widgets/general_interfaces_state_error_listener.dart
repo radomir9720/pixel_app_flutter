@@ -5,18 +5,21 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:re_widgets/re_widgets.dart';
 
-class DoorsStateErrorListener extends SingleChildStatelessWidget {
-  const DoorsStateErrorListener({super.key, super.child});
+class GeneralInterfacesStateErrorListener extends SingleChildStatelessWidget {
+  const GeneralInterfacesStateErrorListener({super.key, super.child});
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    return BlocListener<DoorsCubit, DoorsState>(
+    return BlocListener<GeneralInterfacesCubit, GeneralInterfacesState>(
       listenWhen: (previous, current) {
         final errors = current.whenFailure<MapEntry<String, ToggleStateError>>(
           previous,
-          left: (error) => MapEntry(context.l10n.leftDoorInterfaceTitle, error),
-          right: (error) =>
+          leftDoor: (error) =>
+              MapEntry(context.l10n.leftDoorInterfaceTitle, error),
+          rightDoor: (error) =>
               MapEntry(context.l10n.rightDoorInterfaceTitle, error),
+          wipers: (error) =>
+              MapEntry(context.l10n.windscreenWipersInterfaceTitle, error),
         );
 
         if (errors.isEmpty) return false;

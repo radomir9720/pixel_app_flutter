@@ -51,9 +51,9 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
             child: ListView(
               primary: false,
               children: [
-                BlocSelector<DoorsCubit, DoorsState,
+                BlocSelector<GeneralInterfacesCubit, GeneralInterfacesState,
                     AsyncData<bool, ToggleStateError>>(
-                  selector: (state) => state.left,
+                  selector: (state) => state.leftDoor,
                   builder: (context, state) {
                     return CarInterfaceListTile(
                       title: context.l10n.leftDoorInterfaceTitle,
@@ -62,13 +62,14 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                           ? PixelIcons.unlocked
                           : PixelIcons.locked,
                       state: state.tileState,
-                      onPressed: context.read<DoorsCubit>().toggleLeftDoor,
+                      onPressed:
+                          context.read<GeneralInterfacesCubit>().toggleLeftDoor,
                     );
                   },
                 ),
-                BlocSelector<DoorsCubit, DoorsState,
+                BlocSelector<GeneralInterfacesCubit, GeneralInterfacesState,
                     AsyncData<bool, ToggleStateError>>(
-                  selector: (state) => state.right,
+                  selector: (state) => state.rightDoor,
                   builder: (context, state) {
                     return CarInterfaceListTile(
                       title: context.l10n.rightDoorInterfaceTitle,
@@ -77,7 +78,9 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                           ? PixelIcons.unlocked
                           : PixelIcons.locked,
                       state: state.tileState,
-                      onPressed: context.read<DoorsCubit>().toggleRightDoor,
+                      onPressed: context
+                          .read<GeneralInterfacesCubit>()
+                          .toggleRightDoor,
                     );
                   },
                 ),

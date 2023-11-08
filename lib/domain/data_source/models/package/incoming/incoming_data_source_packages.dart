@@ -32,3 +32,4 @@ export 'side_beam.dart';
 export 'speed.dart';
 export 'turn_signal.dart';
 export 'voltage.dart';
+export 'windscreen_wipers.dart';

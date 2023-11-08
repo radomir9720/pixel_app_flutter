@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:nested/nested.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/car_widget.dart';
-import 'package:pixel_app_flutter/presentation/screens/general/widgets/doors_state_error_listener.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/gear_widget.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/general_interfaces_state_error_listener.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/light_state_error_listener.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/overlay_data_sender.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/user_defined_buttons_end_drawer.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/wipers_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/app/organisms/screen_data.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/responsive_padding.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/speed_widget.dart';
@@ -27,7 +28,7 @@ class GeneralScreen extends StatelessWidget {
     return Nested(
       children: const [
         LightStateErrorListener(),
-        DoorsStateErrorListener(),
+        GeneralInterfacesStateErrorListener(),
         OverlayDataSender(),
       ],
       child: Scaffold(
@@ -133,10 +134,14 @@ class HandsetGeneralScreenBody extends StatelessWidget {
           const StatisticWidget(useWrap: true),
           const SizedBox(height: 32),
           const LEDSwitcherButton(),
+          const SizedBox(height: 16),
+          const WipersSwitcherButton(),
         ] else ...[
           GearWidget(screenSize: size),
           const SizedBox(height: 16),
           const LEDSwitcherButton(),
+          const SizedBox(height: 16),
+          const WipersSwitcherButton(),
         ],
       ],
     );

@@ -154,11 +154,12 @@ class SelectedDataSourceScope extends AutoRouter {
                 lazy: false,
               ),
               BlocProvider(
-                create: (context) => DoorsCubit(
+                create: (context) => GeneralInterfacesCubit(
                   dataSource: context.read(),
                 )
                   ..subscribeToLeftDoor()
-                  ..subscribeToRightDoor(),
+                  ..subscribeToRightDoor()
+                  ..subscribeToWindscreenWipers(),
               ),
               BlocProvider(
                 create: (context) {

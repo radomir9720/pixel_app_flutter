@@ -7,6 +7,7 @@ import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/extensions.dart';
 import 'package:pixel_app_flutter/presentation/app/icons.dart';
 import 'package:pixel_app_flutter/presentation/screens/general/widgets/led_switcher_button.dart';
+import 'package:pixel_app_flutter/presentation/screens/general/widgets/wipers_switcher_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/icon_button.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/atoms/relay_widget.dart';
 import 'package:pixel_app_flutter/presentation/widgets/common/molecules/trunk_joystick.dart';
@@ -113,14 +114,15 @@ class _CarWidgetState extends State<CarWidget> {
               child: Transform.scale(
                 scale: buttonScaleCoef,
                 alignment: Alignment.centerRight,
-                child: BlocSelector<DoorsCubit, DoorsState,
-                    AsyncData<bool, ToggleStateError>>(
-                  selector: (state) => state.left,
+                child: BlocSelector<GeneralInterfacesCubit,
+                    GeneralInterfacesState, AsyncData<bool, ToggleStateError>>(
+                  selector: (state) => state.leftDoor,
                   builder: (context, state) {
                     return CarInterfaceSwitcher(
                       icon: _getIcon(state.payload),
                       state: state.buttonState,
-                      onPressed: context.read<DoorsCubit>().toggleLeftDoor,
+                      onPressed:
+                          context.read<GeneralInterfacesCubit>().toggleLeftDoor,
                       title: context.l10n.doorInterfaceTitle,
                       status: context.getStatus(state),
                       pointerSide: CarInterfacePointerSide.right,
@@ -138,14 +140,16 @@ class _CarWidgetState extends State<CarWidget> {
               child: Transform.scale(
                 scale: buttonScaleCoef,
                 alignment: Alignment.centerLeft,
-                child: BlocSelector<DoorsCubit, DoorsState,
-                    AsyncData<bool, ToggleStateError>>(
-                  selector: (state) => state.right,
+                child: BlocSelector<GeneralInterfacesCubit,
+                    GeneralInterfacesState, AsyncData<bool, ToggleStateError>>(
+                  selector: (state) => state.rightDoor,
                   builder: (context, state) {
                     return CarInterfaceSwitcher(
                       icon: _getIcon(state.payload),
                       state: state.buttonState,
-                      onPressed: context.read<DoorsCubit>().toggleRightDoor,
+                      onPressed: context
+                          .read<GeneralInterfacesCubit>()
+                          .toggleRightDoor,
                       title: context.l10n.doorInterfaceTitle,
                       status: context.getStatus(state),
                       pointerSide: CarInterfacePointerSide.left,
@@ -184,6 +188,12 @@ class _CarWidgetState extends State<CarWidget> {
               bottom: 0,
               left: -140,
               child: LEDSwitcherButton(),
+            ),
+            // Windscreen wipers
+            const Positioned(
+              top: 0,
+              left: -140,
+              child: WipersSwitcherButton(),
             ),
           ],
         ],
