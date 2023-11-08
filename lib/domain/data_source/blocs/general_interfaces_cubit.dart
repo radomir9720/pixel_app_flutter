@@ -7,52 +7,68 @@ import 'package:pixel_app_flutter/domain/data_source/models/package/outgoing/out
 import 'package:pixel_app_flutter/domain/data_source/models/package_data/package_data.dart';
 import 'package:re_seedwork/re_seedwork.dart';
 
-typedef DoorState = AsyncData<bool, ToggleStateError>;
+typedef GeneralInterfaceState = AsyncData<bool, ToggleStateError>;
 
 @immutable
-class DoorsState with EquatableMixin {
-  const DoorsState({required this.left, required this.right});
+class GeneralInterfacesState with EquatableMixin {
+  const GeneralInterfacesState({
+    required this.leftDoor,
+    required this.rightDoor,
+    required this.wipers,
+  });
 
-  const DoorsState.initial()
-      : left = const AsyncData.initial(false),
-        right = const AsyncData.initial(false);
+  const GeneralInterfacesState.initial()
+      : leftDoor = const AsyncData.initial(false),
+        rightDoor = const AsyncData.initial(false),
+        wipers = const AsyncData.initial(false);
 
-  final DoorState left;
-  final DoorState right;
+  final GeneralInterfaceState leftDoor;
+  final GeneralInterfaceState rightDoor;
+  final GeneralInterfaceState wipers;
 
   @override
-  List<Object?> get props => [left, right];
+  List<Object?> get props => [leftDoor, rightDoor, wipers];
 
-  DoorsState copyWith({
-    DoorState? left,
-    DoorState? right,
+  GeneralInterfacesState copyWith({
+    GeneralInterfaceState? leftDoor,
+    GeneralInterfaceState? rightDoor,
+    GeneralInterfaceState? wipers,
   }) {
-    return DoorsState(
-      left: left ?? this.left,
-      right: right ?? this.right,
+    return GeneralInterfacesState(
+      leftDoor: leftDoor ?? this.leftDoor,
+      rightDoor: rightDoor ?? this.rightDoor,
+      wipers: wipers ?? this.wipers,
     );
   }
 
-  bool get hasFailureState => [left, right].any((element) => element.isFailure);
+  bool get hasFailureState =>
+      [leftDoor, rightDoor, wipers].any((element) => element.isFailure);
 
   List<R> whenFailure<R>(
-    DoorsState prevState, {
-    required R Function(ToggleStateError error) left,
-    required R Function(ToggleStateError error) right,
+    GeneralInterfacesState prevState, {
+    required R Function(ToggleStateError error) leftDoor,
+    required R Function(ToggleStateError error) rightDoor,
+    required R Function(ToggleStateError error) wipers,
   }) {
-    final leftError = this.left.error;
-    final rightError = this.right.error;
+    final leftError = this.leftDoor.error;
+    final rightError = this.rightDoor.error;
+    final wipersError = this.wipers.error;
 
     final errors = [
       _filterError(
         leftError,
-        prevState.left.error,
-        left,
+        prevState.leftDoor.error,
+        leftDoor,
       ),
       _filterError(
         rightError,
-        prevState.right.error,
-        right,
+        prevState.rightDoor.error,
+        rightDoor,
+      ),
+      _filterError(
+        wipersError,
+        prevState.wipers.error,
+        wipers,
       ),
     ].whereType<R>().toList();
 
@@ -78,19 +94,24 @@ extension _ErrorExtension<V, E extends Object> on AsyncData<V, E> {
       );
 }
 
-class DoorsCubit extends Cubit<DoorsState> with ConsumerBlocMixin {
-  DoorsCubit({
+class GeneralInterfacesCubit extends Cubit<GeneralInterfacesState>
+    with ConsumerBlocMixin {
+  GeneralInterfacesCubit({
     required this.dataSource,
     this.subscriptionTimeout = kSubscriptionTimeout,
     this.toggleTimeout = kToggleTimeout,
-  }) : super(const DoorsState.initial()) {
+  }) : super(const GeneralInterfacesState.initial()) {
     subscribe<DataSourceIncomingPackage>(dataSource.packageStream, (package) {
       package
         ..voidOnModel<DoorBody, LeftDoorIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(left: AsyncData.success(model.isOpen)));
+          emit(state.copyWith(leftDoor: AsyncData.success(model.isOpen)));
         })
         ..voidOnModel<DoorBody, RightDoorIncomingDataSourcePackage>((model) {
-          emit(state.copyWith(right: AsyncData.success(model.isOpen)));
+          emit(state.copyWith(rightDoor: AsyncData.success(model.isOpen)));
+        })
+        ..voidOnModel<WindscreenWipersBody,
+            WindscreenWipersIncomingDataSourcePackage>((model) {
+          emit(state.copyWith(wipers: AsyncData.success(model.isOn)));
         });
     });
   }
@@ -115,8 +136,8 @@ class DoorsCubit extends Cubit<DoorsState> with ConsumerBlocMixin {
         const DataSourceParameterId.custom(ButtonFunctionId.leftDoorId),
   ]) {
     _subscribe(
-      newStateBuilder: (newState) => state.copyWith(left: newState),
-      newFeatureStateBuilder: () => state.left,
+      newStateBuilder: (newState) => state.copyWith(leftDoor: newState),
+      newFeatureStateBuilder: () => state.leftDoor,
       parameterId: parameterId,
     );
   }
@@ -126,14 +147,25 @@ class DoorsCubit extends Cubit<DoorsState> with ConsumerBlocMixin {
         const DataSourceParameterId.custom(ButtonFunctionId.rightDoorId),
   ]) {
     _subscribe(
-      newStateBuilder: (newState) => state.copyWith(right: newState),
-      newFeatureStateBuilder: () => state.right,
+      newStateBuilder: (newState) => state.copyWith(rightDoor: newState),
+      newFeatureStateBuilder: () => state.rightDoor,
+      parameterId: parameterId,
+    );
+  }
+
+  void subscribeToWindscreenWipers({
+    DataSourceParameterId parameterId =
+        const DataSourceParameterId.windscreenWipers(),
+  }) {
+    _subscribe(
+      newStateBuilder: (newState) => state.copyWith(wipers: newState),
+      newFeatureStateBuilder: () => state.wipers,
       parameterId: parameterId,
     );
   }
 
   Future<void> _subscribe({
-    required DoorsState Function(
+    required GeneralInterfacesState Function(
       AsyncData<bool, ToggleStateError> newState,
     ) newStateBuilder,
     required AsyncData<bool, ToggleStateError> Function()
@@ -148,7 +180,7 @@ class DoorsCubit extends Cubit<DoorsState> with ConsumerBlocMixin {
 
     final failure = await stream
         .where((event) => newFeatureStateBuilder().isExecuted)
-        .map<DoorsState?>((event) => null)
+        .map<GeneralInterfacesState?>((event) => null)
         .first
         .timeout(
       subscriptionTimeout,
@@ -169,9 +201,10 @@ class DoorsCubit extends Cubit<DoorsState> with ConsumerBlocMixin {
     DataSourceParameterId parameterId = const DataSourceParameterId.leftDoor(),
   ]) {
     _toggleBool(
-      newFeatureStateBuilder: () => state.left,
-      newStateBuilder: (newState) => state.copyWith(left: newState),
-      parameterId: parameterId,
+      newFeatureStateBuilder: () => state.leftDoor,
+      newStateBuilder: (newState) => state.copyWith(leftDoor: newState),
+      outgoingPackageBuilder: (_) =>
+          OutgoingActionRequestPackage(parameterId: parameterId),
     );
   }
 
@@ -179,19 +212,36 @@ class DoorsCubit extends Cubit<DoorsState> with ConsumerBlocMixin {
     DataSourceParameterId parameterId = const DataSourceParameterId.rightDoor(),
   ]) {
     _toggleBool(
-      newFeatureStateBuilder: () => state.right,
-      newStateBuilder: (newState) => state.copyWith(right: newState),
-      parameterId: parameterId,
+      newFeatureStateBuilder: () => state.rightDoor,
+      newStateBuilder: (newState) => state.copyWith(rightDoor: newState),
+      outgoingPackageBuilder: (_) =>
+          OutgoingActionRequestPackage(parameterId: parameterId),
+    );
+  }
+
+  void toggleWindscreenWipers([
+    DataSourceParameterId parameterId =
+        const DataSourceParameterId.windscreenWipers(),
+  ]) {
+    _toggleBool(
+      newFeatureStateBuilder: () => state.wipers,
+      newStateBuilder: (newState) => state.copyWith(wipers: newState),
+      outgoingPackageBuilder: (setTo) => OutgoingSetValuePackage(
+        parameterId: parameterId,
+        setValueBody: SetUint8Body(value: setTo ? 0xFF : 0),
+      ),
     );
   }
 
   Future<void> _toggleBool({
     required AsyncData<bool, ToggleStateError> Function()
         newFeatureStateBuilder,
-    required DoorsState Function(
+    required GeneralInterfacesState Function(
       AsyncData<bool, ToggleStateError> newState,
     ) newStateBuilder,
-    required DataSourceParameterId parameterId,
+    // ignore: avoid_positional_boolean_parameters
+    required DataSourceOutgoingPackage Function(bool setTo)
+        outgoingPackageBuilder,
   }) async {
     final currentState = newFeatureStateBuilder();
     if (!currentState.isExecuted) return;
@@ -199,13 +249,11 @@ class DoorsCubit extends Cubit<DoorsState> with ConsumerBlocMixin {
     final setTo = !currentState.payload;
     emit(newStateBuilder(AsyncData.loading(setTo)));
 
-    await dataSource.sendPackage(
-      OutgoingActionRequestPackage(parameterId: parameterId),
-    );
+    await dataSource.sendPackage(outgoingPackageBuilder(setTo));
 
     final failure = await stream
         .where((event) => newFeatureStateBuilder().payload == setTo)
-        .map<DoorState?>((event) => null)
+        .map<GeneralInterfaceState?>((event) => null)
         .first
         .timeout(
       toggleTimeout,

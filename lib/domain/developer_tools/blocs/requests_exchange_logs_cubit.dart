@@ -89,7 +89,7 @@ class RawRequestsExchangeLogsState
 
 abstract class RequestsExchangeLogsCubitBase<S,
     T extends RequestsExchangeLogsStateBase<S>> extends Cubit<List<T>> {
-  RequestsExchangeLogsCubitBase({this.maxItems = 150}) : super([]);
+  RequestsExchangeLogsCubitBase({this.maxItems = 500}) : super([]);
 
   @visibleForTesting
   final int maxItems;

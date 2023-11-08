@@ -45,12 +45,6 @@ abstract class DataSourcePackage extends UnmodifiableListView<int> {
     return [...body, ...calculateCheckSum(body)];
   }
 
-  static int dataBytesLength(int? data) {
-    if (data == null) return 0;
-    final bits = (data.bitLength / 8).ceil();
-    return bits.clamp(1, 100);
-  }
-
   /// If [fixedBytesLength] is not null, then bytes length will be set to this
   /// value, and element count in returned list will be equal to
   /// [fixedBytesLength]
@@ -64,7 +58,8 @@ abstract class DataSourcePackage extends UnmodifiableListView<int> {
       }
       return const [];
     }
-    final bytesLength = fixedBytesLength ?? dataBytesLength(data);
+    final bytesLength =
+        fixedBytesLength ?? IntBytesLengthExtension.bytesLength(data);
 
     return data
         .toRadixString(16)
@@ -130,9 +125,9 @@ abstract class DataSourcePackage extends UnmodifiableListView<int> {
   }
 
   @override
-  String toString() {
-    return '${directionFlag.name.capitalize}'
-        '(${map((e) => e.toRadixString(16).toUpperCase())})';
+  String toString({bool withDirection = true}) {
+    if (!withDirection) return toFormattedHexString;
+    return '${directionFlag.name.capitalize}$toFormattedHex';
   }
 }
 

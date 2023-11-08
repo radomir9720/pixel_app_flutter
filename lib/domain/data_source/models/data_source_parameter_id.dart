@@ -68,8 +68,6 @@ abstract class DataSourceParameterId {
       FrontHazardBeamParameterId;
   const factory DataSourceParameterId.tailHazardBeam() =
       TailHazardBeamParameterId;
-  const factory DataSourceParameterId.frontCustomBeam() =
-      FrontCustomBeamParameterId;
   const factory DataSourceParameterId.tailCustomBeam() =
       TailCustomBeamParameterId;
   const factory DataSourceParameterId.frontLeftTurnSignal() =
@@ -101,6 +99,8 @@ abstract class DataSourceParameterId {
   const factory DataSourceParameterId.leftDoor() = LeftDoorParameterId;
   const factory DataSourceParameterId.rightDoor() = RightDoorParameterId;
   const factory DataSourceParameterId.cabinLight() = CabinLightParameterId;
+  const factory DataSourceParameterId.windscreenWipers() =
+      WindscreenWipersParameterId;
 
   bool get isAuthorization => this is AuthorizationParameterId;
 
@@ -153,7 +153,6 @@ abstract class DataSourceParameterId {
   bool get isHighBeam => this is HighBeamParameterId;
   bool get isFrontHazardBeam => this is FrontHazardBeamParameterId;
   bool get isTailHazardBeam => this is TailHazardBeamParameterId;
-  bool get isFrontCustomBeam => this is FrontCustomBeamParameterId;
   bool get isTailCustomBeam => this is TailCustomBeamParameterId;
   bool get isFrontLeftTurnSignal => this is FrontLeftTurnSignalParameterId;
   bool get isFrontRightTurnSignal => this is FrontRightTurnSignalParameterId;
@@ -178,6 +177,8 @@ abstract class DataSourceParameterId {
   bool get isLeftDoor => this is LeftDoorParameterId;
   bool get isRightDoor => this is RightDoorParameterId;
   bool get isCabinLight => this is CabinLightParameterId;
+
+  bool get isWindscreenWipers => this is WindscreenWipersParameterId;
 
   void voidOn<T extends DataSourceParameterId>(void Function() function) {
     if (this is T) function();
@@ -218,7 +219,6 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.highBeam(),
       DataSourceParameterId.frontHazardBeam(),
       DataSourceParameterId.tailHazardBeam(),
-      DataSourceParameterId.frontCustomBeam(),
       DataSourceParameterId.tailCustomBeam(),
       DataSourceParameterId.frontLeftTurnSignal(),
       DataSourceParameterId.frontRightTurnSignal(),
@@ -245,6 +245,8 @@ abstract class DataSourceParameterId {
       DataSourceParameterId.leftDoor(),
       DataSourceParameterId.rightDoor(),
       DataSourceParameterId.cabinLight(),
+      //
+      DataSourceParameterId.windscreenWipers(),
     ];
   }
 
@@ -396,10 +398,6 @@ class TailHazardBeamParameterId extends DataSourceParameterId {
   const TailHazardBeamParameterId() : super(0x00E9);
 }
 
-class FrontCustomBeamParameterId extends DataSourceParameterId {
-  const FrontCustomBeamParameterId() : super(0x00CA);
-}
-
 class TailCustomBeamParameterId extends DataSourceParameterId {
   const TailCustomBeamParameterId() : super(0x00EA);
 }
@@ -486,4 +484,8 @@ class RightDoorParameterId extends DataSourceParameterId {
 
 class CabinLightParameterId extends DataSourceParameterId {
   const CabinLightParameterId() : super(0x0189);
+}
+
+class WindscreenWipersParameterId extends DataSourceParameterId {
+  const WindscreenWipersParameterId() : super(0x00CA);
 }

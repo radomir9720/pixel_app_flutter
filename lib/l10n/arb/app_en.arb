@@ -480,5 +480,6 @@
   "waitingInterfaceStatus": "Waiting",
   "closedShortStatusMessage": "Closed",
   "openedShortStatusMessage": "Closed",
-  "decimalShortListTileLabel": "dec"
+  "decimalShortListTileLabel": "dec",
+  "windscreenWipersInterfaceTitle": "Wipers"
 }

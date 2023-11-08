@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:pixel_app_flutter/bootstrap.dart';
 import 'package:pixel_app_flutter/domain/app/storages/logger_storage.dart';
 import 'package:pixel_app_flutter/domain/apps/apps.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/domain/user_defined_buttons/storages/user_defined_buttons_storage.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
@@ -21,6 +24,17 @@ class SelectedDataSourceScope extends AutoRouter {
   @override
   Widget Function(BuildContext context, Widget content)? get builder {
     return (context, content) {
+      String? inValidatedKey;
+      String? inRawKey;
+      String? inComposedKey;
+      String? outKey;
+      int? maxKeyLength;
+
+      int getKeysMaxLength() {
+        return [inValidatedKey, inRawKey, inComposedKey, outKey]
+            .fold<int>(0, (pr, curr) => math.max(curr?.length ?? 0, pr));
+      }
+
       return BlocBuilder<DataSourceCubit, DataSourceState>(
         builder: (context, state) {
           final dswa = state.ds.when(
@@ -48,6 +62,12 @@ class SelectedDataSourceScope extends AutoRouter {
               BlocProvider<DataSourceConnectionStatusCubit>(
                 create: (context) {
                   if (context.read<Environment>().isDev) {
+                    final dataSourceKey = context.read<DataSource>().key;
+                    inValidatedKey ??= 'InValidatedPackage($dataSourceKey)';
+                    inRawKey ??= 'InRaw($dataSourceKey)';
+                    inComposedKey ??= 'InComposedPackage($dataSourceKey)';
+                    outKey ??= 'OutPackage($dataSourceKey)';
+                    maxKeyLength ??= getKeysMaxLength();
                     context.read<DataSource>().addObserver(
                       (observable) {
                         observable.whenOrNull(
@@ -59,8 +79,8 @@ class SelectedDataSourceScope extends AutoRouter {
                                   DataSourceRequestDirection.incoming,
                                 );
                             context.read<LoggerStorage>().logInfo(
-                                  package.toString(),
-                                  'IncomingProcessedPackage',
+                                  package.toString(withDirection: false),
+                                  inValidatedKey.padLeftSpace(maxKeyLength),
                                 );
                           },
                           outgoingPackage: (package) {
@@ -75,8 +95,8 @@ class SelectedDataSourceScope extends AutoRouter {
                                   DataSourceRequestDirection.outgoing,
                                 );
                             context.read<LoggerStorage>().logInfo(
-                                  package.toString(),
-                                  'OutgoingPackage',
+                                  package.toString(withDirection: false),
+                                  outKey.padLeftSpace(maxKeyLength),
                                 );
                           },
                           rawIncomingBytes: (bytes) {
@@ -85,8 +105,8 @@ class SelectedDataSourceScope extends AutoRouter {
                                   DataSourceRequestDirection.incoming,
                                 );
                             context.read<LoggerStorage>().logInfo(
-                                  bytes.toString(),
-                                  'IncomingRawBytes',
+                                  bytes.toFormattedHexString,
+                                  inRawKey.padLeftSpace(maxKeyLength),
                                 );
                           },
                           rawIncomingPackage: (bytes) {
@@ -95,8 +115,8 @@ class SelectedDataSourceScope extends AutoRouter {
                                   DataSourceRequestDirection.incoming,
                                 );
                             context.read<LoggerStorage>().logInfo(
-                                  bytes.toString(),
-                                  'IncomingRawPackage',
+                                  bytes.toFormattedHexString,
+                                  inComposedKey.padLeftSpace(maxKeyLength),
                                 );
                           },
                         );
@@ -134,11 +154,12 @@ class SelectedDataSourceScope extends AutoRouter {
                 lazy: false,
               ),
               BlocProvider(
-                create: (context) => DoorsCubit(
+                create: (context) => GeneralInterfacesCubit(
                   dataSource: context.read(),
                 )
                   ..subscribeToLeftDoor()
-                  ..subscribeToRightDoor(),
+                  ..subscribeToRightDoor()
+                  ..subscribeToWindscreenWipers(),
               ),
               BlocProvider(
                 create: (context) {
@@ -196,4 +217,8 @@ class SelectedDataSourceScope extends AutoRouter {
       );
     };
   }
+}
+
+extension on String? {
+  String padLeftSpace(int? width) => this?.padLeft(width ?? 0) ?? '';
 }

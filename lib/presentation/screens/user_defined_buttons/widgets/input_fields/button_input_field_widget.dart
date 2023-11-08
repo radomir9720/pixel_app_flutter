@@ -96,13 +96,12 @@ class _ButtonInputFieldWidgetState<T> extends State<ButtonInputFieldWidget<T>> {
     if (initialValue.isNotEmpty && widget.formatIntToHex) {
       if (T == getType<int?>()) {
         final integer = int.tryParse(initialValue);
-        if (integer != null) initialValue = '0x${integer.toRadixString(16)}';
+        if (integer != null) initialValue = integer.toFormattedHex;
       } else if (T == getType<List<int>?>()) {
         final parsed = initialValue.parseListOfInts();
         if ((parsed?.isNotEmpty ?? false) &&
             !initialValue.hasUnparsedSegments) {
-          initialValue =
-              parsed?.map((e) => '0x${e.toRadixString(16)}').join(', ');
+          initialValue = parsed?.map((e) => e.toFormattedHex).join(', ');
         }
       }
     }

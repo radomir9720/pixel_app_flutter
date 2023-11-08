@@ -375,6 +375,11 @@ class DemoDataSource extends DataSource
               const CustomImageParameterId(),
             );
           })
+          ..voidOn<WindscreenWipersParameterId>(() {
+            _sendSetBoolUint8ResultCallback(
+              const WindscreenWipersParameterId(),
+            );
+          })
           ..voidOn<CustomParameterId>(() {
             switch (parameterId.value) {
               case 0x00E0:
@@ -565,6 +570,12 @@ class DemoDataSource extends DataSource
       ..voidOn<TailRightTurnSignalParameterId>(() {
         _sendSetBoolUint8ResultCallback(
           const TailRightTurnSignalParameterId(),
+          package.boolData,
+        );
+      })
+      ..voidOn<WindscreenWipersParameterId>(() {
+        _sendSetBoolUint8ResultCallback(
+          const WindscreenWipersParameterId(),
           package.boolData,
         );
       })

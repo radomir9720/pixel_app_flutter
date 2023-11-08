@@ -44,6 +44,7 @@ class LEDSwitcherButton extends StatelessWidget {
               turningOff: (_) => const MiniProgreesIndicator.onPrimary(),
               turningOn: (_, __) => const MiniProgreesIndicator(),
             ),
+            showCheckmark: false,
             labelStyle:
                 const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
             label: Row(

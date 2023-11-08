@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 
 class OnlyNumbersInputFormatter extends TextInputFormatter {
@@ -73,11 +74,7 @@ class _IntegerListDialogState extends State<IntegerListDialog> {
                     ...newValue,
                   }.map((current) {
                     return FilterChip(
-                      label: Text(
-                        '0x${current.toRadixString(16).toUpperCase()} '
-                        ' | '
-                        '$current',
-                      ),
+                      label: Text('${current.toFormattedHex} | $current'),
                       showCheckmark: false,
                       selected: newValue.contains(current),
                       onSelected: (selected) {

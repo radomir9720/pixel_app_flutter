@@ -131,6 +131,8 @@ abstract class DataSourceIncomingPackage<T extends BytesConvertible>
       RightDoorIncomingDataSourcePackage.new,
       CabinLightIncomingDataSourcePackage.new,
       //
+      WindscreenWipersIncomingDataSourcePackage.new,
+      //
       ErrorWithCodeAndSectionIncomingDataSourcePackage.new,
       //
       CustomIncomingDataSourcePackage.new,

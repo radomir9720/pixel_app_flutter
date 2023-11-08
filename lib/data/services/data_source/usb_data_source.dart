@@ -83,7 +83,7 @@ class USBDataSource extends DataSource
 
     observeOutgoing(package);
 
-    sp.write(package.toUint8List);
+    sp.write(package.toUint8List, timeout: 0);
 
     return const Result.value(null);
   }
