@@ -85,7 +85,7 @@ class RequestsExchangeLogsFilterScope extends AutoRouter {
   const RequestsExchangeLogsFilterScope({super.key});
 }
 
-@RoutePage(name: 'FilterParameterIdDialogRoute')
+@RoutePage<List<int>>(name: 'FilterParameterIdDialogRoute')
 class FilterParameterIdDialog extends IntegerListDialog {
   const FilterParameterIdDialog({
     super.key,
@@ -96,7 +96,7 @@ class FilterParameterIdDialog extends IntegerListDialog {
   });
 }
 
-@RoutePage(name: 'FilterRequestTypeDialogRoute')
+@RoutePage<List<int>>(name: 'FilterRequestTypeDialogRoute')
 class FilterRequestTypeDialog extends IntegerListDialog {
   const FilterRequestTypeDialog({
     super.key,
@@ -107,7 +107,7 @@ class FilterRequestTypeDialog extends IntegerListDialog {
   });
 }
 
-@RoutePage(name: 'FilterDirectionDialogRoute')
+@RoutePage<List<int>>(name: 'FilterDirectionDialogRoute')
 class FilterDirectionDialog extends IntegerListDialog {
   const FilterDirectionDialog({
     super.key,
@@ -118,7 +118,7 @@ class FilterDirectionDialog extends IntegerListDialog {
   });
 }
 
-@RoutePage(name: 'ChangeParametersSubscriptionDialogRoute')
+@RoutePage<List<int>>(name: 'ChangeParametersSubscriptionDialogRoute')
 class ChangeParametersSubscriptionDialog extends IntegerListDialog {
   const ChangeParametersSubscriptionDialog({
     super.key,
@@ -129,7 +129,7 @@ class ChangeParametersSubscriptionDialog extends IntegerListDialog {
   });
 }
 
-@RoutePage(name: 'ChangeRequestPeriodDialogRoute')
+@RoutePage<int>(name: 'ChangeRequestPeriodDialogRoute')
 class ChangeRequestPeriodDialog extends SliderDialog {
   const ChangeRequestPeriodDialog({
     super.key,
@@ -139,7 +139,7 @@ class ChangeRequestPeriodDialog extends SliderDialog {
   });
 }
 
-@RoutePage(name: 'ChangeHandshakeResponseTimeoutDialogRoute')
+@RoutePage<int>(name: 'ChangeHandshakeResponseTimeoutDialogRoute')
 class ChangeHandshakeResponseTimeoutDialog extends SliderDialog {
   const ChangeHandshakeResponseTimeoutDialog({
     super.key,
