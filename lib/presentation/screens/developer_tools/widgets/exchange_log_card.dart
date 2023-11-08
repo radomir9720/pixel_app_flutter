@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
+import 'package:pixel_app_flutter/domain/data_source/extensions/int.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/app/colors.dart';
 import 'package:re_seedwork/re_seedwork.dart';
@@ -157,7 +158,7 @@ class ExchangeLogCard extends StatelessWidget {
                       (e) => Padding(
                         padding: const EdgeInsets.all(4),
                         child: Text(
-                          e.toRadixString(16).padLeft(2, '0').toUpperCase(),
+                          e.toFormattedHex,
                           textAlign: TextAlign.center,
                         ),
                       ),

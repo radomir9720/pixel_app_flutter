@@ -2,8 +2,6 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 
-// import 'package:byte_extensions/byte_extensions.dart';
-
 extension ToBytesExtension on int {
   Int8List get toBytesInt8 => intToBytesInt8(this);
 
@@ -109,5 +107,27 @@ extension ParseListOfIntsExtension on String {
         .map((e) => int.tryParse(e.trim()))
         .where((element) => element == null)
         .isNotEmpty;
+  }
+}
+
+extension FormattedHexExtension on int {
+  String get toFormattedHex {
+    final bytesLength = IntBytesLengthExtension.bytesLength(this);
+
+    return '0x${toRadixString(16).padLeft(bytesLength * 2, '0').toUpperCase()}';
+  }
+}
+
+extension FormattedHexListExtension on List<int> {
+  Iterable<String> get toFormattedHex => map((e) => e.toFormattedHex);
+
+  String get toFormattedHexString => '[${toFormattedHex.join(' ')}]';
+}
+
+extension IntBytesLengthExtension on int? {
+  static int bytesLength(int? data) {
+    if (data == null) return 0;
+    final bits = (data.bitLength / 8).ceil();
+    return bits.clamp(1, 100);
   }
 }
