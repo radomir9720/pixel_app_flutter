@@ -20,10 +20,9 @@ class DataSourceStorageImpl
   @override
   Future<Result<DataSourceStorageRemoveError, void>> remove() async {
     if (await preferences.remove(kDataSourceKey)) {
+      await put(const Optional.undefined());
       return const Result.value(null);
     }
-
-    await put(const Optional.undefined());
 
     return const Result.error(DataSourceStorageRemoveError.unknown);
   }

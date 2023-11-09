@@ -12,6 +12,7 @@ class SettingsBaseLayout extends StatelessWidget {
     this.bottom = const SizedBox.shrink(),
     this.showBottom = true,
     this.bottomLeft,
+    this.bottomRight,
   });
 
   @protected
@@ -29,6 +30,9 @@ class SettingsBaseLayout extends StatelessWidget {
   @protected
   final Widget? bottomLeft;
 
+  @protected
+  final Widget? bottomRight;
+
   @override
   Widget build(BuildContext context) {
     final screenData = Screen.of(context);
@@ -40,7 +44,7 @@ class SettingsBaseLayout extends StatelessWidget {
         horizontal: size.width * .07,
       ),
     );
-    final closeButtonPadding = screenData.whenType(
+    final bottomButtonPadding = screenData.whenType(
       handset: () => const EdgeInsets.all(16),
       orElse: () => const EdgeInsets.symmetric(
         horizontal: 38,
@@ -119,14 +123,19 @@ class SettingsBaseLayout extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: closeButtonPadding,
+                    padding: bottomButtonPadding,
                     child: bottomLeft ?? const PCloseButton(),
                   ),
                 ),
                 Expanded(
                   child: Center(child: bottom),
                 ),
-                const Spacer(),
+                Expanded(
+                  child: Padding(
+                    padding: bottomButtonPadding,
+                    child: bottomRight ?? const SizedBox.shrink(),
+                  ),
+                ),
               ],
             ),
         ],

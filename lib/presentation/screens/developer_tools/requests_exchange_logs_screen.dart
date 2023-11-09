@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
 import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
+import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/filter_button.dart';
 
 @RoutePage()
 class RequestsExchangeLogsScreen extends StatelessWidget {
@@ -24,12 +25,7 @@ class RequestsExchangeLogsScreen extends StatelessWidget {
             ),
             title: Text(context.l10n.requestsExchangeLogsScreenTitle),
             actions: [
-              IconButton(
-                onPressed: () {
-                  context.router.push(const RequestsExchangeLogsFilterFlow());
-                },
-                icon: const Icon(Icons.filter_list_alt),
-              ),
+              const FilterButton(),
               BlocBuilder<PauseLogsUpdatingCubit, bool>(
                 builder: (context, pause) {
                   return IconButton(

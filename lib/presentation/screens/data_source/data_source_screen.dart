@@ -61,6 +61,30 @@ class DataSourceScreen extends StatelessWidget {
             screenTitle: currentDataSource != null
                 ? context.l10n.dataSourceScreenTitle
                 : context.l10n.selectDataSourceScreenTitle,
+            bottomRight: currentDataSource == null
+                ? null
+                : GlueTitle(
+                    alignment: Alignment.centerRight,
+                    title: context.l10n.disconnectButtonCaption,
+                    side: GlueTitleSide.bottom,
+                    child: PIconButton(
+                      onPressed: () async {
+                        final disconnect = await context.router.push<bool>(
+                              DataSourceDisconnectDialogRoute(
+                                title: context.l10n
+                                    .areYouSureYouWantToDisconnectDialogTitle,
+                              ),
+                            ) ??
+                            false;
+                        if (!context.mounted) return;
+                        if (disconnect) {
+                          await context.read<DataSourceCubit>().disconnect();
+                        }
+                      },
+                      icon: Icons.logout,
+                      size: PIconButtonSize.normal,
+                    ),
+                  ),
             bottomLeft: showCloseButton
                 ? null
                 : GlueTitle(

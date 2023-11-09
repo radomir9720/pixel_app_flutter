@@ -481,5 +481,9 @@
   "closedShortStatusMessage": "Closed",
   "openedShortStatusMessage": "Closed",
   "decimalShortListTileLabel": "dec",
-  "windscreenWipersInterfaceTitle": "Wipers"
+  "windscreenWipersInterfaceTitle": "Wipers",
+  "noButtonCaption": "No",
+  "yesButtonCaption": "Yes",
+  "disconnectButtonCaption": "Disconnect",
+  "areYouSureYouWantToDisconnectDialogTitle": "Are you sure you want to disconnect?"
 }

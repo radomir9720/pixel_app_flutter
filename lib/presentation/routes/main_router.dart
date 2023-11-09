@@ -40,14 +40,15 @@ import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/add_
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/edit_user_defined_button_screen.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/models/button_builder.dart';
 import 'package:pixel_app_flutter/presentation/screens/user_defined_buttons/select_button_type_screen.dart';
+import 'package:pixel_app_flutter/presentation/widgets/common/molecules/bool_dialog.dart';
 
+part 'guards/selected_data_source_guard.dart';
 part 'main_router.gr.dart';
 part 'subroutes/developer_tools_route.dart';
 part 'subroutes/home_route.dart';
 part 'subroutes/select_data_source_route.dart';
 part 'subroutes/settings_route.dart';
 part 'subroutes/user_defined_buttons_route.dart';
-part 'guards/selected_data_source_guard.dart';
 
 @AutoRouterConfig(
   replaceInRouteName: 'ScreenWrapper|Screen|PageWrapper|Page|Scope,Route',
@@ -75,12 +76,14 @@ class MainRouter extends _$MainRouter {
             _selectDataSourceRoute(root: false),
             //
             _userDefinedButtonsRoute,
+            //
+            _developerToolsRoute(),
           ],
         ),
         //
         _selectDataSourceRoute(),
         //
-        _developerToolsRoute,
+        _developerToolsRoute(selectedDS: false),
         //
         CustomRoute(
           path: '/loading',
