@@ -18,6 +18,16 @@ class RequestsExchangeLogsFilterScreen extends StatelessWidget {
           onPressed: context.router.pop,
         ),
         title: Text(context.l10n.requestsFilterScreenTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.cleaning_services),
+            onPressed: () {
+              context.read<RequestsExchangeLogsFilterCubit>().update(
+                    const RequestsExchangeLogsFilterState(),
+                  );
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<RequestsExchangeLogsFilterCubit,
           RequestsExchangeLogsFilterState>(
