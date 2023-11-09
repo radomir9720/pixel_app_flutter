@@ -20,6 +20,11 @@ AutoRoute _selectDataSourceRoute({bool root = true}) => AutoRoute(
               path: 'select-device',
               customRouteBuilder: dialogRouteBuilder,
             ),
+            CustomRoute(
+              page: DataSourceDisconnectDialogRoute.page,
+              path: 'disconnect',
+              customRouteBuilder: dialogRouteBuilder,
+            ),
           ],
         ),
         CustomRoute(
@@ -39,4 +44,13 @@ AutoRoute _selectDataSourceRoute({bool root = true}) => AutoRoute(
 @RoutePage(name: 'SelectDataSourceGeneralFlow')
 class SelectDataSourceGeneralScope extends AutoRouter {
   const SelectDataSourceGeneralScope({super.key});
+}
+
+@RoutePage<bool>(name: 'DataSourceDisconnectDialogRoute')
+class DataSourceDisconnectDialog extends BoolDialog {
+  const DataSourceDisconnectDialog({
+    super.key,
+    super.content,
+    required super.title,
+  });
 }

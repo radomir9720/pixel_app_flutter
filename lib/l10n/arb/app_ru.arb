@@ -481,5 +481,9 @@
   "closedShortStatusMessage": "Закр",
   "openedShortStatusMessage": "Откр",
   "decimalShortListTileLabel": "dec",
-  "windscreenWipersInterfaceTitle": "Дворники"
+  "windscreenWipersInterfaceTitle": "Дворники",
+  "noButtonCaption": "Нет",
+  "yesButtonCaption": "Да",
+  "disconnectButtonCaption": "Отключиться",
+  "areYouSureYouWantToDisconnectDialogTitle": "Вы уверены что хотите отключиться?"
 }

@@ -43,15 +43,34 @@ class DataSourceCubit extends Cubit<DataSourceState> with ConsumerBlocMixin {
     super.onChange(change);
   }
 
-  @override
-  Future<void> close() async {
+  Future<void> disconnect() async {
+    await disconnectAndDispose();
+    final result = await dataSourceStorage.remove();
+    result.when(
+      error: (error) => onError(error, StackTrace.current),
+      value: (_) {},
+    );
+  }
+
+  @visibleForTesting
+  Future<void> disconnectAndDispose() async {
     await state.ds.when(
       undefined: () async {},
       presented: (p) async {
-        await p.dataSource.disconnect();
+        await p.dataSource.disconnect().then((value) {
+          value.when(
+            error: (error) => onError(error, StackTrace.current),
+            value: (_) {},
+          );
+        });
         await p.dataSource.dispose();
       },
     );
+  }
+
+  @override
+  Future<void> close() async {
+    await disconnectAndDispose();
     return super.close();
   }
 }
