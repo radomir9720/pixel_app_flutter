@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixel_app_flutter/domain/data_source/data_source.dart';
 import 'package:pixel_app_flutter/domain/developer_tools/developer_tools.dart';
 import 'package:pixel_app_flutter/l10n/l10n.dart';
-import 'package:pixel_app_flutter/presentation/routes/main_router.dart';
 import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/exchange_log_card.dart';
+import 'package:pixel_app_flutter/presentation/screens/developer_tools/widgets/filter_button.dart';
 import 'package:re_widgets/re_widgets.dart';
 
 @RoutePage()
@@ -40,12 +40,7 @@ class _PackagesExchangeConsoleScreenState
       appBar: AppBar(
         title: Text(context.l10n.packagesExchangeConsoleScreenTitle),
         actions: [
-          IconButton(
-            onPressed: () {
-              context.router.push(const RequestsExchangeLogsFilterFlow());
-            },
-            icon: const Icon(Icons.filter_list_alt),
-          ),
+          const FilterButton(),
           BlocBuilder<PauseLogsUpdatingCubit, bool>(
             builder: (context, pause) {
               return IconButton(

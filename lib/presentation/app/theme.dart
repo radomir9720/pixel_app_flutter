@@ -114,6 +114,9 @@ class MaterialTheme {
         shape: ElevatedButtonBorder(colors: colors),
         selectedColor: colors.primaryAccent.withOpacity(.15),
       ),
+      badgeTheme: BadgeThemeData(
+        backgroundColor: colors.primary,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
