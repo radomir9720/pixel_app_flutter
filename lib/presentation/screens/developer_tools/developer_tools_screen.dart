@@ -182,12 +182,14 @@ class DeveloperToolsScreen extends StatelessWidget {
                     context.router.push(const RequestsExchangeLogsFlow());
                   },
                 ),
-                ListTile(
-                  title: Text(context.l10n.packagesExchangeConsoleScreenTitle),
-                  onTap: () {
-                    context.router.push(const PackagesExchangeConsoleRoute());
-                  },
-                ),
+                if (context.read<DataSourceCubit>().state.ds.isPresent)
+                  ListTile(
+                    title:
+                        Text(context.l10n.packagesExchangeConsoleScreenTitle),
+                    onTap: () {
+                      context.router.push(const PackagesExchangeConsoleRoute());
+                    },
+                  ),
                 ListTile(
                   title: Text(context.l10n.exportLogsListTileLabel),
                   onTap: () async {
